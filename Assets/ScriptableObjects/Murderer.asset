@@ -10,24 +10,38 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7dc8225a4be6fd4d87acb8e49149fbb, type: 3}
-  m_Name: Human
+  m_Name: Murderer
   m_EditorClassIdentifier: 
-  Type: 0
+  Type: 1
   Behaviors:
-  - _name: Sleep
-    _dialogue: New Dialogue
-    _action: 3
+  - _name: Kill Victim
+    _dialogue: 
+    _action: 1
     _actionParameter:
-      rid: 1081034420328595474
+      rid: 1081034420328595470
+    _conditions:
+    - conditionType: 2
+      parameter:
+        rid: 1081034420328595470
+    _priority: 0
+  - _name: Find Victim
+    _dialogue: 
+    _action: 2
+    _actionParameter:
+      rid: 1081034420328595470
     _conditions:
     - conditionType: 1
       parameter:
-        rid: 1081034420328595474
+        rid: 1081034420328595471
     _priority: 0
   references:
     version: 2
     RefIds:
-    - rid: 1081034420328595474
+    - rid: 1081034420328595470
+      type: {class: TargetType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 3
+    - rid: 1081034420328595471
       type: {class: NeedType, ns: Mind, asm: Assembly-CSharp}
       data:
-        value__: 1
+        value__: 3
