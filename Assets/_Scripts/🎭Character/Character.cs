@@ -1,12 +1,23 @@
+﻿using Mind;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class Character
+public class Character : Movement
 {
-    public int hello = 0;
+    private Dictionary<NeedType, float> _needs = new();
 
-    public int hi = 0;
+    public Dictionary<NeedType, float> Needs
+    {
+        get => _needs;
+        set => _needs = value;
+    }
 
+    private Dictionary<TargetType, GameObject> _targets = new();
 
-    public int lo = 0;
+    public Dictionary<TargetType, GameObject> Targets
+    {
+        get => _targets;
+        set => _targets = value;
+    }
 
 }
