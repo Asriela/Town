@@ -44,7 +44,7 @@ public static class Conditions
     // Example condition check methods:
     private static bool CheckNeed(NeedType parameter, NPC npc)
     {
-        if (npc.Needs.ContainsKey(parameter) && npc.Needs[parameter] > 80) // Replace with actual need logic
+        if (npc.Needs.ContainsKey(parameter) && npc.Needs[parameter] > 80) 
         {
             return true;
         }
@@ -53,7 +53,7 @@ public static class Conditions
 
     private static bool CheckTarget(TargetType parameter, NPC npc)
     {
-        if (npc.Targets.ContainsKey(parameter) && npc.Targets[parameter] != null) // Replace with actual target check
+        if (npc.Memory.Targets.ContainsKey(parameter) && npc.Memory.Targets[parameter] != null) 
         {
             return true;
         }

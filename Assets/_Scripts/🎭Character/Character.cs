@@ -12,12 +12,6 @@ public class Character : Movement
         set => _needs = value;
     }
 
-    private Dictionary<TargetType, GameObject> _targets = new();
 
-    public Dictionary<TargetType, GameObject> Targets
-    {
-        get => _targets;
-        set => _targets = value;
-    }
 
 }

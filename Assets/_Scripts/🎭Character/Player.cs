@@ -1,16 +1,24 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-public class Player : Movement
+public class Player : Character
 {
     [SerializeField] private GameObject radialMenuPrefab; // Radial menu prefab
-
-
+    [SerializeField] private Color seenColor = Color.red;  // Color when the player is seen
+    [SerializeField] private Color defaultColor = Color.blue;
+    private SpriteRenderer _spriteRenderer;
+    private bool _isSeen = false;
     private GameObject currentRadialMenu;
 
+    protected override void Start()
+    {
+        base.Start();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
 
-
-    private void Update()
+        // Initialize with the default color
+        _spriteRenderer.color = defaultColor;
+    }
+        private void Update()
     {
         HandleInput();
     }
@@ -68,4 +76,20 @@ public class Player : Movement
             currentRadialMenu = null;
         }
     }
+
+    public void SetSeenState(bool isSeen)
+    {
+        _isSeen = isSeen;
+
+        // Change the color based on whether the player is seen
+        if (_isSeen)
+        {
+            _spriteRenderer.color = seenColor;  // Change color to 'seen' color
+        }
+        else
+        {
+            _spriteRenderer.color = defaultColor;  // Revert to default color
+        }
+    }
+
 }

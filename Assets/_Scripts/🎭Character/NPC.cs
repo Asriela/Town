@@ -1,4 +1,5 @@
 ﻿using Mind;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -7,28 +8,34 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Acting))]
 [RequireComponent(typeof(Vitality))]
 [RequireComponent(typeof(Senses))]
+[RequireComponent(typeof(Logger))]
+[RequireComponent(typeof(Memory))]
 public class NPC : Character
 {
     private Transform _target;
 
-    private Thinking _thinking;
-    private Senses _senses;
+    public Thinking Thinking{ get; set; }
+
     private Vitality _vitality;
+    public Memory Memory { get; set; }
+    public Senses Senses { get; set; }
     public Acting Acting { get; set; }
 
+    public Logger Logger { get; set; }
 
-
-    private void Start()
+    protected override void Start()
     {
         base.Start();
-        _thinking = GetComponent<Thinking>();
-        _thinking.Initialize(this);
+        Thinking = GetComponent<Thinking>();
+        Thinking.Initialize(this);
         _vitality = GetComponent<Vitality>();
         _vitality.Initialize(this);
-        _senses= GetComponent<Senses>();
-        _senses.Initialize(this);
+        Senses = GetComponent<Senses>();
+        Senses.Initialize(this);
         Acting = GetComponent<Acting>();
         Acting.Initialize(this);
+        Logger = GetComponent<Logger>();
+        Memory = GetComponent<Memory>();
     }
 
     private void Update()
