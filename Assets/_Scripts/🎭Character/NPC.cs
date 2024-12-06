@@ -16,7 +16,7 @@ public class NPC : Character
 
     public Thinking Thinking{ get; set; }
 
-    private Vitality _vitality;
+    public Vitality Vitality { get; set; }
     public Memory Memory { get; set; }
     public Senses Senses { get; set; }
     public Acting Acting { get; set; }
@@ -28,8 +28,8 @@ public class NPC : Character
         base.Start();
         Thinking = GetComponent<Thinking>();
         Thinking.Initialize(this);
-        _vitality = GetComponent<Vitality>();
-        _vitality.Initialize(this);
+        Vitality = GetComponent<Vitality>();
+        Vitality.Initialize(this);
         Senses = GetComponent<Senses>();
         Senses.Initialize(this);
         Acting = GetComponent<Acting>();

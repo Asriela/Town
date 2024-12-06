@@ -68,4 +68,9 @@ namespace Mind
         needsTo,
         hasTarget
     }
+
+    public enum ObjectType : short
+    {
+        bed
+    }
 }

@@ -36,6 +36,7 @@ public class TraitEditor : Editor
                 var actionProperty = behaviorProperty.FindPropertyRelative("_action");
                 var actionParameterProperty = behaviorProperty.FindPropertyRelative("_actionParameter");
                 var conditionsProperty = behaviorProperty.FindPropertyRelative("_conditions");
+                var priorityProperty = behaviorProperty.FindPropertyRelative("_priority");
 
                 float lineHeight = EditorGUIUtility.singleLineHeight;
                 float spacing = EditorGUIUtility.standardVerticalSpacing;
@@ -48,6 +49,7 @@ public class TraitEditor : Editor
 
                 rect.y += lineHeight + spacing + 2; // Adjust position of next element to avoid overlap with the divider
 
+                // Draw Name, Dialogue, Action
                 EditorGUI.PropertyField(new Rect(rect.x, rect.y, rect.width, lineHeight), nameProperty, new GUIContent("Name"));
                 rect.y += lineHeight + spacing;
 
@@ -84,25 +86,26 @@ public class TraitEditor : Editor
 
                 rect.y += lineHeight + spacing;
 
+                // Draw the Priority field
+                EditorGUI.PropertyField(new Rect(rect.x, rect.y, rect.width, lineHeight), priorityProperty, new GUIContent("Priority"));
+                rect.y += lineHeight + spacing;
+
                 // Draw Conditions list
                 DrawConditionsList(new Rect(rect.x, rect.y, rect.width, lineHeight), conditionsProperty);
             },
 
             elementHeightCallback = index =>
             {
-                // Compute the height based on the number of conditions
+                // Compute the height based on the number of conditions + space for priority
                 SerializedProperty behaviorProperty = behaviorsProperty.GetArrayElementAtIndex(index);
                 SerializedProperty conditionsProperty = behaviorProperty.FindPropertyRelative("_conditions");
                 int numConditions = conditionsProperty.arraySize;
 
-                // Adjust the height for the conditions list and behavior details
-                return EditorGUIUtility.singleLineHeight * 6 + (numConditions * (EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing)) + 30; // Adding extra space (30) for the new controls and divider
+                // Adjust the height for the conditions list, behavior details, and priority field
+                return EditorGUIUtility.singleLineHeight * 7 + (numConditions * (EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing)) + 30; // Adding extra space (30) for the new controls and divider
             }
         };
     }
-
-
-
 
     private Type GetEnumTypeForActionType(int actionIndex)
     {
@@ -128,6 +131,17 @@ public class TraitEditor : Editor
         _behaviorList.DoLayoutList();
 
         serializedObject.ApplyModifiedProperties();
+    }
+
+    private Type GetEnumTypeForConditionType(Mind.ConditionType conditionType)
+    {
+        // Map ConditionType to corresponding Enum types
+        return conditionType switch
+        {
+            Mind.ConditionType.hasTarget => typeof(Mind.TargetType),
+            Mind.ConditionType.needsTo => typeof(Mind.NeedType),
+            _ => null,
+        };
     }
 
     private void DrawConditionsList(Rect rect, SerializedProperty conditionsProperty)
@@ -199,19 +213,5 @@ public class TraitEditor : Editor
                 parameterProperty.managedReferenceValue = Enum.GetValues(parameterEnumType).GetValue(0);
             }
         }
-    }
-
-
-
-
-    private Type GetEnumTypeForConditionType(Mind.ConditionType conditionType)
-    {
-        // Map ConditionType to corresponding Enum types
-        return conditionType switch
-        {
-            Mind.ConditionType.hasTarget => typeof(Mind.TargetType),
-            Mind.ConditionType.needsTo => typeof(Mind.NeedType),
-            _ => null,
-        };
     }
 }

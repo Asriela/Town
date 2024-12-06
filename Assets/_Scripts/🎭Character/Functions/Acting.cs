@@ -14,6 +14,7 @@ public class Acting : MonoBehaviour
     _actionHandlers = new Dictionary<Mind.ActionType, Action<object>>
     {
         { Mind.ActionType.find, param => Find((Mind.TargetType)param) },
+        { Mind.ActionType.fullfillNeed, param => FullfillNeed((Mind.NeedType)param) },
         { Mind.ActionType.kill, param => Kill((Mind.TargetType)param) }
     };
 
@@ -30,7 +31,7 @@ public class Acting : MonoBehaviour
             _npc.Logger.CurrentBehaviour = CurrentBehavior.Name;
             _npc.Logger.CurrentAction = $"{CurrentBehavior.Action} {CurrentBehavior.ActionParameter}";
 
-       
+
             action(CurrentBehavior.ActionParameter);
         }
         else
@@ -43,25 +44,34 @@ public class Acting : MonoBehaviour
 
     private void Find(Mind.TargetType targetType)
     {
-   
+
 
         StartCoroutine(Actions.WanderAndSearch(_npc, targetType, Mind.TraitType.human));
 
-      
+
     }
 
 
     private void Kill(Mind.TargetType targetType)
     {
-        switch (targetType)
-        {
-            case Mind.TargetType.murderVictim:
+        _npc.MoveTo(_npc.Memory.Targets[targetType].transform.position);
 
-                break;
-        }
 
     }
 
 
+    private void FullfillNeed(Mind.NeedType needType)
+    {
+        var objectToUse = _npc.Memory.Possessions[ObjectType.bed];
+        var objectPosition = objectToUse.transform.position;
+        var ourPosition = _npc.transform.position;
+        var interactionDistance = 2f;
+        _npc.MoveTo(objectPosition);
 
+        if (Vector3.Distance(ourPosition, objectPosition)< interactionDistance)
+        {
+            _npc.Vitality.Needs[needType] = 0;
+        }
+
+    }
 }

@@ -44,7 +44,7 @@ public static class Conditions
     // Example condition check methods:
     private static bool CheckNeed(NeedType parameter, NPC npc)
     {
-        if (npc.Needs.ContainsKey(parameter) && npc.Needs[parameter] > 80) 
+        if (npc.Vitality.Needs.ContainsKey(parameter) && npc.Vitality.Needs[parameter] > 80) 
         {
             return true;
         }
