@@ -1,15 +1,16 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using Mind;
 
-public static class Actions
+public static class ActionsHelper
 {
     //aimlessly look around
     public static void Wander(NPC npc)
     {
 
 
-        npc.MoveToRandomPoints();
+        npc.Movement.MoveToRandomPoints();
     }
     //specifically go into every building to see if we can find what we are looking for
     public static void LookAroundArea(NPC npc)
@@ -19,7 +20,23 @@ public static class Actions
 
     }
 
-    public static IEnumerator WanderAndSearch(NPC npc, Mind.TargetType targetType, params Mind.TraitType[] traitsToLookFor)
+    public static bool Reached(NPC npc, Vector3 destination)
+    {
+
+        var ourPosition = npc.transform.position;
+        var interactionDistance = 2f;
+        npc.Movement.MoveTo(destination);
+
+        if (Vector3.Distance(ourPosition, destination) < interactionDistance)
+        {
+            return true;
+        }
+
+
+        return false;
+    }
+
+    public static IEnumerator WanderAndSearch(NPC npc, Mind.TargetType targetType, bool alive, params Mind.TraitType[] traitsToLookFor)
     {
         npc.Logger.CurrentStepInAction = "wander and search";
         // Continuously wander until the NPC sees someone with the desired traits
@@ -29,7 +46,7 @@ public static class Actions
 
             // Check if the NPC's senses detect someone with the desired traits
             var target = npc.Senses.SeeSomeoneWithTraits(traitsToLookFor); // Replace with actual parameters
-            if (target != null)
+            if (target != null && !(alive && target.GetComponent<Character>().Vitality.Dead))
             {
 
                 npc.Memory.Targets[targetType] = target;

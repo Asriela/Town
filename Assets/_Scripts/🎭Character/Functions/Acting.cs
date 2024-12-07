@@ -13,16 +13,16 @@ public class Acting : MonoBehaviour
     private void Awake() =>
     _actionHandlers = new Dictionary<Mind.ActionType, Action<object>>
     {
-        { Mind.ActionType.find, param => Find((Mind.TargetType)param) },
+        { Mind.ActionType.findCharacter, param => Find((Mind.TargetType)param) },
         { Mind.ActionType.fullfillNeed, param => FullfillNeed((Mind.NeedType)param) },
         { Mind.ActionType.kill, param => Kill((Mind.TargetType)param) }
     };
 
     private void Update() => PerformCurrentBehavior();
 
-
     private void PerformCurrentBehavior()
     {
+
         if (CurrentBehavior == null)
         { return; }
 
@@ -30,7 +30,6 @@ public class Acting : MonoBehaviour
         {
             _npc.Logger.CurrentBehaviour = CurrentBehavior.Name;
             _npc.Logger.CurrentAction = $"{CurrentBehavior.Action} {CurrentBehavior.ActionParameter}";
-
 
             action(CurrentBehavior.ActionParameter);
         }
@@ -40,38 +39,30 @@ public class Acting : MonoBehaviour
         }
     }
 
-
-
     private void Find(Mind.TargetType targetType)
     {
-
-
-        StartCoroutine(Actions.WanderAndSearch(_npc, targetType, Mind.TraitType.human));
-
+        StartCoroutine(ActionsHelper.WanderAndSearch(_npc, targetType, true,Mind.TraitType.human));
 
     }
-
 
     private void Kill(Mind.TargetType targetType)
     {
-        _npc.MoveTo(_npc.Memory.Targets[targetType].transform.position);
+        var target = _npc.Memory.Targets[targetType].GetComponent<Character>();
 
+        if (ActionsHelper.Reached(_npc, target.transform.position))
+        {
+            target.Vitality.Die();
+            _npc.Memory.Targets[targetType] = null;
+        }
 
     }
-
 
     private void FullfillNeed(Mind.NeedType needType)
     {
         var objectToUse = _npc.Memory.Possessions[ObjectType.bed];
-        var objectPosition = objectToUse.transform.position;
-        var ourPosition = _npc.transform.position;
-        var interactionDistance = 2f;
-        _npc.MoveTo(objectPosition);
-
-        if (Vector3.Distance(ourPosition, objectPosition)< interactionDistance)
+        if (ActionsHelper.Reached(_npc, objectToUse.transform.position))
         {
             _npc.Vitality.Needs[needType] = 0;
         }
-
     }
 }

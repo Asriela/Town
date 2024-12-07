@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7dc8225a4be6fd4d87acb8e49149fbb, type: 3}
-  m_Name: Human
+  m_Name: TouchedByDarkness
   m_EditorClassIdentifier: 
-  Type: 0
+  Type: 2
   Behaviors:
-  - _name: Sleep
-    _dialogue: New Dialogue
+  - _name: Find Book of the dead
+    _dialogue: 
     _action: 3
     _actionParameter:
-      rid: 1081034513282760910
+      rid: 1081034513282760933
     _conditions:
-    - conditionType: 1
+    - conditionType: 4
       parameter:
-        rid: 1081034513282760910
-    _priority: 3
+        rid: 1081034513282760933
+    _priority: 2
   references:
     version: 2
     RefIds:
-    - rid: 1081034513282760910
-      type: {class: NeedType, ns: Mind, asm: Assembly-CSharp}
+    - rid: 1081034513282760933
+      type: {class: ObjectType, ns: Mind, asm: Assembly-CSharp}
       data:
-        value__: 1
+        value__: 2

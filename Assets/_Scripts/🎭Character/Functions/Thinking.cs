@@ -14,7 +14,7 @@ public class Thinking : MonoBehaviour
     public List<Trait> Traits => _traits;
 
 
-    [SerializeField] private float checkInterval = 3f;
+    [SerializeField] private float _checkInterval = 3f;
     private void Start()
     {
 
@@ -28,7 +28,7 @@ public class Thinking : MonoBehaviour
 
             CalculateHighestScoringBehavior();
 
-            yield return new WaitForSeconds(checkInterval);
+            yield return new WaitForSeconds(_checkInterval);
         }
     }
 
@@ -36,6 +36,8 @@ public class Thinking : MonoBehaviour
 
     public void CalculateHighestScoringBehavior()
     {
+        if (_npc.Vitality.Dead)
+        { return; }
         Behavior highestScoringBehavior = null;
         int highestScore = 0;
 

@@ -10,24 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7dc8225a4be6fd4d87acb8e49149fbb, type: 3}
-  m_Name: Human
+  m_Name: Trader
   m_EditorClassIdentifier: 
-  Type: 0
+  Type: 3
   Behaviors:
-  - _name: Sleep
+  - _name: Trade
     _dialogue: New Dialogue
-    _action: 3
+    _action: 9
     _actionParameter:
-      rid: 1081034513282760910
+      rid: 1081034513282760843
     _conditions:
-    - conditionType: 1
+    - conditionType: 3
       parameter:
-        rid: 1081034513282760910
-    _priority: 3
+        rid: 1081034513282760909
+    _priority: 2
   references:
     version: 2
     RefIds:
-    - rid: 1081034513282760910
-      type: {class: NeedType, ns: Mind, asm: Assembly-CSharp}
+    - rid: 1081034513282760843
+      type: {class: OccupationType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1
+    - rid: 1081034513282760909
+      type: {class: TargetType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 0

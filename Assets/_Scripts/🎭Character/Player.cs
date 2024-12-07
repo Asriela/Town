@@ -1,30 +1,44 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
+
 public class Player : Character
 {
-    [SerializeField] private GameObject radialMenuPrefab; // Radial menu prefab
-    [SerializeField] private Color seenColor = Color.red;  // Color when the player is seen
-    [SerializeField] private Color defaultColor = Color.blue;
+    [SerializeField] private GameObject _radialMenuPrefab; // Radial menu prefab
+    [SerializeField] private Color _seenColor = Color.red;  // Color when the player is seen
+    [SerializeField] private Color _defaultColor = Color.blue;
     private SpriteRenderer _spriteRenderer;
     private bool _isSeen = false;
-    private GameObject currentRadialMenu;
+    private bool _lastSeen = false;
+    private GameObject _currentRadialMenu;
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
+
         _spriteRenderer = GetComponent<SpriteRenderer>();
 
         // Initialize with the default color
-        _spriteRenderer.color = defaultColor;
+        _spriteRenderer.color = _defaultColor;
     }
-        private void Update()
+    private void Update()
     {
+        
         HandleInput();
+        UpdateSeenColor();
     }
 
+    private void UpdateSeenColor()
+    {
+        if (_lastSeen != _isSeen)
+        {
+            _lastSeen = _isSeen;
+            _spriteRenderer.color = _isSeen ? _seenColor : _defaultColor;
+        }
+    }
     private void HandleInput()
     {
+        if (Vitality.Dead)
+        { return; }
         if (Input.GetMouseButtonDown(0)) // Left-click
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -46,22 +60,22 @@ public class Player : Character
 
     private void MoveToLocation(Vector3 targetPosition)
     {
-        MoveTo(targetPosition);
+        Movement.MoveTo(targetPosition);
     }
 
     private void ShowRadialMenu(GameObject enemy, Vector3 position)
     {
         // Destroy the existing radial menu if there is one
-        if (currentRadialMenu != null)
+        if (_currentRadialMenu != null)
         {
-            Destroy(currentRadialMenu);
+            Destroy(_currentRadialMenu);
         }
 
         // Instantiate a new radial menu at the click position
-        currentRadialMenu = Instantiate(radialMenuPrefab, position, Quaternion.identity);
+        _currentRadialMenu = Instantiate(_radialMenuPrefab, position, Quaternion.identity);
 
         // Optionally: Pass the enemy to the radial menu for context-based actions
-        RadialMenu menu = currentRadialMenu.GetComponent<RadialMenu>();
+        RadialMenu menu = _currentRadialMenu.GetComponent<RadialMenu>();
         if (menu != null)
         {
             menu.SetTarget(enemy);
@@ -70,26 +84,20 @@ public class Player : Character
 
     private void HideRadialMenu()
     {
-        if (currentRadialMenu != null)
+        if (_currentRadialMenu != null)
         {
-            Destroy(currentRadialMenu);
-            currentRadialMenu = null;
+            Destroy(_currentRadialMenu);
+            _currentRadialMenu = null;
         }
     }
 
     public void SetSeenState(bool isSeen)
     {
+        _lastSeen = _isSeen;
         _isSeen = isSeen;
 
         // Change the color based on whether the player is seen
-        if (_isSeen)
-        {
-            _spriteRenderer.color = seenColor;  // Change color to 'seen' color
-        }
-        else
-        {
-            _spriteRenderer.color = defaultColor;  // Revert to default color
-        }
+
     }
 
 }

@@ -40,11 +40,10 @@ public class Movement : MonoBehaviour
         }
     }
 
-    public Vector3 GetMovementDirection()
-    {
-        return agent.velocity.normalized;  // Returns the normalized movement direction
-    }
+    public Vector3 GetMovementDirection() => agent.velocity.normalized;  // Returns the normalized movement direction
+
+    public Vector3 GetPosition() => transform.position;
 }
 
-    
+
 

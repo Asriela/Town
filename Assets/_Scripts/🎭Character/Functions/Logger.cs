@@ -7,15 +7,17 @@ public class Logger : MonoBehaviour
     public string CurrentAction { get; set; }
     public string CurrentStepInAction { get; set; }
 
-    private TextMeshPro _statsLabel;
+    private TextMeshProUGUI _statsLabel;
+    [SerializeField]
+    private Transform _statsLabelTransform;
 
     private void Awake()
     {
 
-        var statsLabelTransform = transform.Find("Canvas/StatsLabel");
-        if (statsLabelTransform != null)
+        _statsLabelTransform = transform.Find("Canvas/StatsLabel");
+        if (_statsLabelTransform != null)
         {
-            _statsLabel = statsLabelTransform.GetComponent<TextMeshPro>();
+            _statsLabel = _statsLabelTransform.GetComponent<TextMeshProUGUI>();
         }
 
         if (_statsLabel == null)
@@ -26,7 +28,7 @@ public class Logger : MonoBehaviour
 
     private void Update()
     {
-        UpdateStatsLabel($"CurrentBehaviour: {CurrentBehaviour} \n CurrentAction: {CurrentAction} \n CurrentStepInAction: {CurrentStepInAction}");
+        UpdateStatsLabel($"CurrentBehaviour:\n  {CurrentBehaviour}\n\n  CurrentAction:\n  {CurrentAction}\n\n  CurrentStepInAction:\n  {CurrentStepInAction}");
     }
 
     public void UpdateStatsLabel(string message)

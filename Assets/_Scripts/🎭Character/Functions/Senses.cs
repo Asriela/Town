@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class Senses : MonoBehaviour
@@ -8,28 +9,34 @@ public class Senses : MonoBehaviour
 
     [Header("Senses Settings")]
     [SerializeField] private float _detectionRadius = 10f;  // How far NPC can see
-    [SerializeField] private float _viewAngle = 180;  // The angle of view in degrees
+    [SerializeField] private float _viewAngle = 100;  // The angle of view in degrees
     [SerializeField] private LayerMask _detectionLayer;  // What layers the NPC can detect (e.g., NPCs)
     [SerializeField] private Material _viewConeMaterial; // Material for the cone
+    private Vector3 _lookDirection;
 
     private Mesh _viewConeMesh;
+
     private MeshRenderer _viewConeRenderer;
     private List<Character> _charactersInSight = new List<Character>();
 
     public void Initialize(NPC npc)
     {
         _npc = npc;
+        StartCoroutine(DetectCharactersInSight());
+        CreateViewCone();
     }
 
-    public void Start()
-    {
-        CreateViewCone();
-        StartCoroutine(DetectCharactersInSight());
-    }
+
 
     private void Update()
     {
         DrawViewCone();
+        SetViewDirection();
+    }
+
+    private void SetViewDirection()
+    {
+        _lookDirection = _npc.Movement.GetMovementDirection().normalized;
     }
 
     private void CreateViewCone()
@@ -56,7 +63,7 @@ public class Senses : MonoBehaviour
         int[] triangles = new int[segments * 3];
 
         // Get the movement direction from the NPC 
-        Vector3 movementDirection = _npc.GetMovementDirection().normalized;
+        Vector3 movementDirection = _lookDirection;
 
         vertices[0] = Vector3.zero; // Cone origin
         for (int i = 0; i <= segments; i++)
@@ -81,22 +88,22 @@ public class Senses : MonoBehaviour
 
     private IEnumerator DetectCharactersInSight()
     {
+
         while (true)
         {
             // First, reset the 'unseen' state for characters that are no longer in sight
-            /*foreach (var character in _charactersInSight.ToArray())
+            foreach (var character in _charactersInSight.ToArray())
             {
                 if (character is Player player)
                 {
                     // Check if player is no longer in the view cone
-                    if (!IsInLineOfSight(player))
-                    {
-                        player.SetSeenState(false); // Set player to unseen state
-                        _charactersInSight.Remove(character); // Remove from sight list
-                    }
+
+                    player.SetSeenState(false); // Set player to unseen state
+                    _charactersInSight.Remove(character); // Remove from sight list
+
                 }
             }
-            */
+
 
             // Clear the previous list and detect all new characters
             Collider2D[] collidersInRange = Physics2D.OverlapCircleAll(transform.position, _detectionRadius, _detectionLayer);
@@ -110,10 +117,9 @@ public class Senses : MonoBehaviour
                 {
                     if (collider.TryGetComponent(out NPC potentialNPC))
                     {
-                        Vector2 directionToTarget = (potentialNPC.transform.position - transform.position).normalized;
-                        float angle = Vector2.Angle(transform.right, directionToTarget);
 
-                        if (angle <= _viewAngle && IsInLineOfSight(potentialNPC))
+
+                        if (IsInLineOfSight((Character)potentialNPC))
                         {
                             if (!_charactersInSight.Contains(potentialNPC))
                             {
@@ -124,17 +130,15 @@ public class Senses : MonoBehaviour
                     }
                     else if (collider.TryGetComponent(out Player potentialPlayer))
                     {
-                        Vector2 directionToTarget = (potentialPlayer.transform.position - transform.position).normalized;
-                        float angle = Vector2.Angle(transform.right, directionToTarget);
 
-                        // If player is inside the view cone angle, immediately check line of sight
-                        if (angle <= _viewAngle  && IsInLineOfSight(potentialPlayer))
+
+                        if (IsInLineOfSight((Character)potentialPlayer))
                         {
                             if (!_charactersInSight.Contains(potentialPlayer))
                             {
                                 print("sees Player");
                                 _charactersInSight.Add(potentialPlayer);
-                                //potentialPlayer.SetSeenState(true); // Set player to seen state
+                                potentialPlayer.SetSeenState(true); // Set player to seen state
                             }
                         }
                     }
@@ -146,26 +150,32 @@ public class Senses : MonoBehaviour
     }
     private bool IsInLineOfSight(Character character)
     {
-        var targetPosition = character.transform.position;
-        // Offset the ray start position slightly to avoid hitting the NPC's own collider
-        Vector2 rayStartPosition = (Vector2)transform.position + new Vector2(0, 2f); // Example offset along the y-axis
+       
+        var ourPosition = _npc.Movement.GetPosition();
+        var targetPosition = character.Movement.GetPosition();
+        if (Vector3.Distance(ourPosition, targetPosition) > _detectionRadius)
+        { return false; }
 
-        // Cast a ray towards the target
-        RaycastHit2D hit = Physics2D.Raycast(rayStartPosition, targetPosition - (Vector3)rayStartPosition, _detectionRadius, _detectionLayer);
-        Debug.DrawRay(rayStartPosition, targetPosition - (Vector3)rayStartPosition, Color.red);
+        var dirToTarget = (targetPosition - ourPosition).normalized;
 
-        // Check if the first hit is the character and not the NPC itself
-        if (hit.collider != null && hit.collider == character.GetComponent<Collider2D>())
-        {
-            // Check if there are no walls between the NPC and the player
-            return true;
-        }
+        if (Vector3.Angle(_lookDirection, dirToTarget) > _viewAngle / 2f)
+        { return false; }
+
+        int oldLayer = _npc.gameObject.layer;
+        _npc.gameObject.layer = Physics.IgnoreRaycastLayer; // or any layer that's not included in the raycast
+        var raycastHit2D = Physics2D.Raycast(ourPosition, dirToTarget, _detectionRadius, _detectionLayer);
+
+        _npc.gameObject.layer = oldLayer;
 
 
+        if (raycastHit2D.collider != null && raycastHit2D.collider.gameObject == character.gameObject)
+        { return true; }
 
-        // If no hits or a non-character object was hit, return false
+
         return false;
     }
+
+
 
     /* private bool IsInLineOfSight(Character character)
      {
@@ -229,7 +239,7 @@ public class Senses : MonoBehaviour
         if (_npc != null)
         {
             // Get the movement direction from the Movement class
-            Vector3 movementDirection = _npc.GetMovementDirection();
+            Vector3 movementDirection = _npc.Movement.GetMovementDirection();
 
             // Draw the field of view cone (2D)
             Gizmos.color = new Color(1f, 1f, 0f, 0.3f);  // Yellow with transparency

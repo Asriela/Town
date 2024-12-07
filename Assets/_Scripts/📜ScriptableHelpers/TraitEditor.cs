@@ -112,9 +112,11 @@ public class TraitEditor : Editor
         // Map ActionType to corresponding Enum types
         return ((Mind.ActionType)actionIndex) switch
         {
-            Mind.ActionType.find => typeof(Mind.TargetType),
+            Mind.ActionType.findCharacter => typeof(Mind.TargetType),
+            Mind.ActionType.findObject => typeof(Mind.ObjectType),
             Mind.ActionType.kill => typeof(Mind.TargetType),
             Mind.ActionType.fullfillNeed => typeof(Mind.NeedType),
+            Mind.ActionType.occupation => typeof(Mind.OccupationType),
             _ => null,
         };
     }
@@ -133,16 +135,18 @@ public class TraitEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 
-    private Type GetEnumTypeForConditionType(Mind.ConditionType conditionType)
-    {
+    private Type GetEnumTypeForConditionType(Mind.ConditionType conditionType) =>
         // Map ConditionType to corresponding Enum types
-        return conditionType switch
+        conditionType switch
         {
             Mind.ConditionType.hasTarget => typeof(Mind.TargetType),
+            Mind.ConditionType.doesNotHaveTarget => typeof(Mind.TargetType),
+            Mind.ConditionType.hasObject => typeof(Mind.ObjectType),
+            Mind.ConditionType.doesNotHaveObject => typeof(Mind.ObjectType),
             Mind.ConditionType.needsTo => typeof(Mind.NeedType),
+            Mind.ConditionType.timeOfDay => typeof(Mind.TimeOfDayType),
             _ => null,
         };
-    }
 
     private void DrawConditionsList(Rect rect, SerializedProperty conditionsProperty)
     {
