@@ -18,16 +18,16 @@ MonoBehaviour:
     _dialogue: 
     _action: 3
     _actionParameter:
-      rid: 1081034513282760933
+      rid: 1081034534366740556
     _conditions:
     - conditionType: 4
       parameter:
-        rid: 1081034513282760933
+        rid: 1081034534366740556
     _priority: 2
   references:
     version: 2
     RefIds:
-    - rid: 1081034513282760933
+    - rid: 1081034534366740556
       type: {class: ObjectType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 2

@@ -10,28 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7dc8225a4be6fd4d87acb8e49149fbb, type: 3}
-  m_Name: Trader
+  m_Name: Innkeeper
   m_EditorClassIdentifier: 
-  Type: 3
+  Type: 0
   Behaviors:
-  - _name: Trade
-    _dialogue: New Dialogue
+  - _name: Innkeeper
+    _dialogue: 
     _action: 10
     _actionParameter:
-      rid: 1081034515448332410
+      rid: 1081034534366740562
     _conditions:
     - conditionType: 6
       parameter:
-        rid: 1081034515448332411
+        rid: 1081034534366740565
     _priority: 6
   references:
     version: 2
     RefIds:
-    - rid: 1081034515448332410
-      type: {class: OccupationType, ns: Mind, asm: Assembly-CSharp}
+    - rid: 1081034534366740562
+      type: {class: TraderType, ns: Mind, asm: Assembly-CSharp}
       data:
-        value__: 1
-    - rid: 1081034515448332411
+        value__: 4
+    - rid: 1081034534366740565
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 6

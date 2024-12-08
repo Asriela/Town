@@ -1,6 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-public class CommunicationHelper
+public static class SocialHelper
 {
     
 }

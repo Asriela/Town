@@ -116,7 +116,7 @@ public class TraitEditor : Editor
             Mind.ActionType.findObject => typeof(Mind.ObjectType),
             Mind.ActionType.kill => typeof(Mind.TargetType),
             Mind.ActionType.fullfillNeed => typeof(Mind.NeedType),
-            Mind.ActionType.occupation => typeof(Mind.OccupationType),
+            Mind.ActionType.trader => typeof(Mind.TraderType),
             _ => null,
         };
     }

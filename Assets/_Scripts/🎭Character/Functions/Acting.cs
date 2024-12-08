@@ -17,7 +17,7 @@ public class Acting : MonoBehaviour
         { Mind.ActionType.findObject, param => FindObject((Mind.ObjectType)param) },
         { Mind.ActionType.fullfillNeed, param => FullfillNeed((Mind.NeedType)param) },
         { Mind.ActionType.kill, param => Kill((Mind.TargetType)param) },
-        { Mind.ActionType.occupation, param => DoOccupation((Mind.OccupationType)param) }
+        { Mind.ActionType.trader, param => TraderJob((Mind.TraderType)param) }
     };
 
     private void Update() => PerformCurrentBehavior();
@@ -44,7 +44,6 @@ public class Acting : MonoBehaviour
     private void FindCharacter(Mind.TargetType targetType)
     {
         StartCoroutine(ActionsHelper.WanderAndSearch(_npc, targetType, true,Mind.TraitType.human));
-
     }
     private void FindObject(Mind.ObjectType targetType)
     {
@@ -72,7 +71,7 @@ public class Acting : MonoBehaviour
         }
     }
 
-    private void DoOccupation(Mind.OccupationType needType)
+    private void TraderJob(Mind.TraderType traderType)
     {
         var objectToUse = _npc.Memory.Possessions[ObjectType.traderDesk];
         if (ActionsHelper.Reached(_npc, objectToUse.transform.position))

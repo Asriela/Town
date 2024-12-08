@@ -28,7 +28,7 @@ namespace Mind
         abduct,
         performSpell,
         socialize,
-        occupation
+        trader
     }
     [Serializable]
     public enum SpellType : short
@@ -38,10 +38,13 @@ namespace Mind
     }
 
     [Serializable]
-    public enum OccupationType : short
+    public enum TraderType : short
     {
         none,
-        trade
+        food,
+        generalGoods,
+        barKeeper,
+        innkeeper
     }
 
     [Serializable]
