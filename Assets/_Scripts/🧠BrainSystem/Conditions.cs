@@ -29,6 +29,11 @@ public static class Conditions
             // Now we check which type the delegate is and cast it accordingly
             switch (condition.conditionType)
             {
+
+                case ConditionType.timeOfDay:
+                    var timeDelegate = (ConditionDelegate<TimeOfDayType>)conditionDelegate;
+                    return timeDelegate((TimeOfDayType)condition.parameter, npc, true);
+
                 case ConditionType.needsTo:
                     var needDelegate = (ConditionDelegate<NeedType>)conditionDelegate;
                     return needDelegate((NeedType)condition.parameter, npc, true);
@@ -37,9 +42,7 @@ public static class Conditions
                     var targetDelegate = (ConditionDelegate<TargetType>)conditionDelegate;
                     return targetDelegate((TargetType)condition.parameter, npc, true);
 
-                case ConditionType.doesNotHaveTarget:
-                    var targetNotDelegate = (ConditionDelegate<TargetType>)conditionDelegate;
-                    return targetNotDelegate((TargetType)condition.parameter, npc, false);
+
 
                 case ConditionType.hasObject:
                     var objectDelegate = (ConditionDelegate<ObjectType>)conditionDelegate;
@@ -85,6 +88,7 @@ public static class Conditions
     }
     private static bool CheckTimeOfDay(TimeOfDayType parameter, NPC npc, bool trueStatement)
     {
+        var timeDelegate = true;
         if (WorldManager.Instance.GetTimeOfDayAsEnum() == parameter)
         {
             return trueStatement;

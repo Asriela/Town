@@ -16,22 +16,22 @@ MonoBehaviour:
   Behaviors:
   - _name: Trade
     _dialogue: New Dialogue
-    _action: 9
+    _action: 10
     _actionParameter:
-      rid: 1081034513282760843
+      rid: 1081034515448332410
     _conditions:
-    - conditionType: 3
+    - conditionType: 6
       parameter:
-        rid: 1081034513282760909
-    _priority: 2
+        rid: 1081034515448332411
+    _priority: 6
   references:
     version: 2
     RefIds:
-    - rid: 1081034513282760843
+    - rid: 1081034515448332410
       type: {class: OccupationType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1
-    - rid: 1081034513282760909
-      type: {class: TargetType, ns: Mind, asm: Assembly-CSharp}
+    - rid: 1081034515448332411
+      type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
-        value__: 0
+        value__: 6

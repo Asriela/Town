@@ -12,7 +12,7 @@ public class GameUI : MonoBehaviour
         var root = _uiDocument.rootVisualElement;
 
         // Find the label by its name and set its text
-        _timeOfDaylabel = root.Q<Label>("TimeOfDayLabel");  
+        _timeOfDaylabel = root.Q<Label>("TimeOfDay");  
     }
 
     private void Update()
@@ -20,7 +20,7 @@ public class GameUI : MonoBehaviour
 
         if (_timeOfDaylabel != null)
         {
-            _timeOfDaylabel.text = WorldManager.Instance.TimeOfDay.ToString();
+            _timeOfDaylabel.text = @$"Time of day: {((int)WorldManager.Instance.TimeOfDay)}h/n Enum: {WorldManager.Instance.GetTimeOfDayAsEnum()} ";
         }
 
     } 

@@ -13,9 +13,11 @@ public class Acting : MonoBehaviour
     private void Awake() =>
     _actionHandlers = new Dictionary<Mind.ActionType, Action<object>>
     {
-        { Mind.ActionType.findCharacter, param => Find((Mind.TargetType)param) },
+        { Mind.ActionType.findCharacter, param => FindCharacter((Mind.TargetType)param) },
+        { Mind.ActionType.findObject, param => FindObject((Mind.ObjectType)param) },
         { Mind.ActionType.fullfillNeed, param => FullfillNeed((Mind.NeedType)param) },
-        { Mind.ActionType.kill, param => Kill((Mind.TargetType)param) }
+        { Mind.ActionType.kill, param => Kill((Mind.TargetType)param) },
+        { Mind.ActionType.occupation, param => DoOccupation((Mind.OccupationType)param) }
     };
 
     private void Update() => PerformCurrentBehavior();
@@ -39,12 +41,16 @@ public class Acting : MonoBehaviour
         }
     }
 
-    private void Find(Mind.TargetType targetType)
+    private void FindCharacter(Mind.TargetType targetType)
     {
         StartCoroutine(ActionsHelper.WanderAndSearch(_npc, targetType, true,Mind.TraitType.human));
 
     }
+    private void FindObject(Mind.ObjectType targetType)
+    {
+      //  StartCoroutine(ActionsHelper.WanderAndSearch(_npc, targetType, true, Mind.TraitType.human));
 
+    }
     private void Kill(Mind.TargetType targetType)
     {
         var target = _npc.Memory.Targets[targetType].GetComponent<Character>();
@@ -65,4 +71,14 @@ public class Acting : MonoBehaviour
             _npc.Vitality.Needs[needType] = 0;
         }
     }
+
+    private void DoOccupation(Mind.OccupationType needType)
+    {
+        var objectToUse = _npc.Memory.Possessions[ObjectType.traderDesk];
+        if (ActionsHelper.Reached(_npc, objectToUse.transform.position))
+        {
+
+        }
+    }
+    
 }

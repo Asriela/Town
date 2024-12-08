@@ -18,30 +18,30 @@ MonoBehaviour:
     _dialogue: 
     _action: 2
     _actionParameter:
-      rid: 1081034513282760906
+      rid: 1081034515448332372
     _conditions:
     - conditionType: 1
       parameter:
-        rid: 1081034513282760907
+        rid: 1081034515448332373
     _priority: 0
   - _name: Kill Victim
     _dialogue: 
     _action: 1
     _actionParameter:
-      rid: 1081034513282760906
+      rid: 1081034515448332372
     _conditions:
     - conditionType: 2
       parameter:
-        rid: 1081034513282760906
+        rid: 1081034515448332372
     _priority: 0
   references:
     version: 2
     RefIds:
-    - rid: 1081034513282760906
+    - rid: 1081034515448332372
       type: {class: TargetType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 3
-    - rid: 1081034513282760907
+    - rid: 1081034515448332373
       type: {class: NeedType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 3

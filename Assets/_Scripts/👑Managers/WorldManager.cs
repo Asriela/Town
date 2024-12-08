@@ -26,7 +26,7 @@ public class WorldManager : Singleton<WorldManager>
         if (hour >= 0 && hour < 12)
         {
 
-            return (TimeOfDayType)(hour + 1);
+            return (TimeOfDayType)(hour-1);
         }
         else
         {
