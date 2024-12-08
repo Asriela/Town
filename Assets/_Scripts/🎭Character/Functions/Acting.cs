@@ -17,7 +17,9 @@ public class Acting : MonoBehaviour
         { Mind.ActionType.findObject, param => FindObject((Mind.ObjectType)param) },
         { Mind.ActionType.fullfillNeed, param => FullfillNeed((Mind.NeedType)param) },
         { Mind.ActionType.kill, param => Kill((Mind.TargetType)param) },
-        { Mind.ActionType.trader, param => TraderJob((Mind.TraderType)param) }
+        { Mind.ActionType.trader, param => TraderJob((Mind.TraderType)param) },
+        { Mind.ActionType.findKnowledge, param => FindKnowledge((Mind.KnowledgeType)param) },
+        { Mind.ActionType.gotoLocation, param => GotoLocation((Mind.TargetLocationType)param) }
     };
 
     private void Update() => PerformCurrentBehavior();
@@ -50,6 +52,12 @@ public class Acting : MonoBehaviour
       //  StartCoroutine(ActionsHelper.WanderAndSearch(_npc, targetType, true, Mind.TraitType.human));
 
     }
+    private void FindKnowledge(Mind.KnowledgeType knowledgeType)
+    {
+        //  StartCoroutine(ActionsHelper.WanderAndSearch(_npc, targetType, true, Mind.TraitType.human));
+       // CurrentBehavior.ActionTags;
+
+    }
     private void Kill(Mind.TargetType targetType)
     {
         var target = _npc.Memory.Targets[targetType].GetComponent<Character>();
@@ -79,5 +87,17 @@ public class Acting : MonoBehaviour
 
         }
     }
-    
+
+    private void GotoLocation(Mind.TargetLocationType locationType)
+    {
+      //  var targetMemory = _npc.Memory
+     //   var destination = WorldManager.Instance.Locations[locationType];
+
+       // if (ActionsHelper.Reached(_npc, destination.transform.position))
+       // {
+       //     _npc.Memory.CurrentLocation = locationType;
+      //  }
+    }
+
+
 }

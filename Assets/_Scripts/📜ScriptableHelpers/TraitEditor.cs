@@ -35,6 +35,8 @@ public class TraitEditor : Editor
                 var dialogueProperty = behaviorProperty.FindPropertyRelative("_dialogue");
                 var actionProperty = behaviorProperty.FindPropertyRelative("_action");
                 var actionParameterProperty = behaviorProperty.FindPropertyRelative("_actionParameter");
+                var actionTagsProperty = behaviorProperty.FindPropertyRelative("_actionTags");
+
                 var conditionsProperty = behaviorProperty.FindPropertyRelative("_conditions");
                 var priorityProperty = behaviorProperty.FindPropertyRelative("_priority");
 
@@ -86,6 +88,31 @@ public class TraitEditor : Editor
 
                 rect.y += lineHeight + spacing;
 
+                // Draw ActionTags
+                EditorGUI.LabelField(new Rect(rect.x, rect.y, rect.width, lineHeight), "Action Tags");
+                rect.y += lineHeight + spacing;
+
+                for (int i = 0; i < actionTagsProperty.arraySize; i++)
+                {
+                    SerializedProperty tagProperty = actionTagsProperty.GetArrayElementAtIndex(i);
+                    EditorGUI.PropertyField(new Rect(rect.x, rect.y, rect.width - 30, lineHeight), tagProperty, GUIContent.none);
+
+                    if (GUI.Button(new Rect(rect.x + rect.width - 30, rect.y, 30, lineHeight), "-"))
+                    {
+                        actionTagsProperty.DeleteArrayElementAtIndex(i);
+                        break;
+                    }
+
+                    rect.y += lineHeight + spacing;
+                }
+
+                if (GUI.Button(new Rect(rect.x, rect.y, 100, lineHeight), "Add Tag"))
+                {
+                    actionTagsProperty.arraySize++;
+                }
+                rect.y += lineHeight + spacing;
+
+
                 // Draw the Priority field
                 EditorGUI.PropertyField(new Rect(rect.x, rect.y, rect.width, lineHeight), priorityProperty, new GUIContent("Priority"));
                 rect.y += lineHeight + spacing;
@@ -96,15 +123,17 @@ public class TraitEditor : Editor
 
             elementHeightCallback = index =>
             {
-                // Compute the height based on the number of conditions + space for priority
                 SerializedProperty behaviorProperty = behaviorsProperty.GetArrayElementAtIndex(index);
                 SerializedProperty conditionsProperty = behaviorProperty.FindPropertyRelative("_conditions");
-                int numConditions = conditionsProperty.arraySize;
+                SerializedProperty actionTagsProperty = behaviorProperty.FindPropertyRelative("_actionTags");
 
-                // Adjust the height for the conditions list, behavior details, and priority field
-                return EditorGUIUtility.singleLineHeight * 7 + (numConditions * (EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing)) + 30; // Adding extra space (30) for the new controls and divider
+                return EditorGUIUtility.singleLineHeight * 7 + // Name, Dialogue, Action, Priority
+                       (actionTagsProperty.arraySize * (EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing)) + // ActionTags
+                       (conditionsProperty.arraySize * (EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing)) + // Conditions
+                       EditorGUIUtility.singleLineHeight + // Add space for "Add Condition" button
+                       70; // Space for additional buttons
             }
-        };
+    };
     }
 
     private Type GetEnumTypeForActionType(int actionIndex)
@@ -117,6 +146,8 @@ public class TraitEditor : Editor
             Mind.ActionType.kill => typeof(Mind.TargetType),
             Mind.ActionType.fullfillNeed => typeof(Mind.NeedType),
             Mind.ActionType.trader => typeof(Mind.TraderType),
+            Mind.ActionType.findKnowledge => typeof(Mind.KnowledgeType),
+            Mind.ActionType.gotoLocation => typeof(Mind.TargetLocationType),
             _ => null,
         };
     }
@@ -145,6 +176,10 @@ public class TraitEditor : Editor
             Mind.ConditionType.doesNotHaveObject => typeof(Mind.ObjectType),
             Mind.ConditionType.needsTo => typeof(Mind.NeedType),
             Mind.ConditionType.timeOfDay => typeof(Mind.TimeOfDayType),
+            Mind.ConditionType.hasKnowledge => typeof(Mind.KnowledgeType),
+            Mind.ConditionType.doesNotHaveKnowledge => typeof(Mind.KnowledgeType),
+            Mind.ConditionType.atLocation => typeof(Mind.TargetLocationType),
+            Mind.ConditionType.hasLocationTarget => typeof(Mind.TargetLocationType),
             _ => null,
         };
 
@@ -165,7 +200,7 @@ public class TraitEditor : Editor
             SerializedProperty parameterProperty = conditionProperty.FindPropertyRelative("parameter");
 
             // Draw condition type
-            EditorGUI.PropertyField(new Rect(rect.x, rect.y + (lineHeight + spacing) * i, rect.width * 0.4f, lineHeight), conditionTypeProperty, GUIContent.none);
+            EditorGUI.PropertyField(new Rect(rect.x, rect.y, rect.width * 0.4f, lineHeight), conditionTypeProperty, GUIContent.none);
 
             // Always reset parameter when ConditionType changes
             Mind.ConditionType currentConditionType = (Mind.ConditionType)conditionTypeProperty.enumValueIndex;
@@ -173,49 +208,49 @@ public class TraitEditor : Editor
 
             if (enumType != null)
             {
-                // Reset the parameter when the condition type changes
                 if (parameterProperty.managedReferenceValue == null || parameterProperty.managedReferenceValue.GetType() != enumType)
                 {
-                    parameterProperty.managedReferenceValue = Enum.GetValues(enumType).GetValue(0); // Set default value
+                    parameterProperty.managedReferenceValue = Enum.GetValues(enumType).GetValue(0);
                 }
 
-                // Draw parameter field dynamically based on condition type
                 var currentValue = (Enum)parameterProperty.managedReferenceValue;
-                var newValue = EditorGUI.EnumPopup(new Rect(rect.x + rect.width * 0.45f, rect.y + (lineHeight + spacing) * i, rect.width * 0.5f, lineHeight), currentValue);
+                var newValue = EditorGUI.EnumPopup(new Rect(rect.x + rect.width * 0.45f, rect.y, rect.width * 0.5f, lineHeight), currentValue);
                 parameterProperty.managedReferenceValue = newValue;
             }
             else
             {
-                EditorGUI.LabelField(new Rect(rect.x + rect.width * 0.45f, rect.y + (lineHeight + spacing) * i, rect.width * 0.5f, lineHeight), "No parameters");
+                EditorGUI.LabelField(new Rect(rect.x + rect.width * 0.45f, rect.y, rect.width * 0.5f, lineHeight), "No parameters");
             }
 
-            // Add a "Remove" button (represented by a "-" icon) to the left of the condition row
-            if (GUI.Button(new Rect(rect.x + rect.width - 20, rect.y + (lineHeight + spacing) * i, 20, lineHeight), "-"))
+            // Remove button
+            if (GUI.Button(new Rect(rect.x + rect.width - 20, rect.y, 20, lineHeight), "-"))
             {
-                // Remove the condition from the list
                 conditionsProperty.DeleteArrayElementAtIndex(i);
-                // Reapply properties after deleting
                 serializedObject.ApplyModifiedProperties();
+                break;
             }
+
+            rect.y += lineHeight + spacing;
         }
 
-        // Add button for adding conditions at the bottom of the list
-        if (GUI.Button(new Rect(rect.x + rect.width - 100, rect.y + (lineHeight + spacing) * conditionsProperty.arraySize, 100, EditorGUIUtility.singleLineHeight), "Add Condition"))
+        // Add Condition button
+        rect.y += spacing; // Small gap before the button
+        if (GUI.Button(new Rect(rect.x, rect.y, rect.width, lineHeight), "Add Condition"))
         {
             conditionsProperty.arraySize++;
             var newCondition = conditionsProperty.GetArrayElementAtIndex(conditionsProperty.arraySize - 1);
 
             var conditionTypeProperty = newCondition.FindPropertyRelative("conditionType");
-            conditionTypeProperty.enumValueIndex = 0; // Default to the first condition type
+            conditionTypeProperty.enumValueIndex = 0;
 
             var parameterProperty = newCondition.FindPropertyRelative("parameter");
             Type parameterEnumType = GetEnumTypeForConditionType((Mind.ConditionType)0);
 
-            // Set default value only if enumType is valid
             if (parameterEnumType != null)
             {
                 parameterProperty.managedReferenceValue = Enum.GetValues(parameterEnumType).GetValue(0);
             }
         }
     }
+
 }

@@ -20,11 +20,14 @@ public class Behavior
     [SerializeReference] private object _actionParameter; // Use [SerializeReference] for polymorphic serialization
     [SerializeField] private List<Condition> _conditions = new();
     [SerializeField] private int _priority;
+    [SerializeField] private List<Mind.KnowledgeTag> _actionTags;
 
     public string Name => _name;
     public string Dialogue => _dialogue;
     public Mind.ActionType Action => _action;
     public object ActionParameter => _actionParameter;
+
+    public List<Mind.KnowledgeTag> ActionTags => _actionTags;
     public List<Condition> Conditions => _conditions;
     public int Priority => _priority;
 

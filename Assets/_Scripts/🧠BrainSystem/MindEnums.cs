@@ -9,7 +9,7 @@ namespace Mind
         human,
         deathCultist,
         touchedByDarkness,
-        trader,
+        innKeeper,
         murderer,
         guard,
         draugerCultist,
@@ -28,13 +28,36 @@ namespace Mind
         abduct,
         performSpell,
         socialize,
-        trader
+        trader,
+        findKnowledge,
+        gotoLocation,
+
+    }
+    [Serializable]
+    public enum LocationName : short
+    {
+        none,
+        ruinsOfLazeel
+    }
+    [Serializable]
+    public enum TargetLocationType : short
+    {
+        none,
+        locationOfDarkKnowledge
     }
     [Serializable]
     public enum SpellType : short
     {
         none,
         makeUndead
+    }
+    [Serializable]
+    public enum KnowledgeTag : short
+    {
+        none,
+        dark,
+        light,
+        ruins
     }
 
     [Serializable]
@@ -45,6 +68,13 @@ namespace Mind
         generalGoods,
         barKeeper,
         innkeeper
+    }
+    [Serializable]
+    public enum KnowledgeType : short
+    {
+        none,
+        location,
+        person
     }
 
     [Serializable]
@@ -88,7 +118,14 @@ namespace Mind
         doesNotHaveTarget,
         doesNotHaveObject,
         hasObject,
-        timeOfDay
+        timeOfDay,
+        doesNotHaveKnowledge,
+        hasKnowledge,
+        atLocation,
+        notAtLocation,
+        hasLocationTarget,
+        doesNotHaveLocationTarget
+
     }
     [Serializable]
     public enum TimeOfDayType : short

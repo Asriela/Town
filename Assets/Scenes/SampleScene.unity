@@ -366,6 +366,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 862567352352533102, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _peopleKnowledge.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 862567352352533102, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: _possessions.Array.data[0].gameObject
       value: 
       objectReference: {fileID: 1025085715}
@@ -500,6 +504,11 @@ PrefabInstance:
 --- !u!224 &71209172 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2678595810235465622, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+  m_PrefabInstance: {fileID: 71209171}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &71209173 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6668485555159576815, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
   m_PrefabInstance: {fileID: 71209171}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &184148373
@@ -1990,9 +1999,25 @@ PrefabInstance:
       value: 'Zerath '
       objectReference: {fileID: 0}
     - target: {fileID: 862567352352533102, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _peopleKnowledge.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 862567352352533102, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: _possessions.Array.data[0].gameObject
       value: 
       objectReference: {fileID: 1841029038}
+    - target: {fileID: 862567352352533102, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _peopleKnowledge.Array.data[0].traitType
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 862567352352533102, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _peopleKnowledge.Array.data[0].gameObjects.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 862567352352533102, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: '_peopleKnowledge.Array.data[0].gameObjects.Array.data[0]'
+      value: 
+      objectReference: {fileID: 71209173}
     - target: {fileID: 1706725622196036196, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: _traits.Array.size
       value: 2
