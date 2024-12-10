@@ -13,12 +13,13 @@ public static class Conditions
     static Conditions()
     {
         // Initialize the delegates for each condition type.
-        _conditionDelegates.Add(ConditionType.needsTo, new ConditionDelegate<NeedType>(CheckNeed));
-        _conditionDelegates.Add(ConditionType.hasTarget, new ConditionDelegate<TargetType>(CheckTarget));
-        _conditionDelegates.Add(ConditionType.doesNotHaveTarget, new ConditionDelegate<NeedType>(CheckNeed));
-        _conditionDelegates.Add(ConditionType.hasObject, new ConditionDelegate<ObjectType>(CheckHasObject));
-        _conditionDelegates.Add(ConditionType.doesNotHaveObject, new ConditionDelegate<ObjectType>(CheckHasObject));
-        _conditionDelegates.Add(ConditionType.timeOfDay, new ConditionDelegate<TimeOfDayType>(CheckTimeOfDay));
+        _conditionDelegates.Add(ConditionType.needsTo, new ConditionDelegate<Mind.NeedType>(CheckNeed));
+        _conditionDelegates.Add(ConditionType.hasTarget, new ConditionDelegate<Mind.TargetType>(CheckTarget));
+        _conditionDelegates.Add(ConditionType.doesNotHaveTarget, new ConditionDelegate<Mind.NeedType>(CheckNeed));
+        _conditionDelegates.Add(ConditionType.hasObject, new ConditionDelegate<Mind.ObjectType>(CheckHasObject));
+        _conditionDelegates.Add(ConditionType.doesNotHaveObject, new ConditionDelegate<Mind.ObjectType>(CheckHasObject));
+        _conditionDelegates.Add(ConditionType.timeOfDay, new ConditionDelegate<Mind.TimeOfDayType>(CheckTimeOfDay));
+        _conditionDelegates.Add(ConditionType.atLocation, new ConditionDelegate<Mind.LocationName>(AtLocation));
     }
 
     public static bool CheckCondition(Condition condition, NPC npc)
@@ -31,26 +32,29 @@ public static class Conditions
             {
 
                 case ConditionType.timeOfDay:
-                    var timeDelegate = (ConditionDelegate<TimeOfDayType>)conditionDelegate;
-                    return timeDelegate((TimeOfDayType)condition.parameter, npc, true);
+                    var timeDelegate = (ConditionDelegate<Mind.TimeOfDayType>)conditionDelegate;
+                    return timeDelegate((Mind.TimeOfDayType)condition.parameter, npc, true);
 
                 case ConditionType.needsTo:
-                    var needDelegate = (ConditionDelegate<NeedType>)conditionDelegate;
-                    return needDelegate((NeedType)condition.parameter, npc, true);
+                    var needDelegate = (ConditionDelegate<Mind.NeedType>)conditionDelegate;
+                    return needDelegate((Mind.NeedType)condition.parameter, npc, true);
 
                 case ConditionType.hasTarget:
-                    var targetDelegate = (ConditionDelegate<TargetType>)conditionDelegate;
-                    return targetDelegate((TargetType)condition.parameter, npc, true);
+                    var targetDelegate = (ConditionDelegate<Mind.TargetType>)conditionDelegate;
+                    return targetDelegate((Mind.TargetType)condition.parameter, npc, true);
 
 
 
                 case ConditionType.hasObject:
-                    var objectDelegate = (ConditionDelegate<ObjectType>)conditionDelegate;
-                    return objectDelegate((ObjectType)condition.parameter, npc, true);
+                    var objectDelegate = (ConditionDelegate<Mind.ObjectType>)conditionDelegate;
+                    return objectDelegate((Mind.ObjectType)condition.parameter, npc, true);
 
                 case ConditionType.doesNotHaveObject:
-                    var objectNotDelegate = (ConditionDelegate<ObjectType>)conditionDelegate;
-                    return objectNotDelegate((ObjectType)condition.parameter, npc, false);
+                    var objectNotDelegate = (ConditionDelegate<Mind.ObjectType>)conditionDelegate;
+                    return objectNotDelegate((Mind.ObjectType)condition.parameter, npc, false);
+                case ConditionType.atLocation:
+                    var atLocation = (ConditionDelegate<Mind.LocationName>)conditionDelegate;
+                    return atLocation((Mind.LocationName)condition.parameter, npc, false);
                 default:
                     return false;
             }
@@ -60,7 +64,7 @@ public static class Conditions
     }
 
     // Example condition check methods:
-    private static bool CheckNeed(NeedType parameter, NPC npc, bool trueStatement)
+    private static bool CheckNeed(Mind.NeedType parameter, NPC npc, bool trueStatement)
     {
         if (npc.Vitality.Needs.ContainsKey(parameter) && npc.Vitality.Needs[parameter] > 80)
         {
@@ -69,7 +73,7 @@ public static class Conditions
         return false;
     }
 
-    private static bool CheckTarget(TargetType parameter, NPC npc, bool trueStatement)
+    private static bool CheckTarget(Mind.TargetType parameter, NPC npc, bool trueStatement)
     {
         if (npc.Memory.Targets.ContainsKey(parameter) && npc.Memory.Targets[parameter] != null)
         {
@@ -78,7 +82,7 @@ public static class Conditions
         return !trueStatement;
     }
 
-    private static bool CheckHasObject(ObjectType parameter, NPC npc, bool trueStatement)
+    private static bool CheckHasObject(Mind.ObjectType parameter, NPC npc, bool trueStatement)
     {
         if (npc.Memory.Possessions.ContainsKey(parameter) && npc.Memory.Possessions[parameter] != null)
         {
@@ -86,7 +90,7 @@ public static class Conditions
         }
         return !trueStatement;
     }
-    private static bool CheckTimeOfDay(TimeOfDayType parameter, NPC npc, bool trueStatement)
+    private static bool CheckTimeOfDay(Mind.TimeOfDayType parameter, NPC npc, bool trueStatement)
     {
         var timeDelegate = true;
         if (WorldManager.Instance.GetTimeOfDayAsEnum() == parameter)
@@ -95,5 +99,10 @@ public static class Conditions
         }
         return !trueStatement;
     }
-
+    private static bool AtLocation(Mind.LocationName parameter, NPC npc, bool trueStatement)
+    {
+        if (npc.Movement.CurrentLocation == parameter)
+        { return trueStatement; }
+        return !trueStatement;
+    }
 }

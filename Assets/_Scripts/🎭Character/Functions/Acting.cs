@@ -90,14 +90,13 @@ public class Acting : MonoBehaviour
 
     private void GotoLocation(Mind.TargetLocationType locationType)
     {
-      //  var targetMemory = _npc.Memory
-     //   var destination = WorldManager.Instance.Locations[locationType];
+        var locationTarget = _npc.Memory.LocationTargets[locationType];
+        var destination = WorldManager.Instance.Locations[locationTarget];
 
-       // if (ActionsHelper.Reached(_npc, destination.transform.position))
-       // {
-       //     _npc.Memory.CurrentLocation = locationType;
-      //  }
+      if (ActionsHelper.Reached(_npc, destination.transform.position))
+      {
+          _npc.Memory.CurrentLocation = locationTarget;
+      }
     }
-
 
 }

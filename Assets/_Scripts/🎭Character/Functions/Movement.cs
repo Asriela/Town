@@ -6,6 +6,8 @@ public class Movement : MonoBehaviour
     protected NavMeshAgent agent;
     private Vector3 _currentTarget;
 
+    public Mind.LocationName CurrentLocation { get; set; }
+
     protected virtual void Start()
     {
         agent = GetComponent<NavMeshAgent>();

@@ -25,22 +25,20 @@ public class LocationTagsPair
 
 public class Memory : MonoBehaviour
 {
-    public Mind.LocationName CurrentLocation { get; set; }
+
 
     public Dictionary<Mind.TargetType, GameObject> Targets { get; set; } = new();
 
-    public Dictionary<Mind.TargetLocationType, GameObject> LocationTargets { get; set; } = new();
+    public Dictionary<Mind.TargetLocationType, Mind.LocationName> LocationTargets { get; set; } = new();
 
     [SerializeField]
     private List<LocationTagsPair> _locationKnowledge = new();
 
-    public List<Mind.LocationName> GetLocationsByTag(params Mind.KnowledgeTag[] tags)
-    {
-        return _locationKnowledge
+    public List<Mind.LocationName> GetLocationsByTag(params Mind.KnowledgeTag[] tags) =>
+    _locationKnowledge
             .Where(p => tags.All(tag => p.tags.Contains(tag)))
             .Select(p => p.location)
             .ToList();
-    }
 
     public Dictionary<Mind.LocationName, List<Mind.KnowledgeTag>> LocationKnowledge
     {
