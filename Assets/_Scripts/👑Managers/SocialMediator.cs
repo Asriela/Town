@@ -1,22 +1,82 @@
 ﻿using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public static class SocialMediator
 {
-    public static void PostAction(NPC sender, NPC target, string action, object actionData, float radius)
+    private static readonly float _hearingRadius = 2f;
+    private static readonly float _sightRadius = 10f;
+
+    public static void PostAction(Character sender, Character target, Mind.ActionType actionType, ActionPost actionPost)
     {
         // Notify the target directly
-        target?.ReactToAction(sender, action, actionData);
+        if (target != null)
+        { target.Reactions.ReactToAction(sender, true, actionType, actionPost); }
 
-        // Notify nearby witnesses
-        foreach (var npc in _registeredNPCs)
+        if (IsHeardAction(actionType))
         {
-            if (npc == sender || npc == target)
-                continue; // Skip sender and direct target
-
-            if (Vector3.Distance(sender.transform.position, npc.transform.position) <= radius)
+            foreach (var characterKeyValue in WorldManager.Instance.AllCharacters)
             {
-                npc.OverhearAction(sender, action, actionData);
+                var character = characterKeyValue.Value;
+                if (character == sender || character == target)
+                { continue; }
+
+                //TODO: change hearing radius to senses : add senses to character class instead of npc class
+                if (Vector3.Distance(sender.transform.position, character.transform.position) <= _hearingRadius)
+                {
+                    character.Reactions.ReactToAction(sender, false, actionType, actionPost);
+                }
             }
         }
+
+        if (IsSeenAction(actionType))
+        {
+            foreach (var characterKeyValue in WorldManager.Instance.AllCharacters)
+            {
+                var character = characterKeyValue.Value;
+                if (character == sender || character == target)
+                { continue; }
+
+                //TODO: change sightradius to checking line of sight via senses class
+                if (Vector3.Distance(sender.transform.position, character.transform.position) <= _sightRadius)
+                {
+                    character.Reactions.ReactToAction(sender, false, actionType, actionPost);
+                }
+            }
+        }
+
     }
+
+    private static bool IsHeardAction(Mind.ActionType actionType)
+    {
+        bool ret = false;
+        switch (actionType)
+        {
+            case Mind.ActionType.findKnowledge:
+                ret = true;
+                break;
+            case Mind.ActionType.socialize:
+                ret = true;
+                break;
+        }
+        return ret;
+    }
+
+    private static bool IsSeenAction(Mind.ActionType actionType)
+    {
+        bool ret = false;
+        switch (actionType)
+        {
+            case Mind.ActionType.kill:
+                ret = true;
+                break;
+            case Mind.ActionType.performSpell:
+                ret = true;
+                break;
+        }
+        return ret;
+    }
+
 }
+
+
+

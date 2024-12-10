@@ -34,6 +34,13 @@ namespace Mind
 
     }
     [Serializable]
+    public enum CharacterName : short
+    {
+        none,
+        Belethor,
+        Zerath
+    }
+    [Serializable]
     public enum LocationName : short
     {
         none,

@@ -5,11 +5,21 @@ using UnityEngine;
 [RequireComponent(typeof(Movement))]
 [RequireComponent(typeof(Vitality))]
 [RequireComponent(typeof(Appearance))]
+[RequireComponent(typeof(Reactions))]
+[RequireComponent(typeof(Memory))]
 public class Character : MonoBehaviour
 {
     private Collider2D _collider2D;
+
+    [SerializeField]
+    private Mind.CharacterName _characterName;
+    public Mind.CharacterName CharacterName => _characterName;
+
     public Movement Movement { get; set; }
     public Vitality Vitality { get; set; }
+    public Reactions Reactions { get; set; }
+
+    public Memory Memory { get; set; }
 
     public Appearance Appearance { get; set; }
 
@@ -24,6 +34,9 @@ public class Character : MonoBehaviour
         Vitality.Initialize(this);
         Appearance = GetComponent<Appearance>();
         Appearance.Initialize(this);
+        Reactions = GetComponent<Reactions>();
+        Reactions.Initialize(this);
+        Memory = GetComponent<Memory>();
     }
 
 

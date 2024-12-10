@@ -65,7 +65,8 @@ public class Acting : MonoBehaviour
         {
             //STEP 2 ASK FOR DIRCTIONS
             _npc.Logger.CurrentStepInAction = "2 Ask innkeeper for location with tags";
-            SocialHelper.AskForKnowledge(_npc, target, knowledgeType, CurrentBehavior.ActionTags);
+            List<System.Enum> tagsAsEnum = CurrentBehavior.ActionTags.Cast<System.Enum>().ToList();
+            SocialHelper.AskForKnowledge(_npc, target, knowledgeType, tagsAsEnum);
         }
         //STEP 3 RECIEVE DIRECTIONS - STORE IN MEMORY
 

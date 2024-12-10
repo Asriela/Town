@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mind;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -10,6 +11,13 @@ public class LocationTypeGameObjectPair
     public GameObject gameObject; // Value
 }
 
+
+[Serializable]
+public class EnumCharacterPair
+{
+    public Mind.CharacterName characterName; // Key
+    public Character character; // Value
+}
 
 public class WorldManager : Singleton<WorldManager>
 {
@@ -51,7 +59,7 @@ public class WorldManager : Singleton<WorldManager>
         if (hour >= 0 && hour < 12)
         {
 
-            return (TimeOfDayType)(hour-1);
+            return (TimeOfDayType)(hour - 1);
         }
         else
         {
@@ -60,6 +68,22 @@ public class WorldManager : Singleton<WorldManager>
         }
 
     }
+    [SerializeField]
+    private List<EnumCharacterPair> _allCharacters = new();
+
+    public Dictionary<Mind.CharacterName, Character> AllCharacters
+    {
+        get
+        {
+            Dictionary<Mind.CharacterName, Character> dictionary = new();
+            foreach (var pair in _allCharacters)
+            {
+                dictionary[pair.characterName] = pair.character;
+            }
+            return dictionary;
+        }
+    } 
+
 
 
 
