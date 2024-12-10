@@ -370,6 +370,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 862567352352533102, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _locationKnowledge.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 862567352352533102, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: _possessions.Array.data[0].gameObject
       value: 
       objectReference: {fileID: 1025085715}
@@ -380,6 +384,22 @@ PrefabInstance:
     - target: {fileID: 862567352352533102, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: _possessions.Array.data[1].objectType
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 862567352352533102, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _locationKnowledge.Array.data[0].location
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 862567352352533102, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _locationKnowledge.Array.data[0].tags.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 862567352352533102, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: '_locationKnowledge.Array.data[0].tags.Array.data[0]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 862567352352533102, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: '_locationKnowledge.Array.data[0].tags.Array.data[1]'
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1198832829993639336, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: m_Color.b
@@ -1772,6 +1792,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _persistent: 0
+  _locations: []
   TimeOfDay: 0
 --- !u!1 &1359901485
 GameObject:
