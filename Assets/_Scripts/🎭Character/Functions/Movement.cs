@@ -26,23 +26,23 @@ public class Movement : MonoBehaviour
             return;
 
         float randomRange = 10f;
-        // Generate a random point around the NPC's current position
+
         Vector3 randomDirection = Random.insideUnitSphere * randomRange;
         randomDirection += transform.position;
 
-        // Ensure the random point is on the NavMesh
+
         if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, randomRange, NavMesh.AllAreas))
         {
-            _currentTarget = hit.position; // Store the current target
+            _currentTarget = hit.position;
             agent.SetDestination(_currentTarget);
         }
         else
         {
-            Debug.LogWarning("Failed to find a valid NavMesh point. Retrying...");
+
         }
     }
 
-    public Vector3 GetMovementDirection() => agent.velocity.normalized;  // Returns the normalized movement direction
+    public Vector3 GetMovementDirection() => agent.velocity.normalized;  
 
     public Vector3 GetPosition() => transform.position;
 }

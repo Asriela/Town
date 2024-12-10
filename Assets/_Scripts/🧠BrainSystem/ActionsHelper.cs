@@ -25,17 +25,33 @@ public static class ActionsHelper
 
         var ourPosition = npc.transform.position;
         var interactionDistance = 2f;
-        npc.Movement.MoveTo(destination);
+
 
         if (Vector3.Distance(ourPosition, destination) < interactionDistance)
         {
             return true;
         }
-
+        else
+        { npc.Movement.MoveTo(destination);}
 
         return false;
     }
+    public static bool Reachedd(NPC npc, Vector3 destination)
+    {
 
+        var ourPosition = npc.transform.position;
+        var interactionDistance = 2f;
+
+
+        if (Vector3.Distance(ourPosition, destination) < interactionDistance)
+        {
+            return true;
+        }
+        else
+        { npc.Movement.MoveTo(destination); }
+
+        return false;
+    }
     public static IEnumerator WanderAndSearch(NPC npc, Mind.TargetType targetType, bool alive, params Mind.TraitType[] traitsToLookFor)
     {
         npc.Logger.CurrentStepInAction = "wander and search";

@@ -8,10 +8,10 @@ public class Senses : MonoBehaviour
     private NPC _npc;
 
     [Header("Senses Settings")]
-    [SerializeField] private float _detectionRadius = 10f;  // How far NPC can see
-    [SerializeField] private float _viewAngle = 100;  // The angle of view in degrees
-    [SerializeField] private LayerMask _detectionLayer;  // What layers the NPC can detect (e.g., NPCs)
-    [SerializeField] private Material _viewConeMaterial; // Material for the cone
+    [SerializeField] private float _detectionRadius = 10f;
+    [SerializeField] private float _viewAngle = 100;
+    [SerializeField] private LayerMask _detectionLayer;
+    [SerializeField] private Material _viewConeMaterial;
     private Vector3 _lookDirection;
 
     private Mesh _viewConeMesh;
@@ -41,12 +41,12 @@ public class Senses : MonoBehaviour
 
     private void CreateViewCone()
     {
-        // Create a GameObject for the cone
+
         GameObject coneObject = new GameObject("ViewCone");
         coneObject.transform.parent = transform;
         coneObject.transform.localPosition = Vector3.zero;
 
-        // Add components for the cone
+
         _viewConeMesh = new Mesh();
         MeshFilter meshFilter = coneObject.AddComponent<MeshFilter>();
         _viewConeRenderer = coneObject.AddComponent<MeshRenderer>();
@@ -57,15 +57,15 @@ public class Senses : MonoBehaviour
 
     private void DrawViewCone()
     {
-        int segments = 50; // Number of segments for the cone
+        int segments = 50;
         float angleStep = _viewAngle / segments;
         Vector3[] vertices = new Vector3[segments + 2];
         int[] triangles = new int[segments * 3];
 
-        // Get the movement direction from the NPC 
+
         Vector3 movementDirection = _lookDirection;
 
-        vertices[0] = Vector3.zero; // Cone origin
+        vertices[0] = Vector3.zero;
         for (int i = 0; i <= segments; i++)
         {
             float angle = -_viewAngle / 2 + angleStep * i;
@@ -91,21 +91,21 @@ public class Senses : MonoBehaviour
 
         while (true)
         {
-            // First, reset the 'unseen' state for characters that are no longer in sight
+
             foreach (var character in _charactersInSight.ToArray())
             {
                 if (character is Player player)
                 {
-                    // Check if player is no longer in the view cone
 
-                    player.SetSeenState(false); // Set player to unseen state
-                    _charactersInSight.Remove(character); // Remove from sight list
+
+                    player.SetSeenState(false);
+                    _charactersInSight.Remove(character);
 
                 }
             }
 
 
-            // Clear the previous list and detect all new characters
+
             Collider2D[] collidersInRange = Physics2D.OverlapCircleAll(transform.position, _detectionRadius, _detectionLayer);
 
             foreach (var collider in collidersInRange)
@@ -123,7 +123,7 @@ public class Senses : MonoBehaviour
                         {
                             if (!_charactersInSight.Contains(potentialNPC))
                             {
-                                print("sees NPC");
+                                //  print("sees NPC");
                                 _charactersInSight.Add(potentialNPC);
                             }
                         }
@@ -136,21 +136,21 @@ public class Senses : MonoBehaviour
                         {
                             if (!_charactersInSight.Contains(potentialPlayer))
                             {
-                                print("sees Player");
+                                // print("sees Player");
                                 _charactersInSight.Add(potentialPlayer);
-                                potentialPlayer.SetSeenState(true); // Set player to seen state
+                                potentialPlayer.SetSeenState(true);
                             }
                         }
                     }
                 }
             }
 
-            yield return new WaitForSeconds(0.5f);  // Adjust the check interval if needed
+            yield return new WaitForSeconds(0.5f);
         }
     }
     private bool IsInLineOfSight(Character character)
     {
-       
+
         var ourPosition = _npc.Movement.GetPosition();
         var targetPosition = character.Movement.GetPosition();
         if (Vector3.Distance(ourPosition, targetPosition) > _detectionRadius)
@@ -162,7 +162,7 @@ public class Senses : MonoBehaviour
         { return false; }
 
         int oldLayer = _npc.gameObject.layer;
-        _npc.gameObject.layer = Physics.IgnoreRaycastLayer; // or any layer that's not included in the raycast
+        _npc.gameObject.layer = Physics.IgnoreRaycastLayer;
         var raycastHit2D = Physics2D.Raycast(ourPosition, dirToTarget, _detectionRadius, _detectionLayer);
 
         _npc.gameObject.layer = oldLayer;

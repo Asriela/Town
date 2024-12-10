@@ -180,6 +180,7 @@ public class TraitEditor : Editor
             Mind.ConditionType.doesNotHaveKnowledge => typeof(Mind.KnowledgeType),
             Mind.ConditionType.atLocation => typeof(Mind.TargetLocationType),
             Mind.ConditionType.hasLocationTarget => typeof(Mind.TargetLocationType),
+            Mind.ConditionType.doesNotHaveLocationTarget => typeof(Mind.TargetLocationType),
             _ => null,
         };
 

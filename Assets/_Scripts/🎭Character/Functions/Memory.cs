@@ -30,6 +30,7 @@ public class Memory : MonoBehaviour
     public Dictionary<Mind.TargetType, GameObject> Targets { get; set; } = new();
 
     public Dictionary<Mind.TargetLocationType, Mind.LocationName> LocationTargets { get; set; } = new();
+    public Mind.TargetLocationType LatestLocationTargetType { get; set; }
 
     [SerializeField]
     private List<LocationTagsPair> _locationKnowledge = new();
@@ -74,6 +75,7 @@ public class Memory : MonoBehaviour
                 }
             }
         }
+
     }
 
     public List<Mind.LocationName> GetLocationsByTag(params Mind.KnowledgeTag[] tags) =>

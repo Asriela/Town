@@ -19,6 +19,7 @@ public class Reactions : MonoBehaviour
                 switch (actionPost.Parameter)
                 {
                     case Mind.KnowledgeType.location:
+                      //  print("❤request for knowledge recieved");
                         var originalEnumList = actionPost.KnowledgeTags.Cast<Mind.KnowledgeTag>().ToArray();
                         List<System.Enum> newKnowledge = _npc.Memory.GetLocationsByTag(originalEnumList).Cast<System.Enum>().ToList();
                         var originalTags = actionPost.KnowledgeTags;
@@ -31,12 +32,14 @@ public class Reactions : MonoBehaviour
                 switch (actionPost.Parameter)
                 {
                     case Mind.KnowledgeType.location:
+                       // print("❤knowledge recieved");
                         foreach (var knowledgeItem in actionPost.KnowledgeTags)
                         {
                             Mind.LocationName location = (Mind.LocationName)Enum.Parse(typeof(Mind.LocationName), knowledgeItem.ToString());
                             List<Mind.KnowledgeTag> tags = actionPost.OriginalTags.Cast<Mind.KnowledgeTag>().ToList();
 
                             _npc.Memory.AddLocation(location, tags);
+                            _npc.Memory.LocationTargets[_npc.Memory.LatestLocationTargetType] = location;
                         }
 
                         break;

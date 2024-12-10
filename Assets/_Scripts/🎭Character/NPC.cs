@@ -12,7 +12,7 @@ using UnityEngine.AI;
 
 public class NPC : Character
 {
-    private Transform _target;
+
     public Thinking Thinking{ get; set; }
     public Senses Senses { get; set; }
     public Acting Acting { get; set; }
@@ -20,13 +20,13 @@ public class NPC : Character
 
     private void Start()
     {
-
+        Acting = GetComponent<Acting>();
+        Acting.Initialize(this);
         Thinking = GetComponent<Thinking>();
         Thinking.Initialize(this);
         Senses = GetComponent<Senses>();
         Senses.Initialize(this);
-        Acting = GetComponent<Acting>();
-        Acting.Initialize(this);
+
         Logger = GetComponent<Logger>();
 
     }

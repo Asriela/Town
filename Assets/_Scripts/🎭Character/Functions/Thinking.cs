@@ -9,17 +9,16 @@ public class Thinking : MonoBehaviour
 
     private NPC _npc;
 
-    public void Initialize(NPC npc) => _npc = npc;
+    public void Initialize(NPC npc)
+    {
+        _npc = npc;
+        StartCoroutine(CheckBestBehaviorCoroutine());
+    }
 
     public List<Trait> Traits => _traits;
 
 
     [SerializeField] private float _checkInterval = 3f;
-    private void Start()
-    {
-
-        StartCoroutine(CheckBestBehaviorCoroutine());
-    }
 
     private IEnumerator CheckBestBehaviorCoroutine()
     {
@@ -36,10 +35,11 @@ public class Thinking : MonoBehaviour
 
     public void CalculateHighestScoringBehavior()
     {
+        int highestScore = 0;
         if (_npc.Vitality.Dead)
         { return; }
         Behavior highestScoringBehavior = null;
-        int highestScore = 0;
+       
 
 
         for (int i = 0; i < _traits.Count; i++)
@@ -59,7 +59,9 @@ public class Thinking : MonoBehaviour
                 if (AreConditionsMet(behavior.Conditions))
                 {
 
-                    int score = behavior.Priority + j + 1 + i + 1;
+                    int reverseJ = trait.Behaviors.Count - j;
+
+                    int score = behavior.Priority + reverseJ + i + 1;
 
 
                     if (score > highestScore)

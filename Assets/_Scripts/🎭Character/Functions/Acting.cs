@@ -67,8 +67,9 @@ public class Acting : MonoBehaviour
             _npc.Logger.CurrentStepInAction = "2 Ask innkeeper for location with tags";
             List<System.Enum> tagsAsEnum = CurrentBehavior.ActionTags.Cast<System.Enum>().ToList();
             SocialHelper.AskForKnowledge(_npc, target, knowledgeType, tagsAsEnum);
+            //STEP 3 LETS ASSUME WE ALWAYS WANNA GO TO THE LOCATION WE JUST LEARNED ABOUT SO AUTOMATICALLY MAKE IT OUR TARGET
         }
-        //STEP 3 RECIEVE DIRECTIONS - STORE IN MEMORY
+
 
 
     }
@@ -106,13 +107,17 @@ public class Acting : MonoBehaviour
 
     private void GotoLocation(Mind.TargetLocationType locationType)
     {
-        var locationTarget = _npc.Memory.LocationTargets[locationType];
+        _npc.Logger.CurrentStepInAction = $"Goto location {locationType}";
+        var ok = false;
+        var mem = _npc.Memory;
+
+        var locationTarget = mem.LocationTargets[locationType];
         var destination = WorldManager.Instance.Locations[locationTarget];
 
-        if (ActionsHelper.Reached(_npc, destination.transform.position))
+        if (ActionsHelper.Reachedd(_npc, destination.transform.position))
         {
             _npc.Movement.CurrentLocation = locationTarget;
         }
     }
 
-}
+} 

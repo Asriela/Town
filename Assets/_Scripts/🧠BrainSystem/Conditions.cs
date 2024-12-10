@@ -20,6 +20,8 @@ public static class Conditions
         _conditionDelegates.Add(ConditionType.doesNotHaveObject, new ConditionDelegate<Mind.ObjectType>(CheckHasObject));
         _conditionDelegates.Add(ConditionType.timeOfDay, new ConditionDelegate<Mind.TimeOfDayType>(CheckTimeOfDay));
         _conditionDelegates.Add(ConditionType.atLocation, new ConditionDelegate<Mind.LocationName>(AtLocation));
+        _conditionDelegates.Add(ConditionType.hasLocationTarget, new ConditionDelegate<Mind.TargetLocationType>(CheckLocationTarget));
+        _conditionDelegates.Add(ConditionType.doesNotHaveLocationTarget, new ConditionDelegate<Mind.TargetLocationType>(CheckLocationTarget));
     }
 
     public static bool CheckCondition(Condition condition, NPC npc)
@@ -55,6 +57,13 @@ public static class Conditions
                 case ConditionType.atLocation:
                     var atLocation = (ConditionDelegate<Mind.LocationName>)conditionDelegate;
                     return atLocation((Mind.LocationName)condition.parameter, npc, false);
+
+                case ConditionType.hasLocationTarget:
+                    var locationTargetDelegate = (ConditionDelegate<Mind.TargetLocationType>)conditionDelegate;
+                    return locationTargetDelegate((Mind.TargetLocationType)condition.parameter, npc, true);
+                case ConditionType.doesNotHaveLocationTarget:
+                    var locationTargetNotDelegate = (ConditionDelegate<Mind.TargetLocationType>)conditionDelegate;
+                    return locationTargetNotDelegate((Mind.TargetLocationType)condition.parameter, npc, false);
                 default:
                     return false;
             }
@@ -81,6 +90,23 @@ public static class Conditions
         }
         return !trueStatement;
     }
+    private static bool CheckLocationTarget(Mind.TargetLocationType parameter, NPC npc, bool trueStatement)
+    {
+        bool ret;
+        if (npc.Memory.LocationTargets.ContainsKey(parameter))
+        Debug.Log($"🔰Location target: {npc.Memory.LocationTargets[parameter]}");
+        if (npc.Memory.LocationTargets.ContainsKey(parameter) && npc.Memory.LocationTargets[parameter] != LocationName.none)
+        {
+            ret = trueStatement;
+        }
+        else
+        { ret = !trueStatement; }
+
+        if (ret != trueStatement)
+        { npc.Memory.LatestLocationTargetType = parameter; }
+
+        return ret; 
+    }
 
     private static bool CheckHasObject(Mind.ObjectType parameter, NPC npc, bool trueStatement)
     {
@@ -101,7 +127,7 @@ public static class Conditions
     }
     private static bool AtLocation(Mind.LocationName parameter, NPC npc, bool trueStatement)
     {
-        if (npc.Movement.CurrentLocation == parameter)
+        if (npc.Movement.CurrentLocation != LocationName.none && npc.Movement.CurrentLocation == parameter)
         { return trueStatement; }
         return !trueStatement;
     }
