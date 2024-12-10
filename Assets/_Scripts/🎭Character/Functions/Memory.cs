@@ -51,11 +51,38 @@ public class Memory : MonoBehaviour
         }
     }
 
+    public void AddLocation(Mind.LocationName locationName, List<Mind.KnowledgeTag> tags)
+    {
+        var existingLocation = _locationKnowledge.FirstOrDefault(p => p.location == locationName);
+
+        if (existingLocation == null)
+        {
+
+            _locationKnowledge.Add(new LocationTagsPair
+            {
+                location = locationName,
+                tags = tags
+            });
+        }
+        else
+        {
+            foreach (var tag in tags)
+            {
+                if (!existingLocation.tags.Contains(tag))
+                {
+                    existingLocation.tags.Add(tag);
+                }
+            }
+        }
+    }
+
     public List<Mind.LocationName> GetLocationsByTag(params Mind.KnowledgeTag[] tags) =>
     _locationKnowledge
         .Where(p => tags.All(tag => p.tags.Contains(tag)))
         .Select(p => p.location)
         .ToList();
+
+
 
     [SerializeField]
     private List<GameObjectTagsPair> _peopleKnowledge = new();
@@ -72,7 +99,30 @@ public class Memory : MonoBehaviour
             return dictionary;
         }
     }
+    public void AddPerson(GameObject person, List<Mind.TraitType> tags)
+    {
 
+        var existingPerson = _peopleKnowledge.FirstOrDefault(p => p.gameObject == person);
+
+        if (existingPerson == null)
+        {
+            _peopleKnowledge.Add(new GameObjectTagsPair
+            {
+                gameObject = person,
+                tags = tags
+            });
+        }
+        else
+        {
+            foreach (var tag in tags)
+            {
+                if (!existingPerson.tags.Contains(tag))
+                {
+                    existingPerson.tags.Add(tag);
+                }
+            }
+        }
+    }
     public List<GameObject> GetPeopleByTag(params Mind.TraitType[] tags) =>
     _peopleKnowledge
     .Where(p => tags.All(tag => p.tags.Contains(tag)))

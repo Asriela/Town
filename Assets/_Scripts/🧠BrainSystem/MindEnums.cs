@@ -30,6 +30,7 @@ namespace Mind
         socialize,
         trader,
         findKnowledge,
+        shareKnowledge,
         gotoLocation,
 
     }
