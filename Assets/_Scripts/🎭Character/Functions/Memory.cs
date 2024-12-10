@@ -10,10 +10,10 @@ public class ObjectTypeGameObjectPair
     public GameObject gameObject;
 }
 [Serializable]
-public class TraitTypeGameObjectListPair
+public class GameObjectTagsPair
 {
-    public Mind.TraitType traitType;
-    public List<GameObject> gameObjects;
+    public GameObject gameObject;
+    public List<Mind.TraitType> tags = new();
 }
 
 [System.Serializable]
@@ -34,11 +34,7 @@ public class Memory : MonoBehaviour
     [SerializeField]
     private List<LocationTagsPair> _locationKnowledge = new();
 
-    public List<Mind.LocationName> GetLocationsByTag(params Mind.KnowledgeTag[] tags) =>
-    _locationKnowledge
-            .Where(p => tags.All(tag => p.tags.Contains(tag)))
-            .Select(p => p.location)
-            .ToList();
+
 
     public Dictionary<Mind.LocationName, List<Mind.KnowledgeTag>> LocationKnowledge
     {
@@ -55,22 +51,34 @@ public class Memory : MonoBehaviour
         }
     }
 
+    public List<Mind.LocationName> GetLocationsByTag(params Mind.KnowledgeTag[] tags) =>
+    _locationKnowledge
+        .Where(p => tags.All(tag => p.tags.Contains(tag)))
+        .Select(p => p.location)
+        .ToList();
 
     [SerializeField]
-    private List<TraitTypeGameObjectListPair> _peopleKnowledge = new();
+    private List<GameObjectTagsPair> _peopleKnowledge = new();
 
-    public Dictionary<Mind.TraitType, List<GameObject>> PeopleKnowledge
+    public Dictionary<GameObject, List<Mind.TraitType>> PeopleKnowledge
     {
         get
         {
-            Dictionary<Mind.TraitType, List<GameObject>> dictionary = new();
+            Dictionary<GameObject, List<Mind.TraitType>> dictionary = new();
             foreach (var pair in _peopleKnowledge)
             {
-                dictionary[pair.traitType] = pair.gameObjects;
+                dictionary[pair.gameObject] = pair.tags;
             }
             return dictionary;
         }
     }
+
+    public List<GameObject> GetPeopleByTag(params Mind.TraitType[] tags) =>
+    _peopleKnowledge
+    .Where(p => tags.All(tag => p.tags.Contains(tag)))
+    .Select(p => p.gameObject)
+    .ToList();
+
 
     [SerializeField]
     private List<ObjectTypeGameObjectPair> _possessions = new();

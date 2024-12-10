@@ -9,12 +9,13 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Senses))]
 [RequireComponent(typeof(Logger))]
 [RequireComponent(typeof(Memory))]
+[RequireComponent(typeof(Reactions))]
 public class NPC : Character
 {
     private Transform _target;
 
     public Thinking Thinking{ get; set; }
-
+    public Reactions Reactions { get; set; }
 
     public Memory Memory { get; set; }
     public Senses Senses { get; set; }

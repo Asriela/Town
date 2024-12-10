@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using System.Linq;
 using UnityEngine;
 using Mind;
 
@@ -54,8 +55,20 @@ public class Acting : MonoBehaviour
     }
     private void FindKnowledge(Mind.KnowledgeType knowledgeType)
     {
-        //  StartCoroutine(ActionsHelper.WanderAndSearch(_npc, targetType, true, Mind.TraitType.human));
-        // CurrentBehavior.ActionTags;
+        //STEP 1 GOTO INNKEEPER
+        _npc.Logger.CurrentStepInAction = "1 Goto nearest innkeeper";
+        //remember who the local innkeeper is
+        var target = _npc.Memory.GetPeopleByTag(Mind.TraitType.innKeeper).FirstOrDefault().GetComponent<Character>();
+
+
+        if (ActionsHelper.Reached(_npc, target.transform.position))
+        {
+            //STEP 2 ASK FOR DIRCTIONS
+            _npc.Logger.CurrentStepInAction = "2 Ask innkeeper for location with tags";
+            SocialHelper.AskForKnowledge(_npc, target, knowledgeType, CurrentBehavior.ActionTags);
+        }
+        //STEP 3 RECIEVE DIRECTIONS - STORE IN MEMORY
+
 
     }
     private void Kill(Mind.TargetType targetType)
@@ -69,6 +82,8 @@ public class Acting : MonoBehaviour
         }
 
     }
+
+
 
     private void FullfillNeed(Mind.NeedType needType)
     {

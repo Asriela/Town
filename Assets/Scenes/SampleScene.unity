@@ -2188,8 +2188,20 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 862567352352533102, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _peopleKnowledge.Array.data[0].gameObject
+      value: 
+      objectReference: {fileID: 71209173}
+    - target: {fileID: 862567352352533102, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _peopleKnowledge.Array.data[0].tags.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 862567352352533102, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: _locationKnowledge.Array.data[0].tags.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 862567352352533102, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: '_peopleKnowledge.Array.data[0].tags.Array.data[1]'
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 862567352352533102, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: '_locationKnowledge.Array.data[0].tags.Array.data[0]'
