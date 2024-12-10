@@ -92,7 +92,7 @@ public static class Conditions
     }
     private static bool CheckTimeOfDay(Mind.TimeOfDayType parameter, NPC npc, bool trueStatement)
     {
-        var timeDelegate = true;
+
         if (WorldManager.Instance.GetTimeOfDayAsEnum() == parameter)
         {
             return trueStatement;

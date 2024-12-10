@@ -45,17 +45,17 @@ public class Acting : MonoBehaviour
 
     private void FindCharacter(Mind.TargetType targetType)
     {
-        StartCoroutine(ActionsHelper.WanderAndSearch(_npc, targetType, true,Mind.TraitType.human));
+        StartCoroutine(ActionsHelper.WanderAndSearch(_npc, targetType, true, Mind.TraitType.human));
     }
     private void FindObject(Mind.ObjectType targetType)
     {
-      //  StartCoroutine(ActionsHelper.WanderAndSearch(_npc, targetType, true, Mind.TraitType.human));
+        //  StartCoroutine(ActionsHelper.WanderAndSearch(_npc, targetType, true, Mind.TraitType.human));
 
     }
     private void FindKnowledge(Mind.KnowledgeType knowledgeType)
     {
         //  StartCoroutine(ActionsHelper.WanderAndSearch(_npc, targetType, true, Mind.TraitType.human));
-       // CurrentBehavior.ActionTags;
+        // CurrentBehavior.ActionTags;
 
     }
     private void Kill(Mind.TargetType targetType)
@@ -93,10 +93,10 @@ public class Acting : MonoBehaviour
         var locationTarget = _npc.Memory.LocationTargets[locationType];
         var destination = WorldManager.Instance.Locations[locationTarget];
 
-      if (ActionsHelper.Reached(_npc, destination.transform.position))
-      {
-          _npc.Memory.CurrentLocation = locationTarget;
-      }
+        if (ActionsHelper.Reached(_npc, destination.transform.position))
+        {
+            _npc.Movement.CurrentLocation = locationTarget;
+        }
     }
 
 }

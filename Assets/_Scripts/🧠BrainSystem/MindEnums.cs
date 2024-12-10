@@ -37,7 +37,8 @@ namespace Mind
     public enum LocationName : short
     {
         none,
-        ruinsOfLazeel
+        ruinsOfLazeel,
+        belethorsInn
     }
     [Serializable]
     public enum TargetLocationType : short
@@ -57,7 +58,8 @@ namespace Mind
         none,
         dark,
         light,
-        ruins
+        ruins,
+        inn
     }
 
     [Serializable]
