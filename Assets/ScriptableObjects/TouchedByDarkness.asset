@@ -18,64 +18,64 @@ MonoBehaviour:
     _dialogue: Do you know of any dark places?
     _action: 11
     _actionParameter:
-      rid: 1081034591265095966
+      rid: 1081034601935929467
     _conditions:
     - conditionType: 12
       parameter:
-        rid: 1081034591265095967
+        rid: 1081034601935929468
     _priority: 4
     _actionTags: 01000300
   - _name: Goto dark place
     _dialogue: 
     _action: 13
     _actionParameter:
-      rid: 1081034591265095967
+      rid: 1081034601935929468
     _conditions:
     - conditionType: 11
       parameter:
-        rid: 1081034591265095967
+        rid: 1081034601935929468
     _priority: 4
     _actionTags: 
   - _name: Find book
     _dialogue: 
     _action: 3
     _actionParameter:
-      rid: 1081034591265095968
+      rid: 1081034601935929469
     _conditions:
     - conditionType: 9
       parameter:
-        rid: 1081034591265095967
+        rid: 1081034601935929468
     - conditionType: 4
       parameter:
-        rid: 1081034591265095968
+        rid: 1081034601935929469
     _priority: 7
     _actionTags: 
   - _name: Read book
     _dialogue: 
     _action: 14
     _actionParameter:
-      rid: 1081034591265095968
+      rid: 1081034601935929469
     _conditions:
     - conditionType: 9
       parameter:
-        rid: 1081034591265095967
+        rid: 1081034601935929468
     - conditionType: 5
       parameter:
-        rid: 1081034591265095968
+        rid: 1081034601935929469
     _priority: 7
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 1081034591265095966
+    - rid: 1081034601935929467
       type: {class: KnowledgeType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1
-    - rid: 1081034591265095967
+    - rid: 1081034601935929468
       type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1
-    - rid: 1081034591265095968
+    - rid: 1081034601935929469
       type: {class: ObjectType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 2

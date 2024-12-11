@@ -15,7 +15,7 @@ public static class Conditions
         // Initialize the delegates for each condition type.
         _conditionDelegates.Add(ConditionType.needsTo, new ConditionDelegate<Mind.NeedType>(CheckNeed));
         _conditionDelegates.Add(ConditionType.hasTarget, new ConditionDelegate<Mind.TargetType>(CheckTarget));
-        _conditionDelegates.Add(ConditionType.doesNotHaveTarget, new ConditionDelegate<Mind.NeedType>(CheckNeed));
+        _conditionDelegates.Add(ConditionType.doesNotHaveTarget, new ConditionDelegate<Mind.TargetType>(CheckTarget));
         _conditionDelegates.Add(ConditionType.hasObject, new ConditionDelegate<Mind.ObjectType>(CheckHasObject));
         _conditionDelegates.Add(ConditionType.doesNotHaveObject, new ConditionDelegate<Mind.ObjectType>(CheckHasObject));
         _conditionDelegates.Add(ConditionType.timeOfDay, new ConditionDelegate<Mind.TimeOfDayType>(CheckTimeOfDay));
@@ -45,6 +45,9 @@ public static class Conditions
                     var targetDelegate = (ConditionDelegate<Mind.TargetType>)conditionDelegate;
                     return targetDelegate((Mind.TargetType)condition.parameter, npc, true);
 
+                case ConditionType.doesNotHaveTarget:
+                    var targetDelegateNot = (ConditionDelegate<Mind.TargetType>)conditionDelegate;
+                    return targetDelegateNot((Mind.TargetType)condition.parameter, npc, false);
 
 
                 case ConditionType.hasObject:
@@ -86,6 +89,7 @@ public static class Conditions
 
     private static bool CheckTarget(Mind.TargetType parameter, NPC npc, bool trueStatement)
     {
+
         if (npc.Memory.Targets.ContainsKey(parameter) && npc.Memory.Targets[parameter] != null)
         {
             return trueStatement;

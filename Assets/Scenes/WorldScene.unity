@@ -533,6 +533,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5343924878233057854, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _characterName
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6668485555159576815, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: m_Name
       value: 'Belethor '
@@ -1550,7 +1554,7 @@ Transform:
   m_GameObject: {fileID: 688938194}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.65, y: -2.03, z: 0}
+  m_LocalPosition: {x: -7.07, y: 1.53, z: 0}
   m_LocalScale: {x: 0.8177237, y: 7.0332665, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1824,7 +1828,7 @@ MonoBehaviour:
   m_BuildHeightMesh: 0
   m_MinRegionArea: 0
   m_HideEditorLogs: 0
-  m_NavMeshData: {fileID: 23800000, guid: 864ec98e3fdfbfa4580e2e71320fb7e3, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 027d6cf4bdd3277478cf63e98c22e528, type: 2}
 --- !u!1001 &848602087
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1859,11 +1863,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4773332652865760712, guid: 98d6204f22f93a544a248c80313f1d1b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -33.18
+      value: -9.37
       objectReference: {fileID: 0}
     - target: {fileID: 4773332652865760712, guid: 98d6204f22f93a544a248c80313f1d1b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 12.46
+      value: 7.45
       objectReference: {fileID: 0}
     - target: {fileID: 4773332652865760712, guid: 98d6204f22f93a544a248c80313f1d1b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1921,6 +1925,7 @@ GameObject:
   m_Component:
   - component: {fileID: 881570906}
   - component: {fileID: 881570907}
+  - component: {fileID: 881570908}
   m_Layer: 9
   m_Name: GameUI
   m_TagString: Untagged
@@ -1962,6 +1967,18 @@ MonoBehaviour:
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
   m_WorldSpaceHeight: 1080
+--- !u!114 &881570908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881570905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67d4e660d71f6f14a96622862c8f588a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &973324746
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2040,11 +2057,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5834618130288783371, guid: 09d047f804eae854f94b36e1a92dcb04, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -30.47
+      value: -10.44
       objectReference: {fileID: 0}
     - target: {fileID: 5834618130288783371, guid: 09d047f804eae854f94b36e1a92dcb04, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 13.17
+      value: 8.16
       objectReference: {fileID: 0}
     - target: {fileID: 5834618130288783371, guid: 09d047f804eae854f94b36e1a92dcb04, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2181,11 +2198,10 @@ MonoBehaviour:
     gameObject: {fileID: 1668611421}
   - locationType: 1
     gameObject: {fileID: 973324748}
-  TimeOfDay: 0
   _allCharacters:
-  - characterName: 1
-    character: {fileID: 71209174}
   - characterName: 2
+    character: {fileID: 71209174}
+  - characterName: 3
     character: {fileID: 1381218247}
 --- !u!1 &1359901485
 GameObject:
@@ -2317,7 +2333,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ac01c6a121ef6646bcb47daf490cfc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterName: 0
+  _characterName: 1
   _radialMenuPrefab: {fileID: 0}
   _seenColor: {r: 0, g: 0, b: 0, a: 1}
   _defaultColor: {r: 0, g: 0, b: 1, a: 1}
@@ -2597,6 +2613,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3996490405021083694, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: m_Speed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5343924878233057854, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _characterName
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6668485555159576815, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}

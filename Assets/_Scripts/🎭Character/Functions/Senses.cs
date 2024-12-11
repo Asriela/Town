@@ -36,8 +36,17 @@ public class Senses : MonoBehaviour
     {
         DrawViewCone();
         SetViewDirection();
+        SetLoggersCharactersInSight();
     }
 
+    private void SetLoggersCharactersInSight()
+    {
+        _npc.Logger.CharactersInSight = "";
+        foreach (Character character in _charactersInSight)
+        {
+            _npc.Logger.CharactersInSight += @$"{character.CharacterName}\n";
+        }
+    }
     private void SetViewDirection()
     {
         _lookDirection = _npc.Movement.GetMovementDirection().normalized;
@@ -92,22 +101,10 @@ public class Senses : MonoBehaviour
 
     private IEnumerator DetectCharactersInSight()
     {
-
         while (true)
         {
 
-            foreach (var character in _charactersInSight.ToArray())
-            {
-                if (character is Player player)
-                {
-
-
-                    player.SetSeenState(false);
-                    _charactersInSight.Remove(character);
-
-                }
-            }
-
+            List<Character> currentCharactersInSight = new();
 
 
             Collider2D[] collidersInRange = Physics2D.OverlapCircleAll(transform.position, _detectionRadius, _characterDetectionLayer);
@@ -121,37 +118,41 @@ public class Senses : MonoBehaviour
                 {
                     if (collider.TryGetComponent(out NPC potentialNPC))
                     {
-
-
                         if (CharacterIsInLineOfSight((Character)potentialNPC))
                         {
-                            if (!_charactersInSight.Contains(potentialNPC))
-                            {
-                                //  print("sees NPC");
-                                _charactersInSight.Add(potentialNPC);
-                            }
+                            currentCharactersInSight.Add(potentialNPC);
                         }
                     }
                     else if (collider.TryGetComponent(out Player potentialPlayer))
                     {
-
-
                         if (CharacterIsInLineOfSight((Character)potentialPlayer))
                         {
-                            if (!_charactersInSight.Contains(potentialPlayer))
-                            {
-                                // print("sees Player");
-                                _charactersInSight.Add(potentialPlayer);
-                                potentialPlayer.SetSeenState(true);
-                            }
+                            currentCharactersInSight.Add(potentialPlayer);
+                            potentialPlayer.SetSeenState(true);
                         }
                     }
                 }
             }
 
+
+            foreach (var character in _charactersInSight)
+            {
+                if (!currentCharactersInSight.Contains(character))
+                {
+                    if (character is Player player)
+                    {
+                        player.SetSeenState(false);
+                    }
+                }
+            }
+
+
+            _charactersInSight = currentCharactersInSight;
+
             yield return new WaitForSeconds(0.5f);
         }
     }
+
 
     private IEnumerator DetectObjectsInSight()
     {

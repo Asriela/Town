@@ -7,6 +7,8 @@ public class Logger : MonoBehaviour
     public string CurrentAction { get; set; }
     public string CurrentStepInAction { get; set; }
 
+    public string CharactersInSight { get; set; }
+
     private TextMeshProUGUI _statsLabel;
     [SerializeField]
     private Transform _statsLabelTransform;
@@ -28,7 +30,7 @@ public class Logger : MonoBehaviour
 
     private void Update()
     {
-        UpdateStatsLabel($"CurrentBehaviour:\n  {CurrentBehaviour}\n\n  CurrentAction:\n  {CurrentAction}\n\n  CurrentStepInAction:\n  {CurrentStepInAction}");
+        UpdateStatsLabel($"CurrentBehaviour:\n {CurrentBehaviour}\n-----------\nCurrentAction:\n{CurrentAction}\n-----------\nCurrentStepInAction:\n{CurrentStepInAction}\n-----------\nSees:\n{CharactersInSight}");
     }
 
     public void UpdateStatsLabel(string message)

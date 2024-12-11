@@ -20,7 +20,7 @@ public class GameUI : MonoBehaviour
 
         if (_timeOfDaylabel != null)
         {
-            _timeOfDaylabel.text = @$"Time of day: {((int)WorldManager.Instance.TimeOfDay)}h/n Enum: {WorldManager.Instance.GetTimeOfDayAsEnum()} ";
+            _timeOfDaylabel.text = @$"Time of day: {((int)WorldManager.Instance.TimeOfDay)}h Enum: {WorldManager.Instance.GetTimeOfDayAsEnum()} ";
         }
 
     } 

@@ -38,6 +38,7 @@ namespace Mind
     public enum CharacterName : short
     {
         none,
+        player,
         Belethor,
         Zerath
     }

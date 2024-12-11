@@ -39,7 +39,7 @@ public class WorldManager : Singleton<WorldManager>
         }
     }
 
-    public float TimeOfDay = 0f;
+    public float TimeOfDay { get; set; }
     private void Update()
     {
         RunTimeOfDay();
