@@ -32,7 +32,7 @@ namespace Mind
         findKnowledge,
         shareKnowledge,
         gotoLocation,
-
+        useObject
     }
     [Serializable]
     public enum CharacterName : short

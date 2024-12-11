@@ -4,10 +4,10 @@ using System.Linq;
 using UnityEngine;
 
 [Serializable]
-public class ObjectTypeGameObjectPair
+public class ObjectTypeWorldObjectPair
 {
     public Mind.ObjectType objectType;
-    public GameObject gameObject;
+    public WorldObject worldObject;
 }
 [Serializable]
 public class GameObjectTagsPair
@@ -101,6 +101,7 @@ public class Memory : MonoBehaviour
             return dictionary;
         }
     }
+
     public void AddPerson(GameObject person, List<Mind.TraitType> tags)
     {
 
@@ -133,18 +134,67 @@ public class Memory : MonoBehaviour
 
 
     [SerializeField]
-    private List<ObjectTypeGameObjectPair> _possessions = new();
+    private List<ObjectTypeWorldObjectPair> _possessions = new();
 
-    public Dictionary<Mind.ObjectType, GameObject> Possessions
+    private Dictionary<Mind.ObjectType, WorldObject> _possessionsDictionary;
+
+    public Dictionary<Mind.ObjectType, WorldObject> Possessions
     {
         get
         {
-            Dictionary<Mind.ObjectType, GameObject> dictionary = new();
-            foreach (var pair in _possessions)
+            if (_possessionsDictionary == null)
             {
-                dictionary[pair.objectType] = pair.gameObject;
+
+                _possessionsDictionary = new Dictionary<Mind.ObjectType, WorldObject>();
+                foreach (var pair in _possessions)
+                {
+                    _possessionsDictionary[pair.objectType] = pair.worldObject;
+                }
             }
-            return dictionary;
+            return _possessionsDictionary;
+        }
+        set
+        {
+            _possessions.Clear();
+            foreach (var kvp in value)
+            {
+                _possessions.Add(new ObjectTypeWorldObjectPair { objectType = kvp.Key, worldObject = kvp.Value });
+            }
+
+            _possessionsDictionary = value;
+        }
+    }
+
+    //TODO: make inventory items follow player
+    //TODO: maybe move inventory to a different class
+    [SerializeField]
+    private List<ObjectTypeWorldObjectPair> _inventory = new();
+
+    private Dictionary<Mind.ObjectType, WorldObject> _inventoryDictionary;
+
+    public Dictionary<Mind.ObjectType, WorldObject> Inventory
+    {
+        get
+        {
+            if (_inventoryDictionary == null)
+            {
+                _inventoryDictionary = new Dictionary<Mind.ObjectType, WorldObject>();
+                foreach (var pair in _inventory)
+                {
+                    _inventoryDictionary[pair.objectType] = pair.worldObject;
+                }
+            }
+            return _inventoryDictionary;
+        }
+        set
+        {
+            _inventory.Clear();
+            foreach (var kvp in value)
+            {
+                _inventory.Add(new ObjectTypeWorldObjectPair { objectType = kvp.Key, worldObject = kvp.Value });
+            }
+
+            _inventoryDictionary = value;
         }
     }
 }

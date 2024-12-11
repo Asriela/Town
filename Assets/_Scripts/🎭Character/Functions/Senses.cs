@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -10,19 +11,22 @@ public class Senses : MonoBehaviour
     [Header("Senses Settings")]
     [SerializeField] private float _detectionRadius = 10f;
     [SerializeField] private float _viewAngle = 100;
-    [SerializeField] private LayerMask _detectionLayer;
+    [SerializeField] private LayerMask _characterDetectionLayer;
+    [SerializeField] private LayerMask _objectDetectionLayer;
     [SerializeField] private Material _viewConeMaterial;
     private Vector3 _lookDirection;
 
     private Mesh _viewConeMesh;
 
     private MeshRenderer _viewConeRenderer;
-    private List<Character> _charactersInSight = new List<Character>();
+    private List<Character> _charactersInSight = new();
+    private List<WorldObject> _objectsInSight = new();
 
     public void Initialize(NPC npc)
     {
         _npc = npc;
         StartCoroutine(DetectCharactersInSight());
+        StartCoroutine(DetectObjectsInSight());
         CreateViewCone();
     }
 
@@ -106,7 +110,7 @@ public class Senses : MonoBehaviour
 
 
 
-            Collider2D[] collidersInRange = Physics2D.OverlapCircleAll(transform.position, _detectionRadius, _detectionLayer);
+            Collider2D[] collidersInRange = Physics2D.OverlapCircleAll(transform.position, _detectionRadius, _characterDetectionLayer);
 
             foreach (var collider in collidersInRange)
             {
@@ -119,7 +123,7 @@ public class Senses : MonoBehaviour
                     {
 
 
-                        if (IsInLineOfSight((Character)potentialNPC))
+                        if (CharacterIsInLineOfSight((Character)potentialNPC))
                         {
                             if (!_charactersInSight.Contains(potentialNPC))
                             {
@@ -132,7 +136,7 @@ public class Senses : MonoBehaviour
                     {
 
 
-                        if (IsInLineOfSight((Character)potentialPlayer))
+                        if (CharacterIsInLineOfSight((Character)potentialPlayer))
                         {
                             if (!_charactersInSight.Contains(potentialPlayer))
                             {
@@ -148,7 +152,45 @@ public class Senses : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
     }
-    private bool IsInLineOfSight(Character character)
+
+    private IEnumerator DetectObjectsInSight()
+    {
+
+        while (true)
+        {
+
+
+
+
+            Collider2D[] collidersInRange = Physics2D.OverlapCircleAll(transform.position, _detectionRadius, _objectDetectionLayer);
+
+            foreach (var collider in collidersInRange)
+            {
+                if (collider == GetComponent<Collider2D>())
+                { continue; }
+
+
+                if (collider.TryGetComponent(out WorldObject potentialObject))
+                {
+
+
+                    if (ObjectIsInLineOfSight(potentialObject))
+                    {
+                        if (!_objectsInSight.Contains(potentialObject))
+                        {
+                            _objectsInSight.Add(potentialObject);
+                        }
+                    }
+                }
+
+
+            }
+
+            yield return new WaitForSeconds(0.5f);
+        }
+    }
+
+    private bool CharacterIsInLineOfSight(Character character)
     {
 
         var ourPosition = _npc.Movement.GetPosition();
@@ -163,7 +205,7 @@ public class Senses : MonoBehaviour
 
         int oldLayer = _npc.gameObject.layer;
         _npc.gameObject.layer = Physics.IgnoreRaycastLayer;
-        var raycastHit2D = Physics2D.Raycast(ourPosition, dirToTarget, _detectionRadius, _detectionLayer);
+        var raycastHit2D = Physics2D.Raycast(ourPosition, dirToTarget, _detectionRadius, _characterDetectionLayer);
 
         _npc.gameObject.layer = oldLayer;
 
@@ -175,51 +217,33 @@ public class Senses : MonoBehaviour
         return false;
     }
 
+    private bool ObjectIsInLineOfSight(WorldObject worldObject)
+    {
+
+        var ourPosition = _npc.Movement.GetPosition();
+        var targetPosition = worldObject.GetPosition();
+        if (Vector3.Distance(ourPosition, targetPosition) > _detectionRadius)
+        { return false; }
+
+        var dirToTarget = (targetPosition - ourPosition).normalized;
+
+        if (Vector3.Angle(_lookDirection, dirToTarget) > _viewAngle / 2f)
+        { return false; }
 
 
-    /* private bool IsInLineOfSight(Character character)
-     {
-         var targetPosition = character.transform.position;
-         // Cast a ray towards the target
-         RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, targetPosition - transform.position, _detectionRadius, _detectionLayer);
+        var raycastHit2D = Physics2D.Raycast(ourPosition, dirToTarget, _detectionRadius, _objectDetectionLayer);
 
-         float closestWall = Mathf.Infinity;
-         float characterDistance = Mathf.Infinity;
 
-         bool playerDetected = false;
 
-         // Loop through all the hits
-         foreach (var hit in hits)
-         {
-             // Check if the hit is the character
-             if (hit.collider == character.GetComponent<Collider2D>() && hit.collider != _npc.GetComponent<Collider2D>())
-             {
-                 playerDetected = true;
-                 characterDistance = Vector2.Distance(transform.position, targetPosition);
-             }
+        if (raycastHit2D.collider != null && raycastHit2D.collider.gameObject == worldObject.gameObject)
+        { return true; }
 
-             // Check if the hit is a wall
-             if (hit.collider.CompareTag("Wall"))
-             {
-                 closestWall = Vector2.Distance(transform.position, hit.transform.position);
-             }
-         }
 
-         // If the player is detected and not blocked by a wall, return true
-         if (playerDetected && closestWall > characterDistance)
-         {
-             return true;
-         }
+        return false;
+    }
 
-         // If a wall is closer than the player, or the player is outside the detection radius, return false
-         if (characterDistance > _detectionRadius || closestWall < characterDistance)
-         {
-             return false;
-         }
 
-         return false;
-     }
-    */
+    //TODO: add looking for object with traits, its not required yet in this demo so i didnt add it
     public GameObject SeeSomeoneWithTraits(params Mind.TraitType[] traits)
     {
         foreach (var character in _charactersInSight)
@@ -228,29 +252,15 @@ public class Senses : MonoBehaviour
         }
         return null;
     }
-
-    // Gizmos for visualizing the field of view in the editor
-    private void OnDrawGizmos()
+    public WorldObject SeeObjectOfType(Mind.ObjectType objectType)
     {
-        // Draw the detection radius as a circle
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, _detectionRadius);
-
-        if (_npc != null)
+        foreach (var anObject in _objectsInSight)
         {
-            // Get the movement direction from the Movement class
-            Vector3 movementDirection = _npc.Movement.GetMovementDirection();
-
-            // Draw the field of view cone (2D)
-            Gizmos.color = new Color(1f, 1f, 0f, 0.3f);  // Yellow with transparency
-            Vector2 leftBoundary = Quaternion.Euler(0, 0, -_viewAngle / 2) * movementDirection * _detectionRadius;
-            Vector2 rightBoundary = Quaternion.Euler(0, 0, _viewAngle / 2) * movementDirection * _detectionRadius;
-
-            Gizmos.DrawLine(transform.position, transform.position + (Vector3)leftBoundary);
-            Gizmos.DrawLine(transform.position, transform.position + (Vector3)rightBoundary);
-
-            // Optionally, draw lines between the boundaries to complete the cone
-            Gizmos.DrawLine(transform.position + (Vector3)leftBoundary, transform.position + (Vector3)rightBoundary);
+            if (anObject.ObjectType == objectType)
+            { return anObject; }
         }
+        return null;
     }
+
+
 }

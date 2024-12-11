@@ -20,7 +20,8 @@ public class Acting : MonoBehaviour
         { Mind.ActionType.kill, param => Kill((Mind.TargetType)param) },
         { Mind.ActionType.trader, param => TraderJob((Mind.TraderType)param) },
         { Mind.ActionType.findKnowledge, param => FindKnowledge((Mind.KnowledgeType)param) },
-        { Mind.ActionType.gotoLocation, param => GotoLocation((Mind.TargetLocationType)param) }
+        { Mind.ActionType.gotoLocation, param => GotoLocation((Mind.TargetLocationType)param) },
+        { Mind.ActionType.useObject, param => UseObject((Mind.ObjectType)param) }
     };
 
     private void Update() => PerformCurrentBehavior();
@@ -35,7 +36,7 @@ public class Acting : MonoBehaviour
         {
             _npc.Logger.CurrentBehaviour = CurrentBehavior.Name;
             _npc.Logger.CurrentAction = $"{CurrentBehavior.Action} {CurrentBehavior.ActionParameter}";
-
+            _npc.Logger.CurrentStepInAction = $"";
             action(CurrentBehavior.ActionParameter);
         }
         else
@@ -43,14 +44,14 @@ public class Acting : MonoBehaviour
             Debug.LogWarning($"No handler defined for ActionType: {CurrentBehavior.Action}");
         }
     }
-
+    //TODO: add dynamic tags  when searching for a character
     private void FindCharacter(Mind.TargetType targetType)
     {
-        StartCoroutine(ActionsHelper.WanderAndSearch(_npc, targetType, true, Mind.TraitType.human));
+        StartCoroutine(ActionsHelper.WanderAndSearchForCharacter(_npc, targetType, true, Mind.TraitType.human));
     }
     private void FindObject(Mind.ObjectType targetType)
     {
-        //  StartCoroutine(ActionsHelper.WanderAndSearch(_npc, targetType, true, Mind.TraitType.human));
+          StartCoroutine(ActionsHelper.WanderAndSearchForObject(_npc, targetType));
 
     }
     private void FindKnowledge(Mind.KnowledgeType knowledgeType)
@@ -82,7 +83,7 @@ public class Acting : MonoBehaviour
             target.Vitality.Die();
             _npc.Memory.Targets[targetType] = null;
         }
-
+        //TODO: killer must only kill victim if they think the victim is alone
     }
 
 
@@ -101,23 +102,30 @@ public class Acting : MonoBehaviour
         var objectToUse = _npc.Memory.Possessions[ObjectType.traderDesk];
         if (ActionsHelper.Reached(_npc, objectToUse.transform.position))
         {
-
+            //TODO: extend trader behaviour here
         }
+    }
+
+    private void UseObject(Mind.ObjectType objectType)
+    {
+        var objectToUse = _npc.Memory.Inventory[objectType];
+        objectToUse.Use(_npc);
+        _npc.Thinking.CalculateHighestScoringBehavior();
     }
 
     private void GotoLocation(Mind.TargetLocationType locationType)
     {
-        _npc.Logger.CurrentStepInAction = $"Goto location {locationType}";
-        var ok = false;
+        _npc.Logger.CurrentStepInAction = $"Made it to goto location {locationType}";
+
         var mem = _npc.Memory;
 
         var locationTarget = mem.LocationTargets[locationType];
         var destination = WorldManager.Instance.Locations[locationTarget];
 
-        if (ActionsHelper.Reachedd(_npc, destination.transform.position))
+        if (ActionsHelper.Reached(_npc, destination.transform.position))
         {
             _npc.Movement.CurrentLocation = locationTarget;
         }
     }
 
-} 
+}

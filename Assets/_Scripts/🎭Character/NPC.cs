@@ -13,7 +13,7 @@ using UnityEngine.AI;
 public class NPC : Character
 {
 
-    public Thinking Thinking{ get; set; }
+    public Thinking Thinking { get; set; }
     public Senses Senses { get; set; }
     public Acting Acting { get; set; }
     public Logger Logger { get; set; }

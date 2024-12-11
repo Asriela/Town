@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Thinking : MonoBehaviour
 {
-    [SerializeField]
-    private List<Trait> _traits = new();
 
     private NPC _npc;
 
@@ -15,7 +13,16 @@ public class Thinking : MonoBehaviour
         StartCoroutine(CheckBestBehaviorCoroutine());
     }
 
+    [SerializeField]
+    private List<Trait> _traits = new();
+
     public List<Trait> Traits => _traits;
+
+    public void AddTrait(Trait theTrait)
+    {
+        if (!_traits.Contains(theTrait))
+        { _traits.Add(theTrait); }
+    }
 
 
     [SerializeField] private float _checkInterval = 3f;
@@ -39,7 +46,7 @@ public class Thinking : MonoBehaviour
         if (_npc.Vitality.Dead)
         { return; }
         Behavior highestScoringBehavior = null;
-       
+
 
 
         for (int i = 0; i < _traits.Count; i++)

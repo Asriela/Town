@@ -148,6 +148,7 @@ public class TraitEditor : Editor
             Mind.ActionType.trader => typeof(Mind.TraderType),
             Mind.ActionType.findKnowledge => typeof(Mind.KnowledgeType),
             Mind.ActionType.gotoLocation => typeof(Mind.TargetLocationType),
+            Mind.ActionType.useObject => typeof(Mind.ObjectType),
             _ => null,
         };
     }
@@ -179,6 +180,7 @@ public class TraitEditor : Editor
             Mind.ConditionType.hasKnowledge => typeof(Mind.KnowledgeType),
             Mind.ConditionType.doesNotHaveKnowledge => typeof(Mind.KnowledgeType),
             Mind.ConditionType.atLocation => typeof(Mind.TargetLocationType),
+            Mind.ConditionType.notAtLocation => typeof(Mind.TargetLocationType),
             Mind.ConditionType.hasLocationTarget => typeof(Mind.TargetLocationType),
             Mind.ConditionType.doesNotHaveLocationTarget => typeof(Mind.TargetLocationType),
             _ => null,

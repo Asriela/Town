@@ -19,7 +19,7 @@ public static class Conditions
         _conditionDelegates.Add(ConditionType.hasObject, new ConditionDelegate<Mind.ObjectType>(CheckHasObject));
         _conditionDelegates.Add(ConditionType.doesNotHaveObject, new ConditionDelegate<Mind.ObjectType>(CheckHasObject));
         _conditionDelegates.Add(ConditionType.timeOfDay, new ConditionDelegate<Mind.TimeOfDayType>(CheckTimeOfDay));
-        _conditionDelegates.Add(ConditionType.atLocation, new ConditionDelegate<Mind.LocationName>(AtLocation));
+        _conditionDelegates.Add(ConditionType.atLocation, new ConditionDelegate<Mind.TargetLocationType>(AtLocation));
         _conditionDelegates.Add(ConditionType.hasLocationTarget, new ConditionDelegate<Mind.TargetLocationType>(CheckLocationTarget));
         _conditionDelegates.Add(ConditionType.doesNotHaveLocationTarget, new ConditionDelegate<Mind.TargetLocationType>(CheckLocationTarget));
     }
@@ -55,9 +55,11 @@ public static class Conditions
                     var objectNotDelegate = (ConditionDelegate<Mind.ObjectType>)conditionDelegate;
                     return objectNotDelegate((Mind.ObjectType)condition.parameter, npc, false);
                 case ConditionType.atLocation:
-                    var atLocation = (ConditionDelegate<Mind.LocationName>)conditionDelegate;
-                    return atLocation((Mind.LocationName)condition.parameter, npc, false);
-
+                    var atLocation = (ConditionDelegate<Mind.TargetLocationType>)conditionDelegate;
+                    return atLocation((Mind.TargetLocationType)condition.parameter, npc, true);
+                case ConditionType.notAtLocation:
+                    var atLocationNot = (ConditionDelegate<Mind.TargetLocationType>)conditionDelegate;
+                    return atLocationNot((Mind.TargetLocationType)condition.parameter, npc, false);
                 case ConditionType.hasLocationTarget:
                     var locationTargetDelegate = (ConditionDelegate<Mind.TargetLocationType>)conditionDelegate;
                     return locationTargetDelegate((Mind.TargetLocationType)condition.parameter, npc, true);
@@ -94,7 +96,7 @@ public static class Conditions
     {
         bool ret;
         if (npc.Memory.LocationTargets.ContainsKey(parameter))
-        Debug.Log($"🔰Location target: {npc.Memory.LocationTargets[parameter]}");
+            Debug.Log($"🔰Location target: {npc.Memory.LocationTargets[parameter]}");
         if (npc.Memory.LocationTargets.ContainsKey(parameter) && npc.Memory.LocationTargets[parameter] != LocationName.none)
         {
             ret = trueStatement;
@@ -105,7 +107,7 @@ public static class Conditions
         if (ret != trueStatement)
         { npc.Memory.LatestLocationTargetType = parameter; }
 
-        return ret; 
+        return ret;
     }
 
     private static bool CheckHasObject(Mind.ObjectType parameter, NPC npc, bool trueStatement)
@@ -125,9 +127,15 @@ public static class Conditions
         }
         return !trueStatement;
     }
-    private static bool AtLocation(Mind.LocationName parameter, NPC npc, bool trueStatement)
+    private static bool AtLocation(Mind.TargetLocationType parameter, NPC npc, bool trueStatement)
     {
-        if (npc.Movement.CurrentLocation != LocationName.none && npc.Movement.CurrentLocation == parameter)
+        if (!npc.Memory.LocationTargets.ContainsKey(parameter))
+        { return !trueStatement; }
+        var locationFromMemory = npc.Memory.LocationTargets[parameter];
+
+        Debug.Log($"⭐current location : {npc.Movement.CurrentLocation} locationFromMemory: {locationFromMemory}");
+
+        if (npc.Movement.CurrentLocation != LocationName.none && npc.Movement.CurrentLocation == locationFromMemory)
         { return trueStatement; }
         return !trueStatement;
     }
