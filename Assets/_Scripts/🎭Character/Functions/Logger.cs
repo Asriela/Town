@@ -30,7 +30,7 @@ public class Logger : MonoBehaviour
 
     private void Update()
     {
-        UpdateStatsLabel($"CurrentBehaviour:\n {CurrentBehaviour}\n-----------\nCurrentAction:\n{CurrentAction}\n-----------\nCurrentStepInAction:\n{CurrentStepInAction}\n-----------\nSees:\n{CharactersInSight}");
+        UpdateStatsLabel($"BEHAVIOUR:\n {CurrentBehaviour}\n-----------\nACTION:\n {CurrentAction}\n-----------\nSTEP:\n {CurrentStepInAction}\n-----------\nSEES:\n {CharactersInSight}");
     }
 
     public void UpdateStatsLabel(string message)
