@@ -14,16 +14,13 @@ public class Vitality : MonoBehaviour
     {
         Dead = false;
         _npc = npc;
-        Needs.Add(Mind.NeedType.sleep, 100);
-        Needs.Add(Mind.NeedType.eat, 100);
-        Needs.Add(Mind.NeedType.makeUndead, 100);
-        Needs.Add(Mind.NeedType.murder, 100);
+        Needs.Add(NeedType.sleep, 100);
+        Needs.Add(NeedType.eat, 100);
+        Needs.Add(NeedType.makeUndead, 100);
+        Needs.Add(NeedType.murder, 100);
     }
 
-    private void Update()
-    {
-        ManageNeeds();
-    }
+    private void Update() => ManageNeeds();
 
     public void Die()
     {

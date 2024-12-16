@@ -42,26 +42,23 @@ public class Senses : MonoBehaviour
     private void SetLoggersCharactersInSight()
     {
         _npc.Logger.CharactersInSight = "";
-        foreach (Character character in _charactersInSight)
+        foreach (var character in _charactersInSight)
         {
             _npc.Logger.CharactersInSight += @$"{character.CharacterName}\n";
         }
     }
-    private void SetViewDirection()
-    {
-        _lookDirection = _npc.Movement.GetMovementDirection().normalized;
-    }
+    private void SetViewDirection() => _lookDirection = _npc.Movement.GetMovementDirection().normalized;
 
     private void CreateViewCone()
     {
 
-        GameObject coneObject = new GameObject("ViewCone");
+        GameObject coneObject = new("ViewCone");
         coneObject.transform.parent = transform;
         coneObject.transform.localPosition = Vector3.zero;
 
 
         _viewConeMesh = new Mesh();
-        MeshFilter meshFilter = coneObject.AddComponent<MeshFilter>();
+        var meshFilter = coneObject.AddComponent<MeshFilter>();
         _viewConeRenderer = coneObject.AddComponent<MeshRenderer>();
 
         meshFilter.mesh = _viewConeMesh;
@@ -76,21 +73,21 @@ public class Senses : MonoBehaviour
         int[] triangles = new int[segments * 3];
 
 
-        Vector3 movementDirection = _lookDirection;
+        var movementDirection = _lookDirection;
 
         vertices[0] = Vector3.zero;
         for (int i = 0; i <= segments; i++)
         {
-            float angle = -_viewAngle / 2 + angleStep * i;
-            Vector3 direction = Quaternion.Euler(0, 0, angle) * movementDirection;
+            float angle = (-_viewAngle / 2) + (angleStep * i);
+            var direction = Quaternion.Euler(0, 0, angle) * movementDirection;
             vertices[i + 1] = direction * _detectionRadius;
         }
 
         for (int i = 0; i < segments; i++)
         {
             triangles[i * 3] = 0;
-            triangles[i * 3 + 1] = i + 1;
-            triangles[i * 3 + 2] = i + 2;
+            triangles[(i * 3) + 1] = i + 1;
+            triangles[(i * 3) + 2] = i + 2;
         }
 
         _viewConeMesh.Clear();
@@ -106,13 +103,12 @@ public class Senses : MonoBehaviour
 
             List<Character> currentCharactersInSight = new();
 
-
-            Collider2D[] collidersInRange = Physics2D.OverlapCircleAll(transform.position, _detectionRadius, _characterDetectionLayer);
+            var collidersInRange = Physics2D.OverlapCircleAll(transform.position, _detectionRadius, _characterDetectionLayer);
 
             foreach (var collider in collidersInRange)
             {
                 if (collider == GetComponent<Collider2D>())
-                    continue;
+                { continue; }
 
                 if (collider.CompareTag("Character"))
                 {
@@ -134,7 +130,6 @@ public class Senses : MonoBehaviour
                 }
             }
 
-
             foreach (var character in _charactersInSight)
             {
                 if (!currentCharactersInSight.Contains(character))
@@ -145,7 +140,6 @@ public class Senses : MonoBehaviour
                     }
                 }
             }
-
 
             _charactersInSight = currentCharactersInSight;
 
@@ -163,7 +157,7 @@ public class Senses : MonoBehaviour
 
 
 
-            Collider2D[] collidersInRange = Physics2D.OverlapCircleAll(transform.position, _detectionRadius, _objectDetectionLayer);
+            var collidersInRange = Physics2D.OverlapCircleAll(transform.position, _detectionRadius, _objectDetectionLayer);
 
             foreach (var collider in collidersInRange)
             {
@@ -183,7 +177,6 @@ public class Senses : MonoBehaviour
                         }
                     }
                 }
-
 
             }
 
@@ -210,10 +203,8 @@ public class Senses : MonoBehaviour
 
         _npc.gameObject.layer = oldLayer;
 
-
         if (raycastHit2D.collider != null && raycastHit2D.collider.gameObject == character.gameObject)
         { return true; }
-
 
         return false;
     }
@@ -231,18 +222,13 @@ public class Senses : MonoBehaviour
         if (Vector3.Angle(_lookDirection, dirToTarget) > _viewAngle / 2f)
         { return false; }
 
-
         var raycastHit2D = Physics2D.Raycast(ourPosition, dirToTarget, _detectionRadius, _objectDetectionLayer);
-
-
 
         if (raycastHit2D.collider != null && raycastHit2D.collider.gameObject == worldObject.gameObject)
         { return true; }
 
-
         return false;
     }
-
 
     //TODO: add looking for object with traits, its not required yet in this demo so i didnt add it
     public GameObject SeeSomeoneWithTraits(params Mind.TraitType[] traits)

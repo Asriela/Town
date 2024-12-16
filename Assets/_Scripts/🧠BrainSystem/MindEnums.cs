@@ -13,7 +13,8 @@ namespace Mind
         murderer,
         guard,
         draugerCultist,
-        jarl
+        jarl,
+        pumpkinFarmer
     }
     [Serializable]
     public enum ActionType : short
@@ -29,6 +30,7 @@ namespace Mind
         performSpell,
         socialize,
         trader,
+        farmer,
         findKnowledge,
         shareKnowledge,
         gotoLocation,
@@ -47,13 +49,16 @@ namespace Mind
     {
         none,
         ruinsOfLazeel,
-        belethorsInn
+        belethorsInn,
+        AlexsPumpkinHome
     }
     [Serializable]
     public enum TargetLocationType : short
     {
         none,
-        locationOfDarkKnowledge
+        locationOfDarkKnowledge,
+        tavern,
+        home
     }
     [Serializable]
     public enum SpellType : short
@@ -79,6 +84,11 @@ namespace Mind
         generalGoods,
         barKeeper,
         innkeeper
+    }
+    public enum FarmerType : short
+    {
+        none,
+        pumpkin
     }
     [Serializable]
     public enum KnowledgeType : short
@@ -129,7 +139,8 @@ namespace Mind
         doesNotHaveTarget,
         doesNotHaveObject,
         hasObject,
-        timeOfDay,
+        afterHour,
+        beforeHour,
         doesNotHaveKnowledge,
         hasKnowledge,
         atLocation,
@@ -171,7 +182,18 @@ namespace Mind
     public enum ObjectType : short
     {
         bed,
+        foodBowl,
         traderDesk,
-        bookOfTheDead
+        bookOfTheDead,
+        pumpkin
+    }
+
+    [Serializable]
+    public enum ObjectTrait : short
+    {
+        plant,
+        crop,
+        wilts,
+        grows
     }
 }

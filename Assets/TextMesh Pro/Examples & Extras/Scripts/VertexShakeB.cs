@@ -16,33 +16,24 @@ namespace TMPro.Examples
         private bool hasTextChanged;
 
 
-        void Awake()
-        {
-            m_TextComponent = GetComponent<TMP_Text>();
-        }
+        void Awake() => m_TextComponent = GetComponent<TMP_Text>();
 
-        void OnEnable()
-        {
+        void OnEnable() =>
             // Subscribe to event fired when text object has been regenerated.
             TMPro_EventManager.TEXT_CHANGED_EVENT.Add(ON_TEXT_CHANGED);
-        }
 
-        void OnDisable()
-        {
-            TMPro_EventManager.TEXT_CHANGED_EVENT.Remove(ON_TEXT_CHANGED);
-        }
+        void OnDisable() => TMPro_EventManager.TEXT_CHANGED_EVENT.Remove(ON_TEXT_CHANGED);
 
 
-        void Start()
-        {
-            StartCoroutine(AnimateVertexColors());
-        }
+        void Start() => StartCoroutine(AnimateVertexColors());
 
 
         void ON_TEXT_CHANGED(Object obj)
         {
             if (obj = m_TextComponent)
+            {
                 hasTextChanged = true;
+            }
         }
 
         /// <summary>
@@ -69,7 +60,9 @@ namespace TMPro.Examples
                 if (hasTextChanged)
                 {
                     if (copyOfVertices.Length < textInfo.meshInfo.Length)
+                    {
                         copyOfVertices = new Vector3[textInfo.meshInfo.Length][];
+                    }
 
                     for (int i = 0; i < textInfo.meshInfo.Length; i++)
                     {
@@ -107,7 +100,9 @@ namespace TMPro.Examples
                     {
                         // Skip characters that are not visible and thus have no geometry to manipulate.
                         if (!textInfo.characterInfo[j].isVisible)
+                        {
                             continue;
+                        }
 
                         // Get the index of the material used by the current character.
                         int materialIndex = textInfo.characterInfo[j].materialReferenceIndex;

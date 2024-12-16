@@ -39,7 +39,9 @@ namespace TMPro.Examples
                 m_TextComponent = GetComponent<TMP_Text>();
 
                 if (m_TextComponent == null)
+                {
                     return;
+                }
             }
 
             m_Transform = m_TextComponent.transform;
@@ -58,37 +60,55 @@ namespace TMPro.Examples
             // Draw line metrics
             #region Draw Lines
             if (ShowLines)
+            {
                 DrawLineBounds();
+            }
+
             #endregion
 
             // Draw word metrics
             #region Draw Words
             if (ShowWords)
+            {
                 DrawWordBounds();
+            }
+
             #endregion
 
             // Draw character metrics
             #region Draw Characters
             if (ShowCharacters)
+            {
                 DrawCharactersBounds();
+            }
+
             #endregion
 
             // Draw Quads around each of the words
             #region Draw Links
             if (ShowLinks)
+            {
                 DrawLinkBounds();
+            }
+
             #endregion
 
             // Draw Quad around the bounds of the text
             #region Draw Bounds
             if (ShowMeshBounds)
+            {
                 DrawBounds();
+            }
+
             #endregion
 
             // Draw Quad around the rendered region of the text.
             #region Draw Text Bounds
             if (ShowTextBounds)
+            {
                 DrawTextBounds();
+            }
+
             #endregion
         }
 
@@ -111,10 +131,14 @@ namespace TMPro.Examples
                                           i >= m_TextComponent.firstVisibleCharacter;
 
                 if (m_TextComponent.overflowMode == TextOverflowModes.Page)
+                {
                     isCharacterVisible = isCharacterVisible && characterInfo.pageNumber + 1 == m_TextComponent.pageToDisplay;
+                }
 
                 if (!isCharacterVisible)
+                {
                     continue;
+                }
 
                 float dottedLineSize = 6;
 
@@ -483,7 +507,10 @@ namespace TMPro.Examples
                                       i > m_TextComponent.maxVisibleLines ||
                                      (m_TextComponent.overflowMode == TextOverflowModes.Page && firstCharacterInfo.pageNumber + 1 != m_TextComponent.pageToDisplay) ? false : true;
 
-                if (!isLineVisible) continue;
+                if (!isLineVisible)
+                {
+                    continue;
+                }
 
                 float lineBottomLeft = firstCharacterInfo.bottomLeft.x;
                 float lineTopRight = lastCharacterInfo.topRight.x;
@@ -639,12 +666,12 @@ namespace TMPro.Examples
         {
             var cam = Camera.current;
             float dotSpacing = (cam.WorldToScreenPoint(br).x - cam.WorldToScreenPoint(bl).x) / 75f;
-            UnityEditor.Handles.color = color;
+            Handles.color = color;
 
-            UnityEditor.Handles.DrawDottedLine(bl, tl, dotSpacing);
-            UnityEditor.Handles.DrawDottedLine(tl, tr, dotSpacing);
-            UnityEditor.Handles.DrawDottedLine(tr, br, dotSpacing);
-            UnityEditor.Handles.DrawDottedLine(br, bl, dotSpacing);
+            Handles.DrawDottedLine(bl, tl, dotSpacing);
+            Handles.DrawDottedLine(tl, tr, dotSpacing);
+            Handles.DrawDottedLine(tr, br, dotSpacing);
+            Handles.DrawDottedLine(br, bl, dotSpacing);
         }
         #endif
     }

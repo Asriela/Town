@@ -3,12 +3,7 @@
 public class Appearance : MonoBehaviour
 {
     private Character _npc;
-    public void Initialize(Character npc)
-    {
-
-        _npc = npc;
-
-    }
+    public void Initialize(Character npc) => _npc = npc;
 
     public void LookDead()
     {

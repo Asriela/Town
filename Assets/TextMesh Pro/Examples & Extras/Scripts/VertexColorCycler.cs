@@ -10,16 +10,10 @@ namespace TMPro.Examples
 
         private TMP_Text m_TextComponent;
 
-        void Awake()
-        {
-            m_TextComponent = GetComponent<TMP_Text>();
-        }
+        void Awake() => m_TextComponent = GetComponent<TMP_Text>();
 
 
-        void Start()
-        {
-            StartCoroutine(AnimateVertexColors());
-        }
+        void Start() => StartCoroutine(AnimateVertexColors());
 
 
         /// <summary>

@@ -12,8 +12,8 @@ public class Character : MonoBehaviour
     private Collider2D _collider2D;
 
     [SerializeField]
-    private Mind.CharacterName _characterName;
-    public Mind.CharacterName CharacterName => _characterName;
+    private CharacterName _characterName;
+    public CharacterName CharacterName => _characterName;
 
     public Movement Movement { get; set; }
     public Vitality Vitality { get; set; }

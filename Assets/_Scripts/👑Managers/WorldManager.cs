@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Mind;
-using Unity.VisualScripting;
 using UnityEngine;
 [Serializable]
 public class LocationTypeGameObjectPair
 {
-    public Mind.LocationName locationType; // Key
+    public LocationName locationType; // Key
     public GameObject gameObject; // Value
 }
 
@@ -15,7 +13,7 @@ public class LocationTypeGameObjectPair
 [Serializable]
 public class EnumCharacterPair
 {
-    public Mind.CharacterName characterName; // Key
+    public CharacterName characterName; // Key
     public Character character; // Value
 }
 
@@ -24,13 +22,13 @@ public class WorldManager : Singleton<WorldManager>
 
 
     [SerializeField]
-    private List<LocationTypeGameObjectPair> _locations = new List<LocationTypeGameObjectPair>();
+    private List<LocationTypeGameObjectPair> _locations = new();
 
-    public Dictionary<Mind.LocationName, GameObject> Locations
+    public Dictionary<LocationName, GameObject> Locations
     {
         get
         {
-            Dictionary<Mind.LocationName, GameObject> dictionary = new Dictionary<Mind.LocationName, GameObject>();
+            Dictionary<LocationName, GameObject> dictionary = new();
             foreach (var pair in _locations)
             {
                 dictionary[pair.locationType] = pair.gameObject;
@@ -40,49 +38,38 @@ public class WorldManager : Singleton<WorldManager>
     }
 
     public float TimeOfDay { get; set; }
-    private void Update()
-    {
-        RunTimeOfDay();
+    private void Update() => RunTimeOfDay();
 
-    }
-
-    private void RunTimeOfDay()
-    {
-        TimeOfDay = TimeOfDay < 24 ? TimeOfDay + Settings.timeOfDaySpeed : 0;
-    }
+    private void RunTimeOfDay() => TimeOfDay = TimeOfDay < 24 ? TimeOfDay + Settings.timeOfDaySpeed : 0;
 
     public TimeOfDayType GetTimeOfDayAsEnum()
     {
         int hour = (int)(TimeOfDay % 24);
 
-
-        if (hour >= 0 && hour < 12)
+        return hour switch
         {
 
-            return (TimeOfDayType)(hour - 1);
-        }
-        else
-        {
+            >= 0 and < 12 =>
+                 (TimeOfDayType)(hour - 1),
+            _ => (TimeOfDayType)(hour - 11)
 
-            return (TimeOfDayType)(hour - 11);
-        }
-
+        };
     }
     [SerializeField]
     private List<EnumCharacterPair> _allCharacters = new();
 
-    public Dictionary<Mind.CharacterName, Character> AllCharacters
+    public Dictionary<CharacterName, Character> AllCharacters
     {
         get
         {
-            Dictionary<Mind.CharacterName, Character> dictionary = new();
+            Dictionary<CharacterName, Character> dictionary = new();
             foreach (var pair in _allCharacters)
             {
                 dictionary[pair.characterName] = pair.character;
             }
             return dictionary;
         }
-    } 
+    }
 
 
 

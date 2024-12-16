@@ -24,10 +24,7 @@ namespace TMPro.Examples
             m_Material = m_Renderer.material;
         }
 
-        void Start()
-        {
-            StartCoroutine(AnimateProperties());
-        }
+        void Start() => StartCoroutine(AnimateProperties());
 
         IEnumerator AnimateProperties()
         {

@@ -13,15 +13,16 @@ public static class Conditions
     static Conditions()
     {
         // Initialize the delegates for each condition type.
-        _conditionDelegates.Add(ConditionType.needsTo, new ConditionDelegate<Mind.NeedType>(CheckNeed));
-        _conditionDelegates.Add(ConditionType.hasTarget, new ConditionDelegate<Mind.TargetType>(CheckTarget));
-        _conditionDelegates.Add(ConditionType.doesNotHaveTarget, new ConditionDelegate<Mind.TargetType>(CheckTarget));
-        _conditionDelegates.Add(ConditionType.hasObject, new ConditionDelegate<Mind.ObjectType>(CheckHasObject));
-        _conditionDelegates.Add(ConditionType.doesNotHaveObject, new ConditionDelegate<Mind.ObjectType>(CheckHasObject));
-        _conditionDelegates.Add(ConditionType.timeOfDay, new ConditionDelegate<Mind.TimeOfDayType>(CheckTimeOfDay));
-        _conditionDelegates.Add(ConditionType.atLocation, new ConditionDelegate<Mind.TargetLocationType>(AtLocation));
-        _conditionDelegates.Add(ConditionType.hasLocationTarget, new ConditionDelegate<Mind.TargetLocationType>(CheckLocationTarget));
-        _conditionDelegates.Add(ConditionType.doesNotHaveLocationTarget, new ConditionDelegate<Mind.TargetLocationType>(CheckLocationTarget));
+        _conditionDelegates.Add(ConditionType.needsTo, new ConditionDelegate<NeedType>(CheckNeed));
+        _conditionDelegates.Add(ConditionType.hasTarget, new ConditionDelegate<TargetType>(CheckTarget));
+        _conditionDelegates.Add(ConditionType.doesNotHaveTarget, new ConditionDelegate<TargetType>(CheckTarget));
+        _conditionDelegates.Add(ConditionType.hasObject, new ConditionDelegate<ObjectType>(CheckHasObject));
+        _conditionDelegates.Add(ConditionType.doesNotHaveObject, new ConditionDelegate<ObjectType>(CheckHasObject));
+        _conditionDelegates.Add(ConditionType.beforeHour, new ConditionDelegate<TimeOfDayType>(CheckTimeOfDay));
+        _conditionDelegates.Add(ConditionType.afterHour, new ConditionDelegate<TimeOfDayType>(CheckTimeOfDay));
+        _conditionDelegates.Add(ConditionType.atLocation, new ConditionDelegate<TargetLocationType>(AtLocation));
+        _conditionDelegates.Add(ConditionType.hasLocationTarget, new ConditionDelegate<TargetLocationType>(CheckLocationTarget));
+        _conditionDelegates.Add(ConditionType.doesNotHaveLocationTarget, new ConditionDelegate<TargetLocationType>(CheckLocationTarget));
     }
 
     public static bool CheckCondition(Condition condition, NPC npc)
@@ -33,42 +34,45 @@ public static class Conditions
             switch (condition.conditionType)
             {
 
-                case ConditionType.timeOfDay:
-                    var timeDelegate = (ConditionDelegate<Mind.TimeOfDayType>)conditionDelegate;
-                    return timeDelegate((Mind.TimeOfDayType)condition.parameter, npc, true);
+                case ConditionType.afterHour:
+                    var beforeHourDelegate = (ConditionDelegate<TimeOfDayType>)conditionDelegate;
+                    return beforeHourDelegate((TimeOfDayType)condition.parameter, npc, true);
+                case ConditionType.beforeHour:
+                    var afterHourDelegate = (ConditionDelegate<TimeOfDayType>)conditionDelegate;
+                    return afterHourDelegate((TimeOfDayType)condition.parameter, npc, true);
 
                 case ConditionType.needsTo:
-                    var needDelegate = (ConditionDelegate<Mind.NeedType>)conditionDelegate;
-                    return needDelegate((Mind.NeedType)condition.parameter, npc, true);
+                    var needDelegate = (ConditionDelegate<NeedType>)conditionDelegate;
+                    return needDelegate((NeedType)condition.parameter, npc, true);
 
                 case ConditionType.hasTarget:
-                    var targetDelegate = (ConditionDelegate<Mind.TargetType>)conditionDelegate;
-                    return targetDelegate((Mind.TargetType)condition.parameter, npc, true);
+                    var targetDelegate = (ConditionDelegate<TargetType>)conditionDelegate;
+                    return targetDelegate((TargetType)condition.parameter, npc, true);
 
                 case ConditionType.doesNotHaveTarget:
-                    var targetDelegateNot = (ConditionDelegate<Mind.TargetType>)conditionDelegate;
-                    return targetDelegateNot((Mind.TargetType)condition.parameter, npc, false);
+                    var targetDelegateNot = (ConditionDelegate<TargetType>)conditionDelegate;
+                    return targetDelegateNot((TargetType)condition.parameter, npc, false);
 
 
                 case ConditionType.hasObject:
-                    var objectDelegate = (ConditionDelegate<Mind.ObjectType>)conditionDelegate;
-                    return objectDelegate((Mind.ObjectType)condition.parameter, npc, true);
+                    var objectDelegate = (ConditionDelegate<ObjectType>)conditionDelegate;
+                    return objectDelegate((ObjectType)condition.parameter, npc, true);
 
                 case ConditionType.doesNotHaveObject:
-                    var objectNotDelegate = (ConditionDelegate<Mind.ObjectType>)conditionDelegate;
-                    return objectNotDelegate((Mind.ObjectType)condition.parameter, npc, false);
+                    var objectNotDelegate = (ConditionDelegate<ObjectType>)conditionDelegate;
+                    return objectNotDelegate((ObjectType)condition.parameter, npc, false);
                 case ConditionType.atLocation:
-                    var atLocation = (ConditionDelegate<Mind.TargetLocationType>)conditionDelegate;
-                    return atLocation((Mind.TargetLocationType)condition.parameter, npc, true);
+                    var atLocation = (ConditionDelegate<TargetLocationType>)conditionDelegate;
+                    return atLocation((TargetLocationType)condition.parameter, npc, true);
                 case ConditionType.notAtLocation:
-                    var atLocationNot = (ConditionDelegate<Mind.TargetLocationType>)conditionDelegate;
-                    return atLocationNot((Mind.TargetLocationType)condition.parameter, npc, false);
+                    var atLocationNot = (ConditionDelegate<TargetLocationType>)conditionDelegate;
+                    return atLocationNot((TargetLocationType)condition.parameter, npc, false);
                 case ConditionType.hasLocationTarget:
-                    var locationTargetDelegate = (ConditionDelegate<Mind.TargetLocationType>)conditionDelegate;
-                    return locationTargetDelegate((Mind.TargetLocationType)condition.parameter, npc, true);
+                    var locationTargetDelegate = (ConditionDelegate<TargetLocationType>)conditionDelegate;
+                    return locationTargetDelegate((TargetLocationType)condition.parameter, npc, true);
                 case ConditionType.doesNotHaveLocationTarget:
-                    var locationTargetNotDelegate = (ConditionDelegate<Mind.TargetLocationType>)conditionDelegate;
-                    return locationTargetNotDelegate((Mind.TargetLocationType)condition.parameter, npc, false);
+                    var locationTargetNotDelegate = (ConditionDelegate<TargetLocationType>)conditionDelegate;
+                    return locationTargetNotDelegate((TargetLocationType)condition.parameter, npc, false);
                 default:
                     return false;
             }
@@ -78,7 +82,7 @@ public static class Conditions
     }
 
     // Example condition check methods:
-    private static bool CheckNeed(Mind.NeedType parameter, NPC npc, bool trueStatement)
+    private static bool CheckNeed(NeedType parameter, NPC npc, bool trueStatement)
     {
         if (npc.Vitality.Needs.ContainsKey(parameter) && npc.Vitality.Needs[parameter] > 80)
         {
@@ -87,7 +91,7 @@ public static class Conditions
         return false;
     }
 
-    private static bool CheckTarget(Mind.TargetType parameter, NPC npc, bool trueStatement)
+    private static bool CheckTarget(TargetType parameter, NPC npc, bool trueStatement)
     {
 
         if (npc.Memory.Targets.ContainsKey(parameter) && npc.Memory.Targets[parameter] != null)
@@ -96,11 +100,14 @@ public static class Conditions
         }
         return !trueStatement;
     }
-    private static bool CheckLocationTarget(Mind.TargetLocationType parameter, NPC npc, bool trueStatement)
+    private static bool CheckLocationTarget(TargetLocationType parameter, NPC npc, bool trueStatement)
     {
         bool ret;
         if (npc.Memory.LocationTargets.ContainsKey(parameter))
+        {
             Debug.Log($"🔰Location target: {npc.Memory.LocationTargets[parameter]}");
+        }
+
         if (npc.Memory.LocationTargets.ContainsKey(parameter) && npc.Memory.LocationTargets[parameter] != LocationName.none)
         {
             ret = trueStatement;
@@ -114,7 +121,7 @@ public static class Conditions
         return ret;
     }
 
-    private static bool CheckHasObject(Mind.ObjectType parameter, NPC npc, bool trueStatement)
+    private static bool CheckHasObject(ObjectType parameter, NPC npc, bool trueStatement)
     {
         if (npc.Memory.Possessions.ContainsKey(parameter) && npc.Memory.Possessions[parameter] != null)
         {
@@ -122,16 +129,20 @@ public static class Conditions
         }
         return !trueStatement;
     }
-    private static bool CheckTimeOfDay(Mind.TimeOfDayType parameter, NPC npc, bool trueStatement)
+    private static bool CheckTimeOfDay(TimeOfDayType parameter, NPC npc, bool trueStatement)
     {
 
-        if (WorldManager.Instance.GetTimeOfDayAsEnum() == parameter)
+        if (trueStatement && WorldManager.Instance.GetTimeOfDayAsEnum() >= parameter)
         {
-            return trueStatement;
+            return true;
         }
-        return !trueStatement;
+        if (!trueStatement && WorldManager.Instance.GetTimeOfDayAsEnum() < parameter)
+        {
+            return true;
+        }
+        return false;
     }
-    private static bool AtLocation(Mind.TargetLocationType parameter, NPC npc, bool trueStatement)
+    private static bool AtLocation(TargetLocationType parameter, NPC npc, bool trueStatement)
     {
         if (!npc.Memory.LocationTargets.ContainsKey(parameter))
         { return !trueStatement; }

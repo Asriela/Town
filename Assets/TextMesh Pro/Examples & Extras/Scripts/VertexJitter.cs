@@ -25,33 +25,24 @@ namespace TMPro.Examples
             public float speed;
         }
 
-        void Awake()
-        {
-            m_TextComponent = GetComponent<TMP_Text>();
-        }
+        void Awake() => m_TextComponent = GetComponent<TMP_Text>();
 
-        void OnEnable()
-        {
+        void OnEnable() =>
             // Subscribe to event fired when text object has been regenerated.
             TMPro_EventManager.TEXT_CHANGED_EVENT.Add(ON_TEXT_CHANGED);
-        }
 
-        void OnDisable()
-        {
-            TMPro_EventManager.TEXT_CHANGED_EVENT.Remove(ON_TEXT_CHANGED);
-        }
+        void OnDisable() => TMPro_EventManager.TEXT_CHANGED_EVENT.Remove(ON_TEXT_CHANGED);
 
 
-        void Start()
-        {
-            StartCoroutine(AnimateVertexColors());
-        }
+        void Start() => StartCoroutine(AnimateVertexColors());
 
 
         void ON_TEXT_CHANGED(Object obj)
         {
             if (obj == m_TextComponent)
+            {
                 hasTextChanged = true;
+            }
         }
 
         /// <summary>
@@ -110,7 +101,9 @@ namespace TMPro.Examples
 
                     // Skip characters that are not visible and thus have no geometry to manipulate.
                     if (!charInfo.isVisible)
+                    {
                         continue;
+                    }
 
                     // Retrieve the pre-computed animation data for the given character.
                     VertexAnim vertAnim = vertexAnim[i];

@@ -1,24 +1,14 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
-using Mind;
+
 
 public static class ActionsHelper
 {
     //aimlessly look around
-    public static void Wander(NPC npc)
-    {
+    public static void Wander(NPC npc) => npc.Movement.MoveToRandomPoints();
 
-
-        npc.Movement.MoveToRandomPoints();
-    }
     //specifically go into every building to see if we can find what we are looking for
-    public static void LookAroundArea(NPC npc)
-    {
-        npc.Logger.CurrentStepInAction = "looking around area";
-
-
-    }
+    public static void LookAroundArea(NPC npc) => npc.Logger.CurrentStepInAction = "looking around area";
 
     public static bool Reached(NPC npc, Vector3 destination)
     {
@@ -31,8 +21,8 @@ public static class ActionsHelper
         {
             return true;
         }
-        else
-        { npc.Movement.MoveTo(destination); }
+
+        npc.Movement.MoveTo(destination);
 
         return false;
     }
@@ -99,8 +89,8 @@ public static class ActionsHelper
         {
 
             //TODO: issue will occure if we want multiple objects of same type so change it to a list of objects <objectType, List<gameobject>>
-            npc.Memory.Possessions[targetObject.ObjectType] = targetObject;
-            npc.Memory.Inventory[targetObject.ObjectType] = targetObject;
+            npc.Memory.Possessions[targetObject.ObjectType].Add(targetObject);
+            npc.Memory.Inventory[targetObject.ObjectType].Add(targetObject);
 
             targetObject.gameObject.SetActive(false);
 

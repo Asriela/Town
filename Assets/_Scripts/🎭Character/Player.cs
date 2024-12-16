@@ -58,10 +58,7 @@ public class Player : Character
         }
     }
 
-    private void MoveToLocation(Vector3 targetPosition)
-    {
-        Movement.MoveTo(targetPosition);
-    }
+    private void MoveToLocation(Vector3 targetPosition) => Movement.MoveTo(targetPosition);
 
     private void ShowRadialMenu(GameObject enemy, Vector3 position)
     {

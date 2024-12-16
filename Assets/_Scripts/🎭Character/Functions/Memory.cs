@@ -7,8 +7,9 @@ using UnityEngine;
 public class ObjectTypeWorldObjectPair
 {
     public Mind.ObjectType objectType;
-    public WorldObject worldObject;
+    public List<WorldObject> worldObjects;  // Updated to List<WorldObject>
 }
+
 [Serializable]
 public class GameObjectTagsPair
 {
@@ -16,37 +17,53 @@ public class GameObjectTagsPair
     public List<Mind.TraitType> tags = new();
 }
 
-[System.Serializable]
+[Serializable]
 public class LocationTagsPair
 {
     public Mind.LocationName location;
     public List<Mind.KnowledgeTag> tags = new();
 }
 
+[Serializable]
+public class LocationTargetsPair
+{
+    public Mind.TargetLocationType locationType;
+    public Mind.LocationName locationName;
+}
+
 public class Memory : MonoBehaviour
 {
-
-
     public Dictionary<Mind.TargetType, GameObject> Targets { get; set; } = new();
 
-    public Dictionary<Mind.TargetLocationType, Mind.LocationName> LocationTargets { get; set; } = new();
+    [SerializeField]
+    private List<LocationTargetsPair> _locationTargetsList = new();
+
+    public Dictionary<Mind.TargetLocationType, Mind.LocationName> LocationTargets
+    {
+        get
+        {
+            Dictionary<Mind.TargetLocationType, Mind.LocationName> dictionary = new();
+            foreach (var pair in _locationTargetsList)
+            {
+                dictionary[pair.locationType] = pair.locationName;
+            }
+            return dictionary;
+        }
+    }
+
     public Mind.TargetLocationType LatestLocationTargetType { get; set; }
 
     [SerializeField]
     private List<LocationTagsPair> _locationKnowledge = new();
-
-
 
     public Dictionary<Mind.LocationName, List<Mind.KnowledgeTag>> LocationKnowledge
     {
         get
         {
             Dictionary<Mind.LocationName, List<Mind.KnowledgeTag>> dictionary = new();
+            foreach (var pair in _locationKnowledge)
             {
-                foreach (var pair in _locationKnowledge)
-                {
-                    dictionary[pair.location] = pair.tags;
-                }
+                dictionary[pair.location] = pair.tags;
             }
             return dictionary;
         }
@@ -58,7 +75,6 @@ public class Memory : MonoBehaviour
 
         if (existingLocation == null)
         {
-
             _locationKnowledge.Add(new LocationTagsPair
             {
                 location = locationName,
@@ -75,7 +91,6 @@ public class Memory : MonoBehaviour
                 }
             }
         }
-
     }
 
     public List<Mind.LocationName> GetLocationsByTag(params Mind.KnowledgeTag[] tags) =>
@@ -83,8 +98,6 @@ public class Memory : MonoBehaviour
         .Where(p => tags.All(tag => p.tags.Contains(tag)))
         .Select(p => p.location)
         .ToList();
-
-
 
     [SerializeField]
     private List<GameObjectTagsPair> _peopleKnowledge = new();
@@ -104,7 +117,6 @@ public class Memory : MonoBehaviour
 
     public void AddPerson(GameObject person, List<Mind.TraitType> tags)
     {
-
         var existingPerson = _peopleKnowledge.FirstOrDefault(p => p.gameObject == person);
 
         if (existingPerson == null)
@@ -126,77 +138,81 @@ public class Memory : MonoBehaviour
             }
         }
     }
+
     public List<GameObject> GetPeopleByTag(params Mind.TraitType[] tags) =>
     _peopleKnowledge
-    .Where(p => tags.All(tag => p.tags.Contains(tag)))
-    .Select(p => p.gameObject)
-    .ToList();
+        .Where(p => tags.All(tag => p.tags.Contains(tag)))
+        .Select(p => p.gameObject)
+        .ToList();
 
-
+    // Updated: Possessions now a Dictionary with List<WorldObject> as values
     [SerializeField]
-    private List<ObjectTypeWorldObjectPair> _possessions = new();
+    private List<ObjectTypeWorldObjectPair> _possessionsList = new();
 
-    private Dictionary<Mind.ObjectType, WorldObject> _possessionsDictionary;
+    private Dictionary<Mind.ObjectType, List<WorldObject>> _possessionsDictionary;
 
-    public Dictionary<Mind.ObjectType, WorldObject> Possessions
+    public Dictionary<Mind.ObjectType, List<WorldObject>> Possessions
     {
         get
         {
             if (_possessionsDictionary == null)
             {
-
-                _possessionsDictionary = new Dictionary<Mind.ObjectType, WorldObject>();
-                foreach (var pair in _possessions)
+                _possessionsDictionary = new Dictionary<Mind.ObjectType, List<WorldObject>>();
+                foreach (var pair in _possessionsList)
                 {
-                    _possessionsDictionary[pair.objectType] = pair.worldObject;
+                    if (!_possessionsDictionary.ContainsKey(pair.objectType))
+                    {
+                        _possessionsDictionary[pair.objectType] = new List<WorldObject>();
+                    }
+                    _possessionsDictionary[pair.objectType].AddRange(pair.worldObjects);  // Added all worldObjects
                 }
             }
             return _possessionsDictionary;
         }
         set
         {
-            _possessions.Clear();
+            _possessionsList.Clear();
             foreach (var kvp in value)
             {
-                _possessions.Add(new ObjectTypeWorldObjectPair { objectType = kvp.Key, worldObject = kvp.Value });
+                _possessionsList.Add(new ObjectTypeWorldObjectPair { objectType = kvp.Key, worldObjects = kvp.Value });
             }
 
             _possessionsDictionary = value;
         }
     }
 
-    //TODO: make inventory items follow player
-    //TODO: maybe move inventory to a different class
     [SerializeField]
-    private List<ObjectTypeWorldObjectPair> _inventory = new();
+    private List<ObjectTypeWorldObjectPair> _inventoryList = new();
 
-    private Dictionary<Mind.ObjectType, WorldObject> _inventoryDictionary;
+    private Dictionary<Mind.ObjectType, List<WorldObject>> _inventoryDictionary;
 
-    public Dictionary<Mind.ObjectType, WorldObject> Inventory
+    public Dictionary<Mind.ObjectType, List<WorldObject>> Inventory
     {
         get
         {
             if (_inventoryDictionary == null)
             {
-                _inventoryDictionary = new Dictionary<Mind.ObjectType, WorldObject>();
-                foreach (var pair in _inventory)
+                _inventoryDictionary = new Dictionary<Mind.ObjectType, List<WorldObject>>();
+                foreach (var pair in _inventoryList)
                 {
-                    _inventoryDictionary[pair.objectType] = pair.worldObject;
+                    if (!_inventoryDictionary.ContainsKey(pair.objectType))
+                    {
+                        _inventoryDictionary[pair.objectType] = new List<WorldObject>();
+                    }
+                    _inventoryDictionary[pair.objectType].AddRange(pair.worldObjects);  // Added all worldObjects
                 }
             }
             return _inventoryDictionary;
         }
         set
         {
-            _inventory.Clear();
+            _inventoryList.Clear();
             foreach (var kvp in value)
             {
-                _inventory.Add(new ObjectTypeWorldObjectPair { objectType = kvp.Key, worldObject = kvp.Value });
+                _inventoryList.Add(new ObjectTypeWorldObjectPair { objectType = kvp.Key, worldObjects = kvp.Value });
             }
 
             _inventoryDictionary = value;
         }
     }
 }
-
-

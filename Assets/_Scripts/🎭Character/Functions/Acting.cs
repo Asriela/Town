@@ -3,25 +3,29 @@ using System;
 using System.Linq;
 using UnityEngine;
 using Mind;
+using System.Data.Common;
 
 public class Acting : MonoBehaviour
 {
     private NPC _npc;
-    private Dictionary<Mind.ActionType, Action<object>> _actionHandlers;
+    private Dictionary<ActionType, Action<object>> _actionHandlers;
+    private WorldObject _currentObjectTarget = null;
+    private int _stepInAction = 0;
+    private string _lastAction = "";
     public void Initialize(NPC npc) => _npc = npc;
     public Behavior CurrentBehavior { get; set; }
 
     private void Awake() =>
-    _actionHandlers = new Dictionary<Mind.ActionType, Action<object>>
+    _actionHandlers = new Dictionary<ActionType, Action<object>>
     {
-        { Mind.ActionType.findCharacter, param => FindCharacter((Mind.TargetType)param) },
-        { Mind.ActionType.findObject, param => FindObject((Mind.ObjectType)param) },
-        { Mind.ActionType.fullfillNeed, param => FullfillNeed((Mind.NeedType)param) },
-        { Mind.ActionType.kill, param => Kill((Mind.TargetType)param) },
-        { Mind.ActionType.trader, param => TraderJob((Mind.TraderType)param) },
-        { Mind.ActionType.findKnowledge, param => FindKnowledge((Mind.KnowledgeType)param) },
-        { Mind.ActionType.gotoLocation, param => GotoLocation((Mind.TargetLocationType)param) },
-        { Mind.ActionType.useObject, param => UseObject((Mind.ObjectType)param) }
+        { ActionType.findCharacter, param => FindCharacter((TargetType)param) },
+        { ActionType.findObject, param => FindObject((ObjectType)param) },
+        { ActionType.fullfillNeed, param => FullfillNeed((NeedType)param) },
+        { ActionType.kill, param => Kill((TargetType)param) },
+        { ActionType.trader, param => TraderJob((TraderType)param) },
+        { ActionType.findKnowledge, param => FindKnowledge((KnowledgeType)param) },
+        { ActionType.gotoLocation, param => GotoLocation((TargetLocationType)param) },
+        { ActionType.useObject, param => UseObject((ObjectType)param) }
     };
 
     private void Update() => PerformCurrentBehavior();
@@ -37,6 +41,12 @@ public class Acting : MonoBehaviour
             _npc.Logger.CurrentBehaviour = CurrentBehavior.Name;
             _npc.Logger.CurrentAction = $"{CurrentBehavior.Action} {CurrentBehavior.ActionParameter}";
             _npc.Logger.CurrentStepInAction = $"";
+            if (_lastAction != CurrentBehavior.Name)
+            {
+                _stepInAction = 1;
+                _lastAction = CurrentBehavior.Name;
+            }
+
             action(CurrentBehavior.ActionParameter);
         }
         else
@@ -45,36 +55,31 @@ public class Acting : MonoBehaviour
         }
     }
     //TODO: add dynamic tags  when searching for a character
-    private void FindCharacter(Mind.TargetType targetType)
-    {
-        StartCoroutine(ActionsHelper.WanderAndSearchForCharacter(_npc, targetType, true, Mind.TraitType.human));
-    }
-    private void FindObject(Mind.ObjectType targetType)
-    {
-          StartCoroutine(ActionsHelper.WanderAndSearchForObject(_npc, targetType));
+    private void FindCharacter(TargetType targetType) => StartCoroutine(ActionsHelper.WanderAndSearchForCharacter(_npc, targetType, true, TraitType.human));
 
-    }
-    private void FindKnowledge(Mind.KnowledgeType knowledgeType)
+    private void FindObject(ObjectType targetType) => StartCoroutine(ActionsHelper.WanderAndSearchForObject(_npc, targetType));
+
+    private void FindKnowledge(KnowledgeType knowledgeType)
     {
         //STEP 1 GOTO INNKEEPER
         _npc.Logger.CurrentStepInAction = "1 Goto nearest innkeeper";
         //remember who the local innkeeper is
-        var target = _npc.Memory.GetPeopleByTag(Mind.TraitType.innKeeper).FirstOrDefault().GetComponent<Character>();
+        var target = _npc.Memory.GetPeopleByTag(TraitType.innKeeper).FirstOrDefault().GetComponent<Character>();
 
 
         if (ActionsHelper.Reached(_npc, target.transform.position))
         {
-            //STEP 2 ASK FOR DIRCTIONS
+            //STEP 2 ASK FOR DIRECTIONS
             _npc.Logger.CurrentStepInAction = "2 Ask innkeeper for location with tags";
-            List<System.Enum> tagsAsEnum = CurrentBehavior.ActionTags.Cast<System.Enum>().ToList();
+            List<Enum> tagsAsEnum = CurrentBehavior.ActionTags.Cast<Enum>().ToList();
             SocialHelper.AskForKnowledge(_npc, target, knowledgeType, tagsAsEnum);
-            //STEP 3 LETS ASSUME WE ALWAYS WANNA GO TO THE LOCATION WE JUST LEARNED ABOUT SO AUTOMATICALLY MAKE IT OUR TARGET
+            //STEP 3 LETS ASSUME WE ALWAYS WANT TO GO TO THE LOCATION WE JUST LEARNED ABOUT SO AUTOMATICALLY MAKE IT OUR TARGET
         }
 
 
 
     }
-    private void Kill(Mind.TargetType targetType)
+    private void Kill(TargetType targetType)
     {
         var target = _npc.Memory.Targets[targetType].GetComponent<Character>();
 
@@ -88,32 +93,70 @@ public class Acting : MonoBehaviour
 
 
 
-    private void FullfillNeed(Mind.NeedType needType)
+    private void FullfillNeed(NeedType needType)
     {
-        var objectToUse = _npc.Memory.Possessions[ObjectType.bed];
+        var objectToUse = _npc.Memory.Possessions[ObjectType.bed].First();
+        
         if (ActionsHelper.Reached(_npc, objectToUse.transform.position))
         {
             _npc.Vitality.Needs[needType] = 0;
         }
     }
 
-    private void TraderJob(Mind.TraderType traderType)
+    private void TraderJob(TraderType traderType)
     {
-        var objectToUse = _npc.Memory.Possessions[ObjectType.traderDesk];
+        var objectToUse = _npc.Memory.Possessions[ObjectType.traderDesk].First();
         if (ActionsHelper.Reached(_npc, objectToUse.transform.position))
         {
             //TODO: extend trader behaviour here
         }
     }
 
-    private void UseObject(Mind.ObjectType objectType)
+    private void FarmerJob(FarmerType farmerType)
     {
-        var objectToUse = _npc.Memory.Inventory[objectType];
+
+        switch (_stepInAction)
+        {
+            //STEP 1
+            case 1:
+                if (_currentObjectTarget == null)
+                {
+                    var crops = _npc.Memory.Possessions[ObjectType.pumpkin];
+                    foreach (var crop in crops)
+                    {
+                        if (crop.Care < 100)
+                        { _currentObjectTarget = crop; }
+                    }
+
+                    if (_currentObjectTarget == null)
+                    { _stepInAction = 2; }
+                }
+                else
+                if (ActionsHelper.Reached(_npc, _currentObjectTarget.transform.position))
+                {
+                    _currentObjectTarget.CareFor(_npc);
+                    _currentObjectTarget = null;
+                }
+
+                break;
+            //STEP 2
+            case 2:
+                break;
+        }
+
+
+    }
+
+
+
+    private void UseObject(ObjectType objectType)
+    {
+        var objectToUse = _npc.Memory.Inventory[objectType].First();
         objectToUse.Use(_npc);
         _npc.Thinking.CalculateHighestScoringBehavior();
     }
 
-    private void GotoLocation(Mind.TargetLocationType locationType)
+    private void GotoLocation(TargetLocationType locationType)
     {
         _npc.Logger.CurrentStepInAction = $"Made it to goto location {locationType}";
 
@@ -129,3 +172,4 @@ public class Acting : MonoBehaviour
     }
 
 }
+

@@ -15,15 +15,15 @@ public class Movement : MonoBehaviour
         agent.updateUpAxis = false;
     }
 
-    public void MoveTo(Vector3 targetPosition)
-    {
-        agent.SetDestination(targetPosition);
-    }
+    public void MoveTo(Vector3 targetPosition) => agent.SetDestination(targetPosition);
+
     public void MoveToRandomPoints()
     {
 
         if (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
+        {
             return;
+        }
 
         float randomRange = 10f;
 
@@ -38,6 +38,8 @@ public class Movement : MonoBehaviour
         }
         else
         {
+
+
 
         }
     }

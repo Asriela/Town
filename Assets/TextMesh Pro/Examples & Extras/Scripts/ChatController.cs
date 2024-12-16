@@ -11,15 +11,9 @@ public class ChatController : MonoBehaviour {
 
     public Scrollbar ChatScrollbar;
 
-    void OnEnable()
-    {
-        ChatInputField.onSubmit.AddListener(AddToChatOutput);
-    }
+    void OnEnable() => ChatInputField.onSubmit.AddListener(AddToChatOutput);
 
-    void OnDisable()
-    {
-        ChatInputField.onSubmit.RemoveListener(AddToChatOutput);
-    }
+    void OnDisable() => ChatInputField.onSubmit.RemoveListener(AddToChatOutput);
 
 
     void AddToChatOutput(string newText)
@@ -36,9 +30,13 @@ public class ChatController : MonoBehaviour {
             // No special formatting for first entry
             // Add line feed before each subsequent entries
             if (ChatDisplayOutput.text == string.Empty)
+            {
                 ChatDisplayOutput.text = formattedInput;
+            }
             else
+            {
                 ChatDisplayOutput.text += "\n" + formattedInput;
+            }
         }
 
         // Keep Chat input field active

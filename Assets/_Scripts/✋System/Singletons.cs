@@ -33,10 +33,7 @@ public abstract class StaticInstance<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
-    protected virtual void OnApplicationQuit()
-    {
-        _instance = null;
-    }
+    protected virtual void OnApplicationQuit() => _instance = null;
 }
 
 public abstract class Singleton<T> : StaticInstance<T> where T : MonoBehaviour

@@ -136,22 +136,21 @@ public class TraitEditor : Editor
     };
     }
 
-    private Type GetEnumTypeForActionType(int actionIndex)
-    {
+    private Type GetEnumTypeForActionType(int actionIndex) =>
         // Map ActionType to corresponding Enum types
-        return ((Mind.ActionType)actionIndex) switch
+        ((Mind.ActionType)actionIndex) switch
         {
             Mind.ActionType.findCharacter => typeof(Mind.TargetType),
             Mind.ActionType.findObject => typeof(Mind.ObjectType),
             Mind.ActionType.kill => typeof(Mind.TargetType),
             Mind.ActionType.fullfillNeed => typeof(Mind.NeedType),
             Mind.ActionType.trader => typeof(Mind.TraderType),
+            Mind.ActionType.farmer => typeof(Mind.FarmerType),
             Mind.ActionType.findKnowledge => typeof(Mind.KnowledgeType),
             Mind.ActionType.gotoLocation => typeof(Mind.TargetLocationType),
             Mind.ActionType.useObject => typeof(Mind.ObjectType),
-            _ => null,
+            _ => null
         };
-    }
 
     public override void OnInspectorGUI()
     {
@@ -176,14 +175,15 @@ public class TraitEditor : Editor
             Mind.ConditionType.hasObject => typeof(Mind.ObjectType),
             Mind.ConditionType.doesNotHaveObject => typeof(Mind.ObjectType),
             Mind.ConditionType.needsTo => typeof(Mind.NeedType),
-            Mind.ConditionType.timeOfDay => typeof(Mind.TimeOfDayType),
+            Mind.ConditionType.afterHour => typeof(Mind.TimeOfDayType),
+            Mind.ConditionType.beforeHour => typeof(Mind.TimeOfDayType),
             Mind.ConditionType.hasKnowledge => typeof(Mind.KnowledgeType),
             Mind.ConditionType.doesNotHaveKnowledge => typeof(Mind.KnowledgeType),
             Mind.ConditionType.atLocation => typeof(Mind.TargetLocationType),
             Mind.ConditionType.notAtLocation => typeof(Mind.TargetLocationType),
             Mind.ConditionType.hasLocationTarget => typeof(Mind.TargetLocationType),
             Mind.ConditionType.doesNotHaveLocationTarget => typeof(Mind.TargetLocationType),
-            _ => null,
+            _ => null
         };
 
     private void DrawConditionsList(Rect rect, SerializedProperty conditionsProperty)

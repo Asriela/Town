@@ -5,16 +5,16 @@ using System.Collections.Generic;
 
 public static class SocialHelper
 {
-    public static void AskForKnowledge(Character senderOfMessage, Character recieverOfMessage, Mind.KnowledgeType knowledgeType, List<System.Enum> knowledgeTags)
+    public static void AskForKnowledge(Character senderOfMessage, Character recieverOfMessage, KnowledgeType knowledgeType, List<System.Enum> knowledgeTags)
     {
         ActionPost actionPost = new(knowledgeType, knowledgeTags, null);
-        SocialMediator.PostAction(senderOfMessage, recieverOfMessage, Mind.ActionType.findKnowledge, actionPost);
+        SocialMediator.PostAction(senderOfMessage, recieverOfMessage, ActionType.findKnowledge, actionPost);
     }
 
-    public static void ShareKnowledge(Character senderOfMessage, Character recieverOfMessage, Mind.KnowledgeType knowledgeType, List<System.Enum> newKnowledge, List<System.Enum> originalTags)
+    public static void ShareKnowledge(Character senderOfMessage, Character recieverOfMessage, KnowledgeType knowledgeType, List<System.Enum> newKnowledge, List<System.Enum> originalTags)
     {
         ActionPost actionPost = new(knowledgeType, newKnowledge, originalTags);
-        SocialMediator.PostAction(senderOfMessage, recieverOfMessage, Mind.ActionType.shareKnowledge, actionPost);
+        SocialMediator.PostAction(senderOfMessage, recieverOfMessage, ActionType.shareKnowledge, actionPost);
     }
 }
 

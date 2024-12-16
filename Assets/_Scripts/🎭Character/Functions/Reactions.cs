@@ -21,7 +21,7 @@ public class Reactions : MonoBehaviour
                     case Mind.KnowledgeType.location:
                       //  print("❤request for knowledge recieved");
                         var originalEnumList = actionPost.KnowledgeTags.Cast<Mind.KnowledgeTag>().ToArray();
-                        List<System.Enum> newKnowledge = _npc.Memory.GetLocationsByTag(originalEnumList).Cast<System.Enum>().ToList();
+                        List<Enum> newKnowledge = _npc.Memory.GetLocationsByTag(originalEnumList).Cast<Enum>().ToList();
                         var originalTags = actionPost.KnowledgeTags;
                         SocialHelper.ShareKnowledge(_npc, sender, Mind.KnowledgeType.location, newKnowledge, originalTags);
                         break;
