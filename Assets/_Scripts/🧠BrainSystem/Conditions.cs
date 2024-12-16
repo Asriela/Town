@@ -21,6 +21,7 @@ public static class Conditions
         _conditionDelegates.Add(ConditionType.beforeHour, new ConditionDelegate<TimeOfDayType>(CheckTimeOfDay));
         _conditionDelegates.Add(ConditionType.afterHour, new ConditionDelegate<TimeOfDayType>(CheckTimeOfDay));
         _conditionDelegates.Add(ConditionType.atLocation, new ConditionDelegate<TargetLocationType>(AtLocation));
+        _conditionDelegates.Add(ConditionType.notAtLocation, new ConditionDelegate<TargetLocationType>(AtLocation));
         _conditionDelegates.Add(ConditionType.hasLocationTarget, new ConditionDelegate<TargetLocationType>(CheckLocationTarget));
         _conditionDelegates.Add(ConditionType.doesNotHaveLocationTarget, new ConditionDelegate<TargetLocationType>(CheckLocationTarget));
     }
@@ -39,7 +40,7 @@ public static class Conditions
                     return beforeHourDelegate((TimeOfDayType)condition.parameter, npc, true);
                 case ConditionType.beforeHour:
                     var afterHourDelegate = (ConditionDelegate<TimeOfDayType>)conditionDelegate;
-                    return afterHourDelegate((TimeOfDayType)condition.parameter, npc, true);
+                    return afterHourDelegate((TimeOfDayType)condition.parameter, npc, false);
 
                 case ConditionType.needsTo:
                     var needDelegate = (ConditionDelegate<NeedType>)conditionDelegate;

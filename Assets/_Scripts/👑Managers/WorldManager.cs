@@ -37,7 +37,14 @@ public class WorldManager : Singleton<WorldManager>
         }
     }
 
-    public float TimeOfDay { get; set; }
+    [SerializeField]
+    private float _timeOfDay;
+
+    public float TimeOfDay
+    {
+        get => _timeOfDay;
+        set => _timeOfDay = value;
+    }
     private void Update() => RunTimeOfDay();
 
     private void RunTimeOfDay() => TimeOfDay = TimeOfDay < 24 ? TimeOfDay + Settings.timeOfDaySpeed : 0;
@@ -51,7 +58,7 @@ public class WorldManager : Singleton<WorldManager>
 
             >= 0 and < 12 =>
                  (TimeOfDayType)(hour - 1),
-            _ => (TimeOfDayType)(hour - 11)
+            _ => (TimeOfDayType)(hour - 1)
 
         };
     }

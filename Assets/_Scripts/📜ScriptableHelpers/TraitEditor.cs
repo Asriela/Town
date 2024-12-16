@@ -149,6 +149,7 @@ public class TraitEditor : Editor
             Mind.ActionType.findKnowledge => typeof(Mind.KnowledgeType),
             Mind.ActionType.gotoLocation => typeof(Mind.TargetLocationType),
             Mind.ActionType.useObject => typeof(Mind.ObjectType),
+            Mind.ActionType.useObjectInInventory => typeof(Mind.ObjectType),
             _ => null
         };
 

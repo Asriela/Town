@@ -23,9 +23,11 @@ public class Acting : MonoBehaviour
         { ActionType.fullfillNeed, param => FullfillNeed((NeedType)param) },
         { ActionType.kill, param => Kill((TargetType)param) },
         { ActionType.trader, param => TraderJob((TraderType)param) },
+        { ActionType.farmer, param => FarmerJob((FarmerType)param) },
         { ActionType.findKnowledge, param => FindKnowledge((KnowledgeType)param) },
         { ActionType.gotoLocation, param => GotoLocation((TargetLocationType)param) },
-        { ActionType.useObject, param => UseObject((ObjectType)param) }
+        { ActionType.useObject, param => UseObject((ObjectType)param) },
+        { ActionType.useObjectInInventory, param => UseObject((ObjectType)param) }
     };
 
     private void Update() => PerformCurrentBehavior();
@@ -96,7 +98,7 @@ public class Acting : MonoBehaviour
     private void FullfillNeed(NeedType needType)
     {
         var objectToUse = _npc.Memory.Possessions[ObjectType.bed].First();
-        
+
         if (ActionsHelper.Reached(_npc, objectToUse.transform.position))
         {
             _npc.Vitality.Needs[needType] = 0;
@@ -124,8 +126,10 @@ public class Acting : MonoBehaviour
                     var crops = _npc.Memory.Possessions[ObjectType.pumpkin];
                     foreach (var crop in crops)
                     {
-                        if (crop.Care < 100)
-                        { _currentObjectTarget = crop; }
+                        if (crop.Care < 80)
+                        { _currentObjectTarget = crop;
+                            break;
+                        }
                     }
 
                     if (_currentObjectTarget == null)
@@ -149,11 +153,22 @@ public class Acting : MonoBehaviour
 
 
 
-    private void UseObject(ObjectType objectType)
+    private void UseObjectInInventory(ObjectType objectType)
     {
         var objectToUse = _npc.Memory.Inventory[objectType].First();
         objectToUse.Use(_npc);
         _npc.Thinking.CalculateHighestScoringBehavior();
+    }
+
+    private void UseObject(ObjectType objectType)
+    {
+        var objectToUse = _npc.Memory.Possessions[objectType].First();
+        if (ActionsHelper.Reached(_npc, objectToUse.transform.position))
+        {
+            objectToUse.Use(_npc);
+            _npc.Thinking.CalculateHighestScoringBehavior();
+        }
+        
     }
 
     private void GotoLocation(TargetLocationType locationType)

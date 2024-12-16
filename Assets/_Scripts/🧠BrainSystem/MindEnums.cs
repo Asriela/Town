@@ -34,7 +34,8 @@ namespace Mind
         findKnowledge,
         shareKnowledge,
         gotoLocation,
-        useObject
+        useObject,
+        useObjectInInventory
     }
     [Serializable]
     public enum CharacterName : short

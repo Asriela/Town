@@ -42,36 +42,36 @@ public class Thinking : MonoBehaviour
 
     public void CalculateHighestScoringBehavior()
     {
-        int highestScore = 0;
+        int highestScore = int.MinValue; // To accommodate negative scores if needed
         if (_npc.Vitality.Dead)
-        { return; }
+        {
+            return;
+        }
+
         Behavior highestScoringBehavior = null;
-
-
 
         for (int i = 0; i < _traits.Count; i++)
         {
             var trait = _traits[i];
-            print($"inspecting trait: {trait.name}");
-
+            print($"Inspecting trait: {trait.name}");
 
             for (int j = 0; j < trait.Behaviors.Count; j++)
             {
-
                 var behavior = trait.Behaviors[j];
-                print($"inspecting behaviour: {behavior.Name}");
+                print($"Inspecting behavior: {behavior.Name}");
+                print($"Are conditions met: {AreConditionsMet(behavior.Conditions)}");
 
-
-                print($"are conditions met: {AreConditionsMet(behavior.Conditions)}");
                 if (AreConditionsMet(behavior.Conditions))
                 {
+                    // Reverse the priority of behaviors (lower index = higher score)
+                    int reversePriority = j + 1;
 
-                    int reverseJ = trait.Behaviors.Count - j;
+                    // Calculate the score
+                    int score = behavior.Priority + reversePriority + i + 1;
 
-                    int score = behavior.Priority + reverseJ + i + 1;
-
-
-                    if (score > highestScore)
+                    // Update if the score is higher OR if there's a tie, pick the one later in the list
+                    if (score > highestScore ||
+                        (score == highestScore && highestScoringBehavior == null))
                     {
                         highestScore = score;
                         highestScoringBehavior = behavior;
@@ -87,10 +87,10 @@ public class Thinking : MonoBehaviour
         }
         else
         {
-            print("No valid behaviour found.");
+            print("No valid behavior found.");
         }
-
     }
+
 
 
     private bool AreConditionsMet(List<Condition> conditions)

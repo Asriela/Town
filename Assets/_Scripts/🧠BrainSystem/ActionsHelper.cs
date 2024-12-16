@@ -14,7 +14,7 @@ public static class ActionsHelper
     {
 
         var ourPosition = npc.transform.position;
-        var interactionDistance = 2f;
+        var interactionDistance = 1f;
 
 
         if (Vector3.Distance(ourPosition, destination) < interactionDistance)
@@ -96,4 +96,6 @@ public static class ActionsHelper
 
         }
     }
+
+
 }

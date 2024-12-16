@@ -95,7 +95,7 @@ public class WorldObject : MonoBehaviour
             switch (trait)
             {
                 case ObjectTrait.crop:
-                    _care += 10;
+                    _care += 100;
                     break;
             }
         }
