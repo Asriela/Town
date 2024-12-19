@@ -29,58 +29,44 @@ public static class Conditions
     public static bool CheckCondition(Condition condition, NPC npc)
     {
         // Look up the delegate for the given condition type
-        if (_conditionDelegates.TryGetValue(condition.conditionType, out Delegate conditionDelegate))
+        if (_conditionDelegates.TryGetValue(condition.conditionType, out var conditionDelegate))
         {
             // Now we check which type the delegate is and cast it accordingly
-            switch (condition.conditionType)
+
+
+            return condition.conditionType switch
             {
+                ConditionType.afterHour => ConditionHandler<TimeOfDayType>((ConditionDelegate<TimeOfDayType>)conditionDelegate, condition.parameter, npc, true),
 
-                case ConditionType.afterHour:
-                    var beforeHourDelegate = (ConditionDelegate<TimeOfDayType>)conditionDelegate;
-                    return beforeHourDelegate((TimeOfDayType)condition.parameter, npc, true);
-                case ConditionType.beforeHour:
-                    var afterHourDelegate = (ConditionDelegate<TimeOfDayType>)conditionDelegate;
-                    return afterHourDelegate((TimeOfDayType)condition.parameter, npc, false);
+                ConditionType.beforeHour => ConditionHandler<TimeOfDayType>((ConditionDelegate<TimeOfDayType>)conditionDelegate, condition.parameter, npc, false),
 
-                case ConditionType.needsTo:
-                    var needDelegate = (ConditionDelegate<NeedType>)conditionDelegate;
-                    return needDelegate((NeedType)condition.parameter, npc, true);
+                ConditionType.needsTo => ConditionHandler<NeedType>((ConditionDelegate<NeedType>)conditionDelegate, condition.parameter, npc, true),
 
-                case ConditionType.hasTarget:
-                    var targetDelegate = (ConditionDelegate<TargetType>)conditionDelegate;
-                    return targetDelegate((TargetType)condition.parameter, npc, true);
+                ConditionType.hasTarget => ConditionHandler<TargetType>((ConditionDelegate<TargetType>)conditionDelegate, condition.parameter, npc, true),
 
-                case ConditionType.doesNotHaveTarget:
-                    var targetDelegateNot = (ConditionDelegate<TargetType>)conditionDelegate;
-                    return targetDelegateNot((TargetType)condition.parameter, npc, false);
+                ConditionType.doesNotHaveTarget => ConditionHandler<TargetType>((ConditionDelegate<TargetType>)conditionDelegate, condition.parameter, npc, false),
 
+                ConditionType.hasObject => ConditionHandler<ObjectType>((ConditionDelegate<ObjectType>)conditionDelegate, condition.parameter, npc, true),
 
-                case ConditionType.hasObject:
-                    var objectDelegate = (ConditionDelegate<ObjectType>)conditionDelegate;
-                    return objectDelegate((ObjectType)condition.parameter, npc, true);
+                ConditionType.doesNotHaveObject => ConditionHandler<ObjectType>((ConditionDelegate<ObjectType>)conditionDelegate, condition.parameter, npc, false),
 
-                case ConditionType.doesNotHaveObject:
-                    var objectNotDelegate = (ConditionDelegate<ObjectType>)conditionDelegate;
-                    return objectNotDelegate((ObjectType)condition.parameter, npc, false);
-                case ConditionType.atLocation:
-                    var atLocation = (ConditionDelegate<TargetLocationType>)conditionDelegate;
-                    return atLocation((TargetLocationType)condition.parameter, npc, true);
-                case ConditionType.notAtLocation:
-                    var atLocationNot = (ConditionDelegate<TargetLocationType>)conditionDelegate;
-                    return atLocationNot((TargetLocationType)condition.parameter, npc, false);
-                case ConditionType.hasLocationTarget:
-                    var locationTargetDelegate = (ConditionDelegate<TargetLocationType>)conditionDelegate;
-                    return locationTargetDelegate((TargetLocationType)condition.parameter, npc, true);
-                case ConditionType.doesNotHaveLocationTarget:
-                    var locationTargetNotDelegate = (ConditionDelegate<TargetLocationType>)conditionDelegate;
-                    return locationTargetNotDelegate((TargetLocationType)condition.parameter, npc, false);
-                default:
-                    return false;
-            }
+                ConditionType.atLocation => ConditionHandler<TargetLocationType>((ConditionDelegate<TargetLocationType>)conditionDelegate, condition.parameter, npc, true),
+
+                ConditionType.notAtLocation => ConditionHandler<TargetLocationType>((ConditionDelegate<TargetLocationType>)conditionDelegate, condition.parameter, npc, false),
+
+                ConditionType.hasLocationTarget => ConditionHandler<TargetLocationType>((ConditionDelegate<TargetLocationType>)conditionDelegate, condition.parameter, npc, true),
+
+                ConditionType.doesNotHaveLocationTarget => ConditionHandler<TargetLocationType>((ConditionDelegate<TargetLocationType>)conditionDelegate, condition.parameter, npc, false),
+
+                _ => false
+            };
+
         }
 
         return false;
     }
+
+    private static bool ConditionHandler<T>(ConditionDelegate<T> conditionDelegate, object parameter, NPC npc, bool trueStatement) => conditionDelegate((T)parameter, npc, trueStatement);
 
     // Example condition check methods:
     private static bool CheckNeed(NeedType parameter, NPC npc, bool trueStatement)
