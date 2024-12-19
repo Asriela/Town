@@ -16,78 +16,60 @@ MonoBehaviour:
   Behaviors:
   - _name: Seek dark place
     _dialogue: Do you know of any dark places?
-    _action: 11
+    _action: 12
     _actionParameter:
-      rid: 1081034717558472940
+      rid: 1081034784248168564
     _conditions:
-    - conditionType: 12
+    - conditionType: 13
       parameter:
-        rid: 1081034717558472941
+        rid: 1081034784248168565
     _priority: 4
     _actionTags: 01000300
   - _name: Goto dark place
     _dialogue: 
-    _action: 13
+    _action: 14
     _actionParameter:
-      rid: 1081034691748560987
+      rid: 1081034784248168565
     _conditions:
-    - conditionType: 11
+    - conditionType: 12
       parameter:
-        rid: 1081034717558472941
+        rid: 1081034784248168565
     _priority: 4
     _actionTags: 
   - _name: Find book
     _dialogue: 
     _action: 3
     _actionParameter:
-      rid: 1081034717558472942
+      rid: 1081034784248168566
     _conditions:
-    - conditionType: 9
+    - conditionType: 10
       parameter:
-        rid: 1081034717558472943
-    - conditionType: 4
-      parameter:
-        rid: 1081034717558472942
+        rid: 1081034784248168565
     _priority: 7
     _actionTags: 
   - _name: Read book
     _dialogue: 
     _action: 16
     _actionParameter:
-      rid: 1081034717558472944
+      rid: 1081034784248168566
     _conditions:
-    - conditionType: 9
-      parameter:
-        rid: 1081034717558472943
     - conditionType: 5
       parameter:
-        rid: 1081034717558472942
+        rid: 1081034784248168566
     _priority: 7
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 1081034691748560987
-      type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
-      data:
-        value__: 1
-    - rid: 1081034717558472940
+    - rid: 1081034784248168564
       type: {class: KnowledgeType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1
-    - rid: 1081034717558472941
+    - rid: 1081034784248168565
       type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1
-    - rid: 1081034717558472942
-      type: {class: ObjectType, ns: Mind, asm: Assembly-CSharp}
-      data:
-        value__: 2
-    - rid: 1081034717558472943
-      type: {class: KnowledgeType, ns: Mind, asm: Assembly-CSharp}
-      data:
-        value__: 0
-    - rid: 1081034717558472944
+    - rid: 1081034784248168566
       type: {class: ObjectType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 3

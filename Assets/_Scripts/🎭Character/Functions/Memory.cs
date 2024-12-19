@@ -50,7 +50,23 @@ public class Memory : MonoBehaviour
             return dictionary;
         }
     }
+    public void AddLocationTarget(Mind.TargetLocationType locationType, Mind.LocationName locationName)
+    {
+        var existingPair = _locationTargetsList.FirstOrDefault(p => p.locationType == locationType);
 
+        if (existingPair == null)
+        {
+            _locationTargetsList.Add(new LocationTargetsPair
+            {
+                locationType = locationType,
+                locationName = locationName
+            });
+        }
+        else
+        {
+            existingPair.locationName = locationName;
+        }
+    }
     public Mind.TargetLocationType LatestLocationTargetType { get; set; }
 
     [SerializeField]
