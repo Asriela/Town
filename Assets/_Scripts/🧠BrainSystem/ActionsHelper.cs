@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 
@@ -29,7 +30,7 @@ public static class ActionsHelper
 
 
 
-    public static IEnumerator WanderAndSearchForCharacter(NPC npc, Mind.TargetType targetType, bool alive, params Mind.TraitType[] traitsToLookFor)
+    public static IEnumerator WanderAndSearchForCharacter(NPC npc, Mind.TargetType targetType, bool alive, Action onComplete, params Mind.TraitType[] traitsToLookFor)
     {
         npc.Logger.CurrentStepInAction = "wander and search";
 
@@ -44,7 +45,7 @@ public static class ActionsHelper
 
                 npc.Memory.Targets[targetType] = target;
 
-                EndThisBehaviour(npc);
+                onComplete?.Invoke();
                 break;
             }
 
@@ -55,7 +56,7 @@ public static class ActionsHelper
     }
     //TODO: change from object type to tags so we can look up a general object of description
     //TODO: add that we can look for an object at a certain location so that we dont stray too far
-    public static IEnumerator WanderAndSearchForObject(NPC npc, Mind.ObjectType objectType)
+    public static IEnumerator WanderAndSearchForObject(NPC npc, Mind.ObjectType objectType, Action onComplete)
     {
         npc.Logger.CurrentStepInAction = "wander and search";
 
@@ -69,8 +70,7 @@ public static class ActionsHelper
             {
                 npc.Logger.CurrentStepInAction = "found object";
                 PickUpObject(npc, target);
-                EndThisBehaviour(npc);
-
+                onComplete?.Invoke();
                 break;
             }
 

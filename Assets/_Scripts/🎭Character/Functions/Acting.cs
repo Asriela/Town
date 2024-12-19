@@ -12,6 +12,7 @@ public class Acting : MonoBehaviour
     private WorldObject _currentObjectTarget = null;
     private int _stepInAction = 0;
     private string _lastAction = "";
+    private Coroutine _currentCoroutine = null;
     public void Initialize(NPC npc) => _npc = npc;
     public Behavior CurrentBehavior { get; set; }
 
@@ -46,6 +47,7 @@ public class Acting : MonoBehaviour
             if (_lastAction != CurrentBehavior.Name)
             {
                 _stepInAction = 1;
+                _currentCoroutine = null;
                 _lastAction = CurrentBehavior.Name;
             }
 
@@ -57,18 +59,44 @@ public class Acting : MonoBehaviour
         }
     }
     //TODO: add dynamic tags  when searching for a character
-    private void FindCharacter(TargetType targetType) 
-{
-switch(_stepInAction){
-case 1:
- StartCoroutine(ActionsHelper.WanderAndSearchForCharacter(_npc, targetType, true,out _stepInAction, TraitType.human));
-break;
-case 2: 
-break;
-}
-}
+    private void FindCharacter(TargetType targetType)
+    {
+        switch (_stepInAction)
+        {
+            case 1:
+                _currentCoroutine ??= StartCoroutine(ActionsHelper.WanderAndSearchForCharacter(_npc, targetType, true, () =>
+                {
+                    _stepInAction++;
+                    _currentCoroutine = null;
+                }, TraitType.human));
 
-    private void FindObject(ObjectType targetType) => StartCoroutine(ActionsHelper.WanderAndSearchForObject(_npc, targetType));
+                break;
+            case 2:
+                ActionsHelper.EndThisBehaviour(_npc);
+                break;
+        }
+    }
+
+    private void FindObject(ObjectType targetType)
+    {
+
+        switch (_stepInAction)
+        {
+            case 1:
+                _currentCoroutine ??= StartCoroutine(ActionsHelper.WanderAndSearchForObject(_npc, targetType, () =>
+                {
+                    _stepInAction++;
+                    _currentCoroutine = null;
+                }));
+
+                break;
+            case 2:
+                ActionsHelper.EndThisBehaviour(_npc);
+                break;
+        }
+
+    }
+    
 
     private void FindKnowledge(KnowledgeType knowledgeType)
     {
@@ -136,7 +164,8 @@ break;
                     foreach (var crop in crops)
                     {
                         if (crop.Care < 80)
-                        { _currentObjectTarget = crop;
+                        {
+                            _currentObjectTarget = crop;
                             break;
                         }
                     }
@@ -177,7 +206,7 @@ break;
             objectToUse.Use(_npc);
             _npc.Thinking.CalculateHighestScoringBehavior();
         }
-        
+
     }
 
     private void GotoLocation(TargetLocationType locationType)
