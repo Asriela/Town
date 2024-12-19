@@ -41,7 +41,7 @@ public class Reactions : MonoBehaviour
                             _npc.Memory.AddLocation(location, tags);
                             _npc.Memory.AddLocationTarget(_npc.Memory.LatestLocationTargetType, location);
 
-                            Debug.Log($"🎃🎃🎃🎃🎃New memory added: {_npc.Memory.LocationTargets[_npc.Memory.LatestLocationTargetType]}");
+                          
                         }
 
                         break;

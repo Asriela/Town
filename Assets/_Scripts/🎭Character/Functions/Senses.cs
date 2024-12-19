@@ -239,15 +239,15 @@ public class Senses : MonoBehaviour
         }
         return null;
     }
+
     public WorldObject SeeObjectOfType(Mind.ObjectType objectType)
     {
-        foreach (var anObject in _objectsInSight)
-        {
-            if (anObject.ObjectType == objectType)
-            { return anObject; }
-        }
-        return null;
+        var value =
+        _objectsInSight.FirstOrDefault(anObject => anObject.ObjectType == objectType);
+        return value;
     }
+
+
 
 
 }

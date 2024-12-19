@@ -56,45 +56,47 @@ public static class ActionsHelper
     }
     //TODO: change from object type to tags so we can look up a general object of description
     //TODO: add that we can look for an object at a certain location so that we dont stray too far
-    public static IEnumerator WanderAndSearchForObject(NPC npc, Mind.ObjectType objectType, Action onComplete)
+    public static bool WanderAndSearchForObject(NPC npc, Mind.ObjectType objectType)
     {
         npc.Logger.CurrentStepInAction = "wander and search";
 
-        while (true)
+
+        Wander(npc);
+
+
+        var target = npc.Senses.SeeObjectOfType(objectType);
+        if (target != null)
         {
-            Wander(npc);
+            npc.Logger.CurrentStepInAction = "found object";
 
-
-            var target = npc.Senses.SeeObjectOfType(objectType);
-            if (target != null)
-            {
-                npc.Logger.CurrentStepInAction = "found object";
-                PickUpObject(npc, target);
-                onComplete?.Invoke();
-                break;
-            }
-
-            yield return new WaitForSeconds(0.5f);
+            if (PickUpObject(npc, target))
+            { return true; }
         }
+
+
+        return false;
 
 
     }
     public static void EndThisBehaviour(NPC npc) => npc.Thinking.CalculateHighestScoringBehavior();
 
-    public static void PickUpObject(NPC npc, WorldObject targetObject)
+    public static bool PickUpObject(NPC npc, WorldObject targetObject)
     {
 
         npc.Logger.CurrentStepInAction = "pick up object";
         if (Reached(npc, targetObject.transform.position))
         {
-
-            //TODO: issue will occure if we want multiple objects of same type so change it to a list of objects <objectType, List<gameobject>>
-            npc.Memory.Possessions[targetObject.ObjectType].Add(targetObject);
-            npc.Memory.Inventory[targetObject.ObjectType].Add(targetObject);
-
             targetObject.gameObject.SetActive(false);
+            //TODO: issue will occure if we want multiple objects of same type so change it to a list of objects <objectType, List<gameobject>>
+            npc.Memory.AddToPossessions(targetObject.ObjectType, targetObject);
+            npc.Memory.AddToInventory(targetObject.ObjectType, targetObject);
+
+            npc.Logger.CurrentStepInAction = "picked up object";
+            return true;
 
         }
+
+        return false;
     }
 
 

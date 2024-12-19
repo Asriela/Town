@@ -165,7 +165,7 @@ public class Memory : MonoBehaviour
     [SerializeField]
     private List<ObjectTypeWorldObjectPair> _possessionsList = new();
 
-    private Dictionary<Mind.ObjectType, List<WorldObject>> _possessionsDictionary;
+    private Dictionary<Mind.ObjectType, List<WorldObject>> _possessionsDictionary = new();
 
     public Dictionary<Mind.ObjectType, List<WorldObject>> Possessions
     {
@@ -200,7 +200,7 @@ public class Memory : MonoBehaviour
     [SerializeField]
     private List<ObjectTypeWorldObjectPair> _inventoryList = new();
 
-    private Dictionary<Mind.ObjectType, List<WorldObject>> _inventoryDictionary;
+    private Dictionary<Mind.ObjectType, List<WorldObject>> _inventoryDictionary = new();
 
     public Dictionary<Mind.ObjectType, List<WorldObject>> Inventory
     {
@@ -230,5 +230,85 @@ public class Memory : MonoBehaviour
 
             _inventoryDictionary = value;
         }
+    }
+
+    public void AddToPossessions(Mind.ObjectType objectType, List<WorldObject> worldObjects)
+    {
+        if (!_possessionsDictionary.ContainsKey(objectType))
+        {
+            _possessionsDictionary[objectType] = new List<WorldObject>();
+        }
+
+        foreach (var worldObject in worldObjects)
+        {
+            if (!_possessionsDictionary[objectType].Contains(worldObject))
+            {
+                _possessionsDictionary[objectType].Add(worldObject);
+            }
+        }
+
+
+        UpdatePossessionsListFromDictionary();
+    }
+
+    private void UpdatePossessionsListFromDictionary()
+    {
+        _possessionsList.Clear();
+        foreach (var kvp in _possessionsDictionary)
+        {
+            _possessionsList.Add(new ObjectTypeWorldObjectPair { objectType = kvp.Key, worldObjects = kvp.Value });
+        }
+    }
+
+    public void AddToInventory(Mind.ObjectType objectType, List<WorldObject> worldObjects)
+    {
+        if (!_inventoryDictionary.ContainsKey(objectType))
+        {
+            _inventoryDictionary[objectType] = new List<WorldObject>();
+        }
+
+        foreach (var worldObject in worldObjects)
+        {
+            if (!_inventoryDictionary[objectType].Contains(worldObject))
+            {
+                _inventoryDictionary[objectType].Add(worldObject);
+            }
+        }
+
+
+        UpdateInventoryListFromDictionary();
+    }
+
+    private void UpdateInventoryListFromDictionary()
+    {
+        _inventoryList.Clear();
+        foreach (var kvp in _inventoryDictionary)
+        {
+            _inventoryList.Add(new ObjectTypeWorldObjectPair { objectType = kvp.Key, worldObjects = kvp.Value });
+        }
+    }
+
+    public void AddToPossessions(Mind.ObjectType objectType, WorldObject worldObject)
+    {
+        AddToPossessions(objectType, new List<WorldObject> { worldObject });
+    }
+    public void AddToInventory(Mind.ObjectType objectType, WorldObject worldObject)
+    {
+        AddToInventory(objectType, new List<WorldObject> { worldObject });
+    }
+
+
+    public WorldObject GetPossession(Mind.ObjectType objectType)
+    {
+        if (_possessionsDictionary.TryGetValue(objectType, out var objects) && objects.Any())
+        {
+            return objects.First();
+
+        }
+        else
+        {
+            Debug.Log("No object found in possessions.");
+        }
+        return null;
     }
 }

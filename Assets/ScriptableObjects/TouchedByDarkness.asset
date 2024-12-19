@@ -18,58 +18,61 @@ MonoBehaviour:
     _dialogue: Do you know of any dark places?
     _action: 12
     _actionParameter:
-      rid: 1081034784248168564
+      rid: 1081034784248168682
     _conditions:
     - conditionType: 13
       parameter:
-        rid: 1081034784248168565
+        rid: 1081034784248168683
     _priority: 4
     _actionTags: 01000300
   - _name: Goto dark place
     _dialogue: 
     _action: 14
     _actionParameter:
-      rid: 1081034784248168565
+      rid: 1081034784248168683
     _conditions:
     - conditionType: 12
       parameter:
-        rid: 1081034784248168565
+        rid: 1081034784248168683
     _priority: 4
     _actionTags: 
   - _name: Find book
     _dialogue: 
     _action: 3
     _actionParameter:
-      rid: 1081034784248168566
+      rid: 1081034784248168684
     _conditions:
     - conditionType: 10
       parameter:
-        rid: 1081034784248168565
+        rid: 1081034784248168683
+    - conditionType: 4
+      parameter:
+        rid: 1081034784248168684
     _priority: 7
     _actionTags: 
   - _name: Read book
     _dialogue: 
     _action: 16
     _actionParameter:
-      rid: 1081034784248168566
+      rid: 1081034784248168684
     _conditions:
     - conditionType: 5
       parameter:
-        rid: 1081034784248168566
+        rid: 1081034784248168684
     _priority: 7
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 1081034784248168564
+    - rid: 1081034784248168682
       type: {class: KnowledgeType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1
-    - rid: 1081034784248168565
+    - rid: 1081034784248168683
       type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1
-    - rid: 1081034784248168566
+    - rid: 1081034784248168684
       type: {class: ObjectType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 3

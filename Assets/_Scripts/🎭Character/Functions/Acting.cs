@@ -83,11 +83,10 @@ public class Acting : MonoBehaviour
         switch (_stepInAction)
         {
             case 1:
-                _currentCoroutine ??= StartCoroutine(ActionsHelper.WanderAndSearchForObject(_npc, targetType, () =>
+                if (ActionsHelper.WanderAndSearchForObject(_npc, targetType))
                 {
-                    _stepInAction++;
-                    _currentCoroutine = null;
-                }));
+                    _stepInAction = 2;
+                }
 
                 break;
             case 2:
@@ -96,33 +95,46 @@ public class Acting : MonoBehaviour
         }
 
     }
-    
+
 
     private void FindKnowledge(KnowledgeType knowledgeType)
     {
         //STEP 1 GOTO INNKEEPER
-        _npc.Logger.CurrentStepInAction = "1 Goto nearest innkeeper";
-        //remember who the local innkeeper is
-        var target = _npc.Memory.GetPeopleByTag(TraitType.innKeeper).FirstOrDefault().GetComponent<Character>();
 
-
-        if (ActionsHelper.Reached(_npc, target.transform.position))
+        switch (_stepInAction)
         {
-            //STEP 2 ASK FOR DIRECTIONS
-            _npc.Logger.CurrentStepInAction = "2 Ask innkeeper for location with tags";
-            List<Enum> tagsAsEnum = CurrentBehavior.ActionTags.Cast<Enum>().ToList();
-            SocialHelper.AskForKnowledge(_npc, target, knowledgeType, tagsAsEnum);
-            //STEP 3 LETS ASSUME WE ALWAYS WANT TO GO TO THE LOCATION WE JUST LEARNED ABOUT SO AUTOMATICALLY MAKE IT OUR TARGET
+            case 1:
+                _npc.Logger.CurrentStepInAction = "1 Goto nearest innkeeper";
+                //remember who the local innkeeper is
+                var target = _npc.Memory.GetPeopleByTag(TraitType.innKeeper).FirstOrDefault().GetComponent<Character>();
+
+
+                if (ActionsHelper.Reached(_npc, target.transform.position))
+                {
+                    //STEP 2 ASK FOR DIRECTIONS
+                    _npc.Logger.CurrentStepInAction = "2 Ask innkeeper for location with tags";
+                    List<Enum> tagsAsEnum = CurrentBehavior.ActionTags.Cast<Enum>().ToList();
+                    SocialHelper.AskForKnowledge(_npc, target, knowledgeType, tagsAsEnum);
+                    _stepInAction++;
+                    //STEP 3 LETS ASSUME WE ALWAYS WANT TO GO TO THE LOCATION WE JUST LEARNED ABOUT SO AUTOMATICALLY MAKE IT OUR TARGET
+                }
+
+                break;
+            case 2:
+                ActionsHelper.EndThisBehaviour(_npc);
+                break;
         }
-
-
-
     }
+
+
+
+
+
     private void Kill(TargetType targetType)
     {
-        var target = _npc.Memory.Targets[targetType].GetComponent<Character>();
 
-        if (ActionsHelper.Reached(_npc, target.transform.position))
+
+        if (_npc.Memory.Targets[targetType].GetComponent<Character>() is { } target && ActionsHelper.Reached(_npc, target.transform.position))
         {
             target.Vitality.Die();
             _npc.Memory.Targets[targetType] = null;
@@ -134,17 +146,16 @@ public class Acting : MonoBehaviour
 
     private void FullfillNeed(NeedType needType)
     {
-        var objectToUse = _npc.Memory.Possessions[ObjectType.bed].First();
-
-        if (ActionsHelper.Reached(_npc, objectToUse.transform.position))
+        if (_npc.Memory.GetPossession(ObjectType.bed) is { } objectToUse && ActionsHelper.Reached(_npc, objectToUse.transform.position))
         {
             _npc.Vitality.Needs[needType] = 0;
         }
+
     }
 
     private void TraderJob(TraderType traderType)
     {
-        var objectToUse = _npc.Memory.Possessions[ObjectType.traderDesk].First();
+        var objectToUse = _npc.Memory.GetPossession(ObjectType.traderDesk);
         if (ActionsHelper.Reached(_npc, objectToUse.transform.position))
         {
             //TODO: extend trader behaviour here
@@ -195,7 +206,7 @@ public class Acting : MonoBehaviour
     {
         var objectToUse = _npc.Memory.Inventory[objectType].First();
         objectToUse.Use(_npc);
-        _npc.Thinking.CalculateHighestScoringBehavior();
+        ActionsHelper.EndThisBehaviour(_npc);
     }
 
     private void UseObject(ObjectType objectType)
@@ -204,7 +215,7 @@ public class Acting : MonoBehaviour
         if (ActionsHelper.Reached(_npc, objectToUse.transform.position))
         {
             objectToUse.Use(_npc);
-            _npc.Thinking.CalculateHighestScoringBehavior();
+            ActionsHelper.EndThisBehaviour(_npc);
         }
 
     }
