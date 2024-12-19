@@ -57,7 +57,16 @@ public class Acting : MonoBehaviour
         }
     }
     //TODO: add dynamic tags  when searching for a character
-    private void FindCharacter(TargetType targetType) => StartCoroutine(ActionsHelper.WanderAndSearchForCharacter(_npc, targetType, true, TraitType.human));
+    private void FindCharacter(TargetType targetType) 
+{
+switch(_stepInAction){
+case 1:
+ StartCoroutine(ActionsHelper.WanderAndSearchForCharacter(_npc, targetType, true,out _stepInAction, TraitType.human));
+break;
+case 2: 
+break;
+}
+}
 
     private void FindObject(ObjectType targetType) => StartCoroutine(ActionsHelper.WanderAndSearchForObject(_npc, targetType));
 
