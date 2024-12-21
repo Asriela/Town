@@ -6,7 +6,7 @@ using UnityEngine;
 public class LocationTypeGameObjectPair
 {
     public LocationName locationType; // Key
-    public GameObject gameObject; // Value
+    public Location gameObject; // Value
 }
 
 
@@ -24,11 +24,11 @@ public class WorldManager : Singleton<WorldManager>
     [SerializeField]
     private List<LocationTypeGameObjectPair> _locations = new();
 
-    public Dictionary<LocationName, GameObject> Locations
+    public Dictionary<LocationName, Location> Locations
     {
         get
         {
-            Dictionary<LocationName, GameObject> dictionary = new();
+            Dictionary<LocationName, Location> dictionary = new();
             foreach (var pair in _locations)
             {
                 dictionary[pair.locationType] = pair.gameObject;
@@ -37,8 +37,14 @@ public class WorldManager : Singleton<WorldManager>
         }
     }
 
+    public Location GetLocation(LocationName locationName) =>Locations[locationName];
+    
+
     [SerializeField]
     private float _timeOfDay;
+
+    [SerializeField]
+    private float _startingTime;
 
     public float TimeOfDay
     {
@@ -46,6 +52,11 @@ public class WorldManager : Singleton<WorldManager>
         set => _timeOfDay = value;
     }
     private void Update() => RunTimeOfDay();
+
+    private void Start()
+    {
+        _timeOfDay = _startingTime;
+    }
 
     private void RunTimeOfDay() => TimeOfDay = TimeOfDay < 24 ? TimeOfDay + Settings.timeOfDaySpeed : 0;
 

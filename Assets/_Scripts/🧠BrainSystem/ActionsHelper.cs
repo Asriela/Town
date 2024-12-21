@@ -11,11 +11,11 @@ public static class ActionsHelper
     //specifically go into every building to see if we can find what we are looking for
     public static void LookAroundArea(NPC npc) => npc.Logger.CurrentStepInAction = "looking around area";
 
-    public static bool Reached(NPC npc, Vector3 destination)
+    public static bool Reached(NPC npc, Vector3 destination, float distance)
     {
 
         var ourPosition = npc.transform.position;
-        var interactionDistance = 1f;
+        var interactionDistance = distance;
 
 
         if (Vector3.Distance(ourPosition, destination) < interactionDistance)
@@ -30,28 +30,25 @@ public static class ActionsHelper
 
 
 
-    public static IEnumerator WanderAndSearchForCharacter(NPC npc, Mind.TargetType targetType, bool alive, Action onComplete, params Mind.TraitType[] traitsToLookFor)
+    public static bool WanderAndSearchForCharacter(NPC npc, Mind.TargetType targetType, bool alive, params Mind.TraitType[] traitsToLookFor)
     {
         npc.Logger.CurrentStepInAction = "wander and search";
 
-        while (true)
+
+        Wander(npc);
+
+
+        var target = npc.Senses.SeeSomeoneWithTraits(traitsToLookFor);
+        if (target != null && !(alive && target.GetComponent<Character>().Vitality.Dead))
         {
-            Wander(npc);
+
+            npc.Memory.Targets[targetType] = target;
+            return true;
 
 
-            var target = npc.Senses.SeeSomeoneWithTraits(traitsToLookFor);
-            if (target != null && !(alive && target.GetComponent<Character>().Vitality.Dead))
-            {
-
-                npc.Memory.Targets[targetType] = target;
-
-                onComplete?.Invoke();
-                break;
-            }
-
-            yield return new WaitForSeconds(0.5f);
         }
 
+        return false;
 
     }
     //TODO: change from object type to tags so we can look up a general object of description
@@ -84,9 +81,9 @@ public static class ActionsHelper
     {
 
         npc.Logger.CurrentStepInAction = "pick up object";
-        if (Reached(npc, targetObject.transform.position))
+        if (Reached(npc, targetObject.transform.position, 1f))
         {
-            targetObject.gameObject.SetActive(false);
+
             //TODO: issue will occure if we want multiple objects of same type so change it to a list of objects <objectType, List<gameobject>>
             npc.Memory.AddToPossessions(targetObject.ObjectType, targetObject);
             npc.Memory.AddToInventory(targetObject.ObjectType, targetObject);
@@ -97,6 +94,12 @@ public static class ActionsHelper
         }
 
         return false;
+    }
+
+    public static void DestroyObject(NPC npc, WorldObject objectToDestroy)
+    {
+        npc.Memory.RemoveObjectFromPossessions(objectToDestroy);
+        npc.Memory.RemoveObjectFromInventory(objectToDestroy);
     }
 
 

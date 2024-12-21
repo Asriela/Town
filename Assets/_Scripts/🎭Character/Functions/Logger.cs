@@ -9,9 +9,17 @@ public class Logger : MonoBehaviour
 
     public string CharactersInSight { get; set; }
 
+
+
     private TextMeshProUGUI _statsLabel;
     [SerializeField]
     private Transform _statsLabelTransform;
+
+    private NPC _npc;
+    public void Initialize(NPC npc)
+    {
+        _npc = npc;
+    }
 
     private void Awake()
     {
@@ -28,7 +36,7 @@ public class Logger : MonoBehaviour
         }
     }
 
-    private void Update() => UpdateStatsLabel($"BEHAVIOUR:\n {CurrentBehaviour}\n-----------\nACTION:\n {CurrentAction}\n-----------\nSTEP:\n {CurrentStepInAction}\n-----------\nSEES:\n {CharactersInSight}");
+    private void Update() => UpdateStatsLabel($"BEHAVIOUR:\n {CurrentBehaviour}\n-----------\nACTION:\n {CurrentAction}\n-----------\nSTEP:\n {CurrentStepInAction}\n-----------\nSEES:\n {CharactersInSight}-----------\nCOIN:\n {_npc.Memory.Coin}");
 
     public void UpdateStatsLabel(string message)
     {

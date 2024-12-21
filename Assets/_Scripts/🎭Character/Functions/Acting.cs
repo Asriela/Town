@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Mind;
 using System.Data.Common;
+using static UnityEngine.GraphicsBuffer;
 
 public class Acting : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class Acting : MonoBehaviour
     private WorldObject _currentObjectTarget = null;
     private int _stepInAction = 0;
     private string _lastAction = "";
-    private Coroutine _currentCoroutine = null;
+
     public void Initialize(NPC npc) => _npc = npc;
     public Behavior CurrentBehavior { get; set; }
 
@@ -28,7 +29,10 @@ public class Acting : MonoBehaviour
         { ActionType.findKnowledge, param => FindKnowledge((KnowledgeType)param) },
         { ActionType.gotoLocation, param => GotoLocation((TargetLocationType)param) },
         { ActionType.useObject, param => UseObject((ObjectType)param) },
-        { ActionType.useObjectInInventory, param => UseObject((ObjectType)param) }
+        { ActionType.useObjectInInventory, param => UseObjectInInventory((ObjectType)param) },
+        { ActionType.findOccupant, param => FindOccupant((TraitType)param) },
+        { ActionType.gotoOccupant, param => GotoOccupant((TraitType)param) },
+        { ActionType.buyItem, param => BuyItem((ObjectType)param) }
     };
 
     private void Update() => PerformCurrentBehavior();
@@ -47,7 +51,7 @@ public class Acting : MonoBehaviour
             if (_lastAction != CurrentBehavior.Name)
             {
                 _stepInAction = 1;
-                _currentCoroutine = null;
+
                 _lastAction = CurrentBehavior.Name;
             }
 
@@ -64,11 +68,11 @@ public class Acting : MonoBehaviour
         switch (_stepInAction)
         {
             case 1:
-                _currentCoroutine ??= StartCoroutine(ActionsHelper.WanderAndSearchForCharacter(_npc, targetType, true, () =>
+                if (ActionsHelper.WanderAndSearchForCharacter(_npc, targetType, true, TraitType.human))
                 {
                     _stepInAction++;
-                    _currentCoroutine = null;
-                }, TraitType.human));
+
+                }
 
                 break;
             case 2:
@@ -76,7 +80,41 @@ public class Acting : MonoBehaviour
                 break;
         }
     }
-
+    private void FindOccupant(TraitType traitType)
+    {
+        switch (_stepInAction)
+        {
+            case 1:
+                var locationObject = WorldManager.Instance.GetLocation(_npc.Movement.CurrentLocation);
+                var occupant = locationObject.GetOccupant(traitType);
+                if (occupant != null)
+                {
+                    _npc.Memory.OccupantTargets[traitType] = occupant;
+                    _stepInAction++;
+                }
+                break;
+            case 2:
+                ActionsHelper.EndThisBehaviour(_npc);
+                break;
+        }
+    }
+    private void GotoOccupant(TraitType traitType)
+    {
+        switch (_stepInAction)
+        {
+            case 1:
+                var occupant = _npc.Memory.OccupantTargets[traitType];
+                if (occupant != null && ActionsHelper.Reached(_npc, occupant.transform.position, 3f))
+                {
+                    _npc.Memory.ReachedOccupant = occupant;
+                    _stepInAction++;
+                }
+                break;
+            case 2:
+                ActionsHelper.EndThisBehaviour(_npc);
+                break;
+        }
+    }
     private void FindObject(ObjectType targetType)
     {
 
@@ -109,7 +147,7 @@ public class Acting : MonoBehaviour
                 var target = _npc.Memory.GetPeopleByTag(TraitType.innKeeper).FirstOrDefault().GetComponent<Character>();
 
 
-                if (ActionsHelper.Reached(_npc, target.transform.position))
+                if (ActionsHelper.Reached(_npc, target.transform.position, 2f))
                 {
                     //STEP 2 ASK FOR DIRECTIONS
                     _npc.Logger.CurrentStepInAction = "2 Ask innkeeper for location with tags";
@@ -127,6 +165,37 @@ public class Acting : MonoBehaviour
     }
 
 
+    private void BuyItem(ObjectType objectType)
+    {
+
+        switch (_stepInAction)
+        {
+            case 1:
+                var seller = _npc.Memory.ReachedOccupant;
+                var buyer = _npc;
+
+                _npc.Movement.Stop();
+                if (seller != null && ActionsHelper.Reached(_npc, seller.transform.position, 2.7f))
+                {
+                    var price = seller.Memory.GetPrice(objectType);
+                    if (buyer.Memory.Coin >= price && seller.Memory.Possessions.ContainsKey(objectType))
+                    {
+                        var boughtItem = seller.Memory.RemoveFromPossessions(objectType);
+                        buyer.Memory.AddToPossessions(objectType, boughtItem);
+                        buyer.Memory.AddToInventory(objectType, boughtItem);
+                        buyer.Memory.Coin -= price;
+                    }
+
+                    _stepInAction++;
+
+
+                }
+                break;
+            case 2:
+                ActionsHelper.EndThisBehaviour(_npc);
+                break;
+        }
+    }
 
 
 
@@ -134,7 +203,7 @@ public class Acting : MonoBehaviour
     {
 
 
-        if (_npc.Memory.Targets[targetType].GetComponent<Character>() is { } target && ActionsHelper.Reached(_npc, target.transform.position))
+        if (_npc.Memory.Targets[targetType].GetComponent<Character>() is { } target && ActionsHelper.Reached(_npc, target.transform.position, 1f))
         {
             target.Vitality.Die();
             _npc.Memory.Targets[targetType] = null;
@@ -146,7 +215,7 @@ public class Acting : MonoBehaviour
 
     private void FullfillNeed(NeedType needType)
     {
-        if (_npc.Memory.GetPossession(ObjectType.bed) is { } objectToUse && ActionsHelper.Reached(_npc, objectToUse.transform.position))
+        if (_npc.Memory.GetPossession(ObjectType.bed) is { } objectToUse && ActionsHelper.Reached(_npc, objectToUse.transform.position, 1f))
         {
             _npc.Vitality.Needs[needType] = 0;
         }
@@ -155,8 +224,8 @@ public class Acting : MonoBehaviour
 
     private void TraderJob(TraderType traderType)
     {
-        var objectToUse = _npc.Memory.GetPossession(ObjectType.traderDesk);
-        if (ActionsHelper.Reached(_npc, objectToUse.transform.position))
+        var objectToUse = _npc.Memory.GetPossession(ObjectType.traderChair);
+        if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 1f))
         {
             //TODO: extend trader behaviour here
         }
@@ -171,7 +240,7 @@ public class Acting : MonoBehaviour
             case 1:
                 if (_currentObjectTarget == null)
                 {
-                    var crops = _npc.Memory.Possessions[ObjectType.pumpkin];
+                    var crops = _npc.Memory.GetPossessions(ObjectType.pumpkin);
                     foreach (var crop in crops)
                     {
                         if (crop.Care < 80)
@@ -185,7 +254,7 @@ public class Acting : MonoBehaviour
                     { _stepInAction = 2; }
                 }
                 else
-                if (ActionsHelper.Reached(_npc, _currentObjectTarget.transform.position))
+                if (ActionsHelper.Reached(_npc, _currentObjectTarget.transform.position, 1f))
                 {
                     _currentObjectTarget.CareFor(_npc);
                     _currentObjectTarget = null;
@@ -204,21 +273,44 @@ public class Acting : MonoBehaviour
 
     private void UseObjectInInventory(ObjectType objectType)
     {
-        var objectToUse = _npc.Memory.Inventory[objectType].First();
-        objectToUse.Use(_npc);
+        var objectToUse = _npc.Memory.GetPossession(objectType);
+        objectToUse.Use(_npc, out bool destroyObject);
+        _npc.Logger.CurrentStepInAction = "drinking";
+        if (destroyObject)
+        {
+            ActionsHelper.DestroyObject(_npc, objectToUse);
+        }
         ActionsHelper.EndThisBehaviour(_npc);
     }
 
     private void UseObject(ObjectType objectType)
     {
         var objectToUse = _npc.Memory.Possessions[objectType].First();
-        if (ActionsHelper.Reached(_npc, objectToUse.transform.position))
+        switch (_stepInAction)
         {
-            objectToUse.Use(_npc);
-            ActionsHelper.EndThisBehaviour(_npc);
+            //STEP 1
+            case 1:
+                if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 1f))
+                {
+                    _stepInAction++;
+
+
+                }
+
+                break;
+            //STEP 2
+            case 2:
+                objectToUse.Use(_npc, out bool destroyObject);
+                if (destroyObject)
+                {
+                    ActionsHelper.DestroyObject(_npc, objectToUse);
+                }
+                break;
+
         }
 
     }
+
 
     private void GotoLocation(TargetLocationType locationType)
     {
@@ -229,9 +321,10 @@ public class Acting : MonoBehaviour
         var locationTarget = mem.LocationTargets[locationType];
         var destination = WorldManager.Instance.Locations[locationTarget];
 
-        if (ActionsHelper.Reached(_npc, destination.transform.position))
+        if (ActionsHelper.Reached(_npc, destination.transform.position, 1f))
         {
             _npc.Movement.CurrentLocation = locationTarget;
+            _npc.Memory.OccupantTargets.Clear();
         }
     }
 

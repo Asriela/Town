@@ -28,7 +28,7 @@ public class NPC : Character
         Senses.Initialize(this);
 
         Logger = GetComponent<Logger>();
-
+        Logger.Initialize(this);
     }
 
     private void Update()

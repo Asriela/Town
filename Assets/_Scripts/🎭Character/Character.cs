@@ -13,6 +13,9 @@ public class Character : MonoBehaviour
 
     [SerializeField]
     private CharacterName _characterName;
+
+
+
     public CharacterName CharacterName => _characterName;
 
     public Movement Movement { get; set; }
@@ -20,6 +23,8 @@ public class Character : MonoBehaviour
     public Reactions Reactions { get; set; }
 
     public Memory Memory { get; set; }
+
+
 
     public Appearance Appearance { get; set; }
 

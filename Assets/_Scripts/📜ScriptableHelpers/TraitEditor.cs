@@ -150,6 +150,9 @@ public class TraitEditor : Editor
             Mind.ActionType.gotoLocation => typeof(Mind.TargetLocationType),
             Mind.ActionType.useObject => typeof(Mind.ObjectType),
             Mind.ActionType.useObjectInInventory => typeof(Mind.ObjectType),
+            Mind.ActionType.buyItem => typeof(Mind.ObjectType),
+            Mind.ActionType.findOccupant => typeof(Mind.TraitType),
+            Mind.ActionType.gotoOccupant => typeof(Mind.TraitType),
             _ => null
         };
 
@@ -173,6 +176,8 @@ public class TraitEditor : Editor
         {
             Mind.ConditionType.hasTarget => typeof(Mind.TargetType),
             Mind.ConditionType.doesNotHaveTarget => typeof(Mind.TargetType),
+            Mind.ConditionType.hasOccupant => typeof(Mind.TraitType),
+            Mind.ConditionType.doesNotHaveOccupant => typeof(Mind.TraitType),
             Mind.ConditionType.hasObject => typeof(Mind.ObjectType),
             Mind.ConditionType.doesNotHaveObject => typeof(Mind.ObjectType),
             Mind.ConditionType.needsTo => typeof(Mind.NeedType),
@@ -184,6 +189,12 @@ public class TraitEditor : Editor
             Mind.ConditionType.notAtLocation => typeof(Mind.TargetLocationType),
             Mind.ConditionType.hasLocationTarget => typeof(Mind.TargetLocationType),
             Mind.ConditionType.doesNotHaveLocationTarget => typeof(Mind.TargetLocationType),
+            Mind.ConditionType.reachedOccupant => typeof(Mind.TraitType),
+            Mind.ConditionType.hasNotReachedOccupant => typeof(Mind.TraitType),
+            Mind.ConditionType.hasEnoughCoin => typeof(Mind.CoinAmount),
+            Mind.ConditionType.doesNotHaveEnoughCoin => typeof(Mind.CoinAmount),
+            Mind.ConditionType.hasTrait => typeof(Mind.TraitType),
+            Mind.ConditionType.doesNotHaveTrait => typeof(Mind.TraitType),
             _ => null
         };
 

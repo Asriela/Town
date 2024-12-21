@@ -13,17 +13,6 @@ public class Thinking : MonoBehaviour
         StartCoroutine(CheckBestBehaviorCoroutine());
     }
 
-    [SerializeField]
-    private List<Trait> _traits = new();
-
-    public List<Trait> Traits => _traits;
-
-    public void AddTrait(Trait theTrait)
-    {
-        if (!_traits.Contains(theTrait))
-        { _traits.Add(theTrait); }
-    }
-
 
     [SerializeField] private float _checkInterval = 3f;
 
@@ -50,9 +39,9 @@ public class Thinking : MonoBehaviour
 
         Behavior highestScoringBehavior = null;
 
-        for (int i = 0; i < _traits.Count; i++)
+        for (int i = 0; i < _npc.Memory.Traits.Count; i++)
         {
-            var trait = _traits[i];
+            var trait = _npc.Memory.Traits[i];
             print($"Inspecting trait: {trait.name}");
 
             for (int j = 0; j < trait.Behaviors.Count; j++)

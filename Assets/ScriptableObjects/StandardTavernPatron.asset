@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7dc8225a4be6fd4d87acb8e49149fbb, type: 3}
+  m_Name: StandardTavernPatron
+  m_EditorClassIdentifier: 
+  Type: 5
+  Behaviors:
+  - _name: Find Inn Keeper
+    _dialogue: 
+    _action: 3
+    _actionParameter:
+      rid: 1081034830689861819
+    _conditions:
+    - conditionType: 12
+      parameter:
+        rid: 1081034830689861820
+    - conditionType: 5
+      parameter:
+        rid: 1081034830689861819
+    _priority: 7
+    _actionTags: 
+  - _name: Goto Innkeeper
+    _dialogue: 
+    _action: 19
+    _actionParameter:
+      rid: 1081034830689861819
+    _conditions:
+    - conditionType: 12
+      parameter:
+        rid: 1081034830689861820
+    - conditionType: 4
+      parameter:
+        rid: 1081034830689861819
+    - conditionType: 17
+      parameter:
+        rid: 1081034830689861819
+    _priority: 7
+    _actionTags: 
+  - _name: Buy ale
+    _dialogue: '"top me up"'
+    _action: 13
+    _actionParameter:
+      rid: 1081034830689861821
+    _conditions:
+    - conditionType: 12
+      parameter:
+        rid: 1081034830689861820
+    - conditionType: 6
+      parameter:
+        rid: 1081034830689861821
+    - conditionType: 18
+      parameter:
+        rid: 1081034830689861822
+    - conditionType: 16
+      parameter:
+        rid: 1081034830689861819
+    _priority: 7
+    _actionTags: 
+  - _name: Drink
+    _dialogue: 
+    _action: 18
+    _actionParameter:
+      rid: 1081034830689861821
+    _conditions:
+    - conditionType: 12
+      parameter:
+        rid: 1081034830689861820
+    - conditionType: 7
+      parameter:
+        rid: 1081034830689861821
+    _priority: 7
+    _actionTags: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 1081034830689861819
+      type: {class: TraitType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 3
+    - rid: 1081034830689861820
+      type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 2
+    - rid: 1081034830689861821
+      type: {class: ObjectType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 6
+    - rid: 1081034830689861822
+      type: {class: CoinAmount, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 5

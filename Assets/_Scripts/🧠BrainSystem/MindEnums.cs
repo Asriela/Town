@@ -11,6 +11,7 @@ namespace Mind
         touchedByDarkness,
         innKeeper,
         murderer,
+        standardTavernPatron,
         guard,
         draugerCultist,
         jarl,
@@ -22,6 +23,7 @@ namespace Mind
         defaultAction,
         kill,
         findCharacter,
+        findOccupant,
         findObject,
         fullfillNeed,
         patrol,
@@ -31,11 +33,13 @@ namespace Mind
         socialize,
         trader,
         farmer,
+        buyItem,
         findKnowledge,
         shareKnowledge,
         gotoLocation,
         useObject,
-        useObjectInInventory
+        useObjectInInventory,
+        gotoOccupant
     }
     [Serializable]
     public enum CharacterName : short
@@ -43,7 +47,8 @@ namespace Mind
         none,
         player,
         Belethor,
-        Zerath
+        Zerath,
+        Alex
     }
     [Serializable]
     public enum LocationName : short
@@ -119,6 +124,7 @@ namespace Mind
         cultist,
         murderVictim,
         turnUndeadVictim,
+        occupant
     }
 
 
@@ -138,6 +144,8 @@ namespace Mind
         needsTo,
         hasTarget,
         doesNotHaveTarget,
+        hasOccupant,
+        doesNotHaveOccupant,
         doesNotHaveObject,
         hasObject,
         afterHour,
@@ -147,7 +155,13 @@ namespace Mind
         atLocation,
         notAtLocation,
         hasLocationTarget,
-        doesNotHaveLocationTarget
+        doesNotHaveLocationTarget,
+        reachedOccupant,
+        hasNotReachedOccupant,
+        hasEnoughCoin,
+        doesNotHaveEnoughCoin,
+        hasTrait,
+        doesNotHaveTrait
 
     }
     [Serializable]
@@ -185,8 +199,11 @@ namespace Mind
         bed,
         foodBowl,
         traderDesk,
+        traderChair,
         bookOfTheDead,
-        pumpkin
+        pumpkin,
+        ale,
+        barStool
     }
 
     [Serializable]
@@ -196,5 +213,16 @@ namespace Mind
         crop,
         wilts,
         grows
+    }
+
+    [Serializable]
+    public enum CoinAmount
+    {
+        c5 = 5,
+        c10 = 10,
+        c15 = 15,
+        c20 = 20,
+        c25 = 25,
+        c30 = 30
     }
 }

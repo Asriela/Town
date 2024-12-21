@@ -22,13 +22,24 @@ public class WorldObject : MonoBehaviour
     public float Size => _size;
 
     private List<ObjectTrait> _objectTraits = new();
-
+    private SpriteRenderer _spriteRenderer;
     private void Start()
     {
         _integrity = 100;
         _care = 50;
         _size = 1;
         SetStartingTraitsBasedOnObjectType();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+
+
+    public void SetVisibility(bool visible)
+    {
+        if (_spriteRenderer != null)
+        {
+            _spriteRenderer.enabled = visible; // Hides the sprite
+        }
     }
 
     private void Update()
@@ -77,15 +88,24 @@ public class WorldObject : MonoBehaviour
     }
     public Vector3 GetPosition() => transform.position;
     //TODO: make that character class holds traits so that maybe player also has traits that limmit what the player can do or how they react
-    public void Use(NPC userOfObject)
+    public void Use(NPC userOfObject, out bool destroy)
     {
+        destroy = false;
         switch (_objectType)
         {
             //TODO: should just active its effect which is defined in the world object class as opposed to doing a switch
             case ObjectType.bookOfTheDead:
-                userOfObject.Thinking.AddTrait(GameManager.Instance.TraitsInPlay[TraitType.murderer]);
+                userOfObject.Memory.AddTrait(GameManager.Instance.TraitsInPlay[TraitType.deathCultist]);
+                break;
+            case ObjectType.ale:
+                _integrity -= 0.1f;
+                if (_integrity <= 0)
+                { destroy = true; }
+
                 break;
         }
+
+
     }
 
     public void CareFor(NPC userOfObject)

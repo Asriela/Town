@@ -17,6 +17,8 @@ public class Movement : MonoBehaviour
 
     public void MoveTo(Vector3 targetPosition) => agent.SetDestination(targetPosition);
 
+    public void Stop() => agent.SetDestination(transform.position);
+
     public void MoveToRandomPoints()
     {
 

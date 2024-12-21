@@ -313,8 +313,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.1797, y: 0.1892}
-  m_SizeDelta: {x: 0.3595, y: 0.3784}
+  m_AnchoredPosition: {x: -0.1797, y: -0.4446}
+  m_SizeDelta: {x: 0.3595, y: 1.646}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2112230376857529153
 CanvasRenderer:
@@ -583,9 +583,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1a14db7b24745548b55be9af19f014c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _traits:
-  - {fileID: 11400000, guid: ef6c4609bb85cd64c9ccdb801d292c2b, type: 2}
-  - {fileID: 11400000, guid: c731e945e02fcb64982f713f6ab44429, type: 2}
   _checkInterval: 3
 --- !u!114 &7465567415663989329
 MonoBehaviour:
@@ -670,6 +667,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3781de31dd8266b4ea6a06dd66a9ddd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _coin: 0
+  _pricing: []
+  _traits: []
   _locationTargetsList: []
   _locationKnowledge: []
   _peopleKnowledge: []
