@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using System.Collections;
 using UnityEngine;
 using System.Linq;
 
@@ -9,10 +10,23 @@ public class Reactions : MonoBehaviour
 
     public void Initialize(Character npc) => _npc = npc;
 
-    public void ReactToAction(Character sender, bool intendedRecieverOfMessage, Mind.ActionType actionType, ActionPost actionPost)
+    public void ReactToActionStarter(Character sender, bool intendedReceiverOfMessage, Mind.ActionType actionType, ActionPost actionPost)
+    {
+        StartCoroutine(ReactToAction( sender, intendedReceiverOfMessage, actionType, actionPost));
+
+
+    }
+
+    private IEnumerator ReactToAction(Character sender, bool intendedRecieverOfMessage, Mind.ActionType actionType, ActionPost actionPost)
     {
         if (!intendedRecieverOfMessage)
-        { return; }
+        {
+            yield break; 
+        }
+
+
+        yield return new WaitForSeconds(3f); 
+
         switch (actionType)
         {
             case Mind.ActionType.findKnowledge:

@@ -9,12 +9,14 @@ public static class SocialHelper
     {
         ActionPost actionPost = new(knowledgeType, knowledgeTags, null);
         SocialMediator.PostAction(senderOfMessage, recieverOfMessage, ActionType.findKnowledge, actionPost);
+        senderOfMessage.Ui.Speak($"Do you know of a {knowledgeType} that is {string.Join(" and ", knowledgeTags)}");
     }
 
     public static void ShareKnowledge(Character senderOfMessage, Character recieverOfMessage, KnowledgeType knowledgeType, List<System.Enum> newKnowledge, List<System.Enum> originalTags)
     {
         ActionPost actionPost = new(knowledgeType, newKnowledge, originalTags);
         SocialMediator.PostAction(senderOfMessage, recieverOfMessage, ActionType.shareKnowledge, actionPost);
+        senderOfMessage.Ui.Speak($"Yes let me mark it on your map");
     }
 }
 

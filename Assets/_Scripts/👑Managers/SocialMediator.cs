@@ -10,7 +10,7 @@ public static class SocialMediator
     {
         // Notify the target directly
         if (target != null)
-        { target.Reactions.ReactToAction(sender, true, actionType, actionPost); }
+        { target.Reactions.ReactToActionStarter(sender, true, actionType, actionPost); }
 
         if (IsHeardAction(actionType))
         {
@@ -23,7 +23,7 @@ public static class SocialMediator
                 //TODO: change hearing radius to senses : add senses to character class instead of npc class
                 if (Vector3.Distance(sender.transform.position, character.transform.position) <= _hearingRadius)
                 {
-                    character.Reactions.ReactToAction(sender, false, actionType, actionPost);
+                    character.Reactions.ReactToActionStarter(sender, false, actionType, actionPost);
                 }
             }
         }
@@ -39,7 +39,7 @@ public static class SocialMediator
                 //TODO: change sightradius to checking line of sight via senses class
                 if (Vector3.Distance(sender.transform.position, character.transform.position) <= _sightRadius)
                 {
-                    character.Reactions.ReactToAction(sender, false, actionType, actionPost);
+                    character.Reactions.ReactToActionStarter(sender, false, actionType, actionPost);
                 }
             }
         }

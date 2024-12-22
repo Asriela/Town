@@ -27,6 +27,7 @@ public class Senses : MonoBehaviour
         _npc = npc;
         StartCoroutine(DetectCharactersInSight());
         StartCoroutine(DetectObjectsInSight());
+
         CreateViewCone();
     }
 
@@ -41,10 +42,10 @@ public class Senses : MonoBehaviour
 
     private void SetLoggersCharactersInSight()
     {
-        _npc.Logger.CharactersInSight = "";
+        _npc.Ui.CharactersInSight = "";
         foreach (var character in _charactersInSight)
         {
-            _npc.Logger.CharactersInSight += @$"{character.CharacterName}\n";
+            _npc.Ui.CharactersInSight += @$"{character.CharacterName}\n";
         }
     }
     private void SetViewDirection() => _lookDirection = _npc.Movement.GetMovementDirection().normalized;

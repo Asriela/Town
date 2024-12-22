@@ -13,6 +13,7 @@ public class Acting : MonoBehaviour
     private WorldObject _currentObjectTarget = null;
     private int _stepInAction = 0;
     private string _lastAction = "";
+    private float _waitBeforeAction = 0;
 
     public void Initialize(NPC npc) => _npc = npc;
     public Behavior CurrentBehavior { get; set; }
@@ -45,17 +46,36 @@ public class Acting : MonoBehaviour
 
         if (_actionHandlers.TryGetValue(CurrentBehavior.Action, out var action))
         {
-            _npc.Logger.CurrentBehaviour = CurrentBehavior.Name;
-            _npc.Logger.CurrentAction = $"{CurrentBehavior.Action} {CurrentBehavior.ActionParameter}";
-            _npc.Logger.CurrentStepInAction = $"";
+            _npc.Ui.CurrentBehaviour = CurrentBehavior.Name;
+            _npc.Ui.CurrentAction = $"{CurrentBehavior.Action} {CurrentBehavior.ActionParameter}";
+            _npc.Ui.CurrentStepInAction = $"";
             if (_lastAction != CurrentBehavior.Name)
             {
-                _stepInAction = 1;
-
+                _stepInAction = 0;
+                
                 _lastAction = CurrentBehavior.Name;
+                _npc.Movement.Stop();
+                _npc.Ui.EndSpeech();
+                if (CurrentBehavior.Dialogue!="")
+                {
+                    _waitBeforeAction = 7;
+                    _npc.Ui.Speak(CurrentBehavior.Dialogue);
+                }
+                else
+                {
+                    _waitBeforeAction = 3;
+                }
             }
 
+            if (_stepInAction == 0 && _waitBeforeAction <= 0)
+            {
+                _stepInAction++;
+                _npc.Ui.EndSpeech();
+
+            }
             action(CurrentBehavior.ActionParameter);
+
+            _waitBeforeAction -= 0.01f;
         }
         else
         {
@@ -142,7 +162,7 @@ public class Acting : MonoBehaviour
         switch (_stepInAction)
         {
             case 1:
-                _npc.Logger.CurrentStepInAction = "1 Goto nearest innkeeper";
+                _npc.Ui.CurrentStepInAction = "1 Goto nearest innkeeper";
                 //remember who the local innkeeper is
                 var target = _npc.Memory.GetPeopleByTag(TraitType.innKeeper).FirstOrDefault().GetComponent<Character>();
 
@@ -150,16 +170,17 @@ public class Acting : MonoBehaviour
                 if (ActionsHelper.Reached(_npc, target.transform.position, 2f))
                 {
                     //STEP 2 ASK FOR DIRECTIONS
-                    _npc.Logger.CurrentStepInAction = "2 Ask innkeeper for location with tags";
+
+                    _npc.Ui.CurrentStepInAction = "2 Ask innkeeper for location with tags";
                     List<Enum> tagsAsEnum = CurrentBehavior.ActionTags.Cast<Enum>().ToList();
                     SocialHelper.AskForKnowledge(_npc, target, knowledgeType, tagsAsEnum);
                     _stepInAction++;
-                    //STEP 3 LETS ASSUME WE ALWAYS WANT TO GO TO THE LOCATION WE JUST LEARNED ABOUT SO AUTOMATICALLY MAKE IT OUR TARGET
+ 
                 }
 
                 break;
             case 2:
-                ActionsHelper.EndThisBehaviour(_npc);
+        //WAIT FOR RESPONSE
                 break;
         }
     }
@@ -201,33 +222,60 @@ public class Acting : MonoBehaviour
 
     private void Kill(TargetType targetType)
     {
-
-
-        if (_npc.Memory.Targets[targetType].GetComponent<Character>() is { } target && ActionsHelper.Reached(_npc, target.transform.position, 1f))
+        switch (_stepInAction)
         {
-            target.Vitality.Die();
-            _npc.Memory.Targets[targetType] = null;
-        }
-        //TODO: killer must only kill victim if they think the victim is alone
-    }
+            case 1:
 
+                if (_npc.Memory.Targets[targetType].GetComponent<Character>() is { } target &&
+                    ActionsHelper.Reached(_npc, target.transform.position, 1f))
+                {
+                    target.Vitality.Die();
+                    _npc.Memory.Targets[targetType] = null;
+                    _stepInAction++;
+                }
+
+                //TODO: killer must only kill victim if they think the victim is alone
+                break;
+            case 2:
+                ActionsHelper.EndThisBehaviour(_npc);
+                break;
+        }
+    }
 
 
     private void FullfillNeed(NeedType needType)
     {
-        if (_npc.Memory.GetPossession(ObjectType.bed) is { } objectToUse && ActionsHelper.Reached(_npc, objectToUse.transform.position, 1f))
+        switch (_stepInAction)
         {
-            _npc.Vitality.Needs[needType] = 0;
+            case 1:
+                if (_npc.Memory.GetPossession(ObjectType.bed) is { } objectToUse && ActionsHelper.Reached(_npc, objectToUse.transform.position, 0.2f))
+                {
+                    _npc.Vitality.Needs[needType] = 0;
+                    _stepInAction++;
+                }
+                break;
+            case 2:
+                ActionsHelper.EndThisBehaviour(_npc);
+                break;
         }
 
     }
 
     private void TraderJob(TraderType traderType)
     {
-        var objectToUse = _npc.Memory.GetPossession(ObjectType.traderChair);
-        if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 1f))
+        switch (_stepInAction)
         {
-            //TODO: extend trader behaviour here
+            case 1:
+                var objectToUse = _npc.Memory.GetPossession(ObjectType.traderChair);
+                if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 0.2f))
+                {
+                    //TODO: extend trader behaviour here
+                }
+
+                break;
+            case 2:
+                ActionsHelper.EndThisBehaviour(_npc);
+                break;
         }
     }
 
@@ -263,6 +311,7 @@ public class Acting : MonoBehaviour
                 break;
             //STEP 2
             case 2:
+                ActionsHelper.EndThisBehaviour(_npc);
                 break;
         }
 
@@ -273,14 +322,25 @@ public class Acting : MonoBehaviour
 
     private void UseObjectInInventory(ObjectType objectType)
     {
-        var objectToUse = _npc.Memory.GetPossession(objectType);
-        objectToUse.Use(_npc, out bool destroyObject);
-        _npc.Logger.CurrentStepInAction = "drinking";
-        if (destroyObject)
+        switch (_stepInAction)
         {
-            ActionsHelper.DestroyObject(_npc, objectToUse);
+            //STEP 1
+            case 1:
+                var objectToUse = _npc.Memory.GetPossession(objectType);
+                objectToUse.Use(_npc, out bool destroyObject);
+                _npc.Ui.CurrentStepInAction = "drinking";
+                if (destroyObject)
+                {
+                    ActionsHelper.DestroyObject(_npc, objectToUse);
+                }
+
+                ActionsHelper.EndThisBehaviour(_npc);
+                break;
+            //STEP 2
+            case 2:
+                ActionsHelper.EndThisBehaviour(_npc);
+                break;
         }
-        ActionsHelper.EndThisBehaviour(_npc);
     }
 
     private void UseObject(ObjectType objectType)
@@ -290,7 +350,7 @@ public class Acting : MonoBehaviour
         {
             //STEP 1
             case 1:
-                if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 1f))
+                if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 0.3f))
                 {
                     _stepInAction++;
 
@@ -314,19 +374,29 @@ public class Acting : MonoBehaviour
 
     private void GotoLocation(TargetLocationType locationType)
     {
-        _npc.Logger.CurrentStepInAction = $"Made it to goto location {locationType}";
-
-        var mem = _npc.Memory;
-
-        var locationTarget = mem.LocationTargets[locationType];
-        var destination = WorldManager.Instance.Locations[locationTarget];
-
-        if (ActionsHelper.Reached(_npc, destination.transform.position, 1f))
+        switch (_stepInAction)
         {
-            _npc.Movement.CurrentLocation = locationTarget;
-            _npc.Memory.OccupantTargets.Clear();
+            //STEP 1
+            case 1:
+                _npc.Ui.CurrentStepInAction = $"Made it to goto location {locationType}";
+
+                var mem = _npc.Memory;
+
+                var locationTarget = mem.LocationTargets[locationType];
+                var destination = WorldManager.Instance.Locations[locationTarget];
+
+                if (ActionsHelper.Reached(_npc, destination.transform.position, 1f))
+                {
+                    _npc.Movement.CurrentLocation = locationTarget;
+                    _npc.Memory.OccupantTargets.Clear();
+                }
+
+                break;
+            //STEP 2
+            case 2:
+                ActionsHelper.EndThisBehaviour(_npc);
+                break;
         }
     }
-
 }
 

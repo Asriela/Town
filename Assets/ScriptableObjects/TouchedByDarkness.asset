@@ -15,78 +15,81 @@ MonoBehaviour:
   Type: 2
   Behaviors:
   - _name: Seek dark place
-    _dialogue: Have you heard of any dark ruins nearby?
+    _dialogue: Lets see if someone knows where the ruins are...
     _action: 14
     _actionParameter:
-      rid: 1081034839178084424
+      rid: 1081034839178084624
     _conditions:
     - conditionType: 15
       parameter:
-        rid: 1081034839178084425
+        rid: 1081034839178084625
+    - conditionType: 8
+      parameter:
+        rid: 1081034839178084630
     _priority: 4
     _actionTags: 01000300
   - _name: Goto dark place
     _dialogue: 
     _action: 16
     _actionParameter:
-      rid: 1081034839178084425
+      rid: 1081034839178084625
     _conditions:
     - conditionType: 13
       parameter:
-        rid: 1081034839178084425
+        rid: 1081034839178084625
     - conditionType: 14
       parameter:
-        rid: 1081034839178084425
+        rid: 1081034839178084625
     _priority: 4
     _actionTags: 
   - _name: Find book
     _dialogue: Now to find the book of the dead...
     _action: 4
     _actionParameter:
-      rid: 1081034839178084426
+      rid: 1081034839178084626
     _conditions:
     - conditionType: 6
       parameter:
-        rid: 1081034839178084427
+        rid: 1081034839178084626
     - conditionType: 12
       parameter:
-        rid: 1081034839178084425
+        rid: 1081034839178084625
     _priority: 7
     _actionTags: 
   - _name: Read book
     _dialogue: The power of the death cultist is mine
     _action: 18
     _actionParameter:
-      rid: 1081034839178084426
+      rid: 1081034839178084626
     _conditions:
     - conditionType: 7
       parameter:
-        rid: 1081034839178084427
+        rid: 1081034839178084626
     - conditionType: 21
       parameter:
-        rid: 1081034839178084428
+        rid: 1081034839178084627
     _priority: 7
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 1081034839178084424
+    - rid: 1081034839178084624
       type: {class: KnowledgeType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1
-    - rid: 1081034839178084425
+    - rid: 1081034839178084625
       type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1
-    - rid: 1081034839178084426
-      type: {class: ObjectType, ns: Mind, asm: Assembly-CSharp}
-      data:
-        value__: 3
-    - rid: 1081034839178084427
+    - rid: 1081034839178084626
       type: {class: ObjectType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 4
-    - rid: 1081034839178084428
+    - rid: 1081034839178084627
       type: {class: TraitType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1
+    - rid: 1081034839178084630
+      type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 5

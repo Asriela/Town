@@ -9,7 +9,7 @@ public static class ActionsHelper
     public static void Wander(NPC npc) => npc.Movement.MoveToRandomPoints();
 
     //specifically go into every building to see if we can find what we are looking for
-    public static void LookAroundArea(NPC npc) => npc.Logger.CurrentStepInAction = "looking around area";
+    public static void LookAroundArea(NPC npc) => npc.Ui.CurrentStepInAction = "looking around area";
 
     public static bool Reached(NPC npc, Vector3 destination, float distance)
     {
@@ -20,6 +20,7 @@ public static class ActionsHelper
 
         if (Vector3.Distance(ourPosition, destination) < interactionDistance)
         {
+            npc.Movement.Stop();
             return true;
         }
 
@@ -32,7 +33,7 @@ public static class ActionsHelper
 
     public static bool WanderAndSearchForCharacter(NPC npc, Mind.TargetType targetType, bool alive, params Mind.TraitType[] traitsToLookFor)
     {
-        npc.Logger.CurrentStepInAction = "wander and search";
+        npc.Ui.CurrentStepInAction = "wander and search";
 
 
         Wander(npc);
@@ -55,7 +56,7 @@ public static class ActionsHelper
     //TODO: add that we can look for an object at a certain location so that we dont stray too far
     public static bool WanderAndSearchForObject(NPC npc, Mind.ObjectType objectType)
     {
-        npc.Logger.CurrentStepInAction = "wander and search";
+        npc.Ui.CurrentStepInAction = "wander and search";
 
 
         Wander(npc);
@@ -64,7 +65,7 @@ public static class ActionsHelper
         var target = npc.Senses.SeeObjectOfType(objectType);
         if (target != null)
         {
-            npc.Logger.CurrentStepInAction = "found object";
+            npc.Ui.CurrentStepInAction = "found object";
 
             if (PickUpObject(npc, target))
             { return true; }
@@ -80,7 +81,7 @@ public static class ActionsHelper
     public static bool PickUpObject(NPC npc, WorldObject targetObject)
     {
 
-        npc.Logger.CurrentStepInAction = "pick up object";
+        npc.Ui.CurrentStepInAction = "pick up object";
         if (Reached(npc, targetObject.transform.position, 1f))
         {
 
@@ -88,7 +89,7 @@ public static class ActionsHelper
             npc.Memory.AddToPossessions(targetObject.ObjectType, targetObject);
             npc.Memory.AddToInventory(targetObject.ObjectType, targetObject);
 
-            npc.Logger.CurrentStepInAction = "picked up object";
+            npc.Ui.CurrentStepInAction = "picked up object";
             return true;
 
         }

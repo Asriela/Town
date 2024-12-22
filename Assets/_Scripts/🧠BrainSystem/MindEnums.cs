@@ -64,7 +64,8 @@ namespace Mind
         none,
         locationOfDarkKnowledge,
         tavern,
-        home
+        home,
+        pumpkinFarm
     }
     [Serializable]
     public enum SpellType : short

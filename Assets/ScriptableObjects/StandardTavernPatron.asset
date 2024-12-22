@@ -18,83 +18,83 @@ MonoBehaviour:
     _dialogue: 
     _action: 3
     _actionParameter:
-      rid: 1081034839178084429
+      rid: 1081034839178084507
     _conditions:
     - conditionType: 12
       parameter:
-        rid: 1081034839178084430
+        rid: 1081034839178084508
     - conditionType: 5
       parameter:
-        rid: 1081034839178084429
+        rid: 1081034839178084507
     _priority: 7
     _actionTags: 
   - _name: Goto Innkeeper
     _dialogue: Good to see you again
     _action: 19
     _actionParameter:
-      rid: 1081034839178084429
+      rid: 1081034839178084507
     _conditions:
     - conditionType: 12
       parameter:
-        rid: 1081034839178084430
+        rid: 1081034839178084508
     - conditionType: 4
       parameter:
-        rid: 1081034839178084429
+        rid: 1081034839178084507
     - conditionType: 17
       parameter:
-        rid: 1081034839178084429
+        rid: 1081034839178084507
     _priority: 7
     _actionTags: 
   - _name: Buy ale
     _dialogue: Top me up
     _action: 13
     _actionParameter:
-      rid: 1081034839178084431
+      rid: 1081034839178084509
     _conditions:
     - conditionType: 12
       parameter:
-        rid: 1081034839178084430
+        rid: 1081034839178084508
     - conditionType: 6
       parameter:
-        rid: 1081034839178084431
+        rid: 1081034839178084509
     - conditionType: 18
       parameter:
-        rid: 1081034839178084432
+        rid: 1081034839178084510
     - conditionType: 16
       parameter:
-        rid: 1081034839178084429
+        rid: 1081034839178084507
     _priority: 7
     _actionTags: 
   - _name: Drink
     _dialogue: 
     _action: 18
     _actionParameter:
-      rid: 1081034839178084431
+      rid: 1081034839178084509
     _conditions:
     - conditionType: 12
       parameter:
-        rid: 1081034839178084430
+        rid: 1081034839178084508
     - conditionType: 7
       parameter:
-        rid: 1081034839178084431
+        rid: 1081034839178084509
     _priority: 7
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 1081034839178084429
+    - rid: 1081034839178084507
       type: {class: TraitType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 3
-    - rid: 1081034839178084430
+    - rid: 1081034839178084508
       type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 2
-    - rid: 1081034839178084431
+    - rid: 1081034839178084509
       type: {class: ObjectType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 6
-    - rid: 1081034839178084432
+    - rid: 1081034839178084510
       type: {class: CoinAmount, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 5

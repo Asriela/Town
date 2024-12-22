@@ -15,35 +15,63 @@ MonoBehaviour:
   Type: 1
   Behaviors:
   - _name: Find Victim
-    _dialogue: 
-    _action: 2
+    _dialogue: now to find someone to test this spell on
+    _action: 16
     _actionParameter:
-      rid: 1081034822298895032
+      rid: 1081034839178084620
     _conditions:
     - conditionType: 1
       parameter:
-        rid: 1081034822298895033
+        rid: 1081034839178084621
+    - conditionType: 13
+      parameter:
+        rid: 1081034839178084620
+    - conditionType: 8
+      parameter:
+        rid: 1081034839178084622
     _priority: 0
     _actionTags: 
   - _name: Kill Victim
-    _dialogue: 
+    _dialogue: it worked!
+    _action: 2
+    _actionParameter:
+      rid: 1081034839178084623
+    _conditions:
+    - conditionType: 3
+      parameter:
+        rid: 1081034839178084623
+    - conditionType: 12
+      parameter:
+        rid: 1081034839178084620
+    _priority: 0
+    _actionTags: 
+  - _name: Kill Victim
+    _dialogue: it worked!
     _action: 1
     _actionParameter:
-      rid: 1081034822298895032
+      rid: 1081034839178084623
     _conditions:
     - conditionType: 2
       parameter:
-        rid: 1081034822298895032
+        rid: 1081034839178084623
     _priority: 0
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 1081034822298895032
-      type: {class: TargetType, ns: Mind, asm: Assembly-CSharp}
+    - rid: 1081034839178084620
+      type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 4
+    - rid: 1081034839178084621
+      type: {class: NeedType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 3
-    - rid: 1081034822298895033
-      type: {class: NeedType, ns: Mind, asm: Assembly-CSharp}
+    - rid: 1081034839178084622
+      type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 18
+    - rid: 1081034839178084623
+      type: {class: TargetType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 3

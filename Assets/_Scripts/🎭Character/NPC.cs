@@ -7,7 +7,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Thinking))]
 [RequireComponent(typeof(Acting))]
 [RequireComponent(typeof(Senses))]
-[RequireComponent(typeof(Logger))]
+
 
 
 public class NPC : Character
@@ -16,7 +16,7 @@ public class NPC : Character
     public Thinking Thinking { get; set; }
     public Senses Senses { get; set; }
     public Acting Acting { get; set; }
-    public Logger Logger { get; set; }
+
 
     private void Start()
     {
@@ -27,8 +27,7 @@ public class NPC : Character
         Senses = GetComponent<Senses>();
         Senses.Initialize(this);
 
-        Logger = GetComponent<Logger>();
-        Logger.Initialize(this);
+
     }
 
     private void Update()
