@@ -58,7 +58,7 @@ public class UI : MonoBehaviour
         UpdateStatsLabel($"BEHAVIOUR:\n {CurrentBehaviour}\n-----------\nACTION:\n {CurrentAction}\n-----------\nSTEP:\n {CurrentStepInAction}\n-----------\nSEES:\n {CharactersInSight}-----------\nCOIN:\n {_npc.Memory.Coin}");
         if (_speechBubbleLifeLeft > 0)
         {
-            _speechBubbleLifeLeft -= 0.008f;
+            _speechBubbleLifeLeft -= 0.01f;
         }
         else
         if(_statsLabel != null )//&& _statsLabel.text == _lastSpokenMessage)
@@ -79,7 +79,7 @@ public class UI : MonoBehaviour
         _speechBubble.SetActive(true);
         _speechBubbleLabel.text = message;
         _lastSpokenMessage= message;
-        _speechBubbleLifeLeft = 10f;
+        _speechBubbleLifeLeft = 5f;
     }
 
     public void EndSpeech()

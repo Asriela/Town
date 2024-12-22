@@ -18,17 +18,17 @@ MonoBehaviour:
     _dialogue: Lets sleep
     _action: 5
     _actionParameter:
-      rid: 1081034839178084500
+      rid: 1081034839178084697
     _conditions:
     - conditionType: 1
       parameter:
-        rid: 1081034839178084500
+        rid: 1081034839178084697
     _priority: 3
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 1081034839178084500
+    - rid: 1081034839178084697
       type: {class: NeedType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1

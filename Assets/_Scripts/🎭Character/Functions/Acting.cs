@@ -58,12 +58,12 @@ public class Acting : MonoBehaviour
                 _npc.Ui.EndSpeech();
                 if (CurrentBehavior.Dialogue!="")
                 {
-                    _waitBeforeAction = 7;
+                    _waitBeforeAction = 4;
                     _npc.Ui.Speak(CurrentBehavior.Dialogue);
                 }
                 else
                 {
-                    _waitBeforeAction = 3;
+                    _waitBeforeAction = 2;
                 }
             }
 
