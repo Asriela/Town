@@ -15,53 +15,53 @@ MonoBehaviour:
   Type: 3
   Behaviors:
   - _name: Innkeeper
-    _dialogue: 
+    _dialogue: Lets open shop
     _action: 11
     _actionParameter:
-      rid: 1081034830689861847
+      rid: 1081034839178084443
     _conditions:
     - conditionType: 8
       parameter:
-        rid: 1081034830689861848
+        rid: 1081034839178084444
     - conditionType: 9
       parameter:
-        rid: 1081034830689861849
+        rid: 1081034839178084445
     _priority: 6
     _actionTags: 
   - _name: Innkeeper
-    _dialogue: 
+    _dialogue: Off to bed with me then
     _action: 5
     _actionParameter:
-      rid: 1081034830689861853
+      rid: 1081034839178084446
     _conditions:
     - conditionType: 8
       parameter:
-        rid: 1081034830689861849
+        rid: 1081034839178084445
     - conditionType: 9
       parameter:
-        rid: 1081034830689861850
+        rid: 1081034839178084447
     _priority: 6
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 1081034830689861847
+    - rid: 1081034839178084443
       type: {class: TraderType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 4
-    - rid: 1081034830689861848
+    - rid: 1081034839178084444
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 6
-    - rid: 1081034830689861849
+    - rid: 1081034839178084445
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 20
-    - rid: 1081034830689861850
-      type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
-      data:
-        value__: 2
-    - rid: 1081034830689861853
+    - rid: 1081034839178084446
       type: {class: NeedType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1
+    - rid: 1081034839178084447
+      type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 2
