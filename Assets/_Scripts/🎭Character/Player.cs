@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-
+[RequireComponent(typeof(MenuInteraction))]
 public class Player : Character
 {
     [SerializeField] private GameObject _radialMenuPrefab; // Radial menu prefab
@@ -12,9 +12,12 @@ public class Player : Character
     private bool _lastSeen = false;
     private GameObject _currentRadialMenu;
 
+    public MenuInteraction MenuInteraction { get; set; }
+
     private void Start()
     {
-
+        MenuInteraction = GetComponent<MenuInteraction>();
+        MenuInteraction.Initialize(this);
         _spriteRenderer = GetComponent<SpriteRenderer>();
 
         // Initialize with the default color
@@ -44,50 +47,17 @@ public class Player : Character
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
-            // Check if we clicked on an enemy (with a 2D collider)
-            if (hit.collider != null && hit.collider.CompareTag("NPC"))
-            {
-                ShowRadialMenu(hit.collider.gameObject, hit.point);
-            }
-            // Check if we clicked on the ground (no collider hit, or just background)
-            else
+            if(MenuInteraction.NotInteractingWithMenu())
             {
                 MoveToLocation(hit.point);
-                HideRadialMenu();
+
             }
         }
     }
 
     private void MoveToLocation(Vector3 targetPosition) => Movement.MoveTo(targetPosition);
 
-    private void ShowRadialMenu(GameObject enemy, Vector3 position)
-    {
-        // Destroy the existing radial menu if there is one
-        if (_currentRadialMenu != null)
-        {
-            Destroy(_currentRadialMenu);
-        }
-
-        // Instantiate a new radial menu at the click position
-        _currentRadialMenu = Instantiate(_radialMenuPrefab, position, Quaternion.identity);
-
-        // Optionally: Pass the enemy to the radial menu for context-based actions
-        RadialMenu menu = _currentRadialMenu.GetComponent<RadialMenu>();
-        if (menu != null)
-        {
-            menu.SetTarget(enemy);
-        }
-    }
-
-    private void HideRadialMenu()
-    {
-        if (_currentRadialMenu != null)
-        {
-            Destroy(_currentRadialMenu);
-            _currentRadialMenu = null;
-        }
-    }
-
+ 
     public void SetSeenState(bool isSeen)
     {
         _lastSeen = _isSeen;

@@ -7,6 +7,7 @@ using System.Linq;
 public class Reactions : MonoBehaviour
 {
     private Character _npc;
+    public Character PersonWeAreSpeakingTo { get; set; }
 
     public void Initialize(Character npc) => _npc = npc;
 

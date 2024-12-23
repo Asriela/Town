@@ -42,6 +42,14 @@ namespace Mind
         gotoOccupant
     }
     [Serializable]
+    public enum BasicAction : short
+    {
+        kiss,
+        hug,
+        kill
+
+    }
+    [Serializable]
     public enum CharacterName : short
     {
         none,

@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:VisualElement style="flex-grow: 1;">
+    <ui:VisualElement name="MenuContainer" style="flex-grow: 1;">
         <ui:Label text="ksad;las;l dsa" name="TimeOfDay" style="-unity-text-align: upper-center;" />
     </ui:VisualElement>
 </ui:UXML>

@@ -11,6 +11,14 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private List<TraitTypeTraitPair> _traitsInPlay = new();
 
+    public bool UIClicked { get; set; }
+    public bool BlockingPlayerUIOnScreen { get; set; }
+
+    private void Start()
+    {
+        UIClicked = false;
+        BlockingPlayerUIOnScreen = false;
+    }
     public Dictionary<Mind.TraitType, Trait> TraitsInPlay
     {
         get
