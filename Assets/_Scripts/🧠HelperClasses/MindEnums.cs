@@ -39,7 +39,8 @@ namespace Mind
         gotoLocation,
         useObject,
         useObjectInInventory,
-        gotoOccupant
+        gotoOccupant,
+        rentItem
     }
     [Serializable]
     public enum BasicAction : short
@@ -73,6 +74,7 @@ namespace Mind
         locationOfDarkKnowledge,
         tavern,
         home,
+        work,
         pumpkinFarm
     }
     [Serializable]

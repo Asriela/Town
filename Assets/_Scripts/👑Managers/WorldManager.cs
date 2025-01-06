@@ -46,6 +46,11 @@ public class WorldManager : Singleton<WorldManager>
     [SerializeField]
     private float _startingTime;
 
+    public float TotalHoursPassed { get; set; } = 0;
+    public float TimeThatsChanged { get; set; } = 0;
+    
+    private float _lastTimeOfDay = 0;
+
     public float TimeOfDay
     {
         get => _timeOfDay;
@@ -56,9 +61,16 @@ public class WorldManager : Singleton<WorldManager>
     private void Start()
     {
         _timeOfDay = _startingTime;
+        _lastTimeOfDay = _timeOfDay;
     }
 
-    private void RunTimeOfDay() => TimeOfDay = TimeOfDay < 24 ? TimeOfDay + Settings.timeOfDaySpeed : 0;
+    private void RunTimeOfDay()
+    {
+        TimeOfDay = TimeOfDay < 24 ? TimeOfDay + Settings.timeOfDaySpeed : 0;
+        TimeThatsChanged = TimeOfDay - _lastTimeOfDay;
+        _lastTimeOfDay = TimeOfDay;
+        TotalHoursPassed += TimeThatsChanged;
+    }
 
     public TimeOfDayType GetTimeOfDayAsEnum()
     {

@@ -151,6 +151,7 @@ public class TraitEditor : Editor
             Mind.ActionType.useObject => typeof(Mind.ObjectType),
             Mind.ActionType.useObjectInInventory => typeof(Mind.ObjectType),
             Mind.ActionType.buyItem => typeof(Mind.ObjectType),
+            Mind.ActionType.rentItem => typeof(Mind.ObjectType),
             Mind.ActionType.findOccupant => typeof(Mind.TraitType),
             Mind.ActionType.gotoOccupant => typeof(Mind.TraitType),
             _ => null

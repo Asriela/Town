@@ -18,101 +18,101 @@ MonoBehaviour:
     _dialogue: time for some breakfast
     _action: 17
     _actionParameter:
-      rid: 1081034839178084681
+      rid: 2000162439244284063
     _conditions:
     - conditionType: 8
       parameter:
-        rid: 1081034839178084682
+        rid: 2000162439244284064
     - conditionType: 9
       parameter:
-        rid: 1081034839178084683
+        rid: 2000162439244284065
     _priority: 7
     _actionTags: 
   - _name: Go farm
     _dialogue: lets see what me pumkins are up to today
     _action: 12
     _actionParameter:
-      rid: 1081034839178084684
+      rid: 2000162439244284066
     _conditions:
     - conditionType: 8
       parameter:
-        rid: 1081034839178084685
+        rid: 2000162439244284067
     - conditionType: 9
       parameter:
-        rid: 1081034839178084686
+        rid: 2000162439244284068
     _priority: 7
     _actionTags: 
   - _name: Goto Tavern
     _dialogue: i wonder who would be at the tavern tonight
     _action: 16
     _actionParameter:
-      rid: 1081034839178084687
+      rid: 2000162439244284069
     _conditions:
     - conditionType: 8
       parameter:
-        rid: 1081034839178084686
+        rid: 2000162439244284068
     - conditionType: 9
       parameter:
-        rid: 1081034839178084688
+        rid: 2000162439244284070
     - conditionType: 13
       parameter:
-        rid: 1081034839178084687
+        rid: 2000162439244284069
     _priority: 7
     _actionTags: 
   - _name: Go home
     _dialogue: Alright im off home everyone
     _action: 16
     _actionParameter:
-      rid: 1081034839178084689
+      rid: 2000162439244284071
     _conditions:
     - conditionType: 8
       parameter:
-        rid: 1081034839178084690
+        rid: 2000162439244284072
     - conditionType: 13
       parameter:
-        rid: 1081034839178084689
+        rid: 2000162439244284071
     _priority: 7
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 1081034839178084681
+    - rid: 2000162439244284063
       type: {class: ObjectType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1
-    - rid: 1081034839178084682
+    - rid: 2000162439244284064
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 3
-    - rid: 1081034839178084683
+    - rid: 2000162439244284065
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 4
-    - rid: 1081034839178084684
+    - rid: 2000162439244284066
       type: {class: FarmerType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1
-    - rid: 1081034839178084685
+    - rid: 2000162439244284067
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 5
-    - rid: 1081034839178084686
+    - rid: 2000162439244284068
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 13
-    - rid: 1081034839178084687
+    - rid: 2000162439244284069
       type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 2
-    - rid: 1081034839178084688
+    - rid: 2000162439244284070
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 16
-    - rid: 1081034839178084689
+    - rid: 2000162439244284071
       type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 3
-    - rid: 1081034839178084690
+    - rid: 2000162439244284072
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 18

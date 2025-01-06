@@ -73,6 +73,7 @@ public class InteractionMenu : MonoBehaviour
             button.style.marginTop = new Length(i == 0 ? 60 : buttonSpacing, LengthUnit.Pixel);
             button.style.width = new Length(180, LengthUnit.Pixel);
             button.style.alignSelf = Align.Center;
+            button.style.unityTextAlign = TextAnchor.MiddleLeft;
             button.AddToClassList("button");
 
             // Button click handler

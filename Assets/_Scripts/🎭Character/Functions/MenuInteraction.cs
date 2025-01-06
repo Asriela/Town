@@ -11,12 +11,14 @@ public struct MenuOption
 
     public string ButtonLabel;
     public object Data;
+    public object Data2;
 
-    public MenuOption(string buttonLabel, object data)
+    public MenuOption(string buttonLabel, object data, object data2)
     {
 
         ButtonLabel = buttonLabel;
         Data = data;
+        Data2 = data2;
     }
 }
 
@@ -25,7 +27,9 @@ public class MenuInteraction : MonoBehaviour
     public enum SocialMenuState
     {
         start,
-        memories
+        memories,
+        buy,
+        sell
 
     }
 
@@ -37,8 +41,8 @@ public class MenuInteraction : MonoBehaviour
     private bool _justOpenedPieMenu = false;
     private Vector2 _screenPosition;
 
-    public SocialMenuState MenuState;
-    private List<MenuOption> _currentMenuOptions = new List<MenuOption> { new MenuOption("NULL", null) };
+    public SocialMenuState MenuState { get; set; }
+    private List<MenuOption> _currentMenuOptions = new List<MenuOption> { new MenuOption("NULL", null,null) };
 
 
     public static List<BasicAction> BasicActions = new List<BasicAction> { BasicAction.hug, BasicAction.kiss, BasicAction.kill };
@@ -91,12 +95,12 @@ public class MenuInteraction : MonoBehaviour
     }
     private MenuOption Label(string label)
     {
-        return new MenuOption(label, null);
+        return new MenuOption(label, null, null);
     }
 
-    private MenuOption Option(string label, object data)
+    private MenuOption Option(string label, object data, object data2)
     {
-        return new MenuOption(label, data);
+        return new MenuOption(label, data, data2);
     }
 
 
@@ -110,6 +114,7 @@ public class MenuInteraction : MonoBehaviour
 
         switch (buttonLabel)
         {
+
             case "Trade":
 
                 _currentMenuOptions = new List<MenuOption>
@@ -120,10 +125,24 @@ public class MenuInteraction : MonoBehaviour
                     Label("Request")
                 };
                 break;
+            case "Buy":
+                MenuState = SocialMenuState.buy;
+                var pricedItems = _personWeAreSpeakingTo.Memory.GetPricedItems();
+                _currentMenuOptions = pricedItems.Select(item =>
+                {
+                    string labelText = item.ToString() == "bed"
+                        ? "Room to Rent"
+                        : item.ToString();
 
+                    // Get the price using the method and append it to the label
+                    decimal price = _personWeAreSpeakingTo.Memory.GetPrice(item);
+                    string pureLabelText = labelText;
+                    return Option($"{labelText}: {price:C}", pureLabelText, item);
+                }).ToList();
+                break;
             case "Action":
 
-                _currentMenuOptions = BasicActions.Select(action => Option(action.ToString(), null)).ToList();
+                _currentMenuOptions = BasicActions.Select(action => Option(action.ToString(), null,null)).ToList();
                 break;
             case "Social":
 
@@ -145,20 +164,29 @@ public class MenuInteraction : MonoBehaviour
 
 
 
-
-
-        _interactionMenu.ShowMenu(_currentMenuOptions);
+        if (_currentMenuOptions == null)
+        { _interactionMenu.HideMenu();}
+        else
+        {_interactionMenu.ShowMenu(_currentMenuOptions);}
     }
 
     private List<MenuOption> ProcessComplexMenuOptions(int positionInList)
     {
-        var chosenOption = _currentMenuOptions[positionInList - 1];
+        var chosenOption = _currentMenuOptions[positionInList ];
         List<MenuOption> newOptions = null;
 
         switch (MenuState)
         {
             case SocialMenuState.memories:
                 Speak(chosenOption.Data);
+                break;
+            case SocialMenuState.buy:
+
+
+               if (chosenOption.Data == "Room to Rent")
+                    _character.Acting.RentItem((ObjectType)chosenOption.Data2,  _personWeAreSpeakingTo);
+
+                //
                 break;
         }
 
@@ -224,7 +252,7 @@ public class MenuInteraction : MonoBehaviour
     {
 
 
-        if (!_leftClick && !_personWeAreSpeakingTo==null)
+        if (!_leftClick && _personWeAreSpeakingTo!=null)
             return false;
         if (_justOpenedPieMenu)
         { _justOpenedPieMenu = false; return false; }

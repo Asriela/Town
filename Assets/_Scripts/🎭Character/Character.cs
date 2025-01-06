@@ -8,6 +8,7 @@ using UnityEngine;
 [RequireComponent(typeof(Reactions))]
 [RequireComponent(typeof(Memory))]
 [RequireComponent(typeof(UI))]
+[RequireComponent(typeof(Acting))]
 public class Character : MonoBehaviour
 {
     private Collider2D _collider2D;
@@ -26,7 +27,7 @@ public class Character : MonoBehaviour
 
     public Memory Memory { get; set; }
 
-
+    public Acting Acting { get; set; }
 
     public Appearance Appearance { get; set; }
 
@@ -46,6 +47,8 @@ public class Character : MonoBehaviour
         Memory = GetComponent<Memory>();
         Ui = GetComponent<UI>();
         Ui.Initialize(this);
+        Acting = GetComponent<Acting>();
+        Acting.Initialize(this);
     }
 
 

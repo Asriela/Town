@@ -2,7 +2,8 @@
 using Mind;
 using Unity.VisualScripting;
 using UnityEngine;
-
+using static TMPro.Examples.TMP_ExampleScript_01;
+//TODO: change this object into a parent child string of objects to devide up the object types
 public class WorldObject : MonoBehaviour
 {
     [SerializeField]
@@ -12,6 +13,11 @@ public class WorldObject : MonoBehaviour
     [SerializeField]
     private float _integrity;
     public float Integrity => _integrity;
+
+    public float RentHoursLeft { get; set; } = 0;
+
+    public Character RentedBy { get; set; } = null;
+    public Location RentedFrom { get; set; } = null;
 
     [SerializeField]
     private float _care;
@@ -47,9 +53,32 @@ public class WorldObject : MonoBehaviour
 
         Grow();
         Wilt();
-
+        TimelapseRent();
     }
 
+    public void StartRenting(Character character , Location location, float hours)
+    {
+        RentedFrom = location;
+        RentedBy = character;
+        RentHoursLeft = hours;
+    }
+    private void TimelapseRent()
+    {
+        if (RentedBy == null)
+        {
+            RentHoursLeft = 0;
+            return;
+        }
+
+
+        RentHoursLeft -= WorldManager.Instance.TimeThatsChanged;
+        if (RentHoursLeft <= 0)
+        {
+            RentedBy.Memory.RemoveObjectFromPossessions(this);
+            RentedFrom.AddPosession(_objectType, this);
+            RentedBy = null;
+        }
+    }
     private void Wilt()
     {
         if (!_objectTraits.Contains(ObjectTrait.wilts))
@@ -88,7 +117,7 @@ public class WorldObject : MonoBehaviour
     }
     public Vector3 GetPosition() => transform.position;
     //TODO: make that character class holds traits so that maybe player also has traits that limmit what the player can do or how they react
-    public void Use(NPC userOfObject, out bool destroy)
+    public void Use(Character userOfObject, out bool destroy)
     {
         destroy = false;
         switch (_objectType)
@@ -108,7 +137,7 @@ public class WorldObject : MonoBehaviour
 
     }
 
-    public void CareFor(NPC userOfObject)
+    public void CareFor(Character userOfObject)
     {
         foreach (var trait in _objectTraits)
         {

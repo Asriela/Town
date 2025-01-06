@@ -1,49 +1,63 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using static UnityEditor.Experimental.GraphView.GraphView;
+using System.Diagnostics;
 
 
 public static class ActionsHelper
 {
     //aimlessly look around
-    public static void Wander(NPC npc) => npc.Movement.MoveToRandomPoints();
+    public static void Wander(Character character) => character.Movement.MoveToRandomPoints();
 
     //specifically go into every building to see if we can find what we are looking for
-    public static void LookAroundArea(NPC npc) => npc.Ui.CurrentStepInAction = "looking around area";
+    public static void LookAroundArea(Character character) => character.Ui.CurrentStepInAction = "looking around area";
 
-    public static bool Reached(NPC npc, Vector3 destination, float distance)
+    public static bool FinancialTransaction(Character buyer, Character seller, int price)
+    {
+        if (buyer.Memory.Coin >= price)
+        {
+            buyer.Memory.Coin -= price;
+            seller.Memory.Coin += price;
+            return true;
+        }
+
+        return false;
+    }
+
+    public static bool Reached(Character character, Vector3 destination, float distance)
     {
 
-        var ourPosition = npc.transform.position;
+        var ourPosition = character.transform.position;
         var interactionDistance = distance;
 
 
         if (Vector3.Distance(ourPosition, destination) < interactionDistance)
         {
-            npc.Movement.Stop();
+            character.Movement.Stop();
             return true;
         }
 
-        npc.Movement.MoveTo(destination);
+        character.Movement.MoveTo(destination);
 
         return false;
     }
 
 
 
-    public static bool WanderAndSearchForCharacter(NPC npc, Mind.TargetType targetType, bool alive, params Mind.TraitType[] traitsToLookFor)
+    public static bool WanderAndSearchForCharacter(NPC character, Mind.TargetType targetType, bool alive, params Mind.TraitType[] traitsToLookFor)
     {
-        npc.Ui.CurrentStepInAction = "wander and search";
+        character.Ui.CurrentStepInAction = "wander and search";
 
 
-        Wander(npc);
+        Wander(character);
 
 
-        var target = npc.Senses.SeeSomeoneWithTraits(traitsToLookFor);
+        var target = character.Senses.SeeSomeoneWithTraits(traitsToLookFor);
         if (target != null && !(alive && target.GetComponent<Character>().Vitality.Dead))
         {
 
-            npc.Memory.Targets[targetType] = target;
+            character.Memory.Targets[targetType] = target;
             return true;
 
 
@@ -54,20 +68,20 @@ public static class ActionsHelper
     }
     //TODO: change from object type to tags so we can look up a general object of description
     //TODO: add that we can look for an object at a certain location so that we dont stray too far
-    public static bool WanderAndSearchForObject(NPC npc, Mind.ObjectType objectType)
+    public static bool WanderAndSearchForObject(NPC character, Mind.ObjectType objectType)
     {
-        npc.Ui.CurrentStepInAction = "wander and search";
+        character.Ui.CurrentStepInAction = "wander and search";
 
 
-        Wander(npc);
+        Wander(character);
 
 
-        var target = npc.Senses.SeeObjectOfType(objectType);
+        var target = character.Senses.SeeObjectOfType(objectType);
         if (target != null)
         {
-            npc.Ui.CurrentStepInAction = "found object";
+            character.Ui.CurrentStepInAction = "found object";
 
-            if (PickUpObject(npc, target))
+            if (PickUpObject(character, target))
             { return true; }
         }
 
@@ -76,20 +90,24 @@ public static class ActionsHelper
 
 
     }
-    public static void EndThisBehaviour(NPC npc) => npc.Thinking.CalculateHighestScoringBehavior();
+    public static void EndThisBehaviour(Character character)
+    {
+        character.Acting.StepInAction = 0;
+        (character as NPC).Thinking.CalculateHighestScoringBehavior();
+    }
 
-    public static bool PickUpObject(NPC npc, WorldObject targetObject)
+    public static bool PickUpObject(Character character, WorldObject targetObject)
     {
 
-        npc.Ui.CurrentStepInAction = "pick up object";
-        if (Reached(npc, targetObject.transform.position, 1f))
+        character.Ui.CurrentStepInAction = "pick up object";
+        if (Reached(character, targetObject.transform.position, 1f))
         {
 
             //TODO: issue will occure if we want multiple objects of same type so change it to a list of objects <objectType, List<gameobject>>
-            npc.Memory.AddToPossessions(targetObject.ObjectType, targetObject);
-            npc.Memory.AddToInventory(targetObject.ObjectType, targetObject);
+            character.Memory.AddToPossessions(targetObject.ObjectType, targetObject);
+            character.Memory.AddToInventory(targetObject.ObjectType, targetObject);
 
-            npc.Ui.CurrentStepInAction = "picked up object";
+            character.Ui.CurrentStepInAction = "picked up object";
             return true;
 
         }
@@ -97,10 +115,10 @@ public static class ActionsHelper
         return false;
     }
 
-    public static void DestroyObject(NPC npc, WorldObject objectToDestroy)
+    public static void DestroyObject(Character character, WorldObject objectToDestroy)
     {
-        npc.Memory.RemoveObjectFromPossessions(objectToDestroy);
-        npc.Memory.RemoveObjectFromInventory(objectToDestroy);
+        character.Memory.RemoveObjectFromPossessions(objectToDestroy);
+        character.Memory.RemoveObjectFromInventory(objectToDestroy);
     }
 
 

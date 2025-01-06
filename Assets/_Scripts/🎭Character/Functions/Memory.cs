@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mind;
+using UnityEditor;
 using UnityEngine;
 
 [Serializable]
@@ -34,7 +35,7 @@ public class LocationTargetsPair
 [Serializable]
 public class PricingPair
 {
-    public Mind.ObjectType objectTYpe;
+    public Mind.ObjectType objectType;
     public int price;
 }
 public class Memory : MonoBehaviour
@@ -51,8 +52,12 @@ public class Memory : MonoBehaviour
 
     public int GetPrice(Mind.ObjectType objectType)
     {
-        var pricingPair = _pricing.FirstOrDefault(p => p.objectTYpe == objectType);
+        var pricingPair = _pricing.FirstOrDefault(p => p.objectType == objectType);
         return pricingPair != null ? pricingPair.price : -1;
+    }
+    public List<Mind.ObjectType> GetPricedItems()
+    {
+        return _pricing.Select(p => p.objectType).ToList();
     }
     [SerializeField]
     private List<Trait> _traits = new();
@@ -110,6 +115,12 @@ public class Memory : MonoBehaviour
         {
             existingPair.locationName = locationName;
         }
+    }
+    public Mind.LocationName GetLocationTarget(Mind.TargetLocationType locationType)
+    {
+        var pair = _locationTargetsList.FirstOrDefault(p => p.locationType == locationType);
+
+        return pair != null ? pair.locationName : default(Mind.LocationName);
     }
     public Mind.TargetLocationType LatestLocationTargetType { get; set; }
 
@@ -280,9 +291,9 @@ public class Memory : MonoBehaviour
     {
         if (!_possessionsDictionary.ContainsKey(objectType))
         {
-            _possessionsDictionary[objectType] = new List<WorldObject>();
+            _possessionsDictionary[objectType] = worldObjects;
         }
-
+        else
         foreach (var worldObject in worldObjects)
         {
             if (!_possessionsDictionary[objectType].Contains(worldObject))
@@ -291,7 +302,7 @@ public class Memory : MonoBehaviour
             }
         }
 
-
+        EditorUtility.SetDirty(this);
         UpdatePossessionsListFromDictionary();
     }
     public WorldObject RemoveFromPossessions(Mind.ObjectType objectType)
@@ -314,6 +325,9 @@ public class Memory : MonoBehaviour
 
         return null;
     }
+
+
+
     public WorldObject RemoveObjectFromPossessions(WorldObject worldObject)
     {
 
@@ -421,9 +435,9 @@ public class Memory : MonoBehaviour
     {
         if (!_inventoryDictionary.ContainsKey(objectType))
         {
-            _inventoryDictionary[objectType] = new List<WorldObject>();
+            _inventoryDictionary[objectType] = worldObjects;
         }
-
+        else
         foreach (var worldObject in worldObjects)
         {
             if (!_inventoryDictionary[objectType].Contains(worldObject))
