@@ -148,7 +148,7 @@ public class TraitEditor : Editor
             Mind.ActionType.farmer => typeof(Mind.FarmerType),
             Mind.ActionType.findKnowledge => typeof(Mind.KnowledgeType),
             Mind.ActionType.gotoLocation => typeof(Mind.TargetLocationType),
-            Mind.ActionType.useObject => typeof(Mind.ObjectType),
+            Mind.ActionType.useOneOfMyPossesions => typeof(Mind.ObjectType),
             Mind.ActionType.useObjectInInventory => typeof(Mind.ObjectType),
             Mind.ActionType.buyItem => typeof(Mind.ObjectType),
             Mind.ActionType.rentItem => typeof(Mind.ObjectType),

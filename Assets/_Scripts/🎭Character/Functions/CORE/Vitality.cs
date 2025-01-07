@@ -10,6 +10,8 @@ public class Vitality : MonoBehaviour
 
     public bool Dead { get; set; }
 
+    public float Health { get; set; }
+
     public void Initialize(Character npc)
     {
         Dead = false;
@@ -22,11 +24,24 @@ public class Vitality : MonoBehaviour
 
     private void Update() => ManageNeeds();
 
-    public void Die()
+    private void Die()
     {
         Dead = true;
         _npc.Appearance.LookDead();
     }
+
+
+    public void Hurt(float dammage)
+    {
+        Health -= dammage;
+
+        if (Health < 0)
+        {
+            Health = 0;
+            Die();
+        }
+    }
+
     private void ManageNeeds()
     {
         var needs = Needs;

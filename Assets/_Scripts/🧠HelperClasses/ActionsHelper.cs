@@ -90,7 +90,7 @@ public static class ActionsHelper
 
 
     }
-    public static void EndThisBehaviour(Character character)
+    public static void EndThisBehaviour(NPC character)
     {
         character.Acting.StepInAction = 0;
         (character as NPC).Thinking.CalculateHighestScoringBehavior();

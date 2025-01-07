@@ -37,7 +37,7 @@ namespace Mind
         findKnowledge,
         shareKnowledge,
         gotoLocation,
-        useObject,
+        useOneOfMyPossesions,
         useObjectInInventory,
         gotoOccupant,
         rentItem

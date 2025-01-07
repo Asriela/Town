@@ -186,16 +186,17 @@ public class PlayerMenuInteraction : MonoBehaviour
 
 
                if (chosenOption.Data == "Room to Rent")
-                    _character.Acting.RentItem((ObjectType)chosenOption.Data2,  _personWeAreSpeakingTo);
+
+                    BaseAction.RentItem((ObjectType)chosenOption.Data2,_character,  _personWeAreSpeakingTo);
 
                 //
                 break;
-            case SocialMenuState.objectInteraction:
+            case SocialMenuState.objectInteraction: 
 
 
-                if (chosenOption.Data == "Room to Rent")
-                    _character.Acting.RentItem((ObjectType)chosenOption.Data2, _personWeAreSpeakingTo);
-                var option = (InteractionOption)chosenOption.Data;
+               // if (chosenOption.Data == "Room to Rent")
+                    //_character.BaseAction.RentItem((ObjectType)chosenOption.Data2, _personWeAreSpeakingTo);
+               // var option = (InteractionOption)chosenOption.Data;
                 //option.Execute(_character);
                 //
                 break;
