@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(MenuInteraction))]
+[RequireComponent(typeof(PlayerMenuInteraction))]
 public class Player : Character
 {
     [SerializeField] private GameObject _radialMenuPrefab; // Radial menu prefab
@@ -12,11 +12,11 @@ public class Player : Character
     private bool _lastSeen = false;
     private GameObject _currentRadialMenu;
 
-    public MenuInteraction MenuInteraction { get; set; }
+    public PlayerMenuInteraction MenuInteraction { get; set; }
 
     private void Start()
     {
-        MenuInteraction = GetComponent<MenuInteraction>();
+        MenuInteraction = GetComponent<PlayerMenuInteraction>();
         MenuInteraction.Initialize(this);
         _spriteRenderer = GetComponent<SpriteRenderer>();
 

@@ -125,7 +125,7 @@ public class WorldObject : MonoBehaviour
 
     }
 
-    private void Use()
+    private void Use(Character character)
     {
         switch (_objectType)
         {
@@ -142,7 +142,7 @@ public class WorldObject : MonoBehaviour
         {
             case ObjectType.bed:
                 if(character.Memory.IsOurPossession(this))
-                { interactionOptions.Add(new InteractionOption("Sleep", () => Use()));}
+                { interactionOptions.Add(new InteractionOption("Sleep", () => Use(WorldManager.Instance.ThePlayer)));}
 
                 break;
         }

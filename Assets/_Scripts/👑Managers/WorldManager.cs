@@ -48,7 +48,9 @@ public class WorldManager : Singleton<WorldManager>
 
     public float TotalHoursPassed { get; set; } = 0;
     public float TimeThatsChanged { get; set; } = 0;
-    
+
+    public Character ThePlayer { get; set; }
+
     private float _lastTimeOfDay = 0;
 
     public float TimeOfDay

@@ -23,7 +23,7 @@ public struct MenuOption
     }
 }
 
-public class MenuInteraction : MonoBehaviour
+public class PlayerMenuInteraction : MonoBehaviour
 {
     public enum SocialMenuState
     {
@@ -190,6 +190,15 @@ public class MenuInteraction : MonoBehaviour
 
                 //
                 break;
+            case SocialMenuState.objectInteraction:
+
+
+                if (chosenOption.Data == "Room to Rent")
+                    _character.Acting.RentItem((ObjectType)chosenOption.Data2, _personWeAreSpeakingTo);
+                var option = (InteractionOption)chosenOption.Data;
+                option.Execute(_character);
+                //
+                break;
         }
 
 
@@ -266,7 +275,7 @@ public class MenuInteraction : MonoBehaviour
                         new MenuOption
                         {
                             ButtonLabel = option.Label,
-                            Data = option.InteractionAction
+                            Data = option
                         }).ToList();
 
 
