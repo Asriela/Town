@@ -20,7 +20,7 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0.0727572, g: 0.0736739, b: 0.14150941, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
@@ -93,8 +93,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 278b914847837a24790cfb83fc3d58e7, type: 2}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 39d01047dfe5a2b429b711733f06dfb0, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -2416,11 +2416,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4773332652865760712, guid: 98d6204f22f93a544a248c80313f1d1b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -30.19
+      value: -10.39
       objectReference: {fileID: 0}
     - target: {fileID: 4773332652865760712, guid: 98d6204f22f93a544a248c80313f1d1b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4773332652865760712, guid: 98d6204f22f93a544a248c80313f1d1b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2622,7 +2622,7 @@ MonoBehaviour:
   m_LightType: 4
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.14546646, g: 0.13243146, b: 0.3018868, a: 0.6666667}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
@@ -6086,7 +6086,10 @@ MonoBehaviour:
   _locationTargetsList: []
   _locationKnowledge: []
   _peopleKnowledge: []
-  _possessionsList: []
+  _possessionsList:
+  - objectType: 0
+    worldObjects:
+    - {fileID: 522676820}
   _inventoryList: []
 --- !u!114 &1359901496
 MonoBehaviour:
@@ -6156,6 +6159,10 @@ PrefabInstance:
     - target: {fileID: 464766029004685575, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: _characterDetectionLayer.m_Bits
       value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 862567352352533102, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _coin
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 862567352352533102, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: _traits.Array.size

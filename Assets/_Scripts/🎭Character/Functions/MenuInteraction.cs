@@ -5,6 +5,7 @@ using TMPro.Examples;
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.UIElements;
+using static WorldObject;
 
 public struct MenuOption
 {
@@ -29,7 +30,8 @@ public class MenuInteraction : MonoBehaviour
         start,
         memories,
         buy,
-        sell
+        sell,
+        objectInteraction
 
     }
 
@@ -203,15 +205,15 @@ public class MenuInteraction : MonoBehaviour
     {
 
    
-        if (!_leftClick || GameManager.Instance.BlockingPlayerUIOnScreen)
+            if (!_leftClick || GameManager.Instance.BlockingPlayerUIOnScreen)
             return;
-        Debug.Log("✅ STAGE 1");
+   
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
 
         if (hit.collider != null)
         {
-            Debug.Log("⚡ STAGE 2");
+            
             _personWeAreSpeakingTo = hit.collider.GetComponent<Character>();
             if (_personWeAreSpeakingTo != null && _personWeAreSpeakingTo != _character)
             {
@@ -240,7 +242,40 @@ public class MenuInteraction : MonoBehaviour
                 MenuState = SocialMenuState.start;
                 _interactionMenu.ShowMenu(buttonLabels);
             }
-        }
+            else
+            {
+                // If no character is clicked, check for a WorldObject
+                WorldObject clickedWorldObject = hit.collider.GetComponent<WorldObject>();
+                if (clickedWorldObject != null)
+                {
+                    Debug.Log("HIT on WorldObject");
+
+                    // Set up interactions for the world object
+                    _justOpenedPieMenu = true;
+                    _screenPosition = Camera.main.WorldToScreenPoint(hit.point);
+
+
+                    List<InteractionOption> worldObjectInteractionOptions = clickedWorldObject.GetInteractionOptions(_character);
+                    if (!worldObjectInteractionOptions.Any())
+                    {
+                        return;
+                    }
+
+                    // Convert InteractionOptions to MenuOption (assuming InteractionOption has a 'Label' and 'Action' method)
+                        List<MenuOption> menuOptions = worldObjectInteractionOptions.Select(option =>
+                        new MenuOption
+                        {
+                            ButtonLabel = option.Label,
+                            Data = option.InteractionAction
+                        }).ToList();
+
+
+                    MenuState = SocialMenuState.objectInteraction;  // Assuming you have a separate menu state for WorldObjects
+                    _interactionMenu.ShowMenu(menuOptions);
+                }
+            }
+        
+    }
 
 
 

@@ -496,6 +496,19 @@ public class Memory : MonoBehaviour
         }
         return null;
     }
+
+    public bool IsOurPossession(WorldObject worldObject)
+    {
+        foreach (var pair in _possessionsDictionary)
+        {
+            if (pair.Value.Contains(worldObject))
+            {
+                return true;  // The worldObject is found in possessions
+            }
+        }
+
+        return false;  // The worldObject is not found in possessions
+    }
     public List<WorldObject> GetPossessions(Mind.ObjectType objectType)
     {
         if (_possessionsDictionary.TryGetValue(objectType, out var objects) && objects.Any())

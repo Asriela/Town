@@ -70,7 +70,10 @@ public class WorldManager : Singleton<WorldManager>
         TimeThatsChanged = TimeOfDay - _lastTimeOfDay;
         _lastTimeOfDay = TimeOfDay;
         TotalHoursPassed += TimeThatsChanged;
+
+        RenderSettings.ambientLight = new Color(0.1f, 0.1f, 0.3f);
     }
+
 
     public TimeOfDayType GetTimeOfDayAsEnum()
     {

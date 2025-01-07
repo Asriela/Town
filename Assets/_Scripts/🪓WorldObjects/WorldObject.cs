@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Mind;
 using Unity.VisualScripting;
 using UnityEngine;
 using static TMPro.Examples.TMP_ExampleScript_01;
 //TODO: change this object into a parent child string of objects to devide up the object types
+
+
 public class WorldObject : MonoBehaviour
 {
     [SerializeField]
@@ -18,6 +21,24 @@ public class WorldObject : MonoBehaviour
 
     public Character RentedBy { get; set; } = null;
     public Location RentedFrom { get; set; } = null;
+
+    private List<InteractionOption> interactionOptions  = new List<InteractionOption>();
+    public class InteractionOption
+    {
+        public string Label { get; }
+        public Action InteractionAction { get; }
+
+        public InteractionOption(string label, Action interactionAction)
+        {
+            Label = label;
+            InteractionAction = interactionAction;
+        }
+
+        public void Execute()
+        {
+            InteractionAction?.Invoke();
+        }
+    }
 
     [SerializeField]
     private float _care;
@@ -35,6 +56,7 @@ public class WorldObject : MonoBehaviour
         _care = 50;
         _size = 1;
         SetStartingTraitsBasedOnObjectType();
+
         _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -101,6 +123,31 @@ public class WorldObject : MonoBehaviour
         }
 
 
+    }
+
+    private void Use()
+    {
+        switch (_objectType)
+        {
+            case ObjectType.bed:
+
+                break;
+        }
+    }
+
+    public List<InteractionOption> GetInteractionOptions(Character character)
+    {
+        interactionOptions.Clear();
+        switch (_objectType)
+        {
+            case ObjectType.bed:
+                if(character.Memory.IsOurPossession(this))
+                { interactionOptions.Add(new InteractionOption("Sleep", () => Use()));}
+
+                break;
+        }
+
+        return interactionOptions;
     }
 
     private void SetStartingTraitsBasedOnObjectType()
