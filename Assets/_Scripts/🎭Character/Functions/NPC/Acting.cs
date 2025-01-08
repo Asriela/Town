@@ -251,7 +251,7 @@ public class Acting : MonoBehaviour
                 if (_npc.Memory.Targets[targetType].GetComponent<Character>() is { } target &&
                     ActionsHelper.Reached(_npc, target.transform.position, 1f))
                 {
-                    BaseAction.HurtSomeone(_npc,target, 100);
+                    BaseAction.HurtSomeone(_npc, target, 100);
                     _npc.Memory.Targets[targetType] = null;
                     IncrementStepInAction();
                 }
@@ -276,13 +276,13 @@ public class Acting : MonoBehaviour
                 if (objectToUse != null)
                 {
                     _npc.Ui.CurrentStepInAction = $"going to bed";
-                    if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 1f))
+                    if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 0.00001f))
                     {
                         _npc.Ui.CurrentStepInAction = $"sleeping";
                         BaseAction.InteractWithObject(objectToUse, _npc, ObjectInteractionType.use);
 
                         IncrementStepInAction();
-                    } 
+                    }
                 }
 
                 break;

@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using static UnityEditor.Experimental.GraphView.GraphView;
 using System.Diagnostics;
+using UnityEngine.AI;
 
 
 public static class ActionsHelper
@@ -27,19 +28,19 @@ public static class ActionsHelper
 
     public static bool Reached(Character character, Vector3 destination, float distance)
     {
+        BaseAction.MoveTo(character, destination);
+ 
+        float remainingDistance = character.Movement.Agent.remainingDistance;
 
-        var ourPosition = character.transform.position;
-        var remainingDistance = Vector3.Distance(ourPosition, destination);
-        var interactionDistance = distance;
 
 
-        if (remainingDistance < interactionDistance)
+        if (!character.Movement.Agent.pathPending &&  remainingDistance < distance)
         {
             character.Movement.Stop();
             return true;
         }
 
-        BaseAction.MoveTo(character, destination);
+
   
 
         return false;

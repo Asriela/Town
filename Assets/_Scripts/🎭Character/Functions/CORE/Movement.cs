@@ -3,7 +3,8 @@ using UnityEngine.AI;
 
 public class Movement : MonoBehaviour
 {
-    protected NavMeshAgent agent;
+    private NavMeshAgent agent;
+    public NavMeshAgent Agent  => agent; 
     private Vector3 _currentTarget;
 
     public Mind.LocationName CurrentLocation { get; set; }

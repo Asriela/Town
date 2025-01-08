@@ -8,27 +8,28 @@ public class Player : Character
     [SerializeField] private GameObject _radialMenuPrefab; // Radial menu prefab
     [SerializeField] private Color _seenColor = Color.red;  // Color when the player is seen
     [SerializeField] private Color _defaultColor = Color.blue;
-    private SpriteRenderer _spriteRenderer;
+
     private bool _isSeen = false;
     private bool _lastSeen = false;
     private GameObject _currentRadialMenu;
-
+    private InteractionPackage _currentInteraction = null;
     public PlayerMenuInteraction MenuInteraction { get; set; }
 
     private void Start()
     {
         MenuInteraction = GetComponent<PlayerMenuInteraction>();
         MenuInteraction.Initialize(this);
-        _spriteRenderer = GetComponent<SpriteRenderer>();
+
 
         // Initialize with the default color
-        _spriteRenderer.color = _defaultColor;
+
     }
     private void Update()
     {
 
         HandleInput();
         UpdateSeenColor();
+        DoInteraction();
     }
 
     private void UpdateSeenColor()
@@ -36,7 +37,7 @@ public class Player : Character
         if (_lastSeen != _isSeen)
         {
             _lastSeen = _isSeen;
-            _spriteRenderer.color = _isSeen ? _seenColor : _defaultColor;
+            Appearance.ChangeColor(_isSeen ? _seenColor : _defaultColor);
         }
     }
     private void HandleInput()
@@ -51,14 +52,27 @@ public class Player : Character
             if (MenuInteraction.NotInteractingWithMenu())
             {
                 BaseAction.MoveTo(this, hit.point);
-
+                _currentInteraction = null;
             }
         }
     }
 
 
+    public void GotoAndInteractWithObject(WorldObject theObject, ObjectInteractionType interactionType)
+    {
+        _currentInteraction = new InteractionPackage(theObject, interactionType);
 
+    }
 
+    private void DoInteraction()
+    {
+        if (_currentInteraction == null) return;
+        if (ActionsHelper.Reached(this, _currentInteraction.objectToInteractWith.transform.position, 0.3f))
+        {
+            BaseAction.InteractWithObject(_currentInteraction.objectToInteractWith, this, _currentInteraction.interactionType);
+            _currentInteraction = null;
+        }
+    }
     public void SetSeenState(bool isSeen)
     {
         _lastSeen = _isSeen;
@@ -66,6 +80,19 @@ public class Player : Character
 
         // Change the color based on whether the player is seen
 
+    }
+
+    private class InteractionPackage
+    {
+        public WorldObject objectToInteractWith;
+        public ObjectInteractionType interactionType;
+
+        public InteractionPackage(WorldObject objectToInteractWith, ObjectInteractionType interactionType)
+        {
+            this.objectToInteractWith = objectToInteractWith;
+            this.interactionType = interactionType;
+
+        }
     }
 
 }

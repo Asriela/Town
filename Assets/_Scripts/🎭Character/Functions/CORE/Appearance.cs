@@ -13,33 +13,45 @@ public class Appearance : MonoBehaviour
     private AppearanceState _lastState;
     public AppearanceState State { get; set; } = AppearanceState.standing;
 
+    [SerializeField]
+    private Transform _spriteTransform;
 
+    private SpriteRenderer _spriteRenderer;
 
+    private void Start()
+    {
+        _spriteRenderer = _spriteTransform.GetComponent<SpriteRenderer>();
+    }
 
-    void Update()
+    private void Update()
     {
         ChangeAppearanceAccordingToState();
     }
 
+    public void ChangeColor(Color color)
+    {
+        _spriteRenderer.color = color;
+    }
     private void ChangeAppearanceAccordingToState()
     {
+        var temp = 0;
 
-
-        var currentRotation = _character.SpriteRenderer.transform.localRotation;
+        var currentRotation = _spriteRenderer.transform.localRotation;
 
         switch (State)
         {
             case AppearanceState.dead:
 
-                _character.SpriteRenderer.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                _spriteRenderer.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 90);
                 break;
             case AppearanceState.lyingDown:
 
-                _character.SpriteRenderer.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                _spriteRenderer.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 90);
+        
                 break;
             case AppearanceState.standing:
 
-                _character.SpriteRenderer.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                _spriteRenderer.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 break;
         }
 

@@ -37,7 +37,7 @@ public class PlayerMenuInteraction : MonoBehaviour
 
     private InteractionMenu _interactionMenu;
 
-    private Character _character;
+    private Player _player;
     private Character _personWeAreSpeakingTo;
     private WorldObject _selectedWorldObject;
     private bool _leftClick = false;
@@ -50,9 +50,9 @@ public class PlayerMenuInteraction : MonoBehaviour
 
     public static List<SocialActions> BasicActions = new List<SocialActions> { SocialActions.hug, SocialActions.kiss, SocialActions.kill };
 
-    public void Initialize(Character character)
+    public void Initialize(Player player)
     {
-        _character = character;
+        _player = player;
     }
 
     private void Start()
@@ -185,13 +185,13 @@ public class PlayerMenuInteraction : MonoBehaviour
 
                 if (chosenOption.Data == "Room to Rent")
 
-                    BaseAction.RentItem((ObjectType)chosenOption.Data2, _character, _personWeAreSpeakingTo);
+                    BaseAction.RentItem((ObjectType)chosenOption.Data2, _player, _personWeAreSpeakingTo);
 
                 //
                 break;
             case SocialMenuState.objectInteraction:
 
-                BaseAction.InteractWithObject(_selectedWorldObject, _character, (ObjectInteractionType)chosenOption.Data);
+                _player.GotoAndInteractWithObject(_selectedWorldObject, (ObjectInteractionType)chosenOption.Data); 
 
                 //_character.BaseAction.RentItem((ObjectType)chosenOption.Data2, _personWeAreSpeakingTo);
                 // var option = (InteractionOption)chosenOption.Data;
@@ -223,14 +223,14 @@ public class PlayerMenuInteraction : MonoBehaviour
         {
 
             _personWeAreSpeakingTo = hit.collider.GetComponent<Character>();
-            if (_personWeAreSpeakingTo != null && _personWeAreSpeakingTo != _character)
+            if (_personWeAreSpeakingTo != null && _personWeAreSpeakingTo != _player)
             {
 
-                _character.Movement.Stop();
+                _player.Movement.Stop();
                 BasicFunctions.Log("Selected player", LogType.ui);
                 // CameraController.Instance.EnterDialogueMode(_personWeAreSpeakingTo.transform);
 
-                _personWeAreSpeakingTo.Reactions.PersonWeAreSpeakingTo = _character;
+                _personWeAreSpeakingTo.Reactions.PersonWeAreSpeakingTo = _player;
                 _justOpenedPieMenu = true;
                 _screenPosition = Camera.main.WorldToScreenPoint(hit.point);
 
@@ -263,7 +263,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                     _screenPosition = Camera.main.WorldToScreenPoint(hit.point);
 
 
-                    List<InteractionOption> worldObjectInteractionOptions = _selectedWorldObject.GetInteractionOptions(_character);
+                    List<InteractionOption> worldObjectInteractionOptions = _selectedWorldObject.GetInteractionOptions(_player);
                     if (!worldObjectInteractionOptions.Any())
                     {
                         return;

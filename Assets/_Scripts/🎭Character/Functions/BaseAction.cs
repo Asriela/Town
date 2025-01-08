@@ -77,8 +77,14 @@ public static class BaseAction
 
     public static void InteractWithObject(WorldObject objectToUse, Character userOfObject, ObjectInteractionType interactionType)
     {
-        SetState(userOfObject, StateType.normal);
-        objectToUse.InteractWithObject(userOfObject, interactionType);
+        if (!(userOfObject.State.CurrentState == StateType.sleeping && objectToUse.ObjectType == ObjectType.bed))
+            SetState(userOfObject, StateType.normal);
+        if (ActionsHelper.Reached(userOfObject, objectToUse.transform.position, 0.3f))
+        {
+            objectToUse.InteractWithObject(userOfObject, interactionType);
+        }
+
+
 
     }
 
