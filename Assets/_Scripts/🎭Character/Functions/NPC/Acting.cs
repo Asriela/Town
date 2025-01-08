@@ -276,7 +276,7 @@ public class Acting : MonoBehaviour
                 if (objectToUse != null)
                 {
                     _npc.Ui.CurrentStepInAction = $"going to bed";
-                    if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 0.00001f))
+                    if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 0.1f))
                     {
                         _npc.Ui.CurrentStepInAction = $"sleeping";
                         BaseAction.InteractWithObject(objectToUse, _npc, ObjectInteractionType.use);
