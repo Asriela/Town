@@ -18,83 +18,101 @@ MonoBehaviour:
     _dialogue: 
     _action: 3
     _actionParameter:
-      rid: 2000162439244284059
+      rid: 2000162480727523516
     _conditions:
     - conditionType: 12
       parameter:
-        rid: 2000162439244284060
+        rid: 2000162480727523517
     - conditionType: 5
       parameter:
-        rid: 2000162439244284059
+        rid: 2000162480727523516
     _priority: 7
     _actionTags: 
   - _name: Goto Innkeeper
     _dialogue: Good to see you again
     _action: 19
     _actionParameter:
-      rid: 2000162439244284059
+      rid: 2000162480727523516
     _conditions:
     - conditionType: 12
       parameter:
-        rid: 2000162439244284060
+        rid: 2000162480727523517
     - conditionType: 4
       parameter:
-        rid: 2000162439244284059
+        rid: 2000162480727523516
     - conditionType: 17
       parameter:
-        rid: 2000162439244284059
+        rid: 2000162480727523516
     _priority: 7
     _actionTags: 
   - _name: Buy ale
     _dialogue: Top me up
     _action: 13
     _actionParameter:
-      rid: 2000162439244284061
+      rid: 2000162480727523518
     _conditions:
     - conditionType: 12
       parameter:
-        rid: 2000162439244284060
+        rid: 2000162480727523517
     - conditionType: 6
       parameter:
-        rid: 2000162439244284061
+        rid: 2000162480727523518
     - conditionType: 18
       parameter:
-        rid: 2000162439244284062
+        rid: 2000162480727523519
     - conditionType: 16
       parameter:
-        rid: 2000162439244284059
+        rid: 2000162480727523516
     _priority: 7
     _actionTags: 
   - _name: Drink
     _dialogue: 
     _action: 18
     _actionParameter:
-      rid: 2000162439244284061
+      rid: 2000162480727523518
     _conditions:
     - conditionType: 12
       parameter:
-        rid: 2000162439244284060
+        rid: 2000162480727523517
     - conditionType: 7
       parameter:
-        rid: 2000162439244284061
+        rid: 2000162480727523518
+    _priority: 7
+    _actionTags: 
+  - _name: Go Home its late!
+    _dialogue: 
+    _action: 16
+    _actionParameter:
+      rid: 2000162480727523522
+    _conditions:
+    - conditionType: 12
+      parameter:
+        rid: 2000162480727523517
+    - conditionType: 23
+      parameter:
+        rid: 2000162480727523517
     _priority: 7
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162439244284059
+    - rid: 2000162480727523516
       type: {class: TraitType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 3
-    - rid: 2000162439244284060
+    - rid: 2000162480727523517
       type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 2
-    - rid: 2000162439244284061
+    - rid: 2000162480727523518
       type: {class: ObjectType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 6
-    - rid: 2000162439244284062
+    - rid: 2000162480727523519
       type: {class: CoinAmount, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 5
+    - rid: 2000162480727523522
+      type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 3

@@ -33,6 +33,7 @@ public static class Conditions
         _conditionDelegates.Add(ConditionType.doesNotHaveEnoughCoin, new ConditionDelegate<CoinAmount>(CheckCoin));
         _conditionDelegates.Add(ConditionType.hasTrait, new ConditionDelegate<TraitType>(CheckTrait));
         _conditionDelegates.Add(ConditionType.doesNotHaveTrait, new ConditionDelegate<TraitType>(CheckTrait));
+        _conditionDelegates.Add(ConditionType.beforeClosing, new ConditionDelegate<TargetLocationType>(CheckLocationClosed));
     }
 
     public static bool CheckCondition(Condition condition, NPC npc)
@@ -78,9 +79,14 @@ public static class Conditions
                 ConditionType.hasEnoughCoin => ConditionHandler<CoinAmount>((ConditionDelegate<CoinAmount>)conditionDelegate, condition.parameter, npc, true),
 
                 ConditionType.doesNotHaveEnoughCoin => ConditionHandler<CoinAmount>((ConditionDelegate<CoinAmount>)conditionDelegate, condition.parameter, npc, false),
+
                 ConditionType.hasTrait => ConditionHandler<TraitType>((ConditionDelegate<TraitType>)conditionDelegate, condition.parameter, npc, true),
 
                 ConditionType.doesNotHaveTrait => ConditionHandler<TraitType>((ConditionDelegate<TraitType>)conditionDelegate, condition.parameter, npc, false),
+
+                ConditionType.beforeClosing => ConditionHandler<TargetLocationType>((ConditionDelegate<TargetLocationType>)conditionDelegate, condition.parameter, npc, true),
+
+                ConditionType.afterClosing => ConditionHandler<TargetLocationType>((ConditionDelegate<TargetLocationType>)conditionDelegate, condition.parameter, npc, false),
 
                 _ => false
             };
@@ -168,6 +174,27 @@ public static class Conditions
         }
         return false;
     }
+
+    private static bool CheckLocationClosed(TargetLocationType parameter, NPC npc, bool trueStatement)
+    {
+
+        if (!npc.Memory.LocationTargets.ContainsKey(parameter))
+            return false;
+
+        var locationName = npc.Memory.LocationTargets[parameter];
+        var timeOfDay = WorldManager.Instance.TimeOfDay;
+        var closingTime = WorldManager.Instance.GetLocation(locationName).ClosingTime;
+        var openingTime = WorldManager.Instance.GetLocation(locationName).OpeningTime;
+        if (trueStatement && timeOfDay <= closingTime && timeOfDay >= openingTime)
+        {
+            return true;
+        }
+        if (!trueStatement && timeOfDay >= closingTime && timeOfDay <= openingTime)
+        {
+            return true;
+        }
+        return false;
+    }
     private static bool CheckCoin(CoinAmount parameter, NPC npc, bool trueStatement)
     {
 
@@ -187,7 +214,7 @@ public static class Conditions
         { return !trueStatement; }
         var locationFromMemory = npc.Memory.LocationTargets[parameter];
 
-   
+
 
         if (npc.Movement.CurrentLocation != LocationName.none && npc.Movement.CurrentLocation == locationFromMemory)
         { return trueStatement; }

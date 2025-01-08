@@ -196,6 +196,8 @@ public class TraitEditor : Editor
             Mind.ConditionType.doesNotHaveEnoughCoin => typeof(Mind.CoinAmount),
             Mind.ConditionType.hasTrait => typeof(Mind.TraitType),
             Mind.ConditionType.doesNotHaveTrait => typeof(Mind.TraitType),
+            Mind.ConditionType.beforeClosing => typeof(Mind.TargetLocationType),
+            Mind.ConditionType.afterClosing => typeof(Mind.TargetLocationType),
             _ => null
         };
 

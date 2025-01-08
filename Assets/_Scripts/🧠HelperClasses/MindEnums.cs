@@ -172,7 +172,9 @@ namespace Mind
         hasEnoughCoin,
         doesNotHaveEnoughCoin,
         hasTrait,
-        doesNotHaveTrait
+        doesNotHaveTrait,
+        beforeClosing,
+        afterClosing
 
     }
     [Serializable]

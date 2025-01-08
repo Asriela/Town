@@ -6982,6 +6982,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8147195272685913665, guid: 09d047f804eae854f94b36e1a92dcb04, type: 3}
+      propertyPath: _closingTime
+      value: 23
+      objectReference: {fileID: 0}
+    - target: {fileID: 8147195272685913665, guid: 09d047f804eae854f94b36e1a92dcb04, type: 3}
+      propertyPath: _openingTime
+      value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8147195272685913665, guid: 09d047f804eae854f94b36e1a92dcb04, type: 3}
       propertyPath: _occupants.Array.size
       value: 1
       objectReference: {fileID: 0}

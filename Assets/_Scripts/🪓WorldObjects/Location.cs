@@ -23,6 +23,12 @@ public class Location : MonoBehaviour
     [SerializeField]
     private List<ObjectTypeObjectPair> _possessions = new();
 
+    [SerializeField] private float _openingTime = 0f;
+    [SerializeField] private float _closingTime = 0f;
+
+    public float OpeningTime => _openingTime;
+
+    public float ClosingTime => _closingTime;
     public List<ObjectTypeObjectPair> Possession => _possessions;
 
 
