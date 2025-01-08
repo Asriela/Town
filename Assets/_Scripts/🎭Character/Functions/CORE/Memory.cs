@@ -478,7 +478,7 @@ public class Memory : MonoBehaviour
         }
         else
         {
-            Debug.Log("No object found in possessions.");
+            BasicFunctions.Log("No object found in possessions.", LogType.memory);
         }
         return null;
     }
@@ -492,7 +492,7 @@ public class Memory : MonoBehaviour
         }
         else
         {
-            Debug.Log("No object found in possessions.");
+            BasicFunctions.Log("No object found in possessions.", LogType.memory);
         }
         return null;
     }
@@ -518,7 +518,7 @@ public class Memory : MonoBehaviour
         }
         else
         {
-            Debug.Log("No object found in possessions.");
+            BasicFunctions.Log("No object found in possessions.", LogType.memory);
         }
         return null;
     }

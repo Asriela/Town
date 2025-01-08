@@ -60,13 +60,12 @@ public static class BaseAction
 
 
 
-    public static void UseObject(WorldObject objectToUse, Character userOfObject)
+
+
+    public static void InteractWithObject(WorldObject objectToUse, Character userOfObject, ObjectInteractionType interactionType)
     {
-        objectToUse.Use(userOfObject, out bool destroyObject);
-        if (destroyObject)
-        {
-            ActionsHelper.DestroyObject(userOfObject, objectToUse);
-        }
+        objectToUse.InteractWithObject(userOfObject, interactionType);
+
     }
 
     public static void HurtSomeone(Character target, float dammage)

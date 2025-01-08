@@ -6,7 +6,11 @@ using UnityEngine;
 using static TMPro.Examples.TMP_ExampleScript_01;
 //TODO: change this object into a parent child string of objects to devide up the object types
 
-
+public enum ObjectInteractionType : short
+{
+    use,
+    careFor
+}
 public class WorldObject : MonoBehaviour
 {
     [SerializeField]
@@ -26,18 +30,15 @@ public class WorldObject : MonoBehaviour
     public class InteractionOption
     {
         public string Label { get; }
-        public Action InteractionAction { get; }
+        public ObjectInteractionType InteractionAction { get; }
 
-        public InteractionOption(string label, Action interactionAction)
+        public InteractionOption(string label, ObjectInteractionType interactionAction)
         {
             Label = label;
             InteractionAction = interactionAction;
         }
 
-        public void Execute()
-        {
-            InteractionAction?.Invoke();
-        }
+
     }
 
     [SerializeField]
@@ -125,15 +126,19 @@ public class WorldObject : MonoBehaviour
 
     }
 
-    private void Use(Character character)
+    public void InteractWithObject(Character character, ObjectInteractionType interactionType)
     {
-        switch (_objectType)
+        var action = interactionType switch
         {
-            case ObjectType.bed:
+            ObjectInteractionType.use => (Action)(() => Use(character)),
+            ObjectInteractionType.careFor => (Action)(() => CareFor(character)),
+            _ => throw new NotSupportedException("Interaction type not supported")
+        };
 
-                break;
-        }
+        action(); 
     }
+
+
 
     public List<InteractionOption> GetInteractionOptions(Character character)
     {
@@ -142,7 +147,7 @@ public class WorldObject : MonoBehaviour
         {
             case ObjectType.bed:
                 if(character.Memory.IsOurPossession(this))
-                { interactionOptions.Add(new InteractionOption("Sleep", () => Use(WorldManager.Instance.ThePlayer)));}
+                { interactionOptions.Add(new InteractionOption("Sleep",ObjectInteractionType.use));}
 
                 break;
         }
@@ -164,9 +169,9 @@ public class WorldObject : MonoBehaviour
     }
     public Vector3 GetPosition() => transform.position;
     //TODO: make that character class holds traits so that maybe player also has traits that limmit what the player can do or how they react
-    public void Use(Character userOfObject, out bool destroy)
+    private void Use(Character userOfObject)
     {
-        destroy = false;
+        var destroy = false;
         switch (_objectType)
         {
             //TODO: should just active its effect which is defined in the world object class as opposed to doing a switch
@@ -179,12 +184,17 @@ public class WorldObject : MonoBehaviour
                 { destroy = true; }
 
                 break;
+            case ObjectType.bed:
+                userOfObject.Vitality.Needs[NeedType.sleep] -= 0.1f;
+                userOfObject.Appearance.State = AppearanceState.lyingDown;
+                break;
         }
 
+        if(destroy){ ActionsHelper.DestroyObject(userOfObject, this); }
 
     }
 
-    public void CareFor(Character userOfObject)
+    private void CareFor(Character userOfObject)
     {
         foreach (var trait in _objectTraits)
         {

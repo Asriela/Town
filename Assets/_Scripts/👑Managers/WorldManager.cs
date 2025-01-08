@@ -46,6 +46,8 @@ public class WorldManager : Singleton<WorldManager>
     [SerializeField]
     private float _startingTime;
 
+
+
     public float TotalHoursPassed { get; set; } = 0;
     public float TimeThatsChanged { get; set; } = 0;
 
@@ -68,7 +70,7 @@ public class WorldManager : Singleton<WorldManager>
 
     private void RunTimeOfDay()
     {
-        TimeOfDay = TimeOfDay < 24 ? TimeOfDay + Settings.timeOfDaySpeed : 0;
+        TimeOfDay = TimeOfDay < 24 ? TimeOfDay + Settings.Instance.TimeOfDaySpeed : 0;
         TimeThatsChanged = TimeOfDay - _lastTimeOfDay;
         _lastTimeOfDay = TimeOfDay;
         TotalHoursPassed += TimeThatsChanged;

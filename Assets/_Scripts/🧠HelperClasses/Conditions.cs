@@ -133,10 +133,6 @@ public static class Conditions
     private static bool CheckLocationTarget(TargetLocationType parameter, NPC npc, bool trueStatement)
     {
         bool ret;
-        if (npc.Memory.LocationTargets.ContainsKey(parameter))
-        {
-            Debug.Log($"🔰Location target: {npc.Memory.LocationTargets[parameter]}");
-        }
 
         if (npc.Memory.LocationTargets.ContainsKey(parameter) && npc.Memory.LocationTargets[parameter] != LocationName.none)
         {
@@ -191,7 +187,7 @@ public static class Conditions
         { return !trueStatement; }
         var locationFromMemory = npc.Memory.LocationTargets[parameter];
 
-        Debug.Log($"⭐current location : {npc.Movement.CurrentLocation} locationFromMemory: {locationFromMemory}");
+   
 
         if (npc.Movement.CurrentLocation != LocationName.none && npc.Movement.CurrentLocation == locationFromMemory)
         { return trueStatement; }

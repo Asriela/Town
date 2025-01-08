@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Mind;
+using TMPro;
 using UnityEngine;
 
 public class UI : MonoBehaviour
@@ -55,7 +56,7 @@ public class UI : MonoBehaviour
 
     private void Update()
     {
-        UpdateStatsLabel($"BEHAVIOUR:\n {CurrentBehaviour}\n-----------\nACTION:\n {CurrentAction}\n-----------\nSTEP:\n {CurrentStepInAction}\n-----------\nSEES:\n {CharactersInSight}-----------\nCOIN:\n {_npc.Memory.Coin}");
+        UpdateStatsLabel($"BEHAVIOUR:\n {CurrentBehaviour}\n-----------\nACTION:\n {CurrentAction}\n-----------\nSTEP:\n {CurrentStepInAction}\n-----------\nSEES:\n {CharactersInSight}-----------\nCOIN:\n {_npc.Vitality.Needs[NeedType.sleep]}");
         if (_speechBubbleLifeLeft > 0)
         {
             _speechBubbleLifeLeft -= 0.01f;

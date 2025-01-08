@@ -18,7 +18,7 @@ public class InteractionMenu : MonoBehaviour
     void OnEnable()
     {
         root = GetComponent<UIDocument>().rootVisualElement;
-        print($"🎃 Menu enabled");
+
 
         if (interactionMenuTemplate != null)
         {
@@ -80,7 +80,7 @@ public class InteractionMenu : MonoBehaviour
             int index = i;
             button.clicked += () =>
             {
-                Debug.Log($"🌎Button clicked: {label}");
+                BasicFunctions.Log($"🌎Button clicked: {label}", LogType.ui);
                 GameManager.Instance.UIClicked = true;
                 OnButtonClicked?.Invoke(index, label);
                 StartCoroutine(CheckForInputAfterDelay());

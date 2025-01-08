@@ -1,6 +1,13 @@
 ﻿using UnityEngine;
 
-public static class Settings
+public class Settings : Singleton<Settings>
 {
-    public static float timeOfDaySpeed = 0.001f;
-} 
+    [SerializeField] private float _timeOfDaySpeed = 0.001f;
+    public float TimeOfDaySpeed
+    {
+        get => _timeOfDaySpeed;
+        set => _timeOfDaySpeed = value;
+    }
+}
+
+

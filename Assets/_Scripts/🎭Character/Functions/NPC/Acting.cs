@@ -53,11 +53,11 @@ public class Acting : MonoBehaviour
             if (_lastAction != CurrentBehavior.Name)
             {
                 StepInAction = 0;
-                
+
                 _lastAction = CurrentBehavior.Name;
                 _npc.Movement.Stop();
                 _npc.Ui.EndSpeech();
-                if (CurrentBehavior.Dialogue!="")
+                if (CurrentBehavior.Dialogue != "")
                 {
                     _waitBeforeAction = 4;
                     _npc.Ui.Speak(CurrentBehavior.Dialogue);
@@ -104,7 +104,7 @@ public class Acting : MonoBehaviour
     }
     private void FindOccupant(TraitType traitType)
     {
-  
+
         switch (StepInAction)
         {
             case 1:
@@ -179,18 +179,18 @@ public class Acting : MonoBehaviour
                     List<Enum> tagsAsEnum = CurrentBehavior.ActionTags.Cast<Enum>().ToList();
                     SocialHelper.AskForKnowledge(_npc, target, knowledgeType, tagsAsEnum);
                     IncrementStepInAction();
- 
+
                 }
 
                 break;
             case 2:
-        //WAIT FOR RESPONSE
+                //WAIT FOR RESPONSE
                 break;
         }
     }
 
 
-    public void BuyAnItem(ObjectType objectType,Character seller)
+    public void BuyAnItem(ObjectType objectType, Character seller)
     {
 
         switch (StepInAction)
@@ -202,7 +202,7 @@ public class Acting : MonoBehaviour
                 _npc.Movement.Stop();
                 if (seller != null && ActionsHelper.Reached(_npc, seller.transform.position, 2.7f))
                 {
-                    
+
                     BaseAction.BuyItem(objectType, buyer, seller);
 
                     IncrementStepInAction();
@@ -218,7 +218,7 @@ public class Acting : MonoBehaviour
 
     public void RentAnItem(ObjectType objectType, Character seller)
     {
-  
+
         switch (StepInAction)
         {
             case 1:
@@ -229,11 +229,11 @@ public class Acting : MonoBehaviour
 
                 BaseAction.RentItem(objectType, buyer, seller);
 
-                
+
                 IncrementStepInAction();
 
 
-                
+
                 break;
             case 2:
                 ActionsHelper.EndThisBehaviour(_npc);
@@ -271,11 +271,20 @@ public class Acting : MonoBehaviour
         switch (StepInAction)
         {
             case 1:
-                if (_npc.Memory.GetPossession(ObjectType.bed) is { } objectToUse && ActionsHelper.Reached(_npc, objectToUse.transform.position, 0.2f))
+
+                var objectToUse = _npc.Memory.GetPossession(ObjectType.bed);
+                if (objectToUse != null)
                 {
-                    _npc.Vitality.Needs[needType] = 0;
-                    IncrementStepInAction();
+                    _npc.Ui.CurrentStepInAction = $"going to bed";
+                    if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 1f))
+                    {
+                        _npc.Ui.CurrentStepInAction = $"sleeping";
+                        BaseAction.InteractWithObject(objectToUse, _npc, ObjectInteractionType.use);
+
+                        IncrementStepInAction();
+                    } 
                 }
+
                 break;
             case 2:
                 ActionsHelper.EndThisBehaviour(_npc);
@@ -328,7 +337,7 @@ public class Acting : MonoBehaviour
                 else
                 if (ActionsHelper.Reached(_npc, _currentObjectTarget.transform.position, 1f))
                 {
-                    _currentObjectTarget.CareFor(_npc);
+                    BaseAction.InteractWithObject(_currentObjectTarget, _npc, ObjectInteractionType.careFor);
                     _currentObjectTarget = null;
                 }
 
@@ -352,12 +361,9 @@ public class Acting : MonoBehaviour
             //STEP 1
             case 1:
                 var objectToUse = _npc.Memory.GetPossession(objectType);
-                objectToUse.Use(_npc, out bool destroyObject);
+                BaseAction.InteractWithObject(objectToUse, _npc, ObjectInteractionType.use);
                 _npc.Ui.CurrentStepInAction = "drinking";
-                if (destroyObject)
-                {
-                    ActionsHelper.DestroyObject(_npc, objectToUse);
-                }
+
 
                 ActionsHelper.EndThisBehaviour(_npc);
                 break;
@@ -386,7 +392,7 @@ public class Acting : MonoBehaviour
                 break;
             //STEP 2
             case 2:
-                BaseAction.UseObject(objectToUse, _npc);
+                BaseAction.InteractWithObject(objectToUse, _npc, ObjectInteractionType.use);
                 break;
 
         }
@@ -429,8 +435,8 @@ public class Acting : MonoBehaviour
     private void IncrementStepInAction()
     {
 
-            StepInAction ++;
-        
+        StepInAction++;
+
     }
 }
 

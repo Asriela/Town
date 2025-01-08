@@ -42,13 +42,13 @@ public class Thinking : MonoBehaviour
         for (int i = 0; i < _npc.Memory.Traits.Count; i++)
         {
             var trait = _npc.Memory.Traits[i];
-            print($"Inspecting trait: {trait.name}");
+            BasicFunctions.Log($"Inspecting trait: {trait.name}",LogType.thinking);
 
             for (int j = 0; j < trait.Behaviors.Count; j++)
             {
                 var behavior = trait.Behaviors[j];
-                print($"Inspecting behavior: {behavior.Name}");
-                print($"Are conditions met: {AreConditionsMet(behavior.Conditions)}");
+                BasicFunctions.Log($"Inspecting behavior: {behavior.Name}", LogType.thinking);
+                BasicFunctions.Log($"Are conditions met: {AreConditionsMet(behavior.Conditions)}", LogType.thinking);
 
                 if (AreConditionsMet(behavior.Conditions))
                 {
@@ -72,11 +72,11 @@ public class Thinking : MonoBehaviour
         if (highestScoringBehavior != null)
         {
             _npc.Acting.CurrentBehavior = highestScoringBehavior;
-            print($"Selected Behavior: {highestScoringBehavior.Name}");
+            BasicFunctions.Log($"Selected Behavior: {highestScoringBehavior.Name}", LogType.thinking);
         }
         else
         {
-            print("No valid behavior found.");
+            BasicFunctions.Log("No valid behavior found.", LogType.thinking);
         }
     }
 

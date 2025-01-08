@@ -29,10 +29,11 @@ public static class ActionsHelper
     {
 
         var ourPosition = character.transform.position;
+        var remainingDistance = Vector3.Distance(ourPosition, destination);
         var interactionDistance = distance;
 
 
-        if (Vector3.Distance(ourPosition, destination) < interactionDistance)
+        if (remainingDistance < interactionDistance)
         {
             character.Movement.Stop();
             return true;

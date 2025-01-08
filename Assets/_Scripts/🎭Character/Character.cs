@@ -8,6 +8,7 @@ using UnityEngine;
 [RequireComponent(typeof(Memory))]
 [RequireComponent(typeof(UI))]
 [RequireComponent(typeof(Reactions))]
+[RequireComponent(typeof(State))]
 public class Character : MonoBehaviour
 {
     private Collider2D _collider2D;
@@ -28,11 +29,12 @@ public class Character : MonoBehaviour
     public Reactions Reactions { get; set; }
 
     public Appearance Appearance { get; set; }
+    public State State { get; set; }
 
     public SpriteRenderer SpriteRenderer { get; set; }
 
     private void Awake()
-    {
+    { 
         SpriteRenderer = GetComponent<SpriteRenderer>();
         _collider2D = GetComponent<Collider2D>();
         Movement = GetComponent<Movement>();
@@ -46,6 +48,8 @@ public class Character : MonoBehaviour
         Ui.Initialize(this);
         Reactions = GetComponent<Reactions>();
         Reactions.Initialize(this);
+        State = GetComponent<State>();
+        State.Initialize(this);
     }
 
 

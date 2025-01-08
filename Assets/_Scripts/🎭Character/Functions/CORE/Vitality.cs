@@ -27,7 +27,7 @@ public class Vitality : MonoBehaviour
     private void Die()
     {
         Dead = true;
-        _npc.Appearance.LookDead();
+        _npc.Appearance.State = AppearanceState.dead;
     }
 
 
@@ -50,7 +50,7 @@ public class Vitality : MonoBehaviour
             needs[needType] += 0.001f;
 
            // if (needs[needType] > 80)
-              //  print($"Need to: {needType}");
+              //  BasicFunctions.Log($"Need to: {needType}");
         }
     }
 }

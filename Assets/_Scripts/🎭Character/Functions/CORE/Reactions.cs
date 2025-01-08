@@ -34,7 +34,7 @@ public class Reactions : MonoBehaviour
                 switch (actionPost.Parameter)
                 {
                     case Mind.KnowledgeType.location:
-                        //  print("❤request for knowledge received");
+                        //  BasicFunctions.Log("❤request for knowledge received");
                         var originalEnumList = actionPost.KnowledgeTags.Cast<Mind.KnowledgeTag>().ToArray();
                         List<Enum> newKnowledge = _npc.Memory.GetLocationsByTag(originalEnumList).Cast<Enum>().ToList();
                         var originalTags = actionPost.KnowledgeTags;
@@ -47,7 +47,7 @@ public class Reactions : MonoBehaviour
                 switch (actionPost.Parameter)
                 {
                     case Mind.KnowledgeType.location:
-                        // print("❤knowledge received");
+                        // BasicFunctions.Log("❤knowledge received");
                         foreach (var knowledgeItem in actionPost.KnowledgeTags)
                         {
                             Mind.LocationName location = (Mind.LocationName)Enum.Parse(typeof(Mind.LocationName), knowledgeItem.ToString());
