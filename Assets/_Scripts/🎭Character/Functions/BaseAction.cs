@@ -5,8 +5,20 @@ using static UnityEngine.GraphicsBuffer;
 
 public static class BaseAction
 {
-    public static void RentItem(ObjectType objectType, Character buyer , Character seller)
+    private static void SetState(Character character, StateType stateType)
     {
+        character.State.SetState(stateType);
+    }
+
+
+    public static void MoveTo(Character subject, Vector3 destination)
+    {
+        SetState(subject, StateType.normal);
+        subject.Movement.MoveTo(destination);
+    }
+    public static void RentItem(ObjectType objectType, Character buyer, Character seller)
+    {
+        SetState(buyer, StateType.normal);
         int price = seller.Memory.GetPrice(objectType);
         var workLocation = WorldManager.Instance.GetLocation(seller.Memory.GetLocationTarget(TargetLocationType.work));
         var canGetPossession = workLocation.GetPossession(objectType);
@@ -31,9 +43,10 @@ public static class BaseAction
 
     }
 
-    
+
     public static void BuyItem(ObjectType objectType, Character buyer, Character seller)
     {
+        SetState(buyer, StateType.normal);
         int price = seller.Memory.GetPrice(objectType);
 
         bool canGetPossession = seller.Memory.Possessions.ContainsKey(objectType);
@@ -64,12 +77,14 @@ public static class BaseAction
 
     public static void InteractWithObject(WorldObject objectToUse, Character userOfObject, ObjectInteractionType interactionType)
     {
+        SetState(userOfObject, StateType.normal);
         objectToUse.InteractWithObject(userOfObject, interactionType);
 
     }
 
-    public static void HurtSomeone(Character target, float dammage)
+    public static void HurtSomeone(Character subject, Character target, float dammage)
     {
+        SetState(subject, StateType.normal);
         target.Vitality.Hurt(dammage);
     }
 

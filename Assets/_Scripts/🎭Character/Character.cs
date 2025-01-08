@@ -31,8 +31,8 @@ public class Character : MonoBehaviour
     public Appearance Appearance { get; set; }
     public State State { get; set; }
 
-    public SpriteRenderer SpriteRenderer { get; set; }
 
+    public SpriteRenderer SpriteRenderer { get; set; }
     private void Awake()
     { 
         SpriteRenderer = GetComponent<SpriteRenderer>();

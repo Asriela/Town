@@ -251,7 +251,7 @@ public class Acting : MonoBehaviour
                 if (_npc.Memory.Targets[targetType].GetComponent<Character>() is { } target &&
                     ActionsHelper.Reached(_npc, target.transform.position, 1f))
                 {
-                    BaseAction.HurtSomeone(target, 100);
+                    BaseAction.HurtSomeone(_npc,target, 100);
                     _npc.Memory.Targets[targetType] = null;
                     IncrementStepInAction();
                 }

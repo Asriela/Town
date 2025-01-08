@@ -185,8 +185,10 @@ public class WorldObject : MonoBehaviour
 
                 break;
             case ObjectType.bed:
-                userOfObject.Vitality.Needs[NeedType.sleep] -= 0.1f;
-                userOfObject.Appearance.State = AppearanceState.lyingDown;
+                
+
+                userOfObject.State.SetState(StateType.sleeping);
+
                 break;
         }
 

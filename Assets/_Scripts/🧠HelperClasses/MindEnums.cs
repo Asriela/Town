@@ -43,7 +43,7 @@ namespace Mind
         rentItem
     }
     [Serializable]
-    public enum BasicAction : short
+    public enum SocialActions : short
     {
         kiss,
         hug,

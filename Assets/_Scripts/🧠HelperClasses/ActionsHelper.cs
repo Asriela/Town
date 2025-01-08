@@ -39,7 +39,8 @@ public static class ActionsHelper
             return true;
         }
 
-        character.Movement.MoveTo(destination);
+        BaseAction.MoveTo(character, destination);
+  
 
         return false;
     }

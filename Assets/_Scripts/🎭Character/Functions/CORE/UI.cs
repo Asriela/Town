@@ -50,7 +50,7 @@ public class UI : MonoBehaviour
 
         if (_statsLabel == null)
         {
-            Debug.LogError("StatsLabel not found or doesn't have a TextMeshPro component.");
+            //Debug.LogError("StatsLabel not found or doesn't have a TextMeshPro component.");
         }
     }
 

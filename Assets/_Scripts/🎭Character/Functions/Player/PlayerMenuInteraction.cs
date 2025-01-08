@@ -48,7 +48,7 @@ public class PlayerMenuInteraction : MonoBehaviour
     private List<MenuOption> _currentMenuOptions = new List<MenuOption> { new MenuOption("NULL", null, null) };
 
 
-    public static List<BasicAction> BasicActions = new List<BasicAction> { BasicAction.hug, BasicAction.kiss, BasicAction.kill };
+    public static List<SocialActions> BasicActions = new List<SocialActions> { SocialActions.hug, SocialActions.kiss, SocialActions.kill };
 
     public void Initialize(Character character)
     {

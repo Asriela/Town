@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Mind;
+using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(PlayerMenuInteraction))]
@@ -25,7 +26,7 @@ public class Player : Character
     }
     private void Update()
     {
-        
+
         HandleInput();
         UpdateSeenColor();
     }
@@ -47,17 +48,17 @@ public class Player : Character
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
-            if(MenuInteraction.NotInteractingWithMenu())
+            if (MenuInteraction.NotInteractingWithMenu())
             {
-                MoveToLocation(hit.point);
+                BaseAction.MoveTo(this, hit.point);
 
             }
         }
     }
 
-    private void MoveToLocation(Vector3 targetPosition) => Movement.MoveTo(targetPosition);
 
- 
+
+
     public void SetSeenState(bool isSeen)
     {
         _lastSeen = _isSeen;
