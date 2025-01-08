@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3531590608350215589}
   - component: {fileID: 6405104486024333364}
-  - component: {fileID: 165563619022068226}
+  - component: {fileID: 4221562605464312396}
   m_Layer: 0
   m_Name: InteractionMenu
   m_TagString: Untagged
@@ -52,7 +52,7 @@ MonoBehaviour:
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
   m_WorldSpaceHeight: 1080
---- !u!114 &165563619022068226
+--- !u!114 &4221562605464312396
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -61,8 +61,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 3413780781024082899}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2988d83dbac3a304981a9cb653474c2f, type: 3}
+  m_Script: {fileID: 11500000, guid: 267b044dc02c719489dd25c1d315a18b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   interactionMenuTemplate: {fileID: 9197481963319205126, guid: baf25317d311dbe499b544d6260de820, type: 3}
-  buttonSpacing: 10
+  buttonSpacing: 5

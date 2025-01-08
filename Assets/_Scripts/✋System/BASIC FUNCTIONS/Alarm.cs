@@ -58,6 +58,7 @@ public class Alarms
 
         if (alarmsList.ContainsKey(timerType))
         {
+  
             alarmsList[timerType].Triggered = false;
             alarmsList[timerType].TimeLength = timeLength;
             if (loop)
@@ -71,6 +72,7 @@ public class Alarms
         }
         else
         {
+  
             var endTime = 0f;
             var triggered = false;
             if (loop)

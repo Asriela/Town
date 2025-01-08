@@ -20,7 +20,12 @@ public class EnumCharacterPair
 public class WorldManager : Singleton<WorldManager>
 {
 
-
+    [SerializeField] private float _timeOfDaySpeed = 0.001f;
+    public float TimeOfDaySpeed
+    {
+        get => _timeOfDaySpeed;
+        set => _timeOfDaySpeed = value;
+    }
     [SerializeField]
     private List<LocationTypeGameObjectPair> _locations = new();
 
@@ -70,7 +75,7 @@ public class WorldManager : Singleton<WorldManager>
 
     private void RunTimeOfDay()
     {
-        TimeOfDay = TimeOfDay < 24 ? TimeOfDay + Settings.Instance.TimeOfDaySpeed : 0;
+        TimeOfDay = TimeOfDay < 24 ? TimeOfDay + _timeOfDaySpeed : 0;
         TimeThatsChanged = TimeOfDay - _lastTimeOfDay;
         _lastTimeOfDay = TimeOfDay;
         TotalHoursPassed += TimeThatsChanged;

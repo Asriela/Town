@@ -11,7 +11,7 @@ public class UI : MonoBehaviour
     public string CharactersInSight { get; set; }
 
 
-
+    private TextMeshProUGUI _actionLabel;
     private TextMeshProUGUI _statsLabel;
     private TextMeshProUGUI _speechBubbleLabel;
     private GameObject _speechBubble;
@@ -19,11 +19,22 @@ public class UI : MonoBehaviour
     private float _speechBubbleLifeLeft = 0;
     [SerializeField]
     private Transform _statsLabelTransform;
-
-    private Character _npc;
-    public void Initialize(Character npc)
+    [SerializeField]
+    private Transform _actionLabelTransform;
+    [SerializeField]
+    private Transform _statsPanelTransform;
+    [SerializeField]
+    private Transform _actionPanellTransform;
+    private Character _character;
+    public void Initialize(Character character)
     {
-        _npc = npc;
+        _character = character;
+        if (_character is not Player && Settings.Instance.AllNPCsShowLogUI == false) 
+        {
+            _statsLabel.gameObject.SetActive(false);
+            _statsPanelTransform.gameObject.SetActive(false);
+        }
+
     }
 
     private void Awake()
@@ -42,21 +53,27 @@ public class UI : MonoBehaviour
         }
 
 
-        _statsLabelTransform = transform.Find("Canvas/Panel/StatsLabel");
+
         if (_statsLabelTransform != null)
         {
             _statsLabel = _statsLabelTransform.GetComponent<TextMeshProUGUI>();
         }
 
-        if (_statsLabel == null)
+
+
+        if (_actionLabelTransform != null)
         {
-            //Debug.LogError("StatsLabel not found or doesn't have a TextMeshPro component.");
+            _actionLabel = _actionLabelTransform.GetComponent<TextMeshProUGUI>();
         }
+
+
     }
 
     private void Update()
     {
-        UpdateStatsLabel($"BEHAVIOUR:\n {CurrentBehaviour}\n-----------\nACTION:\n {CurrentAction}\n-----------\nSTEP:\n {CurrentStepInAction}\n-----------\nSEES:\n {CharactersInSight}-----------\nCOIN:\n {_npc.Vitality.Needs[NeedType.sleep]}");
+        UpdateStatsLabel($"BEHAVIOUR:\n {CurrentBehaviour}\n-----------\nACTION:\n {CurrentAction}\n-----------\nSTEP:\n {CurrentStepInAction}\n-----------\nSEES:\n {CharactersInSight}-----------\nCOIN:\n {_character.Vitality.Needs[NeedType.sleep]}");
+        UpdateActionLabel($"{CurrentAction}");
+
         if (_speechBubbleLifeLeft > 0)
         {
             _speechBubbleLifeLeft -= 0.01f;
@@ -75,6 +92,13 @@ public class UI : MonoBehaviour
         }
     }
 
+    private void UpdateActionLabel(string message)
+    {
+        if (_actionLabel != null)
+        {
+            _actionLabel.text = message;
+        }
+    }
     public void Speak(string message)
     {
         _speechBubble.SetActive(true);

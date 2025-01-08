@@ -2,11 +2,11 @@
 
 public class Settings : Singleton<Settings>
 {
-    [SerializeField] private float _timeOfDaySpeed = 0.001f;
-    public float TimeOfDaySpeed
+    [SerializeField] private bool _allNPCsShowLogUI = false;
+    public bool AllNPCsShowLogUI
     {
-        get => _timeOfDaySpeed;
-        set => _timeOfDaySpeed = value;
+        get => _allNPCsShowLogUI;
+        set => _allNPCsShowLogUI = value;
     }
 }
 
