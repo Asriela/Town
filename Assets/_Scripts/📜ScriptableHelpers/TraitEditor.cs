@@ -1,4 +1,5 @@
 ﻿using System;
+using Mind;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -133,7 +134,7 @@ public class TraitEditor : Editor
                        EditorGUIUtility.singleLineHeight + // Add space for "Add Condition" button
                        70; // Space for additional buttons
             }
-    };
+        };
     }
 
     private Type GetEnumTypeForActionType(int actionIndex) =>
@@ -148,6 +149,7 @@ public class TraitEditor : Editor
             Mind.ActionType.farmer => typeof(Mind.FarmerType),
             Mind.ActionType.findKnowledge => typeof(Mind.KnowledgeType),
             Mind.ActionType.gotoLocation => typeof(Mind.TargetLocationType),
+            Mind.ActionType.socialize => typeof(Mind.SocializeType),
             Mind.ActionType.useOneOfMyPossesions => typeof(Mind.ObjectType),
             Mind.ActionType.useObjectInInventory => typeof(Mind.ObjectType),
             Mind.ActionType.buyItem => typeof(Mind.ObjectType),
@@ -198,6 +200,8 @@ public class TraitEditor : Editor
             Mind.ConditionType.doesNotHaveTrait => typeof(Mind.TraitType),
             Mind.ConditionType.beforeClosing => typeof(Mind.TargetLocationType),
             Mind.ConditionType.afterClosing => typeof(Mind.TargetLocationType),
+            Mind.ConditionType.seesSomeoneWithTrait => typeof(Mind.TraitType),
+            Mind.ConditionType.seesSomeoneWithoutTrait => typeof(Mind.TraitType),
             _ => null
         };
 

@@ -10,25 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7dc8225a4be6fd4d87acb8e49149fbb, type: 3}
-  m_Name: Human
+  m_Name: HatesOutsiders
   m_EditorClassIdentifier: 
-  Type: 0
+  Type: 11
   Behaviors:
-  - _name: Sleep
-    _dialogue: Lets sleep
-    _action: 5
+  - _name: Insults
+    _dialogue: Begone outsider scum!
+    _action: 10
     _actionParameter:
-      rid: 2000162480727523609
+      rid: 2000162484999946370
     _conditions:
-    - conditionType: 1
+    - conditionType: 24
       parameter:
-        rid: 2000162480727523609
+        rid: 2000162484999946371
     _priority: 3
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162480727523609
-      type: {class: NeedType, ns: Mind, asm: Assembly-CSharp}
+    - rid: 2000162484999946370
+      type: {class: SocializeType, ns: Mind, asm: Assembly-CSharp}
       data:
-        value__: 1
+        value__: 7
+    - rid: 2000162484999946371
+      type: {class: TraitType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 10

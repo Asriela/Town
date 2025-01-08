@@ -23,12 +23,13 @@ public class NPC : Character
 
     private void Start()
     {
+        Senses = GetComponent<Senses>();
+        Senses.Initialize(this);
         Acting = GetComponent<Acting>();
         Acting.Initialize(this);
         Thinking = GetComponent<Thinking>();
         Thinking.Initialize(this);
-        Senses = GetComponent<Senses>();
-        Senses.Initialize(this);
+
 
 
 

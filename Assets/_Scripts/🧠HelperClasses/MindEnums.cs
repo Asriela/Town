@@ -15,7 +15,12 @@ namespace Mind
         guard,
         draugerCultist,
         jarl,
-        pumpkinFarmer
+        pumpkinFarmer,
+        newToTown,
+        hatesOutsiders,
+        hasNoBed,
+        drunkard
+
     }
     [Serializable]
     public enum ActionType : short
@@ -57,7 +62,10 @@ namespace Mind
         player,
         Belethor,
         Zerath,
-        Alex
+        Alex,
+        Ludwar,
+        Lyssara,
+        Duskwither
     }
     [Serializable]
     public enum LocationName : short
@@ -124,7 +132,8 @@ namespace Mind
         eatWith,
         flirt,
         greet,
-        joke
+        joke,
+        insult
     }
 
     [Serializable]
@@ -174,7 +183,9 @@ namespace Mind
         hasTrait,
         doesNotHaveTrait,
         beforeClosing,
-        afterClosing
+        afterClosing,
+        seesSomeoneWithTrait,
+        seesSomeoneWithoutTrait
 
     }
     [Serializable]

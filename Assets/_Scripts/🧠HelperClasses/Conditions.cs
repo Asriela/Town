@@ -34,6 +34,8 @@ public static class Conditions
         _conditionDelegates.Add(ConditionType.hasTrait, new ConditionDelegate<TraitType>(CheckTrait));
         _conditionDelegates.Add(ConditionType.doesNotHaveTrait, new ConditionDelegate<TraitType>(CheckTrait));
         _conditionDelegates.Add(ConditionType.beforeClosing, new ConditionDelegate<TargetLocationType>(CheckLocationClosed));
+        _conditionDelegates.Add(ConditionType.seesSomeoneWithTrait, new ConditionDelegate<TraitType>(CheckSeesSomeoneWithTrait));
+        _conditionDelegates.Add(ConditionType.seesSomeoneWithoutTrait, new ConditionDelegate<TraitType>(CheckSeesSomeoneWithTrait));
     }
 
     public static bool CheckCondition(Condition condition, NPC npc)
@@ -41,7 +43,7 @@ public static class Conditions
         // Look up the delegate for the given condition type
         if (_conditionDelegates.TryGetValue(condition.conditionType, out var conditionDelegate))
         {
-            // Now we check which type the delegate is and cast it accordingly
+            // Now we check which type the delegate is and cast it accordingl
 
 
             return condition.conditionType switch
@@ -87,7 +89,9 @@ public static class Conditions
                 ConditionType.beforeClosing => ConditionHandler<TargetLocationType>((ConditionDelegate<TargetLocationType>)conditionDelegate, condition.parameter, npc, true),
 
                 ConditionType.afterClosing => ConditionHandler<TargetLocationType>((ConditionDelegate<TargetLocationType>)conditionDelegate, condition.parameter, npc, false),
+                ConditionType.seesSomeoneWithTrait => ConditionHandler<TraitType>((ConditionDelegate<TraitType>)conditionDelegate, condition.parameter, npc, true),
 
+                ConditionType.seesSomeoneWithoutTrait => ConditionHandler<TraitType>((ConditionDelegate<TraitType>)conditionDelegate, condition.parameter, npc, false),
                 _ => false
             };
 
@@ -134,6 +138,18 @@ public static class Conditions
         {
             return trueStatement;
         }
+        return !trueStatement;
+    }
+    private static bool CheckSeesSomeoneWithTrait(TraitType parameter, NPC npc, bool trueStatement)
+    {
+        var senses = npc.Senses;
+        var someoneWithTrait = senses.SeeSomeoneWithTraits(parameter);
+        if (someoneWithTrait != null)
+        {
+            npc.Memory.SocialTarget = someoneWithTrait;
+            return trueStatement;
+        }
+        //TODO: add negative , would need to add SeeSomeoneWithoutTraits method in senses
         return !trueStatement;
     }
     private static bool CheckLocationTarget(TargetLocationType parameter, NPC npc, bool trueStatement)

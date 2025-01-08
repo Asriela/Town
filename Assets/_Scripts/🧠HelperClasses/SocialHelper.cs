@@ -16,7 +16,17 @@ public static class SocialHelper
     {
         ActionPost actionPost = new(knowledgeType, newKnowledge, originalTags);
         SocialMediator.PostAction(senderOfMessage, recieverOfMessage, ActionType.shareKnowledge, actionPost);
-        senderOfMessage.Ui.Speak($"Yes let me mark it on your map");
+
+    }
+
+    public static void SocialAction(Character senderOfMessage, Character recieverOfMessage, SocializeType socialActionType)
+    {
+        ActionPost actionPost = new(socialActionType, null, null);
+       // SocialMediator.PostAction(senderOfMessage, recieverOfMessage, ActionType.socialize, actionPost);
+        var socialDialogue = senderOfMessage.Memory.SocialDialogue;
+        if (socialDialogue != null)
+        { senderOfMessage.Ui.Speak(socialDialogue); }
+
     }
 }
 

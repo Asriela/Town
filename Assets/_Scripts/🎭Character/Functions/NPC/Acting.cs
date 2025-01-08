@@ -34,7 +34,8 @@ public class Acting : MonoBehaviour
         { ActionType.findOccupant, param => FindOccupant((TraitType)param) },
         { ActionType.gotoOccupant, param => GotoOccupant((TraitType)param) },
         { ActionType.buyItem, param => BuyAnItem((ObjectType)param,_npc.Memory.ReachedOccupant) },
-        { ActionType.rentItem, param => RentAnItem((ObjectType)param,_npc.Memory.ReachedOccupant) }
+        { ActionType.rentItem, param => RentAnItem((ObjectType)param,_npc.Memory.ReachedOccupant) },
+        { ActionType.socialize, param => DoSocialActionWithSomeone((SocializeType)param,_npc.Memory.SocialTarget) }
     };
 
     private void Update() => PerformCurrentBehavior();
@@ -60,7 +61,12 @@ public class Acting : MonoBehaviour
                 if (CurrentBehavior.Dialogue != "")
                 {
                     _waitBeforeAction = 4;
-                    _npc.Ui.Speak(CurrentBehavior.Dialogue);
+                    if (CurrentBehavior.Action == ActionType.socialize)
+                    {
+                        _npc.Memory.SocialDialogue = CurrentBehavior.Dialogue;
+                    }
+                    else
+                    { _npc.Ui.Speak(CurrentBehavior.Dialogue); }
                 }
                 else
                 {
@@ -189,6 +195,31 @@ public class Acting : MonoBehaviour
         }
     }
 
+
+    private void DoSocialActionWithSomeone(SocializeType socializeActionType, Character personToSocializeWith)
+    {
+        switch (StepInAction)
+        {
+            case 1:
+                _npc.Ui.CurrentStepInAction = "1 Goto nearest innkeeper";
+                //remember who the local innkeeper is
+
+
+
+                if (ActionsHelper.Reached(_npc, personToSocializeWith.transform.position, 2f))
+                {
+
+                    SocialHelper.SocialAction(_npc, personToSocializeWith, socializeActionType);
+                    IncrementStepInAction();
+
+                }
+
+                break;
+            case 2:
+                //WAIT FOR RESPONSE
+                break;
+        }
+    }
 
     public void BuyAnItem(ObjectType objectType, Character seller)
     {

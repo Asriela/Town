@@ -232,11 +232,11 @@ public class Senses : MonoBehaviour
     }
 
     //TODO: add looking for object with traits, its not required yet in this demo so i didnt add it
-    public GameObject SeeSomeoneWithTraits(params Mind.TraitType[] traits)
+    public Character SeeSomeoneWithTraits(params Mind.TraitType[] traits)
     {
         foreach (var character in _charactersInSight)
         {
-            return character.gameObject;
+            return character;
         }
         return null;
     }

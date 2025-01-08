@@ -12,94 +12,94 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7dc8225a4be6fd4d87acb8e49149fbb, type: 3}
   m_Name: HasNoBed
   m_EditorClassIdentifier: 
-  Type: 0
+  Type: 12
   Behaviors:
   - _name: Goto tavern to rent room
     _dialogue: 
     _action: 16
     _actionParameter:
-      rid: 2000162480727523513
+      rid: 2000162480727523591
     _conditions:
     - conditionType: 6
       parameter:
-        rid: 2000162480727523514
+        rid: 2000162480727523592
     - conditionType: 13
       parameter:
-        rid: 2000162480727523513
+        rid: 2000162480727523591
     - conditionType: 22
       parameter:
-        rid: 2000162480727523513
+        rid: 2000162480727523591
     _priority: 10
     _actionTags: 
   - _name: find innkeeper to rent room
     _dialogue: 
     _action: 3
     _actionParameter:
-      rid: 2000162480727523515
+      rid: 2000162480727523593
     _conditions:
     - conditionType: 12
       parameter:
-        rid: 2000162480727523513
+        rid: 2000162480727523591
     - conditionType: 6
       parameter:
-        rid: 2000162480727523514
+        rid: 2000162480727523592
     - conditionType: 5
       parameter:
-        rid: 2000162480727523515
+        rid: 2000162480727523593
     _priority: 10
     _actionTags: 
   - _name: goto inkeeper to rent room
     _dialogue: 
     _action: 19
     _actionParameter:
-      rid: 2000162480727523515
+      rid: 2000162480727523593
     _conditions:
     - conditionType: 12
       parameter:
-        rid: 2000162480727523513
+        rid: 2000162480727523591
     - conditionType: 6
       parameter:
-        rid: 2000162480727523514
+        rid: 2000162480727523592
     - conditionType: 4
       parameter:
-        rid: 2000162480727523515
+        rid: 2000162480727523593
     - conditionType: 17
       parameter:
-        rid: 2000162480727523515
+        rid: 2000162480727523593
     _priority: 10
     _actionTags: 
   - _name: Rent Room
     _dialogue: Can I rent a room please?
     _action: 20
     _actionParameter:
-      rid: 2000162480727523514
+      rid: 2000162480727523592
     _conditions:
     - conditionType: 12
       parameter:
-        rid: 2000162480727523513
+        rid: 2000162480727523591
     - conditionType: 6
       parameter:
-        rid: 2000162480727523514
+        rid: 2000162480727523592
     - conditionType: 4
       parameter:
-        rid: 2000162480727523515
+        rid: 2000162480727523593
     - conditionType: 16
       parameter:
-        rid: 2000162480727523515
+        rid: 2000162480727523593
     _priority: 10
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162480727523513
+    - rid: 2000162480727523591
       type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 2
-    - rid: 2000162480727523514
+    - rid: 2000162480727523592
       type: {class: ObjectType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 0
-    - rid: 2000162480727523515
+    - rid: 2000162480727523593
       type: {class: TraitType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 3

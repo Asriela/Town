@@ -57,7 +57,7 @@ public static class ActionsHelper
 
 
         var target = character.Senses.SeeSomeoneWithTraits(traitsToLookFor);
-        if (target != null && !(alive && target.GetComponent<Character>().Vitality.Dead))
+        if (target != null && !(alive && target.State.CurrentState!=StateType.dead))
         {
 
             character.Memory.Targets[targetType] = target;

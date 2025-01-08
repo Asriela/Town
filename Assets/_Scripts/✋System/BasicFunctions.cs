@@ -21,7 +21,7 @@ public enum TimerType
     moveOn,
     stateMachineLoop,
     wander,
-    grumpy,
+    grumpy, 
     setNewState
 }
 public enum LogType : short

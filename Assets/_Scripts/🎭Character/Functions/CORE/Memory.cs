@@ -40,6 +40,9 @@ public class PricingPair
 }
 public class Memory : MonoBehaviour
 {
+
+    public Character SocialTarget { get; set; }
+    public string SocialDialogue { get; set; }
     [SerializeField]
     private int _coin;
     public int Coin
@@ -80,7 +83,7 @@ public class Memory : MonoBehaviour
     }
 
     public Character ReachedOccupant { get; set; }
-    public Dictionary<Mind.TargetType, GameObject> Targets { get; set; } = new();
+    public Dictionary<Mind.TargetType, Character> Targets { get; set; } = new();
 
     public Dictionary<Mind.TraitType, Character> OccupantTargets { get; set; } = new();
 

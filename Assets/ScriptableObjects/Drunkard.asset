@@ -10,36 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7dc8225a4be6fd4d87acb8e49149fbb, type: 3}
-  m_Name: Murderer
+  m_Name: Drunkard
   m_EditorClassIdentifier: 
-  Type: 4
+  Type: 13
   Behaviors:
-  - _name: Find Victim
-    _dialogue: 
-    _action: 2
+  - _name: Go to tavern
+    _dialogue: Lets drink
+    _action: 16
     _actionParameter:
-      rid: 2000162480727523619
+      rid: 2000162480727523629
     _conditions:
-    - conditionType: 3
+    - conditionType: 13
       parameter:
-        rid: 2000162480727523619
-    _priority: 10
-    _actionTags: 
-  - _name: Kill Victim
-    _dialogue: 
-    _action: 1
-    _actionParameter:
-      rid: 2000162480727523619
-    _conditions:
-    - conditionType: 2
+        rid: 2000162480727523629
+    - conditionType: 22
       parameter:
-        rid: 2000162480727523619
-    _priority: 15
+        rid: 2000162480727523629
+    _priority: 3
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162480727523619
-      type: {class: TargetType, ns: Mind, asm: Assembly-CSharp}
+    - rid: 2000162480727523629
+      type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
-        value__: 3
+        value__: 2
