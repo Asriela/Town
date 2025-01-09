@@ -11,14 +11,14 @@ public class Reactions : MonoBehaviour
 
     public void Initialize(Character npc) => _npc = npc;
 
-    public void ReactToActionStarter(Character sender, bool intendedReceiverOfMessage, Mind.ActionType actionType, ActionPost actionPost)
+    public void ReactToActionStarter(bool intendedReceiverOfMessage, Character sender, Character aboutWho, Mind.ActionType actionType, ActionPost actionPost)
     {
-        StartCoroutine(ReactToAction( sender, intendedReceiverOfMessage, actionType, actionPost));
+        StartCoroutine(ReactToAction(intendedReceiverOfMessage, sender, aboutWho, actionType, actionPost));
 
 
     }
 
-    private IEnumerator ReactToAction(Character sender, bool intendedRecieverOfMessage, Mind.ActionType actionType, ActionPost actionPost)
+    private IEnumerator ReactToAction(bool intendedRecieverOfMessage, Character sender, Character aboutWho, Mind.ActionType actionType, ActionPost actionPost)
     {
         if (!intendedRecieverOfMessage)
         {
@@ -38,7 +38,7 @@ public class Reactions : MonoBehaviour
                         var originalEnumList = actionPost.KnowledgeTags.Cast<Mind.KnowledgeTag>().ToArray();
                         List<Enum> newKnowledge = _npc.Memory.GetLocationsByTag(originalEnumList).Cast<Enum>().ToList();
                         var originalTags = actionPost.KnowledgeTags;
-                        SocialHelper.ShareKnowledge(_npc, sender, Mind.KnowledgeType.location, newKnowledge, originalTags);
+                        SocialHelper.ShareKnowledgeAbout(_npc, sender, aboutWho,Mind.KnowledgeType.location, newKnowledge, originalTags);
                         break;
                 }
 

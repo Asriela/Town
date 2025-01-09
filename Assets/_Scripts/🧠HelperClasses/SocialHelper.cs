@@ -5,20 +5,22 @@ using System.Collections.Generic;
 
 public static class SocialHelper
 {
-    public static void AskForKnowledge(Character senderOfMessage, Character recieverOfMessage, KnowledgeType knowledgeType, List<System.Enum> knowledgeTags)
-    {
-        ActionPost actionPost = new(knowledgeType, knowledgeTags, null);
-        SocialMediator.PostAction(senderOfMessage, recieverOfMessage, ActionType.findKnowledge, actionPost);
-        senderOfMessage.Ui.Speak($"Do you know of a {knowledgeType} that is {string.Join(" and ", knowledgeTags)}");
-    }
 
-    public static void ShareKnowledge(Character senderOfMessage, Character recieverOfMessage, KnowledgeType knowledgeType, List<System.Enum> newKnowledge, List<System.Enum> originalTags)
+
+    public static void ShareKnowledgeAbout(Character senderOfMessage, Character recieverOfMessage, Character aboutPerson, KnowledgeType knowledgeType, List<System.Enum> newKnowledge, List<System.Enum> originalTags)
     {
         ActionPost actionPost = new(knowledgeType, newKnowledge, originalTags);
-        SocialMediator.PostAction(senderOfMessage, recieverOfMessage, ActionType.shareKnowledge, actionPost);
+        SocialMediator.PostAction(senderOfMessage, recieverOfMessage, aboutPerson, ActionType.shareKnowledge, actionPost);
 
     }
 
+    public static void ShareKnowledgeAbout(Character senderOfMessage, Character recieverOfMessage, Character aboutPerson, KnowledgeType knowledgeType, List<System.Enum> newKnowledge)
+    {
+        ActionPost actionPost = new(knowledgeType, newKnowledge, null);
+        SocialMediator.PostAction(senderOfMessage, recieverOfMessage, aboutPerson, ActionType.shareKnowledge, actionPost);
+
+    }
+    
     public static void SocialAction(Character senderOfMessage, Character recieverOfMessage, SocializeType socialActionType)
     {
         ActionPost actionPost = new(socialActionType, null, null);

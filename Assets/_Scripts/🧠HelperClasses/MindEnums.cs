@@ -49,7 +49,7 @@ namespace Mind
         rentItem
     }
     [Serializable]
-    public enum SocialActions : short
+    public enum RemoveSocial : short
     {
         kiss,
         hug,
@@ -128,13 +128,19 @@ namespace Mind
     public enum SocializeType : short
     {
         none,
-        askAbout,
+        sleepWith,
         drinkWith,
         eatWith,
         flirt,
         greet,
         joke,
-        insult
+        insult,
+        hug,
+        kiss,
+        smallTalk,
+        hangOut,
+        ask,
+        tell
     }
 
     [Serializable]

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mind;
 using TMPro.Examples;
@@ -32,16 +33,20 @@ public class PlayerMenuInteraction : MonoBehaviour
         buy,
         sell,
         objectInteraction,
-        tell,
-        ask,
-        socialAction
+        socialAction,
+        askPerson,
+        askObject,
+        askLocation,
+        tellPerson,
+        tellLocation,
+        tellAboutYourself
 
 
     }
 
     private InteractionMenu _interactionMenu;
 
-    private Player _player;
+
     private Character _personWeAreSpeakingTo;
     private WorldObject _selectedWorldObject;
     private bool _leftClick = false;
@@ -52,13 +57,13 @@ public class PlayerMenuInteraction : MonoBehaviour
     private List<MenuOption> _currentMenuOptions = new List<MenuOption> { new MenuOption("NULL", null, null) };
 
 
-    public static List<SocializeType> BasicActions = new List<SocializeType> {  SocializeType.insult };
-     
+    public static List<SocializeType> BasicActions = new List<SocializeType> { SocializeType.greet, SocializeType.hug, SocializeType.smallTalk, SocializeType.insult };
+    private Player _player;
     public void Initialize(Player player)
     {
         _player = player;
     }
-        
+
 
     private void Start()
     {
@@ -157,17 +162,71 @@ public class PlayerMenuInteraction : MonoBehaviour
                     Label("Tell")
                 };
                 break;
-
-
+            ///=======
+            ////ASK
+            /// ===
             case "Ask":
 
-                MenuState = SocialMenuState.ask;
+                _currentMenuOptions = new List<MenuOption>
+                {
+                    Label("Ask about a person"),
+                    Label("Ask about a location")
+                };
                 break;
 
+
+            case "Ask about a person":
+                MenuState = SocialMenuState.askPerson;
+
+                break;
+
+            case "Ask about a location":
+                MenuState = SocialMenuState.askLocation;
+
+
+                break;
+            ///=======
+            ////TELL
+            /// ===
             case "Tell":
-
-                MenuState = SocialMenuState.tell;
+                _currentMenuOptions = new List<MenuOption>
+                {
+                Label("Share something about yourself")
+                //Label("Talk about a person");
+                //Label("Talk about a location");
+                };
                 break;
+
+
+            case "Share something about yourself":
+                MenuState = SocialMenuState.tellAboutYourself;
+
+                // Retrieve all MemoryTags related to the player
+                var playerTags = _player.PersonKnowledge.GetAllCharacterTags(_player);
+
+                // Build a list of menu options from the player's MemoryTags
+                _currentMenuOptions = playerTags.Select(tag =>
+                {
+                    // Convert the MemoryTag to a displayable label
+                    string labelText = tag.ToString(); // You can customize this based on how you want the tags displayed
+
+                    // Return the menu option with the tag stored as Data
+                    return Option(labelText, tag, null);
+                }).ToList();
+                break;
+
+            case "Talk about a person":
+                // MenuState = SocialMenuState.tellPerson;
+
+
+                break;
+
+            case "Talk about a location":
+                //MenuState = SocialMenuState.tellLocation;
+
+
+                break;
+
             default:
                 _currentMenuOptions = ProcessComplexMenuOptions(positionInList);
                 break;
@@ -203,11 +262,23 @@ public class PlayerMenuInteraction : MonoBehaviour
                 break;
             case SocialMenuState.objectInteraction:
 
-                _player.GotoAndInteractWithObject(_selectedWorldObject, (ObjectInteractionType)chosenOption.Data); 
+                _player.GotoAndInteractWithObject(_selectedWorldObject, (ObjectInteractionType)chosenOption.Data);
+                break;
 
-                //_character.BaseAction.RentItem((ObjectType)chosenOption.Data2, _personWeAreSpeakingTo);
-                // var option = (InteractionOption)chosenOption.Data;
-                //option.Execute(_character);
+            case SocialMenuState.tellAboutYourself:
+                if (chosenOption.Data is MemoryTags memoryTag)
+                {
+                    List<Enum> memoryTagsList = new() { memoryTag };
+                    // Safe to cast, proceed with the call
+                    SocialHelper.ShareKnowledgeAbout(_player, _personWeAreSpeakingTo, _player, KnowledgeType.person, memoryTagsList);
+                }
+                else
+                {
+                    // Handle the case where the cast is invalid
+                    Debug.LogError("Error: chosenOption.Data is not of type MemoryTags.");
+                }
+
+
                 //
                 break;
         }

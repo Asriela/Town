@@ -7,7 +7,7 @@ using System.Collections;
 public class InteractionMenu : MonoBehaviour
 {
     public VisualTreeAsset interactionMenuTemplate;
-    public float buttonSpacing = 5f; // Spacing between buttons
+    public float buttonSpacing = 2f; // Spacing between buttons
     public VisualElement root;
     private VisualElement menuContainer;
     private VisualElement backgroundImage;

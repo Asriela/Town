@@ -12,27 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7dc8225a4be6fd4d87acb8e49149fbb, type: 3}
   m_Name: StandardSocialAttitudes
   m_EditorClassIdentifier: 
-  Type: 0
+  Type: 14
   Behaviors:
   - _name: Dispise someone
     _dialogue: I want nothing to do with you! Be gone!
     _action: 10
     _actionParameter:
-      rid: 2000162498786885777
+      rid: 2000162498786885821
     _conditions:
     - conditionType: 27
       parameter:
-        rid: 2000162498786885779
+        rid: 2000162498786885822
     _priority: 3
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162498786885777
+    - rid: 2000162498786885821
       type: {class: SocializeType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 7
-    - rid: 2000162498786885779
+    - rid: 2000162498786885822
       type: {class: ViewTowards, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: -5
