@@ -9,6 +9,9 @@ using UnityEngine;
 [RequireComponent(typeof(UI))]
 [RequireComponent(typeof(Reactions))]
 [RequireComponent(typeof(State))]
+[RequireComponent(typeof(PersonKnowledge))]
+[RequireComponent(typeof(Views))]
+[RequireComponent(typeof(Relationships))]
 public class Character : MonoBehaviour
 {
     private Collider2D _collider2D;
@@ -31,7 +34,10 @@ public class Character : MonoBehaviour
     public Appearance Appearance { get; set; }
     public State State { get; set; }
 
+    public PersonKnowledge PersonKnowledge { get; set; }
+    public Views Views { get; set; }
 
+    public Relationships Relationships { get; set; }
     public SpriteRenderer SpriteRenderer { get; set; }
     private void Awake()
     { 
@@ -42,7 +48,9 @@ public class Character : MonoBehaviour
         Vitality.Initialize(this);
         Appearance = GetComponent<Appearance>();
         Appearance.Initialize(this);
-
+        PersonKnowledge = GetComponent<PersonKnowledge>();
+        Views = GetComponent<Views>();
+        Relationships = GetComponent<Relationships>();
         Memory = GetComponent<Memory>();
         Ui = GetComponent<UI>();
         Ui.Initialize(this);

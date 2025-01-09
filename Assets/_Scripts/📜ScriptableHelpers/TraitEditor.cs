@@ -202,6 +202,8 @@ public class TraitEditor : Editor
             Mind.ConditionType.afterClosing => typeof(Mind.TargetLocationType),
             Mind.ConditionType.seesSomeoneWithTrait => typeof(Mind.TraitType),
             Mind.ConditionType.seesSomeoneWithoutTrait => typeof(Mind.TraitType),
+            Mind.ConditionType.seesSomeoneRelatLevelAtOrAbove => typeof(Mind.ViewTowards),
+            Mind.ConditionType.seesSomeoneRelatLevelAtOrBelow => typeof(Mind.ViewTowards),
             _ => null
         };
 

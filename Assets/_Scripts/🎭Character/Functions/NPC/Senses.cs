@@ -236,10 +236,30 @@ public class Senses : MonoBehaviour
     {
         foreach (var character in _charactersInSight)
         {
-            return character;
+            foreach (Mind.TraitType trait in traits)
+            {
+                if (character.Memory.HasSpecificTrait(trait))
+                {
+                    return character;
+                }
+            }
         }
         return null;
     }
+
+
+    public Character SeeSomeoneWithRelationshipLevel(bool aboveLevel, Mind.ViewTowards view)
+    {
+        foreach (var character in _charactersInSight)
+        {
+            if (aboveLevel && _npc.Relationships.GetRelationshipWith(_npc, character) >= (int)view)
+                return character;
+            if (aboveLevel == false && _npc.Relationships.GetRelationshipWith(_npc, character) <= (int)view)
+                return character;
+        }
+        return null;
+    }
+
 
     public WorldObject SeeObjectOfType(Mind.ObjectType objectType)
     {

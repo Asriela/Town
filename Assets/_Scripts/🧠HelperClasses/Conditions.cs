@@ -36,6 +36,8 @@ public static class Conditions
         _conditionDelegates.Add(ConditionType.beforeClosing, new ConditionDelegate<TargetLocationType>(CheckLocationClosed));
         _conditionDelegates.Add(ConditionType.seesSomeoneWithTrait, new ConditionDelegate<TraitType>(CheckSeesSomeoneWithTrait));
         _conditionDelegates.Add(ConditionType.seesSomeoneWithoutTrait, new ConditionDelegate<TraitType>(CheckSeesSomeoneWithTrait));
+        _conditionDelegates.Add(ConditionType.seesSomeoneRelatLevelAtOrAbove, new ConditionDelegate<ViewTowards>(CheckSeesSomeoneWithRelationshipLevelAt));
+        _conditionDelegates.Add(ConditionType.seesSomeoneRelatLevelAtOrBelow, new ConditionDelegate<ViewTowards>(CheckSeesSomeoneWithRelationshipLevelAt));
     }
 
     public static bool CheckCondition(Condition condition, NPC npc)
@@ -92,6 +94,9 @@ public static class Conditions
                 ConditionType.seesSomeoneWithTrait => ConditionHandler<TraitType>((ConditionDelegate<TraitType>)conditionDelegate, condition.parameter, npc, true),
 
                 ConditionType.seesSomeoneWithoutTrait => ConditionHandler<TraitType>((ConditionDelegate<TraitType>)conditionDelegate, condition.parameter, npc, false),
+                ConditionType.seesSomeoneRelatLevelAtOrAbove => ConditionHandler<ViewTowards>((ConditionDelegate<ViewTowards>)conditionDelegate, condition.parameter, npc, true),
+
+                ConditionType.seesSomeoneRelatLevelAtOrBelow => ConditionHandler<ViewTowards>((ConditionDelegate<ViewTowards>)conditionDelegate, condition.parameter, npc, false),
                 _ => false
             };
 
@@ -147,10 +152,24 @@ public static class Conditions
         if (someoneWithTrait != null)
         {
             npc.Memory.SocialTarget = someoneWithTrait;
-            return trueStatement;
+            return true;
         }
         //TODO: add negative , would need to add SeeSomeoneWithoutTraits method in senses
-        return !trueStatement;
+        return false;
+    }
+
+    private static bool CheckSeesSomeoneWithRelationshipLevelAt(ViewTowards parameter, NPC npc, bool trueStatement)
+    {
+        var senses = npc.Senses;
+        Character someoneAtRelationshipLevel = senses.SeeSomeoneWithRelationshipLevel(trueStatement, parameter);
+
+        if (someoneAtRelationshipLevel != null)
+        {
+            npc.Memory.SocialTarget = someoneAtRelationshipLevel;
+            return true;
+        }
+
+        return false;
     }
     private static bool CheckLocationTarget(TargetLocationType parameter, NPC npc, bool trueStatement)
     {

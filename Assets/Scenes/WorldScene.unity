@@ -745,6 +745,42 @@ PrefabInstance:
       propertyPath: _characterName
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 6447556150417284335, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _peopleViews.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6447556150417284335, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _peopleViews.Array.data[0].character
+      value: 
+      objectReference: {fileID: 71209174}
+    - target: {fileID: 6447556150417284335, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _peopleViews.Array.data[1].character
+      value: 
+      objectReference: {fileID: 71209174}
+    - target: {fileID: 6447556150417284335, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _peopleViews.Array.data[0].views.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6447556150417284335, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _peopleViews.Array.data[1].views.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6447556150417284335, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _peopleViews.Array.data[0].views.Array.data[0].view
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6447556150417284335, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _peopleViews.Array.data[0].views.Array.data[1].view
+      value: -6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6447556150417284335, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _peopleViews.Array.data[1].views.Array.data[0].view
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6447556150417284335, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _peopleViews.Array.data[0].views.Array.data[1].memoryTags
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6668485555159576815, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: m_Name
       value: 'Belethor '
@@ -6082,7 +6118,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1359901486}
   - component: {fileID: 1359901489}
-  - component: {fileID: 1359901490}
   - component: {fileID: 1359901491}
   - component: {fileID: 1359901492}
   - component: {fileID: 1359901494}
@@ -6091,8 +6126,11 @@ GameObject:
   - component: {fileID: 1359901495}
   - component: {fileID: 1359901497}
   - component: {fileID: 1359901498}
-  - component: {fileID: 1359901499}
   - component: {fileID: 1359901500}
+  - component: {fileID: 1359901503}
+  - component: {fileID: 1359901502}
+  - component: {fileID: 1359901504}
+  - component: {fileID: 1359901501}
   m_Layer: 8
   m_Name: Player
   m_TagString: Character
@@ -6139,22 +6177,6 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &1359901490
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1359901485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ac01c6a121ef6646bcb47daf490cfc1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _characterName: 1
-  _radialMenuPrefab: {fileID: 0}
-  _seenColor: {r: 0, g: 0, b: 0, a: 1}
-  _defaultColor: {r: 0, g: 0, b: 1, a: 1}
 --- !u!61 &1359901491
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6256,7 +6278,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4cfebd498ba96d54c9d13408d6b99992, type: 2}
   _locationTargetsList: []
   _locationKnowledge: []
-  _peopleKnowledge: []
   _possessionsList:
   - objectType: 0
     worldObjects:
@@ -6302,18 +6323,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b50f88f1cf842943b0bbb8d001a4eb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1359901499
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1359901485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50918dfa831241f43bf0767db074714b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1359901500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6327,6 +6336,69 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentState: 0
+--- !u!114 &1359901501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1359901485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ac01c6a121ef6646bcb47daf490cfc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _characterName: 1
+  _radialMenuPrefab: {fileID: 0}
+  _seenColor: {r: 0.072267726, g: 0.26780218, b: 0.5283019, a: 1}
+  _defaultColor: {r: 0, g: 0.37256458, b: 0.8773585, a: 1}
+--- !u!114 &1359901502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1359901485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f318ec7f34ac45146bc41cd468714b86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _peopleViews:
+  - character: {fileID: 1359901501}
+    views:
+    - memoryTags: 0
+      view: 1
+  - character: {fileID: 1359901501}
+    views: []
+--- !u!114 &1359901503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1359901485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa71aff9f4e1cf64885e014e07523b1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _peopleKnowledge:
+  - character: {fileID: 1359901501}
+    tags: 000001000700
+--- !u!114 &1359901504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1359901485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a83e2c65ffaa7e4d8488e3f5bebc7ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _characterRelationships: []
 --- !u!1001 &1504362824
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8492,6 +8564,22 @@ PrefabInstance:
       propertyPath: _peopleKnowledge.Array.data[0].gameObject
       value: 
       objectReference: {fileID: 71209173}
+    - target: {fileID: 5885001525488749945, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
+      propertyPath: _peopleKnowledge.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5885001525488749945, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
+      propertyPath: _peopleKnowledge.Array.data[0].character
+      value: 
+      objectReference: {fileID: 939759391}
+    - target: {fileID: 5885001525488749945, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
+      propertyPath: _peopleKnowledge.Array.data[0].tags.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5885001525488749945, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
+      propertyPath: '_peopleKnowledge.Array.data[0].tags.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6292114484936585221, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
       propertyPath: m_Name
       value: 'Zerath '

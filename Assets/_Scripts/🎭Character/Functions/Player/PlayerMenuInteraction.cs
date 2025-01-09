@@ -31,7 +31,11 @@ public class PlayerMenuInteraction : MonoBehaviour
         memories,
         buy,
         sell,
-        objectInteraction
+        objectInteraction,
+        tell,
+        ask,
+        socialAction
+
 
     }
 
@@ -48,12 +52,13 @@ public class PlayerMenuInteraction : MonoBehaviour
     private List<MenuOption> _currentMenuOptions = new List<MenuOption> { new MenuOption("NULL", null, null) };
 
 
-    public static List<SocialActions> BasicActions = new List<SocialActions> { SocialActions.hug, SocialActions.kiss, SocialActions.kill };
-
+    public static List<SocializeType> BasicActions = new List<SocializeType> {  SocializeType.insult };
+     
     public void Initialize(Player player)
     {
         _player = player;
     }
+        
 
     private void Start()
     {
@@ -140,22 +145,29 @@ public class PlayerMenuInteraction : MonoBehaviour
                     return Option($"{labelText}: {price:C}", pureLabelText, item);
                 }).ToList();
                 break;
-            case "Action":
-
+            case "Social Action":
+                MenuState = SocialMenuState.socialAction;
                 _currentMenuOptions = BasicActions.Select(action => Option(action.ToString(), null, null)).ToList();
                 break;
-            case "Social":
+            case "Knowledge":
 
                 _currentMenuOptions = new List<MenuOption>
                 {
                     Label("Ask"),
-                    Label("Tell"),
-                    Label("Hang out")
+                    Label("Tell")
                 };
                 break;
 
 
+            case "Ask":
 
+                MenuState = SocialMenuState.ask;
+                break;
+
+            case "Tell":
+
+                MenuState = SocialMenuState.tell;
+                break;
             default:
                 _currentMenuOptions = ProcessComplexMenuOptions(positionInList);
                 break;
@@ -241,8 +253,8 @@ public class PlayerMenuInteraction : MonoBehaviour
                 List<MenuOption> buttonLabels = new List<MenuOption>
                 {
                     Label("Trade"),
-                    Label("Action"),
-                    Label("Social")
+                    Label("Social Action"),
+                    Label("Knowledge")
 
 
                 };

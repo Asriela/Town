@@ -12,12 +12,6 @@ public class ObjectTypeWorldObjectPair
     public List<WorldObject> worldObjects;  // Updated to List<WorldObject>
 }
 
-[Serializable]
-public class GameObjectTagsPair
-{
-    public GameObject gameObject;
-    public List<Mind.TraitType> tags = new();
-}
 
 [Serializable]
 public class LocationTagsPair
@@ -79,6 +73,18 @@ public class Memory : MonoBehaviour
         if (_traits.Contains(theTrait))
         { return true; }
 
+        return false;
+    }
+
+    public bool HasSpecificTrait(TraitType theTrait)
+    {
+        foreach (var trait in _traits)
+        {
+            if (trait.Type == theTrait)
+            {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -173,51 +179,7 @@ public class Memory : MonoBehaviour
         .Select(p => p.location)
         .ToList();
 
-    [SerializeField]
-    private List<GameObjectTagsPair> _peopleKnowledge = new();
-
-    public Dictionary<GameObject, List<Mind.TraitType>> PeopleKnowledge
-    {
-        get
-        {
-            Dictionary<GameObject, List<Mind.TraitType>> dictionary = new();
-            foreach (var pair in _peopleKnowledge)
-            {
-                dictionary[pair.gameObject] = pair.tags;
-            }
-            return dictionary;
-        }
-    }
-
-    public void AddPerson(GameObject person, List<Mind.TraitType> tags)
-    {
-        var existingPerson = _peopleKnowledge.FirstOrDefault(p => p.gameObject == person);
-
-        if (existingPerson == null)
-        {
-            _peopleKnowledge.Add(new GameObjectTagsPair
-            {
-                gameObject = person,
-                tags = tags
-            });
-        }
-        else
-        {
-            foreach (var tag in tags)
-            {
-                if (!existingPerson.tags.Contains(tag))
-                {
-                    existingPerson.tags.Add(tag);
-                }
-            }
-        }
-    }
-
-    public List<GameObject> GetPeopleByTag(params Mind.TraitType[] tags) =>
-    _peopleKnowledge
-        .Where(p => tags.All(tag => p.tags.Contains(tag)))
-        .Select(p => p.gameObject)
-        .ToList();
+    
 
     // Updated: Possessions now a Dictionary with List<WorldObject> as values
     [SerializeField]

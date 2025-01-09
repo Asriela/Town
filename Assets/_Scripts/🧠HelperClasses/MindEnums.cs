@@ -19,7 +19,8 @@ namespace Mind
         newToTown,
         hatesOutsiders,
         hasNoBed,
-        drunkard
+        drunkard,
+        StandardSocialAttitudes
 
     }
     [Serializable]
@@ -185,8 +186,9 @@ namespace Mind
         beforeClosing,
         afterClosing,
         seesSomeoneWithTrait,
-        seesSomeoneWithoutTrait
-
+        seesSomeoneWithoutTrait,
+        seesSomeoneRelatLevelAtOrAbove,
+        seesSomeoneRelatLevelAtOrBelow
     }
     [Serializable]
     public enum TimeOfDayType : short
@@ -216,7 +218,20 @@ namespace Mind
         pm11,
         pm12,
     }
+    [Serializable]
+    public enum ViewTowards : int
+    {
+        despise = -5,
+        extremelyNegative = -3,
+        veryNegative = -2,
+        negative = -1,
+        neutral = 0,
+        positive = 1,
+        veryPositive = 2,
+        extremelyPositive = 3,
+        adore = 5
 
+    }
     [Serializable]
     public enum ObjectType : short
     {
