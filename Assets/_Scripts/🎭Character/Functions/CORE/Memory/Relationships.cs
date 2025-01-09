@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mind;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
+
 
 [Serializable]
 public class CharacterFloatPair

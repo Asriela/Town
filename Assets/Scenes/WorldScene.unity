@@ -733,6 +733,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4024465088588790527, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5099467846075640772, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -4.25
@@ -1598,6 +1602,10 @@ PrefabInstance:
     - target: {fileID: 2983480696713900480, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
       propertyPath: m_Color.r
       value: 0.6886792
+      objectReference: {fileID: 0}
+    - target: {fileID: 3180940937261684076, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4428779715226018946, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
       propertyPath: _traits.Array.size
@@ -5073,6 +5081,10 @@ PrefabInstance:
       propertyPath: m_Speed
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4024465088588790527, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5099467846075640772, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -0.17975
@@ -6013,7 +6025,7 @@ MonoBehaviour:
   - locationType: 3
     gameObject: {fileID: 442743166}
   _timeOfDay: 0
-  _startingTime: 2
+  _startingTime: 10
   _allCharacters:
   - characterName: 2
     character: {fileID: 71209174}
@@ -8538,6 +8550,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1595573972828242683, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3180940937261684076, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4428779715226018946, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}

@@ -357,7 +357,7 @@ public class PlayerMenuInteraction : MonoBehaviour
 
 
                     MenuState = SocialMenuState.objectInteraction;  // Assuming you have a separate menu state for WorldObjects
-                    _interactionMenu.ShowMenu(_currentMenuOptions, "");
+                    _interactionMenu.ShowMenu(_currentMenuOptions, "Social Interactions");
                 }
             }
 

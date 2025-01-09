@@ -31,8 +31,8 @@ public class UI : MonoBehaviour
         _character = character;
         if (_character is not Player && Settings.Instance.AllNPCsShowLogUI == false) 
         {
-            _statsLabel.gameObject.SetActive(false);
-            _statsPanelTransform.gameObject.SetActive(false);
+           // _statsLabel.gameObject.SetActive(false);
+           // _statsPanelTransform.gameObject.SetActive(false);
         }
 
     }

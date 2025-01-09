@@ -267,7 +267,7 @@ public class Memory : MonoBehaviour
             }
         }
 
-        EditorUtility.SetDirty(this);
+
         UpdatePossessionsListFromDictionary();
     }
     public WorldObject RemoveFromPossessions(Mind.ObjectType objectType)
