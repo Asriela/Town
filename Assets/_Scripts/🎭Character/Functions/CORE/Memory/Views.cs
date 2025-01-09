@@ -95,4 +95,25 @@ public class Views : MonoBehaviour
             .Select(p => p.character)
             .ToList();
     }
+
+    public ViewTowards? GetView(Character character, Mind.MemoryTags memoryTag)
+    {
+        // Check if the character exists in the views dictionary
+        var characterViews = PeopleViews.ContainsKey(character) ? PeopleViews[character] : null;
+
+        if (characterViews != null)
+        {
+            // Find the view for the specific memory tag
+            var memoryTagView = characterViews.FirstOrDefault(view => view.memoryTags == memoryTag);
+
+            // If the memory tag view is found, return the view
+            if (memoryTagView != null)
+            {
+                return memoryTagView.view;
+            }
+        }
+
+        // Return null if no view for the memory tag is found
+        return null;
+    }
 }

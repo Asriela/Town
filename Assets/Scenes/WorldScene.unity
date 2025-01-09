@@ -771,7 +771,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6447556150417284335, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: _peopleViews.Array.data[0].views.Array.data[1].view
-      value: -6
+      value: -25
       objectReference: {fileID: 0}
     - target: {fileID: 6447556150417284335, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: _peopleViews.Array.data[1].views.Array.data[0].view

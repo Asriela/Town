@@ -52,7 +52,7 @@ public class PlayerMenuInteraction : MonoBehaviour
     private bool _leftClick = false;
     private bool _justOpenedPieMenu = false;
     private Vector2 _screenPosition;
-
+    private string _lastMenuOption = "";
     public SocialMenuState MenuState { get; set; }
     private List<MenuOption> _currentMenuOptions = new List<MenuOption> { new MenuOption("NULL", null, null) };
 
@@ -120,7 +120,7 @@ public class PlayerMenuInteraction : MonoBehaviour
 
 
 
-
+        _lastMenuOption = buttonLabel;
 
         switch (buttonLabel)
         {
@@ -154,18 +154,11 @@ public class PlayerMenuInteraction : MonoBehaviour
                 MenuState = SocialMenuState.socialAction;
                 _currentMenuOptions = BasicActions.Select(action => Option(action.ToString(), null, null)).ToList();
                 break;
-            case "Knowledge":
 
-                _currentMenuOptions = new List<MenuOption>
-                {
-                    Label("Ask"),
-                    Label("Tell")
-                };
-                break;
             ///=======
             ////ASK
             /// ===
-            case "Ask":
+            case "Ask about":
 
                 _currentMenuOptions = new List<MenuOption>
                 {
@@ -188,7 +181,7 @@ public class PlayerMenuInteraction : MonoBehaviour
             ///=======
             ////TELL
             /// ===
-            case "Tell":
+            case "Talk about":
                 _currentMenuOptions = new List<MenuOption>
                 {
                 Label("Share something about yourself")
@@ -238,7 +231,7 @@ public class PlayerMenuInteraction : MonoBehaviour
         if (_currentMenuOptions == null)
         { _interactionMenu.HideMenu(); }
         else
-        { _interactionMenu.ShowMenu(_currentMenuOptions); }
+        { _interactionMenu.ShowMenu(_currentMenuOptions, _lastMenuOption); }
     }
 
     private List<MenuOption> ProcessComplexMenuOptions(int positionInList)
@@ -270,7 +263,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                 {
                     List<Enum> memoryTagsList = new() { memoryTag };
                     // Safe to cast, proceed with the call
-                    SocialHelper.ShareKnowledgeAbout(_player, _personWeAreSpeakingTo, _player, KnowledgeType.person, memoryTagsList);
+                    SocialHelper.ShareKnowledgeAbout(_player, _personWeAreSpeakingTo, _player, KnowledgeType.person, memoryTagsList, null);
                 }
                 else
                 {
@@ -323,15 +316,17 @@ public class PlayerMenuInteraction : MonoBehaviour
 
                 List<MenuOption> buttonLabels = new List<MenuOption>
                 {
+                    Label("Talk about"),
+                    Label("Ask about"),
                     Label("Trade"),
-                    Label("Social Action"),
-                    Label("Knowledge")
+                    Label("Social Action")
+
 
 
                 };
 
                 MenuState = SocialMenuState.start;
-                _interactionMenu.ShowMenu(buttonLabels);
+                _interactionMenu.ShowMenu(buttonLabels, _lastMenuOption);
             }
             else
             {
@@ -362,7 +357,7 @@ public class PlayerMenuInteraction : MonoBehaviour
 
 
                     MenuState = SocialMenuState.objectInteraction;  // Assuming you have a separate menu state for WorldObjects
-                    _interactionMenu.ShowMenu(_currentMenuOptions);
+                    _interactionMenu.ShowMenu(_currentMenuOptions, "");
                 }
             }
 

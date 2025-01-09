@@ -227,6 +227,7 @@ namespace Mind
     [Serializable]
     public enum ViewTowards : int
     {
+        unforgivable = -25,
         despise = -5,
         extremelyNegative = -3,
         veryNegative = -2,
@@ -235,7 +236,8 @@ namespace Mind
         positive = 1,
         veryPositive = 2,
         extremelyPositive = 3,
-        adore = 5
+        adore = 5,
+        obsessed =25
 
     }
     [Serializable]

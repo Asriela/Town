@@ -40,43 +40,58 @@ public class Relationships : MonoBehaviour
     private void Update()
     {
         //TODO: make this run only when we get new info on someone
-        CalculateOnlyMyRelationshipWithEveryone();
+       // CalculateOnlyMyRelationshipWithEveryone();
     }
 
 
     // Calculate relationships with all characters based on tags and views
-    public void CalculateOnlyMyRelationshipWithEveryone()
+    public void RecalculateMyRelationshipWithEveryone()
     {
-        var personKnowledge = _character.GetComponent<PersonKnowledge>();
-        var views = _character.GetComponent<Views>();
+        // Accessing _character's PersonKnowledge
+        var personKnowledge = _character.PersonKnowledge;
+        var views = _character.Views;
+        BasicFunctions.Log("Reached relationship calculations", LogType.social);
 
+        // Get the dictionary of people's views (relationships towards _character)
+        var myViews = views.PeopleViews[_character];
+
+        // Access the _character's own knowledge of other characters
         var peopleKnowledge = personKnowledge.PeopleKnowledge;
-        var peopleViews = views.PeopleViews;
 
+        // Iterate over each person in _character's PersonKnowledge
         foreach (var characterTagsPair in peopleKnowledge)
         {
-            var character = characterTagsPair.Key;
-            var tags = characterTagsPair.Value;
+            var character = characterTagsPair.Key;  // The character known by _character
+            var tags = characterTagsPair.Value;    // Tags (memories) that _character knows about this character
 
-            // Get views for the character
-            var characterViews = peopleViews.ContainsKey(character) ? peopleViews[character] : new List<MemoryTagsFeelingsPair>();
 
-            float relationshipValue = 0f;
 
-            // Iterate over the tags known about the character
-            foreach (var tag in tags)
+
+            if (myViews == null || myViews.Count == 0)
             {
-                // Find the view for this tag
-                var viewFeelingPair = characterViews.FirstOrDefault(view => view.memoryTags == tag);
+                continue; // Skip if no views exist for this character
+            }
+
+            // Initialize relationship value for this character
+            float relationshipValue = 0f;
+            BasicFunctions.Log($"Character views contains {myViews.Count} entries", LogType.social);
+
+            // Iterate over the tags known about the character in _character's PersonKnowledge
+            foreach (var memoryTag in tags)
+            {
+                // Find the view for this tag in the character's views
+                var viewFeelingPair = myViews.FirstOrDefault(view => view.memoryTags == memoryTag);
+
                 if (viewFeelingPair != null)
                 {
+                    BasicFunctions.Log($"Character view of {memoryTag} is {viewFeelingPair.view}", LogType.social);
+
                     // Increase or decrease the relationship value based on the view towards the tag
                     relationshipValue += (int)viewFeelingPair.view;
                 }
-         
             }
 
-            // Update the relationship value with the character
+            // Update the relationship value with the character based on the views and memory tags
             AddOrUpdateRelationship(_character, character, relationshipValue);
         }
     }

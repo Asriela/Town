@@ -183,7 +183,9 @@ public class Acting : MonoBehaviour
 
                     _npc.Ui.CurrentStepInAction = "2 Ask innkeeper for location with tags";
                     List<Enum> tagsAsEnum = CurrentBehavior.ActionTags.Cast<Enum>().ToList();
-                    SocialHelper.AskForKnowledge(_npc, target, knowledgeType, tagsAsEnum);
+
+                    //TODO: ask for specific person if its person knowledge
+                    SocialHelper.AskForKnowledgeAbout(_npc, target, _npc, knowledgeType, tagsAsEnum);
                     IncrementStepInAction();
 
                 }

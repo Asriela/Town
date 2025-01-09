@@ -50,7 +50,7 @@ public class Character : MonoBehaviour
         Appearance.Initialize(this);
         PersonKnowledge = GetComponent<PersonKnowledge>();
         Views = GetComponent<Views>();
-        Relationships = GetComponent<Relationships>();
+
         Memory = GetComponent<Memory>();
         Ui = GetComponent<UI>();
         Ui.Initialize(this);
@@ -58,6 +58,8 @@ public class Character : MonoBehaviour
         Reactions.Initialize(this);
         State = GetComponent<State>();
         State.Initialize(this);
+        Relationships = GetComponent<Relationships>();
+        Relationships.Initialize(this);
     }
 
 

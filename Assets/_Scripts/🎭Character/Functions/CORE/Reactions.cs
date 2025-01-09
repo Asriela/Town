@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using System.Linq;
+using Mind;
 
 public class Reactions : MonoBehaviour
 {
@@ -22,11 +23,11 @@ public class Reactions : MonoBehaviour
     {
         if (!intendedRecieverOfMessage)
         {
-            yield break; 
+            yield break;
         }
 
 
-        yield return new WaitForSeconds(3f); 
+        yield return new WaitForSeconds(1f);
 
         switch (actionType)
         {
@@ -38,7 +39,7 @@ public class Reactions : MonoBehaviour
                         var originalEnumList = actionPost.KnowledgeTags.Cast<Mind.KnowledgeTag>().ToArray();
                         List<Enum> newKnowledge = _npc.Memory.GetLocationsByTag(originalEnumList).Cast<Enum>().ToList();
                         var originalTags = actionPost.KnowledgeTags;
-                        SocialHelper.ShareKnowledgeAbout(_npc, sender, aboutWho,Mind.KnowledgeType.location, newKnowledge, originalTags);
+                        SocialHelper.ShareKnowledgeAbout(_npc, sender, aboutWho, Mind.KnowledgeType.location, newKnowledge, originalTags);
                         break;
                 }
 
@@ -56,7 +57,72 @@ public class Reactions : MonoBehaviour
                             _npc.Memory.AddLocation(location, tags);
                             _npc.Memory.AddLocationTarget(_npc.Memory.LatestLocationTargetType, location);
 
-                          
+
+                        }
+
+                        break;
+                    case Mind.KnowledgeType.person:
+                        // BasicFunctions.Log("❤knowledge received");
+                        foreach (var knowledgeItem in actionPost.KnowledgeTags)
+                        {
+
+                            List<Mind.MemoryTags> tags = actionPost.KnowledgeTags.Cast<Mind.MemoryTags>().ToList();
+                            _npc.PersonKnowledge.AddPerson(aboutWho, tags);
+
+                            _npc.Relationships.RecalculateMyRelationshipWithEveryone();
+                            var viewAboutMemoryTag = _npc.Views.GetView(_npc, tags[0]);
+                            
+
+                            switch (viewAboutMemoryTag)
+                            {
+                                case ViewTowards.unforgivable:
+                                    _npc.Ui.Speak("WHAT!? GET OUT!! GET OUT NOW!!");
+                                    break;
+
+                                case ViewTowards.despise:
+                                    _npc.Ui.Speak("That's horrifying!");
+                                    break;
+
+                                case ViewTowards.extremelyNegative:
+                                    _npc.Ui.Speak("That's extremely upsetting.");
+                                    break;
+
+                                case ViewTowards.veryNegative:
+                                    _npc.Ui.Speak("Im not ok with that..");
+                                    break;
+
+                                case ViewTowards.negative:
+                                    _npc.Ui.Speak("I don't like that...");
+                                    break;
+
+                                case ViewTowards.neutral:
+                                    _npc.Ui.Speak("Oh ok..");
+                                    break;
+
+                                case ViewTowards.positive:
+                                    _npc.Ui.Speak("That's nice..");
+                                    break;
+
+                                case ViewTowards.veryPositive:
+                                    _npc.Ui.Speak("I like that...");
+                                    break;
+
+                                case ViewTowards.extremelyPositive:
+                                    _npc.Ui.Speak("How wonderful!");
+                                    break;
+
+                                case ViewTowards.adore:
+                                    _npc.Ui.Speak("That's amazing!");
+                                    break;
+
+                                case ViewTowards.obsessed:
+                                    _npc.Ui.Speak("WOW! UNBELIEVABLE!");
+                                    break;
+
+                                default:
+                                    _npc.Ui.Speak("I don't know how I feel about that.");
+                                    break;
+                            }
                         }
 
                         break;

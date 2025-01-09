@@ -53,7 +53,7 @@ public class InteractionMenu : MonoBehaviour
     }
 
 
-    public void ShowMenu(List<MenuOption> buttonLabels)
+    public void ShowMenu(List<MenuOption> buttonLabels, string lastMenuOption)
     {
         GameManager.Instance.BlockingPlayerUIOnScreen = true;
         menuContainer.Clear();
@@ -63,6 +63,19 @@ public class InteractionMenu : MonoBehaviour
         // Add the background image first
         menuContainer.Add(backgroundImage);
 
+        // Add the lastMenuOption text at the top for context
+        if (!string.IsNullOrEmpty(lastMenuOption))
+        {
+            Label contextLabel = new Label(lastMenuOption);
+            contextLabel.style.fontSize = 14; // Reduced font size
+            contextLabel.style.color = new Color(1f, 1f, 1f); // Set text color to white
+            contextLabel.style.marginTop = new Length(40, LengthUnit.Pixel); // Increased margin to lower the title
+            contextLabel.style.marginBottom = new Length(10, LengthUnit.Pixel); // Adjusted to reduce the gap to buttons
+            contextLabel.style.alignSelf = Align.Center;
+            contextLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
+            menuContainer.Add(contextLabel);
+        }
+
         // Arrange buttons vertically
         for (int i = 0; i < buttonCount; i++)
         {
@@ -70,7 +83,7 @@ public class InteractionMenu : MonoBehaviour
             Button button = new Button { text = label };
 
             // Positioning buttons
-            button.style.marginTop = new Length(i == 0 ? 60 : buttonSpacing, LengthUnit.Pixel);
+            button.style.marginTop = new Length(i == 0 ? 10 : buttonSpacing, LengthUnit.Pixel); // Reduced space before buttons
             button.style.width = new Length(180, LengthUnit.Pixel);
             button.style.alignSelf = Align.Center;
             button.style.unityTextAlign = TextAnchor.MiddleLeft;
@@ -88,6 +101,9 @@ public class InteractionMenu : MonoBehaviour
 
             menuContainer.Add(button);
         }
+
+        // Move the menu to the left by its width (200px)
+        menuContainer.style.left = new Length(-5, LengthUnit.Pixel);
 
         // Display the menu
         menuContainer.style.display = DisplayStyle.Flex;
