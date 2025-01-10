@@ -104,7 +104,7 @@ public class Reactions : MonoBehaviour
                                     break;
 
                                 case ViewTowards.veryPositive:
-                                    _npc.Ui.Speak("I like that...");
+                                    _npc.Ui.Speak("I really like that...");
                                     break;
 
                                 case ViewTowards.extremelyPositive:

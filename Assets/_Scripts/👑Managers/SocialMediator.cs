@@ -10,8 +10,8 @@ public static class SocialMediator
     {
         // Notify the target directly
         if (target != null)
-        { target.Reactions.ReactToActionStarter(true,sender, aboutPerson, actionType, actionPost); }
-
+        { target.Reactions.ReactToActionStarter(true, sender, aboutPerson, actionType, actionPost); }
+        /*
         if (IsHeardAction(actionType))
         {
             foreach (var characterKeyValue in WorldManager.Instance.AllCharacters)
@@ -23,7 +23,7 @@ public static class SocialMediator
                 //TODO: change hearing radius to senses : add senses to character class instead of npc class
                 if (Vector3.Distance(sender.transform.position, character.transform.position) <= _hearingRadius)
                 {
-                    character.Reactions.ReactToActionStarter(false, sender,  aboutPerson, actionType, actionPost);
+                    character.Reactions.ReactToActionStarter(false, sender, aboutPerson, actionType, actionPost);
                 }
             }
         }
@@ -44,6 +44,7 @@ public static class SocialMediator
             }
         }
 
+        */
     }
 
     private static bool IsHeardAction(Mind.ActionType actionType)

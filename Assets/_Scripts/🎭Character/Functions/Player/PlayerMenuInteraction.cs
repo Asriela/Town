@@ -153,7 +153,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                 break;
             case "Social Action":
                 MenuState = SocialMenuState.socialAction;
-                _currentMenuOptions = BasicActions.Select(action => Option(action.ToString(), null, null)).ToList();
+                _currentMenuOptions = BasicActions.Select(action => Option(action.ToString(), action, null)).ToList();
                 break;
 
             ///=======
@@ -335,7 +335,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                 };
 
                 MenuState = SocialMenuState.start;
-                _interactionMenu.ShowMenu(buttonLabels, _lastMenuOption);
+                _interactionMenu.ShowMenu(buttonLabels, "Social Interactions");
             }
             else
             {

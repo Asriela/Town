@@ -70,7 +70,7 @@ public class Relationships : MonoBehaviour
         }
         else
         {
-            effectFromInteraction = CalculateInteractionEffectValue(socializeType, existingEffect.amountOfRepeatsToday,
+            effectFromInteraction = CalculateInteractionEffectValue(socializeType, 1,
                 GetRelationshipWith(_character, giverOfInteraction), out responseDialogue);
 
             // Create a new InteractionEffect and calculate its value
@@ -92,6 +92,7 @@ public class Relationships : MonoBehaviour
     private float CalculateInteractionEffectValue(SocializeType socializeType, int todaysRepeats, float relationshipValueWithGiverOfInteraction, out string responseDialogue)
     {
         float effectValue = 0f;
+        responseDialogue = "";
         switch (socializeType)
         {
             case SocializeType.hug:
@@ -179,7 +180,7 @@ public class Relationships : MonoBehaviour
                 break;
         }
 
-        responseDialogue = "";
+
         return effectValue / 10;
     }
 

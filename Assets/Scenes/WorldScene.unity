@@ -296,7 +296,7 @@ Transform:
   m_GameObject: {fileID: 32974325}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.4, y: 3.81, z: 0}
+  m_LocalPosition: {x: 16.48, y: 3.57, z: 0}
   m_LocalScale: {x: 3.805379, y: 4.143942, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -987,7 +987,7 @@ PrefabInstance:
       objectReference: {fileID: 71209174}
     - target: {fileID: 6447556150417284335, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: _peopleViews.Array.data[0].views.Array.size
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6447556150417284335, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: _peopleViews.Array.data[1].views.Array.size
@@ -995,11 +995,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6447556150417284335, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: _peopleViews.Array.data[0].views.Array.data[0].view
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6447556150417284335, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: _peopleViews.Array.data[0].views.Array.data[1].view
       value: -25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6447556150417284335, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _peopleViews.Array.data[0].views.Array.data[2].view
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6447556150417284335, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _peopleViews.Array.data[0].views.Array.data[3].view
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 6447556150417284335, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: _peopleViews.Array.data[1].views.Array.data[0].view
@@ -1008,6 +1016,14 @@ PrefabInstance:
     - target: {fileID: 6447556150417284335, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: _peopleViews.Array.data[0].views.Array.data[1].memoryTags
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6447556150417284335, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _peopleViews.Array.data[0].views.Array.data[2].memoryTags
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6447556150417284335, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
+      propertyPath: _peopleViews.Array.data[0].views.Array.data[3].memoryTags
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 6668485555159576815, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: m_Name
@@ -1855,6 +1871,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ludwar
       objectReference: {fileID: 0}
+    - target: {fileID: 6292114484936585221, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7380550154796747994, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
       propertyPath: _characterName
       value: 5
@@ -1862,10 +1882,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4370184012527938588, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
 --- !u!1001 &246597555
 PrefabInstance:
@@ -6528,7 +6545,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _persistent: 0
-  _timeOfDaySpeed: 0.001
+  _timeOfDaySpeed: 0.0001
   _locations:
   - locationType: 1
     gameObject: {fileID: 973324749}
@@ -6913,7 +6930,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _peopleKnowledge:
   - character: {fileID: 1359901501}
-    tags: 000001000700
+    tags: 0000010007000d000c00
 --- !u!114 &1359901504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7252,8 +7269,14 @@ MonoBehaviour:
     trait: {fileID: 11400000, guid: a5220e34b34e9c44bb46f1ae48bdb1c1, type: 2}
   - traitType: 5
     trait: {fileID: 11400000, guid: eefabb8ac9e26a04d9898132317b846c, type: 2}
-  - traitType: 6
-    trait: {fileID: 11400000, guid: eefabb8ac9e26a04d9898132317b846c, type: 2}
+  - traitType: 14
+    trait: {fileID: 11400000, guid: d11561b58bf1ed549a1c046da957d40c, type: 2}
+  - traitType: 13
+    trait: {fileID: 11400000, guid: e50717eb719f2aa43828814f8735efcf, type: 2}
+  - traitType: 13
+    trait: {fileID: 11400000, guid: e50717eb719f2aa43828814f8735efcf, type: 2}
+  - traitType: 10
+    trait: {fileID: 11400000, guid: 4cfebd498ba96d54c9d13408d6b99992, type: 2}
 --- !u!1001 &1597307364
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9318,7 +9341,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4428779715226018946, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
       propertyPath: _traits.Array.size
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4428779715226018946, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
       propertyPath: '_traits.Array.data[1]'
@@ -9327,34 +9350,50 @@ PrefabInstance:
     - target: {fileID: 4428779715226018946, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
       propertyPath: '_traits.Array.data[2]'
       value: 
-      objectReference: {fileID: 11400000, guid: eefabb8ac9e26a04d9898132317b846c, type: 2}
+      objectReference: {fileID: 11400000, guid: e324a80a3908f7e4d8c306e70498ffee, type: 2}
     - target: {fileID: 4428779715226018946, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
       propertyPath: '_traits.Array.data[3]'
       value: 
-      objectReference: {fileID: 11400000, guid: e324a80a3908f7e4d8c306e70498ffee, type: 2}
+      objectReference: {fileID: 11400000, guid: 4cfebd498ba96d54c9d13408d6b99992, type: 2}
     - target: {fileID: 4428779715226018946, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
       propertyPath: '_traits.Array.data[4]'
       value: 
-      objectReference: {fileID: 11400000, guid: 4cfebd498ba96d54c9d13408d6b99992, type: 2}
+      objectReference: {fileID: 11400000, guid: eefabb8ac9e26a04d9898132317b846c, type: 2}
     - target: {fileID: 4428779715226018946, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
       propertyPath: _peopleKnowledge.Array.data[0].gameObject
       value: 
       objectReference: {fileID: 71209173}
     - target: {fileID: 5885001525488749945, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
       propertyPath: _peopleKnowledge.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5885001525488749945, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
       propertyPath: _peopleKnowledge.Array.data[0].character
       value: 
       objectReference: {fileID: 939759391}
     - target: {fileID: 5885001525488749945, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
+      propertyPath: _peopleKnowledge.Array.data[1].character
+      value: 
+      objectReference: {fileID: 71209174}
+    - target: {fileID: 5885001525488749945, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
       propertyPath: _peopleKnowledge.Array.data[0].tags.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5885001525488749945, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
+      propertyPath: _peopleKnowledge.Array.data[1].tags.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5885001525488749945, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
       propertyPath: '_peopleKnowledge.Array.data[0].tags.Array.data[0]'
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5885001525488749945, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
+      propertyPath: '_peopleKnowledge.Array.data[0].tags.Array.data[1]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5885001525488749945, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
+      propertyPath: '_peopleKnowledge.Array.data[1].tags.Array.data[0]'
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 6292114484936585221, guid: 6b946f9bf899ab94cbc88c69309b0968, type: 3}
       propertyPath: m_Name

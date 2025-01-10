@@ -28,7 +28,7 @@ public class InteractionMenu : MonoBehaviour
             // Get references to the container
             menuContainer = interactionMenu.Q<VisualElement>("MenuContainer");
             menuContainer.style.position = Position.Absolute;
-            menuContainer.style.width = new Length(200, LengthUnit.Pixel);
+            menuContainer.style.width = new Length(240, LengthUnit.Pixel);
             menuContainer.style.display = DisplayStyle.None;
 
             // Fixed menu position
@@ -41,9 +41,9 @@ public class InteractionMenu : MonoBehaviour
             backgroundImage.style.position = Position.Absolute;
             backgroundImage.style.left = new Length(0, LengthUnit.Pixel);
             backgroundImage.style.top = new Length(0, LengthUnit.Pixel);
-            backgroundImage.style.width = new Length(200, LengthUnit.Pixel);
+            backgroundImage.style.width = new Length(240, LengthUnit.Pixel);
             backgroundImage.style.height = new Length(400, LengthUnit.Pixel);
-            backgroundImage.style.opacity = 0.8f; // Optional: Slight transparency
+            backgroundImage.style.opacity = 1f; // Optional: Slight transparency
             menuContainer.Add(backgroundImage);
         }
         else
@@ -67,7 +67,7 @@ public class InteractionMenu : MonoBehaviour
         if (!string.IsNullOrEmpty(lastMenuOption))
         {
             Label contextLabel = new Label(lastMenuOption);
-            contextLabel.style.fontSize = 14; // Reduced font size
+            contextLabel.style.fontSize = 15; // Reduced font size
             contextLabel.style.color = new Color(1f, 1f, 1f); // Set text color to white
             contextLabel.style.marginTop = new Length(40, LengthUnit.Pixel); // Increased margin to lower the title
             contextLabel.style.marginBottom = new Length(10, LengthUnit.Pixel); // Adjusted to reduce the gap to buttons
@@ -83,6 +83,7 @@ public class InteractionMenu : MonoBehaviour
             Button button = new Button { text = label };
 
             // Positioning buttons
+
             button.style.marginTop = new Length(i == 0 ? 10 : buttonSpacing, LengthUnit.Pixel); // Reduced space before buttons
             button.style.width = new Length(180, LengthUnit.Pixel);
             button.style.alignSelf = Align.Center;
@@ -103,7 +104,7 @@ public class InteractionMenu : MonoBehaviour
         }
 
         // Move the menu to the left by its width (200px)
-        menuContainer.style.left = new Length(-5, LengthUnit.Pixel);
+       menuContainer.style.left = new Length(-5, LengthUnit.Pixel);
 
         // Display the menu
         menuContainer.style.display = DisplayStyle.Flex;
