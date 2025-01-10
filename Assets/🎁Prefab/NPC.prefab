@@ -934,6 +934,9 @@ GameObject:
   - component: {fileID: 5331179223756653882}
   - component: {fileID: 9191417111726022383}
   - component: {fileID: 2165854591833465640}
+  - component: {fileID: 5885001525488749945}
+  - component: {fileID: 3051159425368528727}
+  - component: {fileID: 4342599704053210997}
   m_Layer: 8
   m_Name: NPC
   m_TagString: Character
@@ -1130,9 +1133,6 @@ MonoBehaviour:
   _locationKnowledge:
   - location: 2
     tags: 0400
-  _peopleKnowledge:
-  - gameObject: {fileID: 0}
-    tags: 00000300
   _possessionsList: []
   _inventoryList: []
 --- !u!114 &462211914866264805
@@ -1188,6 +1188,9 @@ MonoBehaviour:
   _actionLabelTransform: {fileID: 3815210255341591321}
   _statsPanelTransform: {fileID: 429018117700145023}
   _actionPanellTransform: {fileID: 3430958870225674865}
+  _speechPanel: {fileID: 5476606203597832118}
+  _speechText: {fileID: 6282705368632622648}
+  _character: {fileID: 0}
 --- !u!114 &2165854591833465640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1201,6 +1204,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentState: 0
+--- !u!114 &5885001525488749945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6292114484936585221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa71aff9f4e1cf64885e014e07523b1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _peopleKnowledge: []
+--- !u!114 &3051159425368528727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6292114484936585221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f318ec7f34ac45146bc41cd468714b86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _peopleViews: []
+--- !u!114 &4342599704053210997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6292114484936585221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a83e2c65ffaa7e4d8488e3f5bebc7ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _characterRelationships: []
 --- !u!1 &6339493109928680269
 GameObject:
   m_ObjectHideFlags: 0

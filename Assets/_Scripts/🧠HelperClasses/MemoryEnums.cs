@@ -16,7 +16,10 @@ namespace Mind
         TheCauteris,
         MagesCollageOfArinus,
         innKeeper,
-        pumpkinFarmer
+        pumpkinFarmer,
+        dunharrow,
+        traveler,
+        occult
     }
 
     [Serializable]

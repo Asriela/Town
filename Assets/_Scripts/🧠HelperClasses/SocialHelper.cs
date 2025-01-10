@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using UnityEngine;
 using System.Collections.Generic;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public static class SocialHelper
 {
@@ -20,16 +21,19 @@ public static class SocialHelper
     {
         ActionPost actionPost = new(knowledgeType, newKnowledge, originalTags);
         SocialMediator.PostAction(senderOfMessage, recieverOfMessage, aboutPerson, ActionType.shareKnowledge, actionPost);
-       // senderOfMessage.Ui.Speak($"Yes let me mark it on your map");
+        // senderOfMessage.Ui.Speak($"Yes let me mark it on your map");
     }
 
     public static void SocialAction(Character senderOfMessage, Character recieverOfMessage, SocializeType socialActionType)
     {
         ActionPost actionPost = new(socialActionType, null, null);
         // SocialMediator.PostAction(senderOfMessage, recieverOfMessage, ActionType.socialize, actionPost);
+
         var socialDialogue = senderOfMessage.Memory.SocialDialogue;
         if (socialDialogue != null)
         { senderOfMessage.Ui.Speak(socialDialogue); }
+
+        float effectFromInteraction = recieverOfMessage.Relationships.AddInteractionEffect(socialActionType, senderOfMessage);
 
     }
 }

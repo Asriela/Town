@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mind;
 using UnityEngine;
 
 
@@ -18,7 +19,20 @@ public class CharacterRelationshipFloatPair
     public List<CharacterFloatPair> relationships = new(); // List of relationships with other characters
 }
 
+public class InteractionEffect
+{
+    public float value;
+    public SocializeType type;
+    public int amountOfRepeatsToday;
+    //TODO: add long lifespan so effects even when dimminished dont last forever
 
+    public InteractionEffect(SocializeType type, float value)
+    {
+        this.value = value;
+        this.type = type;
+        this.amountOfRepeatsToday = 1;
+    }
+}
 
 public class Relationships : MonoBehaviour
 {
@@ -27,19 +41,165 @@ public class Relationships : MonoBehaviour
     public void Initialize(Character character)
     {
         _character = character;
+        WorldManager.Instance.OnMidnight += MoveTodaysInteractionEffectsToThePast;
     }
 
     [SerializeField]
     private List<CharacterRelationshipFloatPair> _characterRelationships = new();
 
+    public List<InteractionEffect> TodaysInteractionEffects { get; set; } = new();
+
+    public List<InteractionEffect> PastInteractionEffects { get; set; } = new();
+
+    public float AddInteractionEffect(SocializeType socializeType, Character giverOfInteraction)
+    {
+        string responseDialogue = "";
+        float effectFromInteraction = 0;
+        // Check if there's already an InteractionEffect of this type
+        var existingEffect = TodaysInteractionEffects.FirstOrDefault(effect => effect.type == socializeType);
+
+        if (existingEffect != null)
+        {
+            // Increment the repeat counter
+            existingEffect.amountOfRepeatsToday++;
+            effectFromInteraction = CalculateInteractionEffectValue(socializeType, existingEffect.amountOfRepeatsToday,
+                GetRelationshipWith(_character, giverOfInteraction), out responseDialogue);
+            existingEffect.value = effectFromInteraction;
 
 
+        }
+        else
+        {
+            effectFromInteraction = CalculateInteractionEffectValue(socializeType, existingEffect.amountOfRepeatsToday,
+                GetRelationshipWith(_character, giverOfInteraction), out responseDialogue);
 
+            // Create a new InteractionEffect and calculate its value
+            var newEffect = new InteractionEffect(
+                socializeType, effectFromInteraction
+             );
+
+
+            TodaysInteractionEffects.Add(newEffect);
+        }
+
+
+        if (responseDialogue != "")
+        { _character.Ui.Speak(responseDialogue); }
+
+        return effectFromInteraction;
+    }
+
+    private float CalculateInteractionEffectValue(SocializeType socializeType, int todaysRepeats, float relationshipValueWithGiverOfInteraction, out string responseDialogue)
+    {
+        float effectValue = 0f;
+        switch (socializeType)
+        {
+            case SocializeType.hug:
+                if (relationshipValueWithGiverOfInteraction >= (float)ViewTowards.veryPositive)
+                {
+                    if (todaysRepeats <= 2)
+                    {
+                        responseDialogue = "ahh thanks that's a nice hug";
+                        effectValue = (float)ViewTowards.positive;
+                    }
+                    else
+                    {
+                        responseDialogue = "why do you keep hugging me, its weird";
+                        effectValue = (float)ViewTowards.negative;
+                    }
+                }
+                else
+                {
+                    responseDialogue = "Why are you hugging me...we arnt that close.";
+                    effectValue = ((float)ViewTowards.veryNegative) * todaysRepeats;
+                }
+                break;
+            case SocializeType.greet:
+                if (relationshipValueWithGiverOfInteraction <= (float)ViewTowards.veryNegative)
+                {
+                    responseDialogue = "ug you again..";
+                    effectValue = ((float)ViewTowards.negative) * todaysRepeats;
+
+                }
+                else
+                {
+                    if (todaysRepeats <= 1)
+                    {
+                        responseDialogue = "Good day to you too!";
+                        effectValue = (float)ViewTowards.positive;
+                    }
+                    else
+                    {
+                        responseDialogue = "You already greeted me..";
+                        effectValue = (float)ViewTowards.negative;
+                    }
+                }
+                break;
+            case SocializeType.smallTalk:
+                if (relationshipValueWithGiverOfInteraction <= (float)ViewTowards.veryNegative)
+                {
+                    responseDialogue = "ug you again..";
+                    effectValue = ((float)ViewTowards.negative) * todaysRepeats;
+
+                }
+                else
+                {
+                    if (todaysRepeats <= 4)
+                    {
+                        responseDialogue = "So did you hear about...";
+                        effectValue = (float)ViewTowards.positive;
+                    }
+                    else
+                    {
+                        responseDialogue = "Haven't we spoken enough for the day?";
+                        effectValue = (float)ViewTowards.negative;
+                    }
+                }
+                break;
+            case SocializeType.insult:
+                if (relationshipValueWithGiverOfInteraction <= (float)ViewTowards.negative)
+                {
+                    responseDialogue = "Yeah sounds like something an asshole like you would say.";
+                    effectValue = ((float)ViewTowards.veryNegative) * todaysRepeats;
+
+                }
+                else
+                {
+                    if (todaysRepeats <= 1)
+                    {
+                        responseDialogue = "Surely you don't mean that...";
+                        effectValue = (float)ViewTowards.negative;
+                    }
+                    else
+                    {
+                        responseDialogue = "I can't believe you have done this!";
+                        effectValue = ((float)ViewTowards.veryNegative) * todaysRepeats;
+                    }
+                }
+                break;
+        }
+
+        responseDialogue = "";
+        return effectValue / 10;
+    }
+
+    private void MoveTodaysInteractionEffectsToThePast()
+    {
+        PastInteractionEffects.AddRange(
+            TodaysInteractionEffects.Select(effect =>
+            {
+                effect.value /= 4;
+                return effect;
+            })
+        );
+
+        TodaysInteractionEffects.Clear();
+    }
 
     private void Update()
     {
         //TODO: make this run only when we get new info on someone
-       // CalculateOnlyMyRelationshipWithEveryone();
+        // CalculateOnlyMyRelationshipWithEveryone();
     }
 
 
@@ -131,13 +291,13 @@ public class Relationships : MonoBehaviour
     }
 
     // Get the relationship value between two characters
-    public float GetRelationshipWith(Character fromCharacter, Character toCharacter)
+    public float GetRelationshipWith(Character whosRelationships, Character withChatacter)
     {
-        var existingPair = _characterRelationships.FirstOrDefault(p => p.character == fromCharacter);
+        var existingPair = _characterRelationships.FirstOrDefault(p => p.character == whosRelationships);
 
         if (existingPair != null)
         {
-            var targetPair = existingPair.relationships.FirstOrDefault(r => r.targetCharacter == toCharacter);
+            var targetPair = existingPair.relationships.FirstOrDefault(r => r.targetCharacter == withChatacter);
             if (targetPair != null)
             {
                 return targetPair.relationshipValue;
@@ -178,5 +338,11 @@ public class Relationships : MonoBehaviour
         }
 
         return new List<Character>();
+    }
+
+    //TODO: add interface to ensure that this class and others like it has their cleanup method so we can clean up all these classes
+    public void Cleanup()
+    {
+        WorldManager.Instance.OnMidnight -= MoveTodaysInteractionEffectsToThePast;
     }
 }

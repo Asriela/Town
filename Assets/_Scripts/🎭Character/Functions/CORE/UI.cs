@@ -25,28 +25,33 @@ public class UI : MonoBehaviour
     private Transform _statsPanelTransform;
     [SerializeField]
     private Transform _actionPanellTransform;
+    [SerializeField]
+    private Transform _speechPanel;
+    [SerializeField]
+    private Transform _speechText;
+    [SerializeField]
     private Character _character;
     public void Initialize(Character character)
     {
         _character = character;
-        if (_character is not Player && Settings.Instance.AllNPCsShowLogUI == false) 
+        if (_character is not Player && Settings.Instance.AllNPCsShowLogUI == false)
         {
-           // _statsLabel.gameObject.SetActive(false);
-           // _statsPanelTransform.gameObject.SetActive(false);
+            // _statsLabel.gameObject.SetActive(false);
+            // _statsPanelTransform.gameObject.SetActive(false);
         }
 
     }
 
     private void Awake()
     {
-        Transform speechBubbleTransform = transform.Find("Canvas/SpeechBubble");
+        Transform speechBubbleTransform = _speechPanel;
 
         if (speechBubbleTransform != null)
         {
             _speechBubble = speechBubbleTransform.gameObject;
         }
 
-        var speechBubbleLabeTransform = transform.Find("Canvas/SpeechBubble/Speech");
+        var speechBubbleLabeTransform = _speechText;
         if (speechBubbleLabeTransform != null)
         {
             _speechBubbleLabel = speechBubbleLabeTransform.GetComponent<TextMeshProUGUI>();
@@ -72,14 +77,17 @@ public class UI : MonoBehaviour
     private void Update()
     {
         UpdateStatsLabel($"BEHAVIOUR:\n {CurrentBehaviour}\n-----------\nACTION:\n {CurrentAction}\n-----------\nSTEP:\n {CurrentStepInAction}\n-----------\nSEES:\n {CharactersInSight}-----------\nCOIN:\n {_character.Vitality.Needs[NeedType.sleep]}");
-        UpdateActionLabel($"{CurrentAction}");
+        if (_character is Player)
+        { UpdateActionLabel($"{_character.State.CurrentState}"); }
+        else
+        { UpdateActionLabel($"{CurrentAction}"); }
 
         if (_speechBubbleLifeLeft > 0)
         {
             _speechBubbleLifeLeft -= 0.01f;
         }
         else
-        if(_statsLabel != null )//&& _statsLabel.text == _lastSpokenMessage)
+        if (_statsLabel != null)//&& _statsLabel.text == _lastSpokenMessage)
         {
             EndSpeech();
         }
@@ -103,12 +111,12 @@ public class UI : MonoBehaviour
     {
         _speechBubble.SetActive(true);
         _speechBubbleLabel.text = message;
-        _lastSpokenMessage= message;
+        _lastSpokenMessage = message;
         _speechBubbleLifeLeft = 5f;
     }
 
     public void EndSpeech()
     {
-        _speechBubble.SetActive(false); 
+        _speechBubble.SetActive(false);
     }
 }

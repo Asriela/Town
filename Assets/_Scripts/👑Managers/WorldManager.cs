@@ -17,8 +17,12 @@ public class EnumCharacterPair
     public Character character; // Value
 }
 
+
+
 public class WorldManager : Singleton<WorldManager>
 {
+
+    public event Action OnMidnight;
 
     [SerializeField] private float _timeOfDaySpeed = 0.001f;
     public float TimeOfDaySpeed
@@ -81,6 +85,11 @@ public class WorldManager : Singleton<WorldManager>
         TotalHoursPassed += TimeThatsChanged;
 
         RenderSettings.ambientLight = new Color(0.1f, 0.1f, 0.3f);
+
+        if (_lastTimeOfDay > TimeOfDay)
+        {
+            OnMidnight?.Invoke();
+        }
     }
 
 

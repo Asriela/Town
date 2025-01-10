@@ -5,6 +5,7 @@ using Mind;
 using TMPro.Examples;
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UIElements;
 using static WorldObject;
 
@@ -264,6 +265,8 @@ public class PlayerMenuInteraction : MonoBehaviour
                     List<Enum> memoryTagsList = new() { memoryTag };
                     // Safe to cast, proceed with the call
                     SocialHelper.ShareKnowledgeAbout(_player, _personWeAreSpeakingTo, _player, KnowledgeType.person, memoryTagsList, null);
+                    _player.Ui.Speak(PlayerDialogue.GetPlayerDialogue(memoryTag));
+
                 }
                 else
                 {
@@ -273,6 +276,12 @@ public class PlayerMenuInteraction : MonoBehaviour
 
 
                 //
+                break;
+            case SocialMenuState.socialAction:
+                float effectFromInteraction = _personWeAreSpeakingTo.Relationships.AddInteractionEffect((SocializeType)chosenOption.Data, _player);
+                //TODO: add that if its a negative response that we dont do the action such as smalltalk which takes time to complete
+                //TODO: add that actions like smalltalk take time
+                //TODO: add animations here for interactions
                 break;
         }
 
