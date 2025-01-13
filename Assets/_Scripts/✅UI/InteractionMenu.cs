@@ -104,7 +104,7 @@ public class InteractionMenu : MonoBehaviour
         }
 
         // Move the menu to the left by its width (200px)
-       menuContainer.style.left = new Length(-5, LengthUnit.Pixel);
+       //menuContainer.style.left = new Length(-5, LengthUnit.Pixel);
 
         // Display the menu
         menuContainer.style.display = DisplayStyle.Flex;
