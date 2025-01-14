@@ -40,7 +40,8 @@ public class PlayerMenuInteraction : MonoBehaviour
         askLocation,
         tellPerson,
         tellLocation,
-        tellAboutYourself
+        tellAboutYourself,
+        talkAboutPerson
 
 
     }
@@ -53,7 +54,7 @@ public class PlayerMenuInteraction : MonoBehaviour
     private bool _leftClick = false;
     private bool _justOpenedPieMenu = false;
     private Vector2 _screenPosition;
-    private string _lastMenuOption = "";
+    private string _titleText = "";
     public SocialMenuState MenuState { get; set; }
     private List<MenuOption> _currentMenuOptions = new List<MenuOption> { new MenuOption("NULL", null, null) };
 
@@ -121,7 +122,7 @@ public class PlayerMenuInteraction : MonoBehaviour
 
 
 
-        _lastMenuOption = buttonLabel;
+        _titleText = buttonLabel;
 
         switch (buttonLabel)
         {
@@ -185,8 +186,8 @@ public class PlayerMenuInteraction : MonoBehaviour
             case "Talk about":
                 _currentMenuOptions = new List<MenuOption>
                 {
-                Label("Share something about yourself")
-                //Label("Talk about a person");
+                Label("Share something about yourself"),
+                Label("Talk about a person")
                 //Label("Talk about a location");
                 };
                 break;
@@ -196,7 +197,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                 MenuState = SocialMenuState.tellAboutYourself;
 
                 // Retrieve all MemoryTags related to the player
-                var playerTags = _player.PersonKnowledge.GetAllCharacterTags(_player);
+                var playerTags = _player.PersonKnowledge.GetAllCharacterTags(_player, _player);
 
                 // Build a list of menu options from the player's MemoryTags
                 _currentMenuOptions = playerTags.Select(tag =>
@@ -210,8 +211,20 @@ public class PlayerMenuInteraction : MonoBehaviour
                 break;
 
             case "Talk about a person":
+                _titleText = "So...";
+                MenuState = SocialMenuState.talkAboutPerson;
                 // MenuState = SocialMenuState.tellPerson;
+                var charactersToTalkAbout = _player.PersonKnowledge.GetAllCharacterWeHaveDataOn();
 
+                // Build a list of menu options from the player's MemoryTags
+                _currentMenuOptions = charactersToTalkAbout.Select(tag =>
+                {
+                    // Convert the MemoryTag to a displayable label
+                    string labelText = tag.ToString(); // You can customize this based on how you want the tags displayed
+
+                    // Return the menu option with the tag stored as Data
+                    return Option(labelText, tag, null);
+                }).ToList();
 
                 break;
 
@@ -232,7 +245,7 @@ public class PlayerMenuInteraction : MonoBehaviour
         if (_currentMenuOptions == null)
         { _interactionMenu.HideMenu(); }
         else
-        { _interactionMenu.ShowMenu(_currentMenuOptions, _lastMenuOption); }
+        { _interactionMenu.ShowMenu(_currentMenuOptions, _titleText); }
     }
 
     private List<MenuOption> ProcessComplexMenuOptions(int positionInList)
@@ -264,7 +277,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                 {
                     List<Enum> memoryTagsList = new() { memoryTag };
                     // Safe to cast, proceed with the call
-                    SocialHelper.ShareKnowledgeAbout(_player, _personWeAreSpeakingTo, _player, KnowledgeType.person, memoryTagsList, null);
+                    SocialHelper.ShareKnowledgeAbout(_player, _personWeAreSpeakingTo, _personWeAreSpeakingTo, _player, KnowledgeType.person, memoryTagsList, null);
                     _player.Ui.Speak(PlayerDialogue.GetPlayerDialogue(memoryTag));
 
                 }

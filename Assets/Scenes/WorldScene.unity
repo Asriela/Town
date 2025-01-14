@@ -1324,6 +1324,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.6886792
       objectReference: {fileID: 0}
+    - target: {fileID: 6626338887933367411, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: _peopleKnowledge.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6949525496380579066, guid: e16a176283d26d947910407f7db82352, type: 3}
       propertyPath: m_LocalPosition.x
       value: -12.79
@@ -2448,6 +2452,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ec6b652e234abb4186e99e20a834324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &535588632 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8406491774118675747, guid: e16a176283d26d947910407f7db82352, type: 3}
+  m_PrefabInstance: {fileID: 234116488}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ef7aff36138e12448894f338e8f1a30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &569565078
 GameObject:
   m_ObjectHideFlags: 0
@@ -2598,7 +2613,7 @@ GameObject:
   - component: {fileID: 594669157}
   m_Layer: 0
   m_Name: Pixel Perfect Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5127,11 +5142,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2499898027300719290, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2499898027300719290, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2678595810235465622, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: m_Pivot.x
@@ -5224,7 +5239,7 @@ PrefabInstance:
     - target: {fileID: 2943148510423140700, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -7115858766221371967, guid: a508a2d2f221643f189dc5e01a327d66, type: 3}
+      objectReference: {fileID: 5134539684181775235, guid: 85c46030edbc56a4eb17cf0b4979d22e, type: 3}
     - target: {fileID: 2943148510423140700, guid: 7af7047c2d15b5a409e8399c594aed66, type: 3}
       propertyPath: m_Color.b
       value: 1
@@ -6649,8 +6664,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _peopleKnowledge:
-  - character: {fileID: 1359901501}
-    tags: 0000010007000d000c00
+  - knower: {fileID: 1359901501}
+    knowledge:
+    - character: {fileID: 1359901501}
+      memoryTags: 000001000d000c000700
+  - knower: {fileID: 5343924878297443053}
+    knowledge:
+    - character: {fileID: 939759391}
+      memoryTags: 0f00
 --- !u!114 &1359901504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7978,6 +7999,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6626338887933367411, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: _peopleKnowledge.Array.data[0].knower
+      value: 
+      objectReference: {fileID: 1788586110}
+    - target: {fileID: 6626338887933367411, guid: e16a176283d26d947910407f7db82352, type: 3}
       propertyPath: _peopleKnowledge.Array.data[0].character
       value: 
       objectReference: {fileID: 5343924878297443053}
@@ -7987,6 +8012,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6626338887933367411, guid: e16a176283d26d947910407f7db82352, type: 3}
       propertyPath: '_peopleKnowledge.Array.data[0].tags.Array.data[0]'
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6626338887933367411, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: _peopleKnowledge.Array.data[0].knowledge.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6626338887933367411, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: _peopleKnowledge.Array.data[0].knowledge.Array.data[0].character
+      value: 
+      objectReference: {fileID: 5343924878297443053}
+    - target: {fileID: 6626338887933367411, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: _peopleKnowledge.Array.data[0].knowledge.Array.data[0].memoryTags.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6626338887933367411, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: '_peopleKnowledge.Array.data[0].knowledge.Array.data[0].memoryTags.Array.data[0]'
       value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 6949525496380579066, guid: e16a176283d26d947910407f7db82352, type: 3}
@@ -8062,6 +8103,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6949525496380579066, guid: e16a176283d26d947910407f7db82352, type: 3}
   m_PrefabInstance: {fileID: 1788586108}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1788586110 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8406491774118675747, guid: e16a176283d26d947910407f7db82352, type: 3}
+  m_PrefabInstance: {fileID: 1788586108}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ef7aff36138e12448894f338e8f1a30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1814749305
 GameObject:
   m_ObjectHideFlags: 0
@@ -8294,7 +8346,7 @@ Transform:
   m_GameObject: {fileID: 1841228293}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.48, y: 7.58, z: 0}
+  m_LocalPosition: {x: 1.48, y: 7.58, z: 1}
   m_LocalScale: {x: 7, y: 7, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9296,6 +9348,70 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 792376233}
     m_Modifications:
+    - target: {fileID: 4013373524307306528, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: _peopleViews.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4013373524307306528, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: _peopleViews.Array.data[1].character
+      value: 
+      objectReference: {fileID: 5343924878297443053}
+    - target: {fileID: 4013373524307306528, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: _peopleViews.Array.data[1].views.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4013373524307306528, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: _peopleViews.Array.data[1].views.Array.data[0].view
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4013373524307306528, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: _peopleViews.Array.data[1].views.Array.data[1].view
+      value: -25
+      objectReference: {fileID: 0}
+    - target: {fileID: 4013373524307306528, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: _peopleViews.Array.data[1].views.Array.data[2].view
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4013373524307306528, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: _peopleViews.Array.data[1].views.Array.data[3].view
+      value: -3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4013373524307306528, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: _peopleViews.Array.data[1].views.Array.data[1].memoryTags
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4013373524307306528, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: _peopleViews.Array.data[1].views.Array.data[2].memoryTags
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4013373524307306528, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: _peopleViews.Array.data[1].views.Array.data[3].memoryTags
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 5929103200558332360, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 4672512944232653718, guid: 29790a913e4103a4186786fd3143bbb6, type: 3}
+    - target: {fileID: 6626338887933367411, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: _peopleKnowledge.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6626338887933367411, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: _peopleKnowledge.Array.data[0].knower
+      value: 
+      objectReference: {fileID: 5343924878297443053}
+    - target: {fileID: 6626338887933367411, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: _peopleKnowledge.Array.data[0].character
+      value: 
+      objectReference: {fileID: 535588632}
+    - target: {fileID: 6626338887933367411, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: _peopleKnowledge.Array.data[0].tags.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6626338887933367411, guid: e16a176283d26d947910407f7db82352, type: 3}
+      propertyPath: _peopleKnowledge.Array.data[0].knowledge.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6949525496380579066, guid: e16a176283d26d947910407f7db82352, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.37
@@ -9366,7 +9482,7 @@ PrefabInstance:
       objectReference: {fileID: 742426182}
     - target: {fileID: 7996950134704341729, guid: e16a176283d26d947910407f7db82352, type: 3}
       propertyPath: m_Name
-      value: 'Belethor '
+      value: Velina
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

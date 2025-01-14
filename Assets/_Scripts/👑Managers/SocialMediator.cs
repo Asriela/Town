@@ -6,11 +6,11 @@ public static class SocialMediator
     private static readonly float _hearingRadius = 2f;
     private static readonly float _sightRadius = 10f;
 
-    public static void PostAction(Character sender, Character target, Character aboutPerson, Mind.ActionType actionType, ActionPost actionPost)
+    public static void PostAction(Character sender, Character target, Character knower, Character aboutPerson, Mind.ActionType actionType, ActionPost actionPost)
     {
         // Notify the target directly
         if (target != null)
-        { target.Reactions.ReactToActionStarter(true, sender, aboutPerson, actionType, actionPost); }
+        { target.Reactions.ReactToActionStarter(true, sender, knower, aboutPerson, actionType, actionPost); }
         /*
         if (IsHeardAction(actionType))
         {

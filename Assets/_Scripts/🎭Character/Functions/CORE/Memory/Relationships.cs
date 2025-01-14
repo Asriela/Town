@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mind;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 
 [Serializable]
@@ -216,13 +217,13 @@ public class Relationships : MonoBehaviour
         var myViews = views.PeopleViews[_character];
 
         // Access the _character's own knowledge of other characters
-        var peopleKnowledge = personKnowledge.PeopleKnowledge;
+        var peopleKnowledge = personKnowledge.GetKnowledgeOf(_character);
 
-        // Iterate over each person in _character's PersonKnowledge
+
         foreach (var characterTagsPair in peopleKnowledge)
         {
-            var character = characterTagsPair.Key;  // The character known by _character
-            var tags = characterTagsPair.Value;    // Tags (memories) that _character knows about this character
+            var character = characterTagsPair.Key; // The character known by _character
+            var tags = characterTagsPair.Value; // Tags (memories) that _character knows about this character
 
 
 
@@ -253,9 +254,10 @@ public class Relationships : MonoBehaviour
 
             // Update the relationship value with the character based on the views and memory tags
             AddOrUpdateRelationship(_character, character, relationshipValue);
-        }
-    }
 
+        }
+
+    }
 
     // Add or update the relationship of one character towards another
     public void AddOrUpdateRelationship(Character fromCharacter, Character toCharacter, float relationshipValue)

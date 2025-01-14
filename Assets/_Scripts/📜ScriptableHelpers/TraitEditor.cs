@@ -1,4 +1,4 @@
-﻿/*
+﻿
 using System;
 using Mind;
 using UnityEditor;
@@ -280,4 +280,4 @@ public class TraitEditor : Editor
 
 }
 
-*/
+

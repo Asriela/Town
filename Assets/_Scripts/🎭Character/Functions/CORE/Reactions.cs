@@ -12,14 +12,14 @@ public class Reactions : MonoBehaviour
 
     public void Initialize(Character npc) => _npc = npc;
 
-    public void ReactToActionStarter(bool intendedReceiverOfMessage, Character sender, Character aboutWho, Mind.ActionType actionType, ActionPost actionPost)
+    public void ReactToActionStarter(bool intendedReceiverOfMessage, Character sender, Character knower, Character aboutWho, Mind.ActionType actionType, ActionPost actionPost)
     {
-        StartCoroutine(ReactToAction(intendedReceiverOfMessage, sender, aboutWho, actionType, actionPost));
+        StartCoroutine(ReactToAction(intendedReceiverOfMessage, sender, knower, aboutWho, actionType, actionPost));
 
 
     }
 
-    private IEnumerator ReactToAction(bool intendedRecieverOfMessage, Character sender, Character aboutWho, Mind.ActionType actionType, ActionPost actionPost)
+    private IEnumerator ReactToAction(bool intendedRecieverOfMessage, Character sender, Character knower, Character aboutWho, Mind.ActionType actionType, ActionPost actionPost)
     {
         if (!intendedRecieverOfMessage)
         {
@@ -39,7 +39,7 @@ public class Reactions : MonoBehaviour
                         var originalEnumList = actionPost.KnowledgeTags.Cast<Mind.KnowledgeTag>().ToArray();
                         List<Enum> newKnowledge = _npc.Memory.GetLocationsByTag(originalEnumList).Cast<Enum>().ToList();
                         var originalTags = actionPost.KnowledgeTags;
-                        SocialHelper.ShareKnowledgeAbout(_npc, sender, aboutWho, Mind.KnowledgeType.location, newKnowledge, originalTags);
+                        SocialHelper.ShareKnowledgeAbout(_npc, sender, knower, aboutWho, Mind.KnowledgeType.location, newKnowledge, originalTags);
                         break;
                 }
 
@@ -67,7 +67,7 @@ public class Reactions : MonoBehaviour
                         {
 
                             List<Mind.MemoryTags> tags = actionPost.KnowledgeTags.Cast<Mind.MemoryTags>().ToList();
-                            _npc.PersonKnowledge.AddPerson(aboutWho, tags);
+                            _npc.PersonKnowledge.AddKnowledge(knower,aboutWho, tags);
 
                             _npc.Relationships.RecalculateMyRelationshipWithEveryone();
                             var viewAboutMemoryTag = _npc.Views.GetView(_npc, tags[0]);

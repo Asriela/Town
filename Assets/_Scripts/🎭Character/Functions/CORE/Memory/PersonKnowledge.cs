@@ -3,70 +3,158 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
-
 [Serializable]
-public class CharacterTagsPair
+public class CharacterMemoryTagsPair
 {
-    public Character character;
-    public List<Mind.MemoryTags> tags = new();
+    public Character character;                 // The character
+    public List<Mind.MemoryTags> memoryTags = new(); // List of memory tags associated with the character
 }
 
-//TODO: split up tags so its easier to sort
+[Serializable]
+public class CharacterKnowledgeTagsPair
+{
+    public Character knower;                             // The character with knowledge
+    public List<CharacterMemoryTagsPair> knowledge = new(); // Knowledge about other characters
+}
 
 public class PersonKnowledge : MonoBehaviour
 {
     [SerializeField]
-    private List<CharacterTagsPair> _peopleKnowledge = new();
+    private List<CharacterKnowledgeTagsPair> _peopleKnowledge = new();
 
-    public Dictionary<Character, List<Mind.MemoryTags>> PeopleKnowledge
+    // Expose the data as a dictionary for easier lookup
+    public Dictionary<Character, Dictionary<Character, List<Mind.MemoryTags>>> PeopleKnowledge
     {
         get
         {
-            Dictionary<Character, List<Mind.MemoryTags>> dictionary = new();
-            foreach (var pair in _peopleKnowledge)
-            {
-                dictionary[pair.character] = pair.tags;
-            }
-            return dictionary;
+            return _peopleKnowledge.ToDictionary(
+                knowerPair => knowerPair.knower,
+                knowerPair => knowerPair.knowledge.ToDictionary(
+                    knowledgePair => knowledgePair.character,
+                    knowledgePair => knowledgePair.memoryTags
+                )
+            );
         }
     }
-
-    public void AddPerson(Character person, List<Mind.MemoryTags> tags)
+    public Dictionary<Character, List<Mind.MemoryTags>> GetKnowledgeOf(Character knower)
     {
-        var existingPerson = _peopleKnowledge.FirstOrDefault(p => p.character == person);
+        var knowerPair = _peopleKnowledge.FirstOrDefault(kp => kp.knower == knower);
 
-        if (existingPerson == null)
+        // If knower exists, return the dictionary of the person's knowledge about others
+        if (knowerPair != null)
         {
-            _peopleKnowledge.Add(new CharacterTagsPair
+            return knowerPair.knowledge.ToDictionary(k => k.character, k => k.memoryTags);
+        }
+
+        // If knower doesn't exist, return an empty dictionary
+        return new Dictionary<Character, List<Mind.MemoryTags>>();
+    }
+    // Retrieve a list of people who have all the specified memory tags for a specific knower
+    public List<Character> GetPeopleByTag(Character knower, params Mind.MemoryTags[] tags)
+    {
+        var knowerPair = _peopleKnowledge.FirstOrDefault(kp => kp.knower == knower);
+
+        return knowerPair?.knowledge
+            .Where(k => tags.All(tag => k.memoryTags.Contains(tag)))
+            .Select(k => k.character)
+            .ToList() ?? new List<Character>();
+    }
+
+    // Add knowledge about a person with a list of memory tags
+    public void AddKnowledge(Character knower, Character person, List<Mind.MemoryTags> tags)
+    {
+        var knowerPair = _peopleKnowledge.FirstOrDefault(kp => kp.knower == knower);
+
+        if (knowerPair == null)
+        {
+            _peopleKnowledge.Add(new CharacterKnowledgeTagsPair
             {
-                character = person,
-                tags = tags
+                knower = knower,
+                knowledge = new List<CharacterMemoryTagsPair>
+                {
+                    new CharacterMemoryTagsPair
+                    {
+                        character = person,
+                        memoryTags = new List<Mind.MemoryTags>(tags)
+                    }
+                }
             });
         }
         else
         {
-            foreach (var tag in tags)
+            var knowledgePair = knowerPair.knowledge.FirstOrDefault(k => k.character == person);
+            if (knowledgePair == null)
             {
-                if (!existingPerson.tags.Contains(tag))
+                knowerPair.knowledge.Add(new CharacterMemoryTagsPair
                 {
-                    existingPerson.tags.Add(tag);
+                    character = person,
+                    memoryTags = new List<Mind.MemoryTags>(tags)
+                });
+            }
+            else
+            {
+                foreach (var tag in tags.Where(tag => !knowledgePair.memoryTags.Contains(tag)))
+                {
+                    knowledgePair.memoryTags.Add(tag);
                 }
             }
         }
     }
 
-    public List<Character> GetPeopleByTag(params Mind.MemoryTags[] tags) =>
-        _peopleKnowledge
-            .Where(p => tags.All(tag => p.tags.Contains(tag)))
-            .Select(p => p.character)
-            .ToList();
-
-    public List<Mind.MemoryTags> GetAllCharacterTags(Character character)
+    // Retrieve knowledge about a specific character
+    public List<Mind.MemoryTags> GetKnowledge(Character knower, Character person)
     {
-        // Find the CharacterTagsPair for the given character
-        var characterTagsPair = _peopleKnowledge.FirstOrDefault(p => p.character == character);
+        var knowerPair = _peopleKnowledge.FirstOrDefault(kp => kp.knower == knower);
+        var knowledgePair = knowerPair?.knowledge.FirstOrDefault(k => k.character == person);
 
-        // Return the tags if found, otherwise return an empty list
-        return characterTagsPair != null ? characterTagsPair.tags : new List<Mind.MemoryTags>();
+        return knowledgePair?.memoryTags ?? new List<Mind.MemoryTags>();
     }
+
+    // Check if a knower has specific knowledge about a person
+    public bool HasKnowledge(Character knower, Character person, Mind.MemoryTags tag)
+    {
+        var knowerPair = _peopleKnowledge.FirstOrDefault(kp => kp.knower == knower);
+        var knowledgePair = knowerPair?.knowledge.FirstOrDefault(k => k.character == person);
+
+        return knowledgePair?.memoryTags.Contains(tag) ?? false;
+    }
+
+    // Remove knowledge about a specific tag for a person
+    public void RemoveKnowledgeTag(Character knower, Character person, Mind.MemoryTags tag)
+    {
+        var knowerPair = _peopleKnowledge.FirstOrDefault(kp => kp.knower == knower);
+        var knowledgePair = knowerPair?.knowledge.FirstOrDefault(k => k.character == person);
+
+        knowledgePair?.memoryTags.Remove(tag);
+    }
+
+    // Retrieve a list of knowers who have all the specified tags about a specific character
+    public List<Character> GetKnowersByTags(Character person, params Mind.MemoryTags[] tags)
+    {
+        return _peopleKnowledge
+            .Where(kp => kp.knowledge.Any(k => k.character == person && tags.All(tag => k.memoryTags.Contains(tag))))
+            .Select(kp => kp.knower)
+            .ToList();
+    }
+
+    public List<Mind.MemoryTags> GetAllCharacterTags(Character knower, Character person)
+    {
+        return GetKnowledge(knower, person);
+    }
+
+
+    // Retrieve all characters who have data in the system
+    public List<Character> GetAllCharacterWeHaveDataOn()
+    {
+        return _peopleKnowledge.Select(kp => kp.knower).ToList();
+    }
+
+    // Retrieve all characters a specific knower has data about
+    public List<Character> GetAllCharactersPersonHasDataOn(Character knower)
+    {
+        var knowerPair = _peopleKnowledge.FirstOrDefault(kp => kp.knower == knower);
+
+        return knowerPair?.knowledge.Select(k => k.character).ToList() ?? new List<Character>();
+    }
+
 }

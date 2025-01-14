@@ -174,7 +174,7 @@ public class Acting : MonoBehaviour
             case 1:
                 _npc.Ui.CurrentStepInAction = "1 Goto nearest innkeeper";
                 //remember who the local innkeeper is
-                var target = _npc.PersonKnowledge.GetPeopleByTag(MemoryTags.innKeeper).FirstOrDefault();
+                var target = _npc.PersonKnowledge.GetPeopleByTag(_npc,MemoryTags.innKeeper).FirstOrDefault();
 
 
                 if (ActionsHelper.Reached(_npc, target.transform.position, 2f))
@@ -185,7 +185,7 @@ public class Acting : MonoBehaviour
                     List<Enum> tagsAsEnum = CurrentBehavior.ActionTags.Cast<Enum>().ToList();
 
                     //TODO: ask for specific person if its person knowledge
-                    SocialHelper.AskForKnowledgeAbout(_npc, target, _npc, knowledgeType, tagsAsEnum);
+                    SocialHelper.AskForKnowledgeAbout(_npc, target, _npc,_npc, knowledgeType, tagsAsEnum);
                     IncrementStepInAction();
 
                 }

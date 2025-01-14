@@ -66,11 +66,11 @@ public class Appearance : MonoBehaviour
         Vector3 movementDirection = transform.position - previousPosition;
 
 
-        if (movementDirection.x > 0.01f)
+        if (movementDirection.x > 0.0001f)
         {
             _spriteRenderer.flipX = false; // Facing right
         }
-        else if (movementDirection.x < -0.01f)
+        else if (movementDirection.x < -0.0001f)
         {
             _spriteRenderer.flipX = true; // Facing left
         }

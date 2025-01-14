@@ -8,19 +8,19 @@ public static class SocialHelper
 {
 
 
-    public static void AskForKnowledgeAbout(Character senderOfMessage, Character recieverOfMessage, Character aboutPerson, Mind.KnowledgeType knowledgeType, List<System.Enum> knowledgeTags)
+    public static void AskForKnowledgeAbout(Character senderOfMessage, Character recieverOfMessage, Character knower, Character aboutPerson, Mind.KnowledgeType knowledgeType, List<System.Enum> knowledgeTags)
     {
 
         ActionPost actionPost = new(knowledgeType, knowledgeTags, null);
-        SocialMediator.PostAction(senderOfMessage, recieverOfMessage, aboutPerson, Mind.ActionType.findKnowledge, actionPost);
+        SocialMediator.PostAction(senderOfMessage, recieverOfMessage, knower,aboutPerson, Mind.ActionType.findKnowledge, actionPost);
         senderOfMessage.Ui.Speak($"Do you know of a {knowledgeType} that is {string.Join(" and ", knowledgeTags)}");
 
     }
 
-    public static void ShareKnowledgeAbout(Character senderOfMessage, Character recieverOfMessage, Character aboutPerson, KnowledgeType knowledgeType, List<System.Enum> newKnowledge, List<System.Enum> originalTags)
+    public static void ShareKnowledgeAbout(Character senderOfMessage, Character recieverOfMessage, Character knower, Character aboutPerson, KnowledgeType knowledgeType, List<System.Enum> newKnowledge, List<System.Enum> originalTags)
     {
         ActionPost actionPost = new(knowledgeType, newKnowledge, originalTags);
-        SocialMediator.PostAction(senderOfMessage, recieverOfMessage, aboutPerson, ActionType.shareKnowledge, actionPost);
+        SocialMediator.PostAction(senderOfMessage, recieverOfMessage, knower,aboutPerson, ActionType.shareKnowledge, actionPost);
         // senderOfMessage.Ui.Speak($"Yes let me mark it on your map");
     }
 

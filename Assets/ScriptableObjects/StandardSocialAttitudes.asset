@@ -18,21 +18,21 @@ MonoBehaviour:
     _dialogue: I want nothing to do with you! Be gone!
     _action: 10
     _actionParameter:
-      rid: 2000162518754394255
+      rid: 2000162619714961483
     _conditions:
     - conditionType: 27
       parameter:
-        rid: 2000162518754394256
+        rid: 2000162619714961484
     _priority: 3
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162518754394255
+    - rid: 2000162619714961483
       type: {class: SocializeType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 7
-    - rid: 2000162518754394256
+    - rid: 2000162619714961484
       type: {class: ViewTowards, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: -25

@@ -19,7 +19,9 @@ namespace Mind
         pumpkinFarmer,
         dunharrow,
         traveler,
-        occult
+        occult,
+        wonderful,
+        charming
     }
 
     [Serializable]
