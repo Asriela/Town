@@ -43,12 +43,18 @@ public class PlayerControls : MonoBehaviour
         // Move the player using the current velocity
         rb.velocity = currentVelocity;
 
-        // Apply pixel-perfect snapping to the position after movement
-        Vector3 snappedPosition = rb.position;
-        snappedPosition.x = Mathf.Round(snappedPosition.x);
-        snappedPosition.y = Mathf.Round(snappedPosition.y);
+        // Pixel-perfect snapping after applying velocity
+        PixelSnap();
+    }
 
-        // Apply the snapped position without affecting velocity
-        rb.MovePosition(snappedPosition);
+    private void PixelSnap()
+    {
+        // Get the current position and snap to the nearest pixel
+        Vector3 snappedPosition = transform.position;
+        snappedPosition.x = Mathf.Round(transform.position.x * 100f) / 100f;
+        snappedPosition.y = Mathf.Round(transform.position.y * 100f) / 100f;
+
+        // Apply the snapped position without modifying velocity
+        transform.position = snappedPosition;
     }
 }
