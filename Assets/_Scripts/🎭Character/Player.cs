@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(PlayerMenuInteraction))]
+[RequireComponent(typeof(PlayerControls))]
 public class Player : Character
 {
     [SerializeField] private GameObject _radialMenuPrefab; // Radial menu prefab
@@ -14,12 +15,14 @@ public class Player : Character
     private GameObject _currentRadialMenu;
     private InteractionPackage _currentInteraction = null;
     public PlayerMenuInteraction MenuInteraction { get; set; }
+    public PlayerControls PlayerControls { get; set; }
 
     private void Start()
     {
         MenuInteraction = GetComponent<PlayerMenuInteraction>();
         MenuInteraction.Initialize(this);
-
+        PlayerControls = GetComponent<PlayerControls>();
+  
 
         // Initialize with the default color
 

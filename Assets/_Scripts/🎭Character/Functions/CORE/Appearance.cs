@@ -18,6 +18,8 @@ public class Appearance : MonoBehaviour
 
     private SpriteRenderer _spriteRenderer;
 
+    private Vector3 previousPosition;
+
     private void Start()
     {
         _spriteRenderer = _spriteTransform.GetComponent<SpriteRenderer>();
@@ -26,6 +28,7 @@ public class Appearance : MonoBehaviour
     private void Update()
     {
         ChangeAppearanceAccordingToState();
+        FlipSpriteBasedOnMovement();
     }
 
     public void ChangeColor(Color color)
@@ -55,6 +58,25 @@ public class Appearance : MonoBehaviour
                 break;
         }
 
+    }
+
+    void FlipSpriteBasedOnMovement()
+    {
+
+        Vector3 movementDirection = transform.position - previousPosition;
+
+
+        if (movementDirection.x > 0.01f)
+        {
+            _spriteRenderer.flipX = false; // Facing right
+        }
+        else if (movementDirection.x < -0.01f)
+        {
+            _spriteRenderer.flipX = true; // Facing left
+        }
+
+
+        previousPosition = transform.position;
     }
 
 }
