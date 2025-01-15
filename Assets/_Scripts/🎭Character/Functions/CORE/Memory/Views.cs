@@ -109,7 +109,7 @@ public class Views : MonoBehaviour
             // If the memory tag view is found, return the view
             if (memoryTagView != null)
             {
-                return memoryTagView.view;
+                return memoryTagView.view; 
             }
         }
 

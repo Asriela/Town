@@ -149,6 +149,7 @@ public class TraitEditor : Editor
             Mind.ActionType.trader => typeof(Mind.TraderType),
             Mind.ActionType.farmer => typeof(Mind.FarmerType),
             Mind.ActionType.findKnowledge => typeof(Mind.KnowledgeType),
+            Mind.ActionType.shareKnowledge => typeof(Mind.KnowledgeType),
             Mind.ActionType.gotoLocation => typeof(Mind.TargetLocationType),
             Mind.ActionType.socialize => typeof(Mind.SocializeType),
             Mind.ActionType.useOneOfMyPossesions => typeof(Mind.ObjectType),
@@ -157,6 +158,7 @@ public class TraitEditor : Editor
             Mind.ActionType.rentItem => typeof(Mind.ObjectType),
             Mind.ActionType.findOccupant => typeof(Mind.TraitType),
             Mind.ActionType.gotoOccupant => typeof(Mind.TraitType),
+            Mind.ActionType.sharePersonKnowledgeAbout => typeof(Mind.CharacterName),
             _ => null
         };
 

@@ -185,7 +185,7 @@ public class Acting : MonoBehaviour
                     List<Enum> tagsAsEnum = CurrentBehavior.ActionTags.Cast<Enum>().ToList();
 
                     //TODO: ask for specific person if its person knowledge
-                    SocialHelper.AskForKnowledgeAbout(_npc, target, _npc,_npc, knowledgeType, tagsAsEnum);
+                    SocialHelper.AskForKnowledgeAbout(_npc, target, _npc,_npc, knowledgeType, tagsAsEnum,false);
                     IncrementStepInAction();
 
                 }

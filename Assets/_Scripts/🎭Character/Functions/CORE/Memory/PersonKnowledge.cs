@@ -110,6 +110,34 @@ public class PersonKnowledge : MonoBehaviour
         return knowledgePair?.memoryTags ?? new List<Mind.MemoryTags>();
     }
 
+    public List<Mind.MemoryTags> GetRandomKnowledge(Character knower, Character person)
+    {
+        // Find the knower pair from the knowledge collection
+        var knowerPair = _peopleKnowledge.FirstOrDefault(kp => kp.knower == knower);
+
+        // If no knower pair is found, return an empty list
+        if (knowerPair == null)
+        {
+            return new List<Mind.MemoryTags>();
+        }
+
+        // Find the knowledge pair for the given person
+        var knowledgePair = knowerPair.knowledge.FirstOrDefault(k => k.character == person);
+
+        // If no knowledge pair is found or memory tags are empty, return an empty list
+        if (knowledgePair == null || knowledgePair.memoryTags.Count == 0)
+        {
+            return new List<Mind.MemoryTags>();
+        }
+
+        // Randomly select a memory tag from the knowledge
+        var randomIndex = UnityEngine.Random.Range(0, knowledgePair.memoryTags.Count);
+
+        // Return the randomly selected memory tag as a list (if you need it wrapped in a list)
+        return new List<Mind.MemoryTags> { knowledgePair.memoryTags[randomIndex] };
+    }
+
+
     // Check if a knower has specific knowledge about a person
     public bool HasKnowledge(Character knower, Character person, Mind.MemoryTags tag)
     {
@@ -144,7 +172,7 @@ public class PersonKnowledge : MonoBehaviour
 
 
     // Retrieve all characters who have data in the system
-    public List<Character> GetAllCharacterWeHaveDataOn()
+    public List<Character> GetAllCharactersWeHaveDataOn()
     {
         return _peopleKnowledge.Select(kp => kp.knower).ToList();
     }

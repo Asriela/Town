@@ -10,36 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7dc8225a4be6fd4d87acb8e49149fbb, type: 3}
-  m_Name: Murderer
+  m_Name: HatesMages
   m_EditorClassIdentifier: 
-  Type: 4
+  Type: 15
   Behaviors:
-  - _name: Find Victim
-    _dialogue: 
-    _action: 2
-    _actionParameter:
-      rid: 2000162622244651107
-    _conditions:
-    - conditionType: 3
-      parameter:
-        rid: 2000162622244651107
-    _priority: 10
-    _actionTags: 
-  - _name: Kill Victim
-    _dialogue: 
+  - _name: Insults
+    _dialogue: We dont want mages here, time to die!
     _action: 1
     _actionParameter:
-      rid: 2000162622244651107
+      rid: 2000162622244651125
     _conditions:
-    - conditionType: 2
+    - conditionType: 24
       parameter:
-        rid: 2000162622244651107
-    _priority: 15
+        rid: 2000162622244651126
+    _priority: 3
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162622244651107
+    - rid: 2000162622244651125
       type: {class: TargetType, ns: Mind, asm: Assembly-CSharp}
       data:
-        value__: 3
+        value__: 6
+    - rid: 2000162622244651126
+      type: {class: TraitType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 10

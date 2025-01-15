@@ -63,7 +63,7 @@ public class InteractionMenu : MonoBehaviour
         // Add the background image first
         menuContainer.Add(backgroundImage);
 
-        // Add the lastMenuOption text at the top for context
+
         if (!string.IsNullOrEmpty(lastMenuOption))
         {
             Label contextLabel = new Label(lastMenuOption);
@@ -73,8 +73,15 @@ public class InteractionMenu : MonoBehaviour
             contextLabel.style.marginBottom = new Length(10, LengthUnit.Pixel); // Adjusted to reduce the gap to buttons
             contextLabel.style.alignSelf = Align.Center;
             contextLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
+
+            // Set width to match the background image width and allow wrapping
+            contextLabel.style.width = new Length(240, LengthUnit.Pixel);
+            contextLabel.style.whiteSpace = WhiteSpace.Normal; // Enable wrapping
+            contextLabel.style.overflow = Overflow.Hidden; // Prevent overflow of the text
+
             menuContainer.Add(contextLabel);
         }
+
 
         // Arrange buttons vertically
         for (int i = 0; i < buttonCount; i++)

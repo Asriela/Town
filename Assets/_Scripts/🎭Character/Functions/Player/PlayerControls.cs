@@ -41,7 +41,7 @@ public class PlayerControls : MonoBehaviour
     void FixedUpdate()
     {
         // Move the player using the current velocity
-        rb.velocity = currentVelocity;
+        rb.linearVelocity = currentVelocity;
 
         // Pixel-perfect snapping after applying velocity
         PixelSnap();

@@ -41,7 +41,11 @@ public class PlayerMenuInteraction : MonoBehaviour
         tellPerson,
         tellLocation,
         tellAboutYourself,
-        talkAboutPerson
+        talkAboutPerson,
+        talkAboutPersonWhoSpokeAboutPerson,
+        talkAboutPersonWhoSpokeAboutPersonsKnowledge,
+        askAboutPerson,
+        askAboutPersonWhoSpokeAboutPerson
 
 
     }
@@ -55,6 +59,10 @@ public class PlayerMenuInteraction : MonoBehaviour
     private bool _justOpenedPieMenu = false;
     private Vector2 _screenPosition;
     private string _titleText = "";
+    private string _passOnTitleText = "";
+    private Character _knower = null;
+    private Character _aboutWho = null;
+
     public SocialMenuState MenuState { get; set; }
     private List<MenuOption> _currentMenuOptions = new List<MenuOption> { new MenuOption("NULL", null, null) };
 
@@ -171,8 +179,23 @@ public class PlayerMenuInteraction : MonoBehaviour
 
 
             case "Ask about a person":
-                MenuState = SocialMenuState.askPerson;
+                MenuState = SocialMenuState.askAboutPerson;
+                _titleText = "So what do...";
 
+                // MenuState = SocialMenuState.tellPerson;
+                var charactersToAskAbout = _player.PersonKnowledge.GetAllCharactersPersonHasDataOn(_player);
+
+                // Build a list of menu options from the player's MemoryTags
+                _currentMenuOptions = charactersToAskAbout.Where(tag => tag != _player) // Exclude the player
+                    .Select(tag =>
+                    {
+                        string labelText = tag.ToString();
+                        if (tag == _personWeAreSpeakingTo)
+                            labelText = "you";
+
+                        // Return the menu option with the tag stored as Data
+                        return Option(labelText, tag, null);
+                    }).ToList();
                 break;
 
             case "Ask about a location":
@@ -214,17 +237,18 @@ public class PlayerMenuInteraction : MonoBehaviour
                 _titleText = "So...";
                 MenuState = SocialMenuState.talkAboutPerson;
                 // MenuState = SocialMenuState.tellPerson;
-                var charactersToTalkAbout = _player.PersonKnowledge.GetAllCharacterWeHaveDataOn();
+                var charactersToTalkAbout = _player.PersonKnowledge.GetAllCharactersWeHaveDataOn();
 
                 // Build a list of menu options from the player's MemoryTags
-                _currentMenuOptions = charactersToTalkAbout.Select(tag =>
-                {
-                    // Convert the MemoryTag to a displayable label
-                    string labelText = tag.ToString(); // You can customize this based on how you want the tags displayed
+                _currentMenuOptions = charactersToTalkAbout.Where(tag => tag != _player) // Exclude the player
+                    .Select(tag =>
+                    {
+                        // Convert the MemoryTag to a displayable label
+                        string labelText = tag.ToString(); // You can customize this based on how you want the tags displayed
 
-                    // Return the menu option with the tag stored as Data
-                    return Option(labelText, tag, null);
-                }).ToList();
+                        // Return the menu option with the tag stored as Data
+                        return Option(labelText, tag, null);
+                    }).ToList();
 
                 break;
 
@@ -253,6 +277,14 @@ public class PlayerMenuInteraction : MonoBehaviour
         var chosenOption = _currentMenuOptions[positionInList];
         List<MenuOption> newOptions = null;
 
+        string aboutWhoString = "";
+        string word = "";
+        MemoryTags knowledge;
+        List<MemoryTags> knowledgeList;
+        List<Enum> memoryTagsList;
+        string doWord;
+        string characterWord;
+
         switch (MenuState)
         {
             case SocialMenuState.memories:
@@ -275,10 +307,10 @@ public class PlayerMenuInteraction : MonoBehaviour
             case SocialMenuState.tellAboutYourself:
                 if (chosenOption.Data is MemoryTags memoryTag)
                 {
-                    List<Enum> memoryTagsList = new() { memoryTag };
-                    // Safe to cast, proceed with the call
+                    memoryTagsList = new() { memoryTag };
+
                     SocialHelper.ShareKnowledgeAbout(_player, _personWeAreSpeakingTo, _personWeAreSpeakingTo, _player, KnowledgeType.person, memoryTagsList, null);
-                    _player.Ui.Speak(PlayerDialogue.GetPlayerDialogue(memoryTag));
+                    _player.Ui.Speak(DialogueHelper.GetTellDialogue(memoryTag));
 
                 }
                 else
@@ -286,6 +318,132 @@ public class PlayerMenuInteraction : MonoBehaviour
                     // Handle the case where the cast is invalid
                     Debug.LogError("Error: chosenOption.Data is not of type MemoryTags.");
                 }
+
+
+                //
+                break;
+            case SocialMenuState.askAboutPerson:
+
+                MenuState = SocialMenuState.askAboutPersonWhoSpokeAboutPerson;
+                _knower = (Character)chosenOption.Data;
+                 doWord = "does";
+                 characterWord = _knower.CharacterName.ToString();
+                if (_knower == _personWeAreSpeakingTo)
+                {
+                    doWord = "do";
+                    characterWord = "you";
+                }
+                    
+                _titleText = $"So what {doWord} <b>{characterWord} think about..</b>";
+
+                var charactersToAskAbout = _player.PersonKnowledge.GetAllCharactersPersonHasDataOn(_player);
+
+                // Build a list of menu options from the player's MemoryTags
+                newOptions = charactersToAskAbout.Where(tag => tag!=_personWeAreSpeakingTo).Select(tag =>
+                {
+                    string labelText = tag.ToString();
+                    if (tag == _personWeAreSpeakingTo)
+                        labelText = "you";
+                    // Return the menu option with the tag stored as Data
+                    return Option(labelText, _knower, tag);
+                }).ToList();
+
+
+                //
+                break;
+            case SocialMenuState.askAboutPersonWhoSpokeAboutPerson:
+
+       
+                _knower = (Character)chosenOption.Data;
+                _aboutWho = (Character)chosenOption.Data2;
+                characterWord = _knower.CharacterName.ToString();
+                aboutWhoString = _aboutWho.CharacterName.ToString();
+                word = "is";
+                doWord = "does";
+                if (_knower == _personWeAreSpeakingTo)
+                {
+
+                    word = "are";
+                    doWord = "do";
+                    characterWord = "you";
+                }
+
+
+                _passOnTitleText = $"So what {doWord} {characterWord} think about <b>{aboutWhoString}?</b>";
+
+
+                SocialHelper.AskForKnowledgeAbout(_player, _personWeAreSpeakingTo, _knower, _aboutWho, KnowledgeType.person, null, true);
+                _player.Ui.Speak(_passOnTitleText);
+
+
+                //
+                break;
+            
+            case SocialMenuState.talkAboutPerson:
+
+                MenuState = SocialMenuState.talkAboutPersonWhoSpokeAboutPerson;
+                _knower = (Character)chosenOption.Data;
+                _titleText = $"So  <b>{_knower.CharacterName} was talking about...</b>";
+
+                var charactersToTalkAbout = _player.PersonKnowledge.GetAllCharactersPersonHasDataOn(_knower);
+
+                // Build a list of menu options from the player's MemoryTags
+                newOptions = charactersToTalkAbout.Select(tag =>
+                    {
+                        string labelText = tag.ToString();
+                        if (tag == _personWeAreSpeakingTo)
+                            labelText = "you";
+                        // Return the menu option with the tag stored as Data
+                        return Option(labelText, _knower, tag);
+                    }).ToList();
+
+
+                //
+                break;
+            case SocialMenuState.talkAboutPersonWhoSpokeAboutPerson:
+
+                MenuState = SocialMenuState.talkAboutPersonWhoSpokeAboutPersonsKnowledge;
+                _knower = (Character)chosenOption.Data;
+                _aboutWho = (Character)chosenOption.Data2;
+                aboutWhoString = _aboutWho.CharacterName.ToString();
+                word = "is";
+                if (_aboutWho == _personWeAreSpeakingTo)
+                {
+                    aboutWhoString = "you";
+                    word = "are";
+
+                }
+
+
+                _titleText = $"So {_knower.CharacterName} was talking about <b>{aboutWhoString} and said {aboutWhoString} {word}...</b>";
+                _passOnTitleText = $"So {_knower.CharacterName} was talking about {aboutWhoString} and said {aboutWhoString} {word} ";
+
+                knowledgeList = _player.PersonKnowledge.GetAllCharacterTags(_knower, _aboutWho);
+
+                // Build a list of menu options from the player's MemoryTags
+                newOptions = knowledgeList.Select(tag =>
+                {
+
+                    string labelText = tag.ToString(); // You can customize this based on how you want the tags displayed
+
+                    // Return the menu option with the tag stored as Data
+                    return Option(labelText, tag, null);
+                }).ToList();
+
+
+                //
+                break;
+            case SocialMenuState.talkAboutPersonWhoSpokeAboutPersonsKnowledge:
+
+                knowledge = (MemoryTags)chosenOption.Data;
+
+
+
+
+                memoryTagsList = new() { knowledge };
+
+                SocialHelper.ShareKnowledgeAbout(_player, _personWeAreSpeakingTo, _knower, _aboutWho, KnowledgeType.person, memoryTagsList, null);
+                _player.Ui.Speak(_passOnTitleText + knowledge.ToString());
 
 
                 //

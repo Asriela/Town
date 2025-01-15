@@ -82,10 +82,49 @@ public class Relationships : MonoBehaviour
 
             TodaysInteractionEffects.Add(newEffect);
         }
+         
+         
+        if (responseDialogue != "")
+        { _character.Ui.Speak(responseDialogue); }
+
+        RecalculateMyRelationshipWithEveryone();
+
+        return effectFromInteraction;
+    }
+
+    public float AddInteractionEffect(SocializeType socializeType, Character giverOfInteraction, float interactionEffect)
+    {
+        string responseDialogue = "";
+        float effectFromInteraction = 0;
+        // Check if there's already an InteractionEffect of this type
+        var existingEffect = TodaysInteractionEffects.FirstOrDefault(effect => effect.type == socializeType);
+
+        if (existingEffect != null)
+        {
+            // Increment the repeat counter
+            existingEffect.amountOfRepeatsToday++;
+
+            existingEffect.value += interactionEffect / 2;
+
+
+        }
+        else
+        {
+
+
+            // Create a new InteractionEffect and calculate its value
+            var newEffect = new InteractionEffect(
+                socializeType, interactionEffect /2
+            );
+
+
+            TodaysInteractionEffects.Add(newEffect);
+        }
 
 
         if (responseDialogue != "")
         { _character.Ui.Speak(responseDialogue); }
+        RecalculateMyRelationshipWithEveryone();
 
         return effectFromInteraction;
     }
@@ -252,6 +291,10 @@ public class Relationships : MonoBehaviour
                 }
             }
 
+            foreach (var effect in TodaysInteractionEffects)
+            {
+                relationshipValue += effect.value;
+            }
             // Update the relationship value with the character based on the views and memory tags
             AddOrUpdateRelationship(_character, character, relationshipValue);
 

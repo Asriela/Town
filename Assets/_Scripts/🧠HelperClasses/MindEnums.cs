@@ -20,7 +20,8 @@ namespace Mind
         hatesOutsiders,
         hasNoBed,
         drunkard,
-        StandardSocialAttitudes
+        StandardSocialAttitudes,
+        hatesMages
 
     }
     [Serializable]
@@ -46,7 +47,8 @@ namespace Mind
         useOneOfMyPossesions,
         useObjectInInventory,
         gotoOccupant,
-        rentItem
+        rentItem,
+        sharePersonKnowledgeAbout
     }
     [Serializable]
     public enum RemoveSocial : short
@@ -61,12 +63,13 @@ namespace Mind
     {
         none,
         player,
-        Belethor,
+        Valina,
         Zerath,
         Alex,
         Ludwar,
         Lyssara,
-        Duskwither
+        Duskwither,
+        Agnar
     }
     [Serializable]
     public enum LocationName : short
@@ -151,7 +154,8 @@ namespace Mind
         cultist,
         murderVictim,
         turnUndeadVictim,
-        occupant
+        occupant,
+        seeTarget
     }
 
 

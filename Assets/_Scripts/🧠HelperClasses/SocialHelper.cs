@@ -8,12 +8,13 @@ public static class SocialHelper
 {
 
 
-    public static void AskForKnowledgeAbout(Character senderOfMessage, Character recieverOfMessage, Character knower, Character aboutPerson, Mind.KnowledgeType knowledgeType, List<System.Enum> knowledgeTags)
+    public static void AskForKnowledgeAbout(Character senderOfMessage, Character recieverOfMessage, Character knower, Character aboutPerson, Mind.KnowledgeType knowledgeType, List<System.Enum> knowledgeTags, bool hasOwnDialogue)
     {
 
         ActionPost actionPost = new(knowledgeType, knowledgeTags, null);
         SocialMediator.PostAction(senderOfMessage, recieverOfMessage, knower,aboutPerson, Mind.ActionType.findKnowledge, actionPost);
-        senderOfMessage.Ui.Speak($"Do you know of a {knowledgeType} that is {string.Join(" and ", knowledgeTags)}");
+        if(!hasOwnDialogue)
+        {senderOfMessage.Ui.Speak($"Do you know of a {knowledgeType} that is {string.Join(" and ", knowledgeTags)}");}
 
     }
 

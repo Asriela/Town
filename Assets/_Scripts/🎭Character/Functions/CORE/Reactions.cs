@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine;
 using System.Linq;
 using Mind;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class Reactions : MonoBehaviour
 {
@@ -26,20 +27,40 @@ public class Reactions : MonoBehaviour
             yield break;
         }
 
-
+        List<Enum> newKnowledge;
         yield return new WaitForSeconds(1f);
 
         switch (actionType)
         {
             case Mind.ActionType.findKnowledge:
+
                 switch (actionPost.Parameter)
                 {
                     case Mind.KnowledgeType.location:
-                        //  BasicFunctions.Log("❤request for knowledge received");
-                        var originalEnumList = actionPost.KnowledgeTags.Cast<Mind.KnowledgeTag>().ToArray();
-                        List<Enum> newKnowledge = _npc.Memory.GetLocationsByTag(originalEnumList).Cast<Enum>().ToList();
+
+                        var knowledgeTags = actionPost.KnowledgeTags.Cast<Mind.KnowledgeTag>().ToArray();
+                        newKnowledge = _npc.Memory.GetLocationsByTag(knowledgeTags).Cast<Enum>().ToList();
                         var originalTags = actionPost.KnowledgeTags;
                         SocialHelper.ShareKnowledgeAbout(_npc, sender, knower, aboutWho, Mind.KnowledgeType.location, newKnowledge, originalTags);
+                        _npc.Ui.Speak("Let me mark that on your map...");
+                        break;
+                    case Mind.KnowledgeType.person:
+
+                        if (_npc.Relationships.GetRelationshipWith(_npc, sender) >= (float)ViewTowards.positive)
+                        {
+                            var memTag = _npc.PersonKnowledge.GetRandomKnowledge(knower, aboutWho);
+                            newKnowledge = memTag.Cast<Enum>().ToList();
+
+                            SocialHelper.ShareKnowledgeAbout(_npc, sender, knower, aboutWho, Mind.KnowledgeType.person, newKnowledge, null);
+                            _npc.Ui.Speak(DialogueHelper.GetTellDialogue(memTag[0]));
+                        }
+                        else
+                        {
+
+                            _npc.Ui.Speak("Impress me and I will tell you more..");
+                        }
+
+
                         break;
                 }
 
@@ -67,61 +88,70 @@ public class Reactions : MonoBehaviour
                         {
 
                             List<Mind.MemoryTags> tags = actionPost.KnowledgeTags.Cast<Mind.MemoryTags>().ToList();
-                            _npc.PersonKnowledge.AddKnowledge(knower,aboutWho, tags);
-
-                            _npc.Relationships.RecalculateMyRelationshipWithEveryone();
+                            _npc.PersonKnowledge.AddKnowledge(knower, aboutWho, tags);
                             var viewAboutMemoryTag = _npc.Views.GetView(_npc, tags[0]);
-                            
-
-                            switch (viewAboutMemoryTag)
+                            if (sender != aboutWho && _npc is not Player)
                             {
-                                case ViewTowards.unforgivable:
-                                    _npc.Ui.Speak("WHAT!? GET OUT!! GET OUT NOW!!");
-                                    break;
+                                _npc.Relationships.AddInteractionEffect(SocializeType.tell, sender, (float)viewAboutMemoryTag);
+                            }
+                            _npc.Relationships.RecalculateMyRelationshipWithEveryone();
 
-                                case ViewTowards.despise:
-                                    _npc.Ui.Speak("That's horrifying!");
-                                    break;
 
-                                case ViewTowards.extremelyNegative:
-                                    _npc.Ui.Speak("That's extremely upsetting.");
-                                    break;
+                            //if the sender is sharing info about someone else that isnt them we need to add a Interactioneffect
 
-                                case ViewTowards.veryNegative:
-                                    _npc.Ui.Speak("Im not ok with that..");
-                                    break;
 
-                                case ViewTowards.negative:
-                                    _npc.Ui.Speak("I don't like that...");
-                                    break;
+                            if (_npc is not Player)
+                            {
+                                switch (viewAboutMemoryTag)
+                                {
+                                    case ViewTowards.unforgivable:
+                                        _npc.Ui.Speak("WHAT!? GET OUT!! GET OUT NOW!!");
+                                        break;
 
-                                case ViewTowards.neutral:
-                                    _npc.Ui.Speak("Oh ok..");
-                                    break;
+                                    case ViewTowards.despise:
+                                        _npc.Ui.Speak("That's horrifying!");
+                                        break;
 
-                                case ViewTowards.positive:
-                                    _npc.Ui.Speak("That's nice..");
-                                    break;
+                                    case ViewTowards.extremelyNegative:
+                                        _npc.Ui.Speak("That's extremely upsetting.");
+                                        break;
 
-                                case ViewTowards.veryPositive:
-                                    _npc.Ui.Speak("I really like that...");
-                                    break;
+                                    case ViewTowards.veryNegative:
+                                        _npc.Ui.Speak("Im not ok with that..");
+                                        break;
 
-                                case ViewTowards.extremelyPositive:
-                                    _npc.Ui.Speak("How wonderful!");
-                                    break;
+                                    case ViewTowards.negative:
+                                        _npc.Ui.Speak("I don't like that...");
+                                        break;
 
-                                case ViewTowards.adore:
-                                    _npc.Ui.Speak("That's amazing!");
-                                    break;
+                                    case ViewTowards.neutral:
+                                        _npc.Ui.Speak("Oh ok..");
+                                        break;
 
-                                case ViewTowards.obsessed:
-                                    _npc.Ui.Speak("WOW! UNBELIEVABLE!");
-                                    break;
+                                    case ViewTowards.positive:
+                                        _npc.Ui.Speak("That's nice..");
+                                        break;
 
-                                default:
-                                    _npc.Ui.Speak("I don't know how I feel about that.");
-                                    break;
+                                    case ViewTowards.veryPositive:
+                                        _npc.Ui.Speak("I really like that...");
+                                        break;
+
+                                    case ViewTowards.extremelyPositive:
+                                        _npc.Ui.Speak("How wonderful!");
+                                        break;
+
+                                    case ViewTowards.adore:
+                                        _npc.Ui.Speak("That's amazing!");
+                                        break;
+
+                                    case ViewTowards.obsessed:
+                                        _npc.Ui.Speak("WOW! UNBELIEVABLE!");
+                                        break;
+
+                                    default:
+                                        _npc.Ui.Speak("I don't know how I feel about that.");
+                                        break;
+                                }
                             }
                         }
 

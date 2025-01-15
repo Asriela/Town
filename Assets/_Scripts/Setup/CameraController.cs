@@ -8,7 +8,7 @@ public class CameraController : MonoBehaviour
     public Vector3 offset;            // Offset of the camera relative to the target
     public float fixedZPosition = -10f; // Fixed Z position for the camera in 2D
 
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         if (target == null)
             return;
