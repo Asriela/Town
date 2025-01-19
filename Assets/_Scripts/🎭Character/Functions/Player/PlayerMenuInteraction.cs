@@ -206,14 +206,32 @@ public class PlayerMenuInteraction : MonoBehaviour
             ///=======
             ////TELL
             /// ===
-            case "Talk about":
-                _currentMenuOptions = new List<MenuOption>
+            case "Lets talk about..":
+                _titleText = "Lets talk about..";
+                MenuState = SocialMenuState.talkAboutPerson;
+                // MenuState = SocialMenuState.tellPerson;
+                var everyoneWeKnow = _player.VisualStatusKnowledge.GetAllCharactersViewerHasVisualStatusOn(_player);
+
+                // Build a list of menu options from the player's MemoryTags
+                _currentMenuOptions = everyoneWeKnow.Select(tag =>
                 {
-                Label("Share something about yourself"),
-                Label("Talk about a person")
-                //Label("Talk about a location");
-                };
+                    string labelText = tag.CharacterName.ToString();
+                    if (tag == _player)
+                    {
+                        labelText = "myself";
+                    }
+                    else if (tag == _personWeAreSpeakingTo)
+                    {
+                        labelText = "you";
+                    }
+
+                    return Option(labelText, tag, null);
+                })
+                .OrderBy(option => option.ButtonLabel == "you" ? 1 : 0) // Ensure "you" is second
+                .ToList();
+
                 break;
+
 
 
             case "Share something about yourself":
@@ -496,10 +514,10 @@ public class PlayerMenuInteraction : MonoBehaviour
 
                 List<MenuOption> buttonLabels = new List<MenuOption>
                 {
-                    Label("Talk about"),
-                    Label("Ask about"),
-                    Label("Trade"),
-                    Label("Social Action")
+                    Label("Lets talk about.."),
+                     Label("Action"),
+                    Label("Trade")
+
 
 
 

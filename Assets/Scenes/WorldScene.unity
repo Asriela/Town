@@ -2219,6 +2219,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5495340519497977495, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: _visualState.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5495340519497977495, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: '_visualState.Array.data[0]'
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 6799200206703036821, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
       propertyPath: m_Name
       value: Captain of guard
@@ -2226,6 +2234,10 @@ PrefabInstance:
     - target: {fileID: 8992165545157527332, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
       propertyPath: _characterName
       value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 9045019834046229109, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: _peopleVisualStatus.Array.size
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6900,7 +6912,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98ee5052c2449594e8964837ffa30d79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _peopleVisualStatus: []
+  _peopleVisualStatus:
+  - knower: {fileID: 1359901501}
+    knowledge:
+    - character: {fileID: 1359901501}
+      memoryTags: 0000
 --- !u!1 &1421062915
 GameObject:
   m_ObjectHideFlags: 0
@@ -9769,8 +9785,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5495340519497977495, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: _visualState.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5495340519497977495, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
       propertyPath: '_formstate.Array.data[0]'
       value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 5495340519497977495, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: '_visualState.Array.data[0]'
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 6799200206703036821, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
       propertyPath: m_Name
@@ -9803,6 +9827,10 @@ PrefabInstance:
     - target: {fileID: 8992165545157527332, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
       propertyPath: _characterName
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 9045019834046229109, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: _peopleVisualStatus.Array.size
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -30,7 +30,9 @@ namespace Mind
         sad,
         worried,
         angry,
-        newToTown
+        newToTown,
+        focused,
+        grumpy
 
     }
 
