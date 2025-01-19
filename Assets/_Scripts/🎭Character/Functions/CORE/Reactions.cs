@@ -22,6 +22,7 @@ public class Reactions : MonoBehaviour
 
     private IEnumerator ReactToAction(bool intendedRecieverOfMessage, Character sender, Character knower, Character aboutWho, Mind.ActionType actionType, ActionPost actionPost)
     {
+        _npc.Appearance.FlipSpriteToTarget(_npc, sender);
         if (!intendedRecieverOfMessage)
         {
             yield break;
@@ -105,7 +106,7 @@ public class Reactions : MonoBehaviour
                                 switch (viewAboutMemoryTag)
                                 {
                                     case ViewTowards.unforgivable:
-                                        _npc.Ui.Speak("WHAT!? GET OUT!! GET OUT NOW!!");
+                                        _npc.Ui.Speak("WHAT!? I WONT STAND FOR THIS!");
                                         break;
 
                                     case ViewTowards.despise:

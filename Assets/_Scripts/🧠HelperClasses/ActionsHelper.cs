@@ -1,4 +1,5 @@
 ﻿
+using Mind;
 using UnityEngine;
 
 
@@ -90,10 +91,12 @@ public static class ActionsHelper
 
 
     }
-    public static void EndThisBehaviour(NPC character)
+    public static void EndThisBehaviour(NPC character, ActionType action )
     {
         character.Acting.StepInAction = 0;
         (character as NPC).Thinking.CalculateHighestScoringBehavior();
+
+        character.Memory.AddToActionCount(action);
     }
 
     public static bool PickUpObject(Character character, WorldObject targetObject)

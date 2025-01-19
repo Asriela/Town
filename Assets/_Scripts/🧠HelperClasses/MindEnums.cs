@@ -21,7 +21,8 @@ namespace Mind
         hasNoBed,
         drunkard,
         StandardSocialAttitudes,
-        hatesMages
+        hatesMages,
+        mage
 
     }
     [Serializable]
@@ -48,7 +49,8 @@ namespace Mind
         useObjectInInventory,
         gotoOccupant,
         rentItem,
-        sharePersonKnowledgeAbout
+        sharePersonKnowledgeAbout,
+        
     }
     [Serializable]
     public enum RemoveSocial : short
@@ -198,7 +200,10 @@ namespace Mind
         seesSomeoneWithTrait,
         seesSomeoneWithoutTrait,
         seesSomeoneRelatLevelAtOrAbove,
-        seesSomeoneRelatLevelAtOrBelow
+        seesSomeoneRelatLevelAtOrBelow,
+        knowsAboutMemoryTag,
+        hasDoneActionToday,
+        hasNotDoneActionToday
     }
     [Serializable]
     public enum TimeOfDayType : short

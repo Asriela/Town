@@ -38,6 +38,9 @@ public static class Conditions
         _conditionDelegates.Add(ConditionType.seesSomeoneWithoutTrait, new ConditionDelegate<TraitType>(CheckSeesSomeoneWithTrait));
         _conditionDelegates.Add(ConditionType.seesSomeoneRelatLevelAtOrAbove, new ConditionDelegate<ViewTowards>(CheckSeesSomeoneWithRelationshipLevelAt));
         _conditionDelegates.Add(ConditionType.seesSomeoneRelatLevelAtOrBelow, new ConditionDelegate<ViewTowards>(CheckSeesSomeoneWithRelationshipLevelAt));
+        _conditionDelegates.Add(ConditionType.knowsAboutMemoryTag, new ConditionDelegate<MemoryTags>(CheckMemoryTag));
+        _conditionDelegates.Add(ConditionType.hasDoneActionToday, new ConditionDelegate<ActionType>(CheckActionDoneForDay));
+        _conditionDelegates.Add(ConditionType.hasNotDoneActionToday, new ConditionDelegate<ActionType>(CheckActionDoneForDay));
     }
 
     public static bool CheckCondition(Condition condition, NPC npc)
@@ -97,6 +100,9 @@ public static class Conditions
                 ConditionType.seesSomeoneRelatLevelAtOrAbove => ConditionHandler<ViewTowards>((ConditionDelegate<ViewTowards>)conditionDelegate, condition.parameter, npc, true),
 
                 ConditionType.seesSomeoneRelatLevelAtOrBelow => ConditionHandler<ViewTowards>((ConditionDelegate<ViewTowards>)conditionDelegate, condition.parameter, npc, false),
+                ConditionType.knowsAboutMemoryTag => ConditionHandler<MemoryTags>((ConditionDelegate<MemoryTags>)conditionDelegate, condition.parameter, npc, true),
+                ConditionType.hasDoneActionToday => ConditionHandler<ActionType>((ConditionDelegate<ActionType>)conditionDelegate, condition.parameter, npc, true),
+                ConditionType.hasNotDoneActionToday => ConditionHandler<ActionType>((ConditionDelegate<ActionType>)conditionDelegate, condition.parameter, npc, false),
                 _ => false
             };
 
@@ -108,6 +114,32 @@ public static class Conditions
     private static bool ConditionHandler<T>(ConditionDelegate<T> conditionDelegate, object parameter, NPC npc, bool trueStatement) => conditionDelegate((T)parameter, npc, trueStatement);
 
     // Example condition check methods:
+    private static bool CheckMemoryTag(MemoryTags parameter, NPC npc, bool trueStatement)
+    {
+        var value = npc.PersonKnowledge.HasMemoryTag(npc, parameter);
+        if (value)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private static bool CheckActionDoneForDay(ActionType parameter, NPC npc, bool trueStatement)
+    {
+        var value = npc.Memory.GetActionCount(parameter);
+        if (value>0 && trueStatement)
+        {
+            return true;
+        }
+
+        if (value <= 0 && !trueStatement)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    
     private static bool CheckNeed(NeedType parameter, NPC npc, bool trueStatement)
     {
         if (npc.Vitality.Needs.ContainsKey(parameter) && npc.Vitality.Needs[parameter] > 80)
@@ -116,7 +148,6 @@ public static class Conditions
         }
         return false;
     }
-
     private static bool CheckOccupantTarget(TraitType parameter, NPC npc, bool trueStatement)
     {
 

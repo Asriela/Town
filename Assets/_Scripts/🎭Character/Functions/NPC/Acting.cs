@@ -14,6 +14,7 @@ public class Acting : MonoBehaviour
     public int StepInAction { get; set; } = 0;
     private string _lastAction = "";
     private float _waitBeforeAction = 0;
+    private ActionType _doingActionTypeOf;
 
     public void Initialize(NPC npc) => _npc = npc;
     public Behavior CurrentBehavior { get; set; }
@@ -35,7 +36,8 @@ public class Acting : MonoBehaviour
         { ActionType.gotoOccupant, param => GotoOccupant((TraitType)param) },
         { ActionType.buyItem, param => BuyAnItem((ObjectType)param,_npc.Memory.ReachedOccupant) },
         { ActionType.rentItem, param => RentAnItem((ObjectType)param,_npc.Memory.ReachedOccupant) },
-        { ActionType.socialize, param => DoSocialActionWithSomeone((SocializeType)param,_npc.Memory.SocialTarget) }
+        { ActionType.socialize, param => DoSocialActionWithSomeone((SocializeType)param,_npc.Memory.SocialTarget) },
+        { ActionType.sharePersonKnowledgeAbout , param => sharePersonKnowledge((CharacterName)param) }
     };
 
     private void Update() => PerformCurrentBehavior();
@@ -54,19 +56,23 @@ public class Acting : MonoBehaviour
             if (_lastAction != CurrentBehavior.Name)
             {
                 StepInAction = 0;
-
+                _doingActionTypeOf = CurrentBehavior.Action;
+                    
                 _lastAction = CurrentBehavior.Name;
                 _npc.Movement.Stop();
-                _npc.Ui.EndSpeech();
+
                 if (CurrentBehavior.Dialogue != "")
                 {
                     _waitBeforeAction = 4;
-                    if (CurrentBehavior.Action == ActionType.socialize)
+                    if (CurrentBehavior.Action == ActionType.socialize || CurrentBehavior.Action == ActionType.sharePersonKnowledgeAbout)
                     {
                         _npc.Memory.SocialDialogue = CurrentBehavior.Dialogue;
                     }
                     else
-                    { _npc.Ui.Speak(CurrentBehavior.Dialogue); }
+                    {
+                        _npc.Ui.Speak(CurrentBehavior.Dialogue); 
+
+                    }
                 }
                 else
                 {
@@ -77,9 +83,10 @@ public class Acting : MonoBehaviour
             if (StepInAction == 0 && _waitBeforeAction <= 0)
             {
                 StepInAction++;
-                _npc.Ui.EndSpeech();
+                //_npc.Ui.EndSpeech();
 
             }
+            
             action(CurrentBehavior.ActionParameter);
 
             _waitBeforeAction -= 0.01f;
@@ -92,7 +99,7 @@ public class Acting : MonoBehaviour
     //TODO: add dynamic tags  when searching for a character
     private void FindCharacter(TargetType targetType)
     {
-
+       
         switch (StepInAction)
         {
             case 1:
@@ -104,7 +111,7 @@ public class Acting : MonoBehaviour
 
                 break;
             case 2:
-                ActionsHelper.EndThisBehaviour(_npc);
+                ActionsHelper.EndThisBehaviour(_npc, _doingActionTypeOf);
                 break;
         }
     }
@@ -119,14 +126,38 @@ public class Acting : MonoBehaviour
                 if (occupant != null)
                 {
                     _npc.Memory.OccupantTargets[traitType] = occupant;
+                    _npc.Memory.Targets[TargetType.occupant] = occupant;
                     IncrementStepInAction();
                 }
                 break;
             case 2:
-                ActionsHelper.EndThisBehaviour(_npc);
+                ActionsHelper.EndThisBehaviour(_npc, _doingActionTypeOf);
                 break;
         }
     }
+
+    private void sharePersonKnowledge(CharacterName aboutWho)
+    {
+        switch (StepInAction)
+        {
+            case 1:
+                var bestie = _npc.Relationships.GetHighestRelationship(_npc);
+                var aboutWhoCharacter = WorldManager.Instance.AllCharacters[aboutWho];
+
+                if (bestie != null && ActionsHelper.Reached(_npc, bestie.transform.position, 3f))
+                {
+                    var knowledge = _npc.PersonKnowledge.GetRandomKnowledge(_npc, aboutWhoCharacter);
+                    SocialHelper.ShareKnowledgeAbout(_npc, bestie, bestie, aboutWhoCharacter, KnowledgeType.person, knowledge.Cast<Enum>().ToList(), null);
+                    _npc.Ui.Speak($"The traveler is a mage! How exciting!");
+                    IncrementStepInAction();
+                }
+                break;
+            case 2:
+                ActionsHelper.EndThisBehaviour(_npc, _doingActionTypeOf);
+                break;
+        }
+    }
+
     private void GotoOccupant(TraitType traitType)
     {
 
@@ -141,7 +172,7 @@ public class Acting : MonoBehaviour
                 }
                 break;
             case 2:
-                ActionsHelper.EndThisBehaviour(_npc);
+                ActionsHelper.EndThisBehaviour(_npc, _doingActionTypeOf);
                 break;
         }
     }
@@ -158,7 +189,7 @@ public class Acting : MonoBehaviour
 
                 break;
             case 2:
-                ActionsHelper.EndThisBehaviour(_npc);
+                ActionsHelper.EndThisBehaviour(_npc, _doingActionTypeOf);
                 break;
         }
 
@@ -244,7 +275,7 @@ public class Acting : MonoBehaviour
                 }
                 break;
             case 2:
-                ActionsHelper.EndThisBehaviour(_npc);
+                ActionsHelper.EndThisBehaviour(_npc, _doingActionTypeOf);
                 break;
         }
     }
@@ -269,7 +300,7 @@ public class Acting : MonoBehaviour
 
                 break;
             case 2:
-                ActionsHelper.EndThisBehaviour(_npc);
+                ActionsHelper.EndThisBehaviour(_npc, _doingActionTypeOf);
                 break;
         }
     }
@@ -281,7 +312,7 @@ public class Acting : MonoBehaviour
         {
             case 1:
 
-                if (_npc.Memory.Targets[targetType].GetComponent<Character>() is { } target &&
+                if (_npc.Memory.Targets[targetType] is { } target &&
                     ActionsHelper.Reached(_npc, target.transform.position, 1f))
                 {
                     BaseAction.HurtSomeone(_npc, target, 100);
@@ -292,7 +323,7 @@ public class Acting : MonoBehaviour
                 //TODO: killer must only kill victim if they think the victim is alone
                 break;
             case 2:
-                ActionsHelper.EndThisBehaviour(_npc);
+                ActionsHelper.EndThisBehaviour(_npc, _doingActionTypeOf);
                 break;
         }
     }
@@ -320,7 +351,7 @@ public class Acting : MonoBehaviour
 
                 break;
             case 2:
-                ActionsHelper.EndThisBehaviour(_npc);
+                ActionsHelper.EndThisBehaviour(_npc, _doingActionTypeOf);
                 break;
         }
 
@@ -340,7 +371,7 @@ public class Acting : MonoBehaviour
 
                 break;
             case 2:
-                ActionsHelper.EndThisBehaviour(_npc);
+                ActionsHelper.EndThisBehaviour(_npc, _doingActionTypeOf);
                 break;
         }
     }
@@ -377,7 +408,7 @@ public class Acting : MonoBehaviour
                 break;
             //STEP 2
             case 2:
-                ActionsHelper.EndThisBehaviour(_npc);
+                ActionsHelper.EndThisBehaviour(_npc, _doingActionTypeOf);
                 break;
         }
 
@@ -398,11 +429,11 @@ public class Acting : MonoBehaviour
                 _npc.Ui.CurrentStepInAction = "drinking";
 
 
-                ActionsHelper.EndThisBehaviour(_npc);
+                ActionsHelper.EndThisBehaviour(_npc, _doingActionTypeOf);
                 break;
             //STEP 2
             case 2:
-                ActionsHelper.EndThisBehaviour(_npc);
+                ActionsHelper.EndThisBehaviour(_npc, _doingActionTypeOf);
                 break;
         }
     }
@@ -456,8 +487,8 @@ public class Acting : MonoBehaviour
 
                 break;
             //STEP 2
-            case 2:
-                ActionsHelper.EndThisBehaviour(_npc);
+            case 2: 
+                ActionsHelper.EndThisBehaviour(_npc, _doingActionTypeOf);
                 break;
         }
     }

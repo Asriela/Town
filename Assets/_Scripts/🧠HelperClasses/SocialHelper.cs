@@ -23,6 +23,7 @@ public static class SocialHelper
         ActionPost actionPost = new(knowledgeType, newKnowledge, originalTags);
         SocialMediator.PostAction(senderOfMessage, recieverOfMessage, knower,aboutPerson, ActionType.shareKnowledge, actionPost);
         // senderOfMessage.Ui.Speak($"Yes let me mark it on your map");
+        
     }
 
     public static void SocialAction(Character senderOfMessage, Character recieverOfMessage, SocializeType socialActionType)

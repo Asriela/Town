@@ -18,21 +18,21 @@ MonoBehaviour:
     _dialogue: Begone outsider scum!
     _action: 10
     _actionParameter:
-      rid: 2000162622244651008
+      rid: 2000162685109141534
     _conditions:
     - conditionType: 24
       parameter:
-        rid: 2000162622244651009
+        rid: 2000162685109141535
     _priority: 3
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162622244651008
+    - rid: 2000162685109141534
       type: {class: SocializeType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 7
-    - rid: 2000162622244651009
+    - rid: 2000162685109141535
       type: {class: TraitType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 10

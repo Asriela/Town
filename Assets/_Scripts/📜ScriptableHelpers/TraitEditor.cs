@@ -207,6 +207,9 @@ public class TraitEditor : Editor
             Mind.ConditionType.seesSomeoneWithoutTrait => typeof(Mind.TraitType),
             Mind.ConditionType.seesSomeoneRelatLevelAtOrAbove => typeof(Mind.ViewTowards),
             Mind.ConditionType.seesSomeoneRelatLevelAtOrBelow => typeof(Mind.ViewTowards),
+            Mind.ConditionType.knowsAboutMemoryTag => typeof(Mind.MemoryTags),
+            Mind.ConditionType.hasDoneActionToday => typeof(Mind.ActionType),
+            Mind.ConditionType.hasNotDoneActionToday => typeof(Mind.ActionType),
             _ => null
         };
 

@@ -385,7 +385,19 @@ public class Relationships : MonoBehaviour
 
         return new List<Character>();
     }
+    public Character GetHighestRelationship(Character whosRelationships)
+    {
+        var existingPair = _characterRelationships.FirstOrDefault(p => p.character == whosRelationships);
 
+        if (existingPair != null && existingPair.relationships.Any())
+        {
+            return existingPair.relationships
+                .OrderByDescending(r => r.relationshipValue)
+                .FirstOrDefault()?.targetCharacter;
+        }
+
+        return null; // Return null if no relationships exist
+    }
     //TODO: add interface to ensure that this class and others like it has their cleanup method so we can clean up all these classes
     public void Cleanup()
     {

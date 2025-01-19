@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mind;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -37,8 +38,34 @@ public class Memory : MonoBehaviour
 
     public Character SocialTarget { get; set; }
     public string SocialDialogue { get; set; }
+    private Dictionary<ActionType, int> _actionCount = new();
+
+    public int GetActionCount(ActionType action)
+    {
+        if (_actionCount.ContainsKey(action))
+        {return _actionCount[action];}
+        else
+        {
+            return 0;
+        }
+    }
+
+    public void AddToActionCount(ActionType action)
+    {
+        if (_actionCount.ContainsKey(action))
+        {
+            _actionCount[action]++;
+        }
+
+        else
+        {
+            _actionCount.Add(action,1);
+
+        }
+    }
     [SerializeField]
     private int _coin;
+
     public int Coin
     {
         get => _coin;

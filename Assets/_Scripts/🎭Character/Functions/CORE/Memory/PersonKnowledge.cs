@@ -164,7 +164,32 @@ public class PersonKnowledge : MonoBehaviour
             .Select(kp => kp.knower)
             .ToList();
     }
+    public bool HasMemoryTag(Character person, params Mind.MemoryTags[] tags)
+    {
+        bool answ = false;
+        foreach (var kp in _peopleKnowledge)
+        {
+            if (kp.knower == person)
+            {
+                foreach (var k in kp.knowledge)
+                {
 
+
+                    Debug.Log($"Checking tags for person: {person.name}");
+                    foreach (var tag in tags)
+                    {
+                        Debug.Log($"Looking for tag: {tag}, Found: {k.memoryTags.Contains(tag)}");
+                        answ= k.memoryTags.Contains(tag);
+                    }
+                }
+            }
+        } 
+
+
+
+        return answ;
+
+    }
     public List<Mind.MemoryTags> GetAllCharacterTags(Character knower, Character person)
     {
         return GetKnowledge(knower, person);

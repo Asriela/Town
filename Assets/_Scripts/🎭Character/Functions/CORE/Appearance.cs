@@ -44,7 +44,16 @@ public class Appearance : MonoBehaviour
         switch (State)
         {
             case AppearanceState.dead:
-
+     
+                Sprite deadSprite = Resources.Load<Sprite>("Assets/Sprites/characters/TravelerDead.png");
+                if (deadSprite != null)
+                {
+                    _spriteRenderer.sprite = deadSprite;
+                }
+                else
+                {
+                    Debug.LogWarning("Sprite not found at path: Sprites/Characters/TravelerDead");
+                }
                 _spriteRenderer.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 90);
                 break;
             case AppearanceState.lyingDown:
@@ -66,11 +75,12 @@ public class Appearance : MonoBehaviour
         Vector3 movementDirection = transform.position - previousPosition;
 
 
-        if (movementDirection.x > 0.0001f)
+        if (movementDirection.x > 0.005f)
         {
             _spriteRenderer.flipX = false; // Facing right
         }
-        else if (movementDirection.x < -0.0001f)
+
+        if (movementDirection.x < -0.005f)
         {
             _spriteRenderer.flipX = true; // Facing left
         }
@@ -79,4 +89,12 @@ public class Appearance : MonoBehaviour
         previousPosition = transform.position;
     }
 
+    public void FlipSpriteToTarget(Character subject, Character target)
+    {
+        // Determine the direction to the target
+        bool flip = target.transform.position.x < subject.transform.position.x;
+
+        // Flip the sprite based on the direction
+        _spriteRenderer.flipX = flip;
+    }
 }
