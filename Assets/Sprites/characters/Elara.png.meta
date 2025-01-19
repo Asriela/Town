@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a508a2d2f221643f189dc5e01a327d66
+guid: b964d62ef18968347a465b0b9470292a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7115858766221371967
-    second: character_maleAdventurer_idle_0
+      213: 1920095000179166794
+    second: Elara_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: character_maleAdventurer_idle_0
+      name: Elara_0
       rect:
         serializedVersion: 2
-        x: 28
+        x: 4
         y: 0
-        width: 136
-        height: 213
+        width: 14
+        height: 40
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1c5968f47246f3d90800000000000000
-      internalID: -7115858766221371967
+      spriteID: a4ecea4ca3c85aa10800000000000000
+      internalID: 1920095000179166794
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      character_maleAdventurer_idle_0: -7115858766221371967
+      Elara_0: 1920095000179166794
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

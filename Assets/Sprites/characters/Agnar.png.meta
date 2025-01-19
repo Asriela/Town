@@ -116,24 +116,17 @@ TextureImporter:
       name: Agnar_0
       rect:
         serializedVersion: 2
-        x: 5
-        y: 2
-        width: 23
-        height: 29
+        x: 2
+        y: 0
+        width: 19
+        height: 41
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
-      physicsShape:
-      - - {x: 11.5, y: -11.5}
-        - {x: 11.5, y: 7.5}
-        - {x: 7.5, y: 14.5}
-        - {x: -11.5, y: 14.5}
-        - {x: -11.5, y: -4.5}
-        - {x: -6.5, y: -14.5}
-        - {x: 7.5, y: -14.5}
-      tessellationDetail: 0
+      physicsShape: []
+      tessellationDetail: -1
       bones: []
       spriteID: f3189297476c2a6e0800000000000000
       internalID: -1827680295207730881
@@ -145,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 4f462e9c94092b44bbf3d0eb20d52dce
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 

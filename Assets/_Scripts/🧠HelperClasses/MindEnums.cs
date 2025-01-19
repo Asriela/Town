@@ -22,8 +22,11 @@ namespace Mind
         drunkard,
         StandardSocialAttitudes,
         hatesMages,
-        mage
-
+        mage,
+        monsterKiller,
+        captainOfTheGuard,
+        werewolf,
+        concernedWife
     }
     [Serializable]
     public enum ActionType : short
@@ -50,7 +53,7 @@ namespace Mind
         gotoOccupant,
         rentItem,
         sharePersonKnowledgeAbout,
-        
+
     }
     [Serializable]
     public enum RemoveSocial : short
@@ -71,7 +74,10 @@ namespace Mind
         Ludwar,
         Lyssara,
         Duskwither,
-        Agnar
+        Agnar,
+        Talinor,
+        Elara,
+        Dohlson
     }
     [Serializable]
     public enum LocationName : short
@@ -203,7 +209,11 @@ namespace Mind
         seesSomeoneRelatLevelAtOrBelow,
         knowsAboutMemoryTag,
         hasDoneActionToday,
-        hasNotDoneActionToday
+        hasNotDoneActionToday,
+        SeePersonKnowledge,
+        NotSeePersonKnowledge,
+        SeePersonForm,
+        NotSeePersonForm
     }
     [Serializable]
     public enum TimeOfDayType : short
@@ -246,7 +256,7 @@ namespace Mind
         veryPositive = 2,
         extremelyPositive = 3,
         adore = 5,
-        obsessed =25
+        obsessed = 25
 
     }
     [Serializable]

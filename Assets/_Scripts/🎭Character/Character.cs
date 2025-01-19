@@ -12,6 +12,7 @@ using UnityEngine;
 [RequireComponent(typeof(PersonKnowledge))]
 [RequireComponent(typeof(Views))]
 [RequireComponent(typeof(Relationships))]
+[RequireComponent(typeof(VisualStatusKnowledge))]
 public class Character : MonoBehaviour
 {
     private Collider2D _collider2D;
@@ -38,6 +39,7 @@ public class Character : MonoBehaviour
     public Views Views { get; set; }
 
     public Relationships Relationships { get; set; }
+    public VisualStatusKnowledge VisualStatusKnowledge { get; set; }
     public SpriteRenderer SpriteRenderer { get; set; }
     private void Awake()
     { 
@@ -60,6 +62,8 @@ public class Character : MonoBehaviour
         State.Initialize(this);
         Relationships = GetComponent<Relationships>();
         Relationships.Initialize(this);
+        VisualStatusKnowledge = GetComponent<VisualStatusKnowledge>();
+
     }
 
 

@@ -21,7 +21,17 @@ namespace Mind
         traveler,
         occult,
         wonderful,
-        charming
+        charming,
+        human,
+        werewolf,
+        sweating,
+        agitated,
+        scared,
+        sad,
+        worried,
+        angry,
+        newToTown
+
     }
 
     [Serializable]

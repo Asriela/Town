@@ -55,12 +55,14 @@ public class WorldManager : Singleton<WorldManager>
     [SerializeField]
     private float _startingTime;
 
+    [SerializeField]
+    private Player _thePlayer;
 
 
     public float TotalHoursPassed { get; set; } = 0;
     public float TimeThatsChanged { get; set; } = 0;
 
-    public Character ThePlayer { get; set; }
+    public Character ThePlayer => _thePlayer;
 
     private float _lastTimeOfDay = 0;
 

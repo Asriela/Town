@@ -210,6 +210,10 @@ public class TraitEditor : Editor
             Mind.ConditionType.knowsAboutMemoryTag => typeof(Mind.MemoryTags),
             Mind.ConditionType.hasDoneActionToday => typeof(Mind.ActionType),
             Mind.ConditionType.hasNotDoneActionToday => typeof(Mind.ActionType),
+            Mind.ConditionType.SeePersonKnowledge => typeof(Mind.MemoryTags),
+            Mind.ConditionType.NotSeePersonKnowledge => typeof(Mind.MemoryTags),
+            Mind.ConditionType.SeePersonForm => typeof(Mind.MemoryTags),
+            Mind.ConditionType.NotSeePersonForm => typeof(Mind.MemoryTags),
             _ => null
         };
 

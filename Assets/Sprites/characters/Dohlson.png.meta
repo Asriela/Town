@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 80dc51f50fc414758aab4060312b3887
+guid: 5fb98ff914485bc4ca8afd239cf8fa6d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6456126842194756164
-    second: character_femaleAdventurer_idle_0
+      213: 5736567765161263512
+    second: Dohlson_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: character_femaleAdventurer_idle_0
+      name: Dohlson_0
       rect:
         serializedVersion: 2
-        x: 31
+        x: 3
         y: 0
-        width: 130
-        height: 192
+        width: 17
+        height: 41
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: cbdfd12d7da3766a0800000000000000
-      internalID: -6456126842194756164
+      spriteID: 891c4602df16c9f40800000000000000
+      internalID: 5736567765161263512
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      character_femaleAdventurer_idle_0: -6456126842194756164
+      Dohlson_0: 5736567765161263512
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

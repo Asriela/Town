@@ -269,7 +269,7 @@ public class PlayerMenuInteraction : MonoBehaviour
         if (_currentMenuOptions == null)
         { _interactionMenu.HideMenu(); }
         else
-        { _interactionMenu.ShowMenu(_currentMenuOptions, _titleText); }
+        { OpenInteractionMenu(_currentMenuOptions, _titleText, _player.transform, _personWeAreSpeakingTo.transform); }
     }
 
     private List<MenuOption> ProcessComplexMenuOptions(int positionInList)
@@ -326,20 +326,20 @@ public class PlayerMenuInteraction : MonoBehaviour
 
                 MenuState = SocialMenuState.askAboutPersonWhoSpokeAboutPerson;
                 _knower = (Character)chosenOption.Data;
-                 doWord = "does";
-                 characterWord = _knower.CharacterName.ToString();
+                doWord = "does";
+                characterWord = _knower.CharacterName.ToString();
                 if (_knower == _personWeAreSpeakingTo)
                 {
                     doWord = "do";
                     characterWord = "you";
                 }
-                    
+
                 _titleText = $"So what {doWord} <b>{characterWord} think about..</b>";
 
                 var charactersToAskAbout = _player.PersonKnowledge.GetAllCharactersPersonHasDataOn(_player);
 
                 // Build a list of menu options from the player's MemoryTags
-                newOptions = charactersToAskAbout.Where(tag => tag!=_personWeAreSpeakingTo).Select(tag =>
+                newOptions = charactersToAskAbout.Where(tag => tag != _personWeAreSpeakingTo).Select(tag =>
                 {
                     string labelText = tag.ToString();
                     if (tag == _personWeAreSpeakingTo)
@@ -353,7 +353,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                 break;
             case SocialMenuState.askAboutPersonWhoSpokeAboutPerson:
 
-       
+
                 _knower = (Character)chosenOption.Data;
                 _aboutWho = (Character)chosenOption.Data2;
                 characterWord = _knower.CharacterName.ToString();
@@ -378,7 +378,7 @@ public class PlayerMenuInteraction : MonoBehaviour
 
                 //
                 break;
-            
+
             case SocialMenuState.talkAboutPerson:
 
                 MenuState = SocialMenuState.talkAboutPersonWhoSpokeAboutPerson;
@@ -506,7 +506,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                 };
 
                 MenuState = SocialMenuState.start;
-                _interactionMenu.ShowMenu(buttonLabels, "Social Interactions");
+                OpenInteractionMenu(buttonLabels, "Social Interactions", _player.transform, _personWeAreSpeakingTo.transform);
             }
             else
             {
@@ -537,7 +537,8 @@ public class PlayerMenuInteraction : MonoBehaviour
 
 
                     MenuState = SocialMenuState.objectInteraction;  // Assuming you have a separate menu state for WorldObjects
-                    _interactionMenu.ShowMenu(_currentMenuOptions, "Social Interactions");
+
+                    OpenInteractionMenu(_currentMenuOptions, "Social Interactions", _player.transform, _personWeAreSpeakingTo.transform);
                 }
             }
 
@@ -547,6 +548,12 @@ public class PlayerMenuInteraction : MonoBehaviour
 
 
 
+    }
+
+    private void OpenInteractionMenu(List<MenuOption> options, string title, Transform subject, Transform target)
+    {
+        EventManager.TriggerSwitchCameraToInteractionMode(subject, target);
+        _interactionMenu.ShowMenu(options, title);
     }
 
     public bool NotInteractingWithMenu()

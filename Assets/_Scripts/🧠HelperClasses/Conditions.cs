@@ -41,6 +41,10 @@ public static class Conditions
         _conditionDelegates.Add(ConditionType.knowsAboutMemoryTag, new ConditionDelegate<MemoryTags>(CheckMemoryTag));
         _conditionDelegates.Add(ConditionType.hasDoneActionToday, new ConditionDelegate<ActionType>(CheckActionDoneForDay));
         _conditionDelegates.Add(ConditionType.hasNotDoneActionToday, new ConditionDelegate<ActionType>(CheckActionDoneForDay));
+        _conditionDelegates.Add(ConditionType.SeePersonKnowledge, new ConditionDelegate<MemoryTags>(CheckSeesPersonKnowledge));
+        _conditionDelegates.Add(ConditionType.NotSeePersonKnowledge, new ConditionDelegate<MemoryTags>(CheckSeesPersonKnowledge));
+        _conditionDelegates.Add(ConditionType.SeePersonForm, new ConditionDelegate<MemoryTags>(CheckSeesFormStatus));
+        _conditionDelegates.Add(ConditionType.NotSeePersonForm, new ConditionDelegate<MemoryTags>(CheckSeesFormStatus));
     }
 
     public static bool CheckCondition(Condition condition, NPC npc)
@@ -103,6 +107,12 @@ public static class Conditions
                 ConditionType.knowsAboutMemoryTag => ConditionHandler<MemoryTags>((ConditionDelegate<MemoryTags>)conditionDelegate, condition.parameter, npc, true),
                 ConditionType.hasDoneActionToday => ConditionHandler<ActionType>((ConditionDelegate<ActionType>)conditionDelegate, condition.parameter, npc, true),
                 ConditionType.hasNotDoneActionToday => ConditionHandler<ActionType>((ConditionDelegate<ActionType>)conditionDelegate, condition.parameter, npc, false),
+
+                ConditionType.SeePersonKnowledge => ConditionHandler<MemoryTags>((ConditionDelegate<MemoryTags>)conditionDelegate, condition.parameter, npc, true),
+                ConditionType.NotSeePersonKnowledge => ConditionHandler<MemoryTags>((ConditionDelegate<MemoryTags>)conditionDelegate, condition.parameter, npc, false),
+
+                ConditionType.SeePersonForm => ConditionHandler<MemoryTags>((ConditionDelegate<MemoryTags>)conditionDelegate, condition.parameter, npc, true),
+                ConditionType.NotSeePersonForm => ConditionHandler<MemoryTags>((ConditionDelegate<MemoryTags>)conditionDelegate, condition.parameter, npc, false),
                 _ => false
             };
 
@@ -173,6 +183,26 @@ public static class Conditions
         if (npc.Memory.HasTrait(GameManager.Instance.TraitsInPlay[parameter]))
         {
             return trueStatement;
+        }
+        return !trueStatement;
+    }
+    private static bool CheckSeesPersonKnowledge(MemoryTags parameter, NPC npc, bool trueStatement)
+    {
+
+        if (npc.Senses.SeeSomeoneWithKnowledgeAboutThem(parameter)!=null)
+        {
+            return trueStatement;
+        }
+        return !trueStatement;
+    }
+
+    private static bool CheckSeesFormStatus(MemoryTags parameter, NPC npc, bool trueStatement)
+    {
+        var someoneWithForm = npc.Senses.SeeSomeoneWithForm(parameter);
+        if (someoneWithForm != null)
+        {
+            return trueStatement;
+            npc.Memory.Targets[TargetType.seeTarget] = someoneWithForm;
         }
         return !trueStatement;
     }

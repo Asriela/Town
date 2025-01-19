@@ -1,5 +1,8 @@
 ﻿using Mind;
+using NUnit.Framework;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 public enum StateType
 {
@@ -16,9 +19,20 @@ public class State : MonoBehaviour
 
 
     [SerializeField]
-    private StateType _currentState;
+    private StateType _actionState;
 
-    public StateType CurrentState => _currentState;
+    [SerializeField]
+    private List<MemoryTags> _visualState = new();
+
+    [SerializeField]
+    private List<MemoryTags> _formstate = new();
+    
+
+    public StateType ActionState => _actionState;
+
+    public List<MemoryTags> VisualState => _visualState;
+
+    public List<MemoryTags> FormState => _formstate;
 
     private Character _character;
     public void Initialize(Character character) => _character = character;
@@ -35,7 +49,7 @@ public class State : MonoBehaviour
     public void SetState(StateType stateType)
     {
 
-        _currentState = stateType;
+        _actionState = stateType;
         _alarm.Start(TimerType.setNewState, 5, false, 0);
 
         switch (stateType)
@@ -53,6 +67,21 @@ public class State : MonoBehaviour
 
     }
 
+    public void SetVisualState(params MemoryTags[] memTags)
+    {
+        _visualState.Clear();
+        _visualState.AddRange(memTags);
+
+    }
+
+    public void SetFormState(params MemoryTags[] memTags)
+    {
+        _formstate.Clear();
+        _formstate.AddRange(memTags);
+
+    }
+
+
     private void ResetStateToNormal()
     {
         if (_character is not Player && _alarm.Ended(TimerType.setNewState))
@@ -64,7 +93,7 @@ public class State : MonoBehaviour
 
     private void RunState()
     {
-        switch (_currentState)
+        switch (_actionState)
         {
             case StateType.sleeping:
                 _character.Vitality.Needs[NeedType.sleep] -= 0.1f;

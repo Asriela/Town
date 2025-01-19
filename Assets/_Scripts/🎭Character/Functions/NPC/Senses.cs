@@ -247,6 +247,36 @@ public class Senses : MonoBehaviour
     }
 
 
+    public Character SeeSomeoneWithKnowledgeAboutThem(params Mind.MemoryTags[] tags)
+    {
+        foreach (var character in _charactersInSight)
+        {
+            foreach (Mind.TraitType tag in tags)
+            {
+                if (character.PersonKnowledge.HasKnowledge(_npc, character, tags[0]))
+                {
+                    return character;
+                }
+            }
+        }
+        return null;
+    }
+
+    public Character SeeSomeoneWithForm(params Mind.MemoryTags[] tags)
+    {
+        foreach (var character in _charactersInSight)
+        {
+            foreach (Mind.TraitType tag in tags)
+            {
+                if (character.VisualStatusKnowledge.HasVisualStatus(_npc, character, tags[0]))
+                {
+                    return character;
+                }
+            }
+        }
+        return null;
+    }
+
     public Character SeeSomeoneWithRelationshipLevel(bool aboveLevel, Mind.ViewTowards view)
     {
         foreach (var character in _charactersInSight)
