@@ -209,28 +209,41 @@ public class PlayerMenuInteraction : MonoBehaviour
             case "Lets talk about..":
                 _titleText = "Lets talk about..";
                 MenuState = SocialMenuState.talkAboutSomeone;
-                // MenuState = SocialMenuState.tellPerson;
                 var everyoneWeKnow = _player.VisualStatusKnowledge.GetAllCharactersViewerHasVisualStatusOn(_player);
 
-                // Build a list of menu options from the player's MemoryTags
-                _currentMenuOptions = everyoneWeKnow.Select(tag =>
+                // Create lists to hold the options
+                List<MenuOption> options = new List<MenuOption>();
+                List<MenuOption> others = new List<MenuOption>();
+
+                // Iterate over everyoneWeKnow and classify options
+                foreach (var tag in everyoneWeKnow)
                 {
                     string labelText = tag.CharacterName.ToString();
                     if (tag == _player)
                     {
                         labelText = "myself";
+                        options.Insert(0, Option(labelText, tag, null)); // Insert "myself" at the beginning
                     }
                     else if (tag == _personWeAreSpeakingTo)
                     {
                         labelText = "you";
+                        options.Add(Option(labelText, tag, null)); // Add "you" at the end
                     }
+                    else
+                    {
+                        others.Add(Option(labelText, tag, null)); // Add other options to a separate list
+                    }
+                }
 
-                    return Option(labelText, tag, null);
-                })
-                .OrderBy(option => option.ButtonLabel == "you" ? 1 : 0) // Ensure "you" is second
-                .ToList();
+                // Combine the lists: "myself", followed by others, then "you"
+                options.AddRange(others);
+
+                // Assign the final list of options
+                _currentMenuOptions = options;
+
 
                 break;
+
 
 
 
@@ -686,7 +699,7 @@ public class PlayerMenuInteraction : MonoBehaviour
 
                     MenuState = SocialMenuState.objectInteraction;  // Assuming you have a separate menu state for WorldObjects
 
-                    OpenInteractionMenu(_currentMenuOptions, "Social Interactions", _player.transform, _personWeAreSpeakingTo.transform);
+                    OpenInteractionMenu(_currentMenuOptions, "Object Interactions", _player.transform, _personWeAreSpeakingTo.transform);
                 }
             }
 
@@ -701,7 +714,7 @@ public class PlayerMenuInteraction : MonoBehaviour
     private void OpenInteractionMenu(List<MenuOption> options, string title, Transform subject, Transform target)
     {
         EventManager.TriggerSwitchCameraToInteractionMode(subject, target);
-        _interactionMenu.ShowMenu(options, title);
+        _interactionMenu.ShowMenu(options, title, _personWeAreSpeakingTo);
     }
 
     public bool NotInteractingWithMenu()

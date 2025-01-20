@@ -10,6 +10,8 @@ public class InteractionMenu : MonoBehaviour
     public VisualElement root;
     private VisualElement menuContainer;
     private VisualElement backgroundImage;
+    private VisualElement portraitBackImage;
+    private VisualElement portraitImage;
 
     [SerializeField]
     private float buttonLeftMargin = 230;
@@ -42,8 +44,30 @@ public class InteractionMenu : MonoBehaviour
             backgroundImage.style.top = new Length(0, LengthUnit.Pixel);
             backgroundImage.style.width = new Length(480, LengthUnit.Pixel);
             backgroundImage.style.height = new Length(600, LengthUnit.Pixel);
-            backgroundImage.style.opacity = 1f; // Optional: Slight transparency
+            backgroundImage.style.opacity = 0.99f; // Optional: Slight transparency
             menuContainer.Add(backgroundImage);
+
+            var portraitWidth = 39 * 3;
+            // Add the portrait background image
+            portraitBackImage = new VisualElement();
+            portraitBackImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/portraits/portraitBack"));
+            portraitBackImage.style.position = Position.Absolute;
+            portraitBackImage.style.left = new Length(-38, LengthUnit.Pixel); // Left of the menu background
+            portraitBackImage.style.top = new Length(20, LengthUnit.Pixel);
+            portraitBackImage.style.width = new Length(portraitWidth, LengthUnit.Pixel); // Scale factor for portrait
+            portraitBackImage.style.height = new Length(49*3, LengthUnit.Pixel); // Scale factor for portrait
+            portraitBackImage.style.opacity = 0.99f;
+            menuContainer.Add(portraitBackImage);
+
+            // Add the actual portrait image
+            portraitImage = new VisualElement();
+            portraitImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/portraits/portraitTalinor"));
+            portraitImage.style.position = Position.Absolute;
+            portraitImage.style.left = new Length(-38, LengthUnit.Pixel); // Align with the back portrait
+            portraitImage.style.top = new Length(10, LengthUnit.Pixel);
+            portraitImage.style.width = new Length(portraitWidth, LengthUnit.Pixel); // Scale factor X 7
+            portraitImage.style.height = new Length(portraitWidth, LengthUnit.Pixel); // Scale factor Y 7
+            menuContainer.Add(portraitImage);
         }
         else
         {
@@ -51,7 +75,7 @@ public class InteractionMenu : MonoBehaviour
         }
     }
 
-    public void ShowMenu(List<MenuOption> buttonLabels, string lastMenuOption)
+    public void ShowMenu(List<MenuOption> buttonLabels, string lastMenuOption, Character personWeAreSpeakingTo)
     {
         GameManager.Instance.BlockingPlayerUIOnScreen = true;
         menuContainer.Clear();
@@ -62,6 +86,49 @@ public class InteractionMenu : MonoBehaviour
         // Add the background image first
         menuContainer.Add(backgroundImage);
 
+        // Add the portrait images
+        menuContainer.Add(portraitBackImage);
+        menuContainer.Add(portraitImage);
+
+        // Update the portrait image with the character's name
+        portraitImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>($"Sprites/portraits/portrait{personWeAreSpeakingTo.CharacterName}"));
+
+        // Create a separate container for the name button (this will not affect the menu options layout)
+        VisualElement nameButtonContainer = new VisualElement();
+        nameButtonContainer.style.position = Position.Absolute;
+        nameButtonContainer.style.top = new Length(110, LengthUnit.Pixel); // Position below the portrait
+        nameButtonContainer.style.left = new Length(-70, LengthUnit.Pixel); // Align to the left margin
+        nameButtonContainer.style.width = new Length(180, LengthUnit.Pixel);
+
+        // Add a button below the portrait image with the character's name
+        Button nameButton = new Button();
+        Label nameLabel = new Label(personWeAreSpeakingTo.CharacterName.ToString()  )
+        {
+            style =
+        {
+            color = Color.white,
+            unityTextAlign = TextAnchor.MiddleCenter,
+            fontSize = 14
+        }
+        };
+        nameButton.Add(nameLabel);
+
+        nameButton.style.marginTop = new Length(10, LengthUnit.Pixel); // Adjust this margin if necessary
+        nameButton.style.backgroundColor = new StyleColor(Color.clear);  // Transparent background
+        nameButton.focusable = false;  // Prevent focus
+
+        nameButton.AddToClassList("button");
+
+        // Override click event to do nothing
+        nameButton.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
+
+        // Add the name button to the container
+        nameButtonContainer.Add(nameButton);
+
+        // Add the container for the name button to the menu (it won't affect the other button layout)
+        menuContainer.Add(nameButtonContainer);
+
+        // Continue with the context button (if any)
         if (!string.IsNullOrEmpty(lastMenuOption))
         {
             Button contextButton = new Button();
@@ -161,13 +228,10 @@ public class InteractionMenu : MonoBehaviour
         menuContainer.style.flexDirection = FlexDirection.Column;
         menuContainer.style.alignItems = Align.FlexStart;
         menuContainer.style.justifyContent = Justify.FlexStart;
+
         // Display the menu
         menuContainer.style.display = DisplayStyle.Flex;
     }
-
-
-
-
 
 
 
