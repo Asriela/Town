@@ -11,6 +11,11 @@ public class InteractionMenu : MonoBehaviour
     private VisualElement menuContainer;
     private VisualElement backgroundImage;
 
+    [SerializeField]
+    private float buttonLeftMargin = 230;
+    [SerializeField]
+    private float buttonWidth = 280;
+
     public delegate void ButtonClicked(int positionInList, string buttonLabel);
     public event ButtonClicked OnButtonClicked;
 
@@ -37,7 +42,7 @@ public class InteractionMenu : MonoBehaviour
             backgroundImage.style.top = new Length(0, LengthUnit.Pixel);
             backgroundImage.style.width = new Length(480, LengthUnit.Pixel);
             backgroundImage.style.height = new Length(600, LengthUnit.Pixel);
-            backgroundImage.style.opacity = 0.9f; // Optional: Slight transparency
+            backgroundImage.style.opacity = 1f; // Optional: Slight transparency
             menuContainer.Add(backgroundImage);
         }
         else
@@ -52,45 +57,88 @@ public class InteractionMenu : MonoBehaviour
         menuContainer.Clear();
 
         int buttonCount = buttonLabels.Count;
+        var myRed = new Color(0.768f, 0.251f, 0.075f);
 
         // Add the background image first
         menuContainer.Add(backgroundImage);
 
         if (!string.IsNullOrEmpty(lastMenuOption))
         {
-            Label contextLabel = new Label(lastMenuOption);
-            contextLabel.style.fontSize = 15; // Reduced font size
-            contextLabel.style.color = new Color(1f, 1f, 1f); // Set text color to white
-            contextLabel.style.marginTop = new Length(40, LengthUnit.Pixel); // Increased margin to lower the title
-            contextLabel.style.marginBottom = new Length(10, LengthUnit.Pixel); // Adjusted to reduce the gap to buttons
-            contextLabel.style.alignSelf = Align.Center;  // Center the context label in its container
-            contextLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
+            Button contextButton = new Button();
 
-            // Shift the title text to the right by 50px
-            contextLabel.style.marginLeft = new Length(300, LengthUnit.Pixel);
+            // Add a label to the button
+            Label contextLabel = new Label(lastMenuOption)
+            {
+                style =
+            {
+                color = Color.white,
+                unityTextAlign = TextAnchor.MiddleLeft,
+                fontSize = 12
+            }
+            };
 
-            // Set width to match the background image width and allow wrapping
-            contextLabel.style.width = new Length(240, LengthUnit.Pixel);
-            contextLabel.style.whiteSpace = WhiteSpace.Normal; // Enable wrapping
-            contextLabel.style.overflow = Overflow.Hidden; // Prevent overflow of the text
+            contextButton.Add(contextLabel);
 
-            menuContainer.Add(contextLabel);
+            // Apply button styling to mimic other buttons
+            contextButton.style.marginLeft = new Length(130, LengthUnit.Pixel);
+            contextButton.style.marginTop = new Length(20, LengthUnit.Pixel);
+            contextButton.style.marginBottom = new Length(10, LengthUnit.Pixel);
+            contextButton.style.width = new Length(180, LengthUnit.Pixel);
+            contextButton.style.alignSelf = Align.Center;
+            contextButton.style.flexDirection = FlexDirection.Row;
+            contextButton.style.backgroundColor = new StyleColor(Color.clear);  // Remove button background
+            contextButton.focusable = false;  // Prevent focus
+
+            contextButton.AddToClassList("button");
+
+            // Override click event to do nothing
+            contextButton.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
+
+            menuContainer.Add(contextButton);
         }
 
         // Arrange buttons vertically
         for (int i = 0; i < buttonCount; i++)
         {
             string label = buttonLabels[i].ButtonLabel;
-            Button button = new Button { text = label };
+            Button button = new Button();
 
-            // Shift the buttons to the right by 50px
-            button.style.marginLeft = new Length(350, LengthUnit.Pixel);
+            // Create a container label with different styling
+            Label numberLabel = new Label($"{i + 1}.")
+            {
+                style =
+            {
+                color = Color.white,
+                unityTextAlign = TextAnchor.MiddleLeft,
+                fontSize = 12,
+                alignSelf = Align.FlexStart  // Align to the top of the button
+            }
+            };
 
-            // Positioning buttons
-            button.style.marginTop = new Length(i == 0 ? 10 : buttonSpacing, LengthUnit.Pixel); // Reduced space before buttons
-            button.style.width = new Length(180, LengthUnit.Pixel);
+            Label textLabel = new Label(label)
+            {
+                style =
+            {
+                color = myRed,
+                unityTextAlign = TextAnchor.MiddleLeft,
+                fontSize = 12,
+                whiteSpace = WhiteSpace.Normal, // Allow text wrapping within the label
+                overflow = Overflow.Hidden, // Prevent text from overflowing horizontally
+                alignSelf = Align.FlexStart // Align to the top of the button
+            }
+            };
+
+            // Add labels to the button
+            button.Add(numberLabel);
+            button.Add(textLabel);
+
+            // Reduced marginTop for closer buttons
+            button.style.marginLeft = new Length(buttonLeftMargin, LengthUnit.Pixel); // Example left margin
+            button.style.marginTop = new Length(-20, LengthUnit.Pixel); // Adjusted margin for closer buttons
+            button.style.width = new Length(buttonWidth, LengthUnit.Pixel); // Fixed width for button
             button.style.alignSelf = Align.Center;
-            button.style.unityTextAlign = TextAnchor.MiddleLeft;
+            button.style.flexDirection = FlexDirection.Row; // Ensure elements are side by side
+
             button.AddToClassList("button");
 
             // Button click handler
@@ -103,16 +151,23 @@ public class InteractionMenu : MonoBehaviour
                 StartCoroutine(CheckForInputAfterDelay());
             };
 
+            // Add button to the container
             menuContainer.Add(button);
         }
 
         // Move the menu up by the height (400px) and right by the width (240px)
         menuContainer.style.left = new Length((1600 + 100) / 2 - 150, LengthUnit.Pixel); // Move right by 240px
         menuContainer.style.top = new Length((900 + 200) / 2 - 500, LengthUnit.Pixel); // Move up by 400px
-
+        menuContainer.style.flexDirection = FlexDirection.Column;
+        menuContainer.style.alignItems = Align.FlexStart;
+        menuContainer.style.justifyContent = Justify.FlexStart;
         // Display the menu
         menuContainer.style.display = DisplayStyle.Flex;
     }
+
+
+
+
 
 
 

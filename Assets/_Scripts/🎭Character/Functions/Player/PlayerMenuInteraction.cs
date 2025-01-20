@@ -45,9 +45,9 @@ public class PlayerMenuInteraction : MonoBehaviour
         talkAboutPersonWhoSpokeAboutPerson,
         talkAboutPersonWhoSpokeAboutPersonsKnowledge,
         askAboutPerson,
-        askAboutPersonWhoSpokeAboutPerson
-
-
+        askAboutPersonWhoSpokeAboutPerson,
+        talkAboutSomeone,
+        talkAboutSomeonePath
     }
 
     private InteractionMenu _interactionMenu;
@@ -208,7 +208,7 @@ public class PlayerMenuInteraction : MonoBehaviour
             /// ===
             case "Lets talk about..":
                 _titleText = "Lets talk about..";
-                MenuState = SocialMenuState.talkAboutPerson;
+                MenuState = SocialMenuState.talkAboutSomeone;
                 // MenuState = SocialMenuState.tellPerson;
                 var everyoneWeKnow = _player.VisualStatusKnowledge.GetAllCharactersViewerHasVisualStatusOn(_player);
 
@@ -253,7 +253,7 @@ public class PlayerMenuInteraction : MonoBehaviour
 
             case "Talk about a person":
                 _titleText = "So...";
-                MenuState = SocialMenuState.talkAboutPerson;
+                MenuState = SocialMenuState.talkAboutSomeone;
                 // MenuState = SocialMenuState.tellPerson;
                 var charactersToTalkAbout = _player.PersonKnowledge.GetAllCharactersWeHaveDataOn();
 
@@ -293,7 +293,7 @@ public class PlayerMenuInteraction : MonoBehaviour
     private List<MenuOption> ProcessComplexMenuOptions(int positionInList)
     {
         var chosenOption = _currentMenuOptions[positionInList];
-        List<MenuOption> newOptions = null;
+        List<MenuOption> newOptions = new();
 
         string aboutWhoString = "";
         string word = "";
@@ -302,6 +302,11 @@ public class PlayerMenuInteraction : MonoBehaviour
         List<Enum> memoryTagsList;
         string doWord;
         string characterWord;
+
+        string pathChosen = "";
+        bool subjectIsWhoWeAreSpeakingTo = false;
+        bool subjectIsMe = false;
+        string subjectName = "";
 
         switch (MenuState)
         {
@@ -396,28 +401,153 @@ public class PlayerMenuInteraction : MonoBehaviour
 
                 //
                 break;
+            case SocialMenuState.talkAboutSomeone:
 
-            case SocialMenuState.talkAboutPerson:
+                MenuState = SocialMenuState.talkAboutSomeonePath;
 
-                MenuState = SocialMenuState.talkAboutPersonWhoSpokeAboutPerson;
+
+
+
+
                 _knower = (Character)chosenOption.Data;
-                _titleText = $"So  <b>{_knower.CharacterName} was talking about...</b>";
+                subjectName = _knower.CharacterName.ToString();
 
-                var charactersToTalkAbout = _player.PersonKnowledge.GetAllCharactersPersonHasDataOn(_knower);
+                subjectIsWhoWeAreSpeakingTo = _knower == _personWeAreSpeakingTo;
+                subjectIsMe = _knower == _player;
 
-                // Build a list of menu options from the player's MemoryTags
-                newOptions = charactersToTalkAbout.Select(tag =>
+                if (subjectIsMe)
+                {
+                    _titleText = $"Me...</b>";
+                }
+                else
+                {
+                    _titleText = $"So  <b>{subjectName}...</b>";
+                    List<MemoryTags> statuses = _player.VisualStatusKnowledge.GetVisualStatus(_player, _knower);
+
+                    // Prepare the status string
+                    string status = string.Empty;
+
+                    // If there are at least two statuses, combine the last two with "and"
+                    if (statuses.Count >= 2)
                     {
-                        string labelText = tag.ToString();
-                        if (tag == _personWeAreSpeakingTo)
-                            labelText = "you";
-                        // Return the menu option with the tag stored as Data
-                        return Option(labelText, _knower, tag);
-                    }).ToList();
+                        // Join all statuses except the last two
+                        status = string.Join(" ,", statuses.Take(statuses.Count - 2).Select(s => s.ToString()));
 
+                        // Combine the last two statuses with " and" if there are more than one
+                        if (statuses.Count > 1)
+                        {
+                            // Add "and" only if there were other statuses previously
+                            if (status.Length > 0)
+                            {
+                                status += " ,";
+                            }
+
+                            status += " " + statuses[statuses.Count - 2].ToString() + " and " + statuses[statuses.Count - 1].ToString();
+                        }
+                    }
+                    else
+                    {
+                        // If there are less than two statuses, handle normally
+                        status = string.Join(" ,", statuses.Select(s => s.ToString()));
+                    }
+
+                    // Handle the "you seem" case for the player
+                    newOptions.Add(Option((subjectIsWhoWeAreSpeakingTo ? "you seem " : $"{subjectName} seems ") + status + "..", _knower, "visual status path"));
+
+                }
+
+
+                //ASK
+
+                var askText = $"what can you tell me about {subjectName}..";
+                if (subjectIsWhoWeAreSpeakingTo)
+                {
+                    askText = "tell me more about you..";
+                }
+                if (subjectIsMe)
+                {
+                    askText = "what do you know about me?";
+                }
+
+
+                    //TELL
+                    var tellText = "";
+                var gossipText = "";
+
+
+                if (subjectIsWhoWeAreSpeakingTo)
+                {
+                    tellText = "theres something I know about you..";
+                }
+                else
+                if (subjectIsMe)
+                {
+                    tellText = "let you tell you about me...";
+                }
+                else
+                {
+                    tellText = $"let me tell you something about {subjectName}...";
+                    gossipText = $"{subjectName} said..";
+                }
+
+
+                if (gossipText != "")
+                {
+                    newOptions.Add(Option(askText, _knower, "tell me about this person"));
+                    newOptions.Add(Option(tellText, _knower, "tell me about this person"));
+                    newOptions.Add(Option(gossipText, _knower, "tell me about this person"));
+                }
+                else
+                {
+                    var options = new List<MenuOption>
+                {
+                    Option(subjectIsMe ? tellText : askText, _knower, subjectIsMe ? "share info on this person" : "tell me about this person"),
+                    Option(subjectIsMe ? askText : tellText, _knower, subjectIsMe ? "tell me about this person" : "share info on this person")
+                };
+                    newOptions.AddRange(options);
+                }
 
                 //
                 break;
+
+            case SocialMenuState.talkAboutSomeonePath:
+                pathChosen = (string)chosenOption.Data;
+
+                switch (pathChosen)
+                {
+                    case "visual status path":
+                        break;
+
+                    case "tell me about this person":
+                        break;
+
+                    case "share info something else said about this person":
+                        MenuState = SocialMenuState.talkAboutPersonWhoSpokeAboutPerson;
+
+
+
+                        _knower = (Character)chosenOption.Data;
+                        _titleText = $"So  <b>{_knower.CharacterName} was talking about...</b>";
+
+                        var charactersToTalkAbout = _player.PersonKnowledge.GetAllCharactersPersonHasDataOn(_knower);
+
+
+
+                        // Build a list of menu options from the player's MemoryTags
+                        newOptions.AddRange(charactersToTalkAbout.Select(tag =>
+                        {
+                            string labelText = tag.ToString();
+                            if (tag == _personWeAreSpeakingTo)
+                                labelText = "you";
+                            // Return the menu option with the tag stored as Data
+                            return Option(labelText, _knower, tag);
+                        }).ToList());
+                        break;
+                }
+
+
+                break;
+
             case SocialMenuState.talkAboutPersonWhoSpokeAboutPerson:
 
                 MenuState = SocialMenuState.talkAboutPersonWhoSpokeAboutPersonsKnowledge;

@@ -24,7 +24,7 @@ namespace Mind
         charming,
         human,
         werewolf,
-        sweating,
+        sweaty,
         agitated,
         scared,
         sad,
