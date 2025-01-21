@@ -262,6 +262,7 @@ namespace Mind
     [Serializable]
     public enum ObjectType : short
     {
+        none,
         bed,
         foodBowl,
         traderDesk,
@@ -270,6 +271,7 @@ namespace Mind
         pumpkin,
         ale,
         barStool
+        
     }
 
     [Serializable]

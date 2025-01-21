@@ -36,7 +36,7 @@ public static class BaseAction
 
             var boughtItem = workLocation.RemoveFromPossessions(objectType);
             buyer.Memory.AddToPossessions(objectType, boughtItem);
-            boughtItem.StartRenting(buyer, workLocation, 24);
+            boughtItem.ObjectActions.TryRenting(buyer, workLocation, 24);
             seller.Ui.Speak($"Here is the key to your room");
 
         }
@@ -81,7 +81,8 @@ public static class BaseAction
             SetState(userOfObject, StateType.normal);
         if (ActionsHelper.Reached(userOfObject, objectToUse.transform.position, 0.3f))
         {
-            objectToUse.InteractWithObject(userOfObject, interactionType);
+            objectToUse.ObjectActions.TryInteractWithObject(userOfObject, interactionType);
+
         }
 
 

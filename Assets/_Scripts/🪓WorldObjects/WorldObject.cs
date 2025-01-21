@@ -1,211 +1,113 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using Mind;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
-using static TMPro.Examples.TMP_ExampleScript_01;
-//TODO: change this object into a parent child string of objects to devide up the object types
 
-public enum ObjectInteractionType : short
+public enum ObjectFeatureType
 {
-    use,
-    careFor
+    UseFeature,
+    UpkeepFeature,
+    InteractionFeature,
+    GrowFeature,
+    RentFeature
 }
+
 public class WorldObject : MonoBehaviour
 {
     [SerializeField]
-    private ObjectType _objectType;
-    public ObjectType ObjectType => _objectType;
+    private WorldObjectData worldObjectData; // Reference to ScriptableObject
+    public WorldObjectData WorldObjectData => worldObjectData;
 
-    [SerializeField]
-    private float _integrity;
-    public float Integrity => _integrity;
+    protected List<ObjectTrait> objectTraits = new List<ObjectTrait>();
+    public List<ObjectTrait> ObjectTraits => objectTraits;
 
-    public float RentHoursLeft { get; set; } = 0;
+    private UseFeature _useFeature;
+    private UpkeepFeature _upkeepFeature;
+    private GrowFeature _growFeature;
+    private InteractFeature _interactFeature;
+    private RentFeature _rentFeature;
+    private ObjectActions _objectActions; // The new ObjectActions class
 
-    public Character RentedBy { get; set; } = null;
-    public Location RentedFrom { get; set; } = null;
-
-    private List<InteractionOption> interactionOptions  = new List<InteractionOption>();
-    public class InteractionOption
+    private void Awake()
     {
-        public string Label { get; }
-        public ObjectInteractionType InteractionAction { get; }
-
-        public InteractionOption(string label, ObjectInteractionType interactionAction)
+        if (worldObjectData != null)
         {
-            Label = label;
-            InteractionAction = interactionAction;
+            // Initialize properties from ScriptableObject
+            InitializeFromData(worldObjectData);
         }
 
-
+        _objectActions = new ObjectActions(this); // Initialize ObjectActions
     }
 
-    [SerializeField]
-    private float _care;
-    public float Care => _care;
-
-    [SerializeField]
-    private float _size;
-    public float Size => _size;
-
-    private List<ObjectTrait> _objectTraits = new();
-    private SpriteRenderer _spriteRenderer;
-    private void Start()
+    private void InitializeFromData(WorldObjectData data)
     {
-        _integrity = 100;
-        _care = 50;
-        _size = 1;
-        SetStartingTraitsBasedOnObjectType();
+        // Set size, integrity, and maintenance from ScriptableObject
+        Size = data.size;
+        Integrity = data.integrity;
+        Maintenance = data.maintenance;
 
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-    }
+        // Set object traits from ScriptableObject
+        objectTraits.AddRange(data.objectTraits);
 
-
-
-    public void SetVisibility(bool visible)
-    {
-        if (_spriteRenderer != null)
+        // Add features dynamically based on ScriptableObject
+        foreach (var feature in data.features)
         {
-            _spriteRenderer.enabled = visible; // Hides the sprite
-        }
-    }
-
-    private void Update()
-    {
-
-        Grow();
-        Wilt();
-        TimelapseRent();
-    }
-
-    public void StartRenting(Character character , Location location, float hours)
-    {
-        RentedFrom = location;
-        RentedBy = character;
-        RentHoursLeft = hours;
-    }
-    private void TimelapseRent()
-    {
-        if (RentedBy == null)
-        {
-            RentHoursLeft = 0;
-            return;
-        }
-
-
-        RentHoursLeft -= WorldManager.Instance.TimeThatsChanged;
-        if (RentHoursLeft <= 0)
-        {
-            RentedBy.Memory.RemoveObjectFromPossessions(this);
-            RentedFrom.AddPosession(_objectType, this);
-            RentedBy = null;
-        }
-    }
-    private void Wilt()
-    {
-        if (!_objectTraits.Contains(ObjectTrait.wilts))
-        { return; }
-
-        if (_care < 10)
-        {
-            _integrity -= 1;
-        }
-    }
-
-    private void Grow()
-    {
-        if (!_objectTraits.Contains(ObjectTrait.grows))
-        { return; }
-        if (_care > 40)
-        {
-            _integrity += 1;
-            _size += 1;
-        }
-
-
-    }
-
-    public void InteractWithObject(Character character, ObjectInteractionType interactionType)
-    {
-        var action = interactionType switch
-        {
-            ObjectInteractionType.use => (Action)(() => Use(character)),
-            ObjectInteractionType.careFor => (Action)(() => CareFor(character)),
-            _ => throw new NotSupportedException("Interaction type not supported")
-        };
-
-        action(); 
-    }
-
-
-
-    public List<InteractionOption> GetInteractionOptions(Character character)
-    {
-        interactionOptions.Clear();
-        switch (_objectType)
-        {
-            case ObjectType.bed:
-                if(character.Memory.IsOurPossession(this))
-                { interactionOptions.Add(new InteractionOption("Sleep",ObjectInteractionType.use));}
-
-                break;
-        }
-
-        return interactionOptions;
-    }
-
-    private void SetStartingTraitsBasedOnObjectType()
-    {
-        switch (_objectType)
-        {
-            case ObjectType.pumpkin:
-                _objectTraits.Add(ObjectTrait.crop);
-                _objectTraits.Add(ObjectTrait.wilts);
-                _objectTraits.Add(ObjectTrait.grows);
-                _objectTraits.Add(ObjectTrait.plant);
-                break;
-        }
-    }
-    public Vector3 GetPosition() => transform.position;
-    //TODO: make that character class holds traits so that maybe player also has traits that limmit what the player can do or how they react
-    private void Use(Character userOfObject)
-    {
-        var destroy = false;
-        switch (_objectType)
-        {
-            //TODO: should just active its effect which is defined in the world object class as opposed to doing a switch
-            case ObjectType.bookOfTheDead:
-                userOfObject.Memory.AddTrait(GameManager.Instance.TraitsInPlay[TraitType.deathCultist]);
-                break;
-            case ObjectType.ale:
-                _integrity -= 0.1f;
-                if (_integrity <= 0)
-                { destroy = true; }
-
-                break;
-            case ObjectType.bed:
-                
-
-                userOfObject.State.SetState(StateType.sleeping);
-
-                break;
-        }
-
-        if(destroy){ ActionsHelper.DestroyObject(userOfObject, this); }
-
-    }
-
-    private void CareFor(Character userOfObject)
-    {
-        foreach (var trait in _objectTraits)
-        {
-            switch (trait)
+            if (feature.enabled)
             {
-                case ObjectTrait.crop:
-                    _care += 100;
-                    break;
+                switch (feature.featureType)
+                {
+                    case ObjectFeatureType.UseFeature:
+                        _useFeature = gameObject.AddComponent<UseFeature>();
+                        break;
+                    case ObjectFeatureType.UpkeepFeature:
+                        _upkeepFeature = gameObject.AddComponent<UpkeepFeature>();
+                        break;
+                    case ObjectFeatureType.InteractionFeature:
+                        _interactFeature = gameObject.AddComponent<InteractFeature>();
+                        break;
+                    case ObjectFeatureType.GrowFeature:
+                        _growFeature = gameObject.AddComponent<GrowFeature>();
+                        break;
+                    case ObjectFeatureType.RentFeature:
+                        _rentFeature = gameObject.AddComponent<RentFeature>();
+                        break;
+                }
             }
         }
     }
+
+    // New Methods to Access the Actions
+    public ObjectActions ObjectActions => _objectActions;
+
+    public float Integrity { get; set; }
+    public float Size { get; set; }
+    public float Maintenance { get; set; }
+
+    // Feature-related methods...
+    public bool HasFeature<T>() where T : class
+    {
+        return GetComponent<T>() != null;
+    }
+
+    public T GetFeature<T>() where T : class
+    {
+        return GetComponent<T>();
+    }
+
+    public Vector3 GetPosition()
+    {
+        return transform.position;
+    }
+
+    public void SetVisibility(bool isVisible)
+    {
+        Renderer renderer = GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            renderer.enabled = isVisible;
+        }
+    }
+
+    // Now access ObjectType from WorldObjectData
+    public ObjectType ObjectType => worldObjectData?.objectType ?? ObjectType.none; // Default to None if not set
 }

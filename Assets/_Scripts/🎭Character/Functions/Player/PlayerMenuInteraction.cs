@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UIElements;
+using static InteractFeature;
 using static WorldObject;
 
 public struct MenuOption
@@ -682,7 +683,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                     _screenPosition = Camera.main.WorldToScreenPoint(hit.point);
 
 
-                    List<InteractionOption> worldObjectInteractionOptions = _selectedWorldObject.GetInteractionOptions(_player);
+                     _selectedWorldObject.ObjectActions.TryGetInteractionOptions(_player, out List<InteractionOption> worldObjectInteractionOptions);
                     if (!worldObjectInteractionOptions.Any())
                     {
                         return;

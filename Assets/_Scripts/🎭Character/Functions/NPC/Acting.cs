@@ -388,7 +388,7 @@ public class Acting : MonoBehaviour
                     var crops = _npc.Memory.GetPossessions(ObjectType.pumpkin);
                     foreach (var crop in crops)
                     {
-                        if (crop.Care < 80)
+                        if (crop.Maintenance < 80)
                         {
                             _currentObjectTarget = crop;
                             break;
