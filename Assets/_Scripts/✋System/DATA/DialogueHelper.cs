@@ -13,7 +13,7 @@ public static class DialogueHelper
             MemoryTags.occult => "I was trained in the arts of the occult",
             MemoryTags.mage => "I am a mage.",
             MemoryTags.charming => "He is charming.",
-            _ => ""
+            _ => $"{memoryTag}"
         };
 
 }

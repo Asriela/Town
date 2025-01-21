@@ -29,6 +29,7 @@ public class Appearance : MonoBehaviour
     {
         ChangeAppearanceAccordingToState();
         FlipSpriteBasedOnMovement();
+
     }
 
     public void ChangeColor(Color color)

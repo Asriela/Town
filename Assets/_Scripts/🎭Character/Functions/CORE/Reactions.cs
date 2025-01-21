@@ -53,7 +53,12 @@ public class Reactions : MonoBehaviour
                             newKnowledge = memTag.Cast<Enum>().ToList();
 
                             SocialHelper.ShareKnowledgeAbout(_npc, sender, knower, aboutWho, Mind.KnowledgeType.person, newKnowledge, null);
-                            _npc.Ui.Speak(DialogueHelper.GetTellDialogue(memTag[0]));
+                            if (memTag != null && memTag.Count > 0)
+                            { _npc.Ui.Speak(DialogueHelper.GetTellDialogue(memTag[0])); }
+                            else
+                            {
+                                _npc.Ui.Speak("Not much.");
+                            }
                         }
                         else
                         {
@@ -91,11 +96,13 @@ public class Reactions : MonoBehaviour
                             List<Mind.MemoryTags> tags = actionPost.KnowledgeTags.Cast<Mind.MemoryTags>().ToList();
                             _npc.PersonKnowledge.AddKnowledge(knower, aboutWho, tags);
                             var viewAboutMemoryTag = _npc.Views.GetView(_npc, tags[0]);
-                            if (sender != aboutWho && _npc is not Player)
+
+                            if (viewAboutMemoryTag != null && sender != aboutWho && _npc is not Player)
                             {
                                 _npc.Relationships.AddInteractionEffect(SocializeType.tell, sender, (float)viewAboutMemoryTag);
+                                _npc.Relationships.RecalculateMyRelationshipWithEveryone();
                             }
-                            _npc.Relationships.RecalculateMyRelationshipWithEveryone();
+
 
 
                             //if the sender is sharing info about someone else that isnt them we need to add a Interactioneffect

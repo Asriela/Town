@@ -18,21 +18,21 @@ MonoBehaviour:
     _dialogue: 
     _action: 22
     _actionParameter:
-      rid: 2000162770358632561
+      rid: 2000162770358632731
     _conditions:
     - conditionType: 8
       parameter:
-        rid: 2000162770358632562
+        rid: 2000162770358632733
     _priority: 0
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162770358632561
+    - rid: 2000162770358632731
       type: {class: CharacterName, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 11
-    - rid: 2000162770358632562
+    - rid: 2000162770358632733
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
-        value__: 0
+        value__: 21
