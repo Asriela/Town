@@ -32,7 +32,9 @@ namespace Mind
         angry,
         newToTown,
         focused,
-        grumpy
+        grumpy,
+        crime,
+        monster
 
     }
 

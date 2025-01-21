@@ -13,7 +13,33 @@ MonoBehaviour:
   m_Name: Werewolf
   m_EditorClassIdentifier: 
   Type: 19
-  Behaviors: []
+  Behaviors:
+  - _name: rage
+    _dialogue: Rooaaarr!
+    _action: 2
+    _actionParameter:
+      rid: 2000162770358632581
+    _conditions:
+    - conditionType: 3
+      parameter:
+        rid: 2000162770358632581
+    _priority: 10
+    _actionTags: 
+  - _name: kill
+    _dialogue: Rooaaarr!
+    _action: 1
+    _actionParameter:
+      rid: 2000162770358632581
+    _conditions:
+    - conditionType: 2
+      parameter:
+        rid: 2000162770358632581
+    _priority: 10
+    _actionTags: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2000162770358632581
+      type: {class: TargetType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 3

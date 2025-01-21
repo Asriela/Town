@@ -244,40 +244,7 @@ public class Memory : MonoBehaviour
         }
     }
 
-    [SerializeField]
-    private List<ObjectTypeWorldObjectPair> _inventoryList = new();
-
-    private Dictionary<Mind.ObjectType, List<WorldObject>> _inventoryDictionary = new();
-
-    public Dictionary<Mind.ObjectType, List<WorldObject>> Inventory
-    {
-        get
-        {
-            if (_inventoryDictionary == null)
-            {
-                _inventoryDictionary = new Dictionary<Mind.ObjectType, List<WorldObject>>();
-                foreach (var pair in _inventoryList)
-                {
-                    if (!_inventoryDictionary.ContainsKey(pair.objectType))
-                    {
-                        _inventoryDictionary[pair.objectType] = new List<WorldObject>();
-                    }
-                    _inventoryDictionary[pair.objectType].AddRange(pair.worldObjects);  // Added all worldObjects
-                }
-            }
-            return _inventoryDictionary;
-        }
-        set
-        {
-            _inventoryList.Clear();
-            foreach (var kvp in value)
-            {
-                _inventoryList.Add(new ObjectTypeWorldObjectPair { objectType = kvp.Key, worldObjects = kvp.Value });
-            }
-
-            _inventoryDictionary = value;
-        }
-    }
+   
 
     public void AddToPossessions(Mind.ObjectType objectType, List<WorldObject> worldObjects)
     {
@@ -344,56 +311,6 @@ public class Memory : MonoBehaviour
 
         return null;
     }
-    public WorldObject RemoveObjectFromInventory(WorldObject worldObject)
-    {
-
-        foreach (var pair in _inventoryDictionary)
-        {
-            if (pair.Value.Contains(worldObject))
-            {
-                pair.Value.Remove(worldObject);
-
-
-                if (!pair.Value.Any())
-                {
-                    _inventoryDictionary.Remove(pair.Key);
-                }
-
-
-                UpdateInventoryListFromDictionary();
-                return worldObject;
-            }
-        }
-
-
-        return null;
-    }
-
-    public WorldObject RemoveFromInventory(Mind.ObjectType objectType)
-    {
-
-        if (_inventoryDictionary.TryGetValue(objectType, out var worldObjects) && worldObjects.Any())
-        {
-
-            var removedObject = worldObjects[0];
-            worldObjects.RemoveAt(0);
-
-
-            if (!worldObjects.Any())
-            {
-                _inventoryDictionary.Remove(objectType);
-            }
-
-
-            UpdateInventoryListFromDictionary();
-
-            return removedObject;
-        }
-
-
-        return null;
-    }
-
     private void UpdatePossessionsListFromDictionary()
     {
         _possessionsList.Clear();
@@ -423,57 +340,12 @@ public class Memory : MonoBehaviour
     }
 
 
-    public void AddToInventory(Mind.ObjectType objectType, List<WorldObject> worldObjects)
-    {
-        if (!_inventoryDictionary.ContainsKey(objectType))
-        {
-            _inventoryDictionary[objectType] = worldObjects;
-        }
-        else
-        foreach (var worldObject in worldObjects)
-        {
-            if (!_inventoryDictionary[objectType].Contains(worldObject))
-            {
-                _inventoryDictionary[objectType].Add(worldObject);
-                worldObject.SetVisibility(false);
-            }
-        }
-
-
-        UpdateInventoryListFromDictionary();
-    }
-
-
-    private void UpdateInventoryListFromDictionary()
-    {
-        _inventoryList.Clear();
-        foreach (var kvp in _inventoryDictionary)
-        {
-            _inventoryList.Add(new ObjectTypeWorldObjectPair { objectType = kvp.Key, worldObjects = kvp.Value });
-        }
-    }
 
     public void AddToPossessions(Mind.ObjectType objectType, WorldObject worldObject)
     {
         AddToPossessions(objectType, new List<WorldObject> { worldObject });
     }
-    public void AddToInventory(Mind.ObjectType objectType, WorldObject worldObject)
-    {
-        AddToInventory(objectType, new List<WorldObject> { worldObject });
-    }
-    public WorldObject GetInventory(Mind.ObjectType objectType)
-    {
-        if (_inventoryDictionary.TryGetValue(objectType, out var objects) && objects.Any())
-        {
-            return objects.First();
 
-        }
-        else
-        {
-            BasicFunctions.Log("No object found in possessions.", LogType.memory);
-        }
-        return null;
-    }
 
     public WorldObject GetPossession(Mind.ObjectType objectType)
     {

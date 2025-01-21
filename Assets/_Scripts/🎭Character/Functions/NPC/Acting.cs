@@ -30,6 +30,7 @@ public class Acting : MonoBehaviour
         { ActionType.farmer, param => FarmerJob((FarmerType)param) },
         { ActionType.findKnowledge, param => FindKnowledge((KnowledgeType)param) },
         { ActionType.gotoLocation, param => GotoLocation((TargetLocationType)param) },
+        { ActionType.gotoPerson , param => GotoPerson((CharacterName)param) },
         { ActionType.useOneOfMyPossesions, param => UseOneOfMyPossesions((ObjectType)param) },
         { ActionType.useObjectInInventory, param => UseObjectInInventory((ObjectType)param) },
         { ActionType.findOccupant, param => FindOccupant((TraitType)param) },
@@ -38,6 +39,7 @@ public class Acting : MonoBehaviour
         { ActionType.rentItem, param => RentAnItem((ObjectType)param,_npc.Memory.ReachedOccupant) },
         { ActionType.socialize, param => DoSocialActionWithSomeone((SocializeType)param,_npc.Memory.SocialTarget) },
         { ActionType.sharePersonKnowledgeAbout , param => sharePersonKnowledge((CharacterName)param) }
+
     };
 
     private void Update() => PerformCurrentBehavior();
@@ -493,8 +495,33 @@ public class Acting : MonoBehaviour
         }
     }
 
+    private void GotoPerson(CharacterName character)
+    {
+
+        switch (StepInAction)
+        {
+            //STEP 1
+            case 1:
+
+                var gotoPerson = WorldManager.Instance.AllCharacters[character];
 
 
+                if (ActionsHelper.Reached(_npc, gotoPerson.transform.position, 1f))
+                {
+
+
+                    IncrementStepInAction();
+                }
+
+                break;
+            //STEP 2
+            case 2:
+                ActionsHelper.EndThisBehaviour(_npc, _doingActionTypeOf);
+                break;
+        }
+    }
+
+    
 
     private void IncrementStepInAction()
     {

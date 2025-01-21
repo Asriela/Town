@@ -108,7 +108,7 @@ public static class ActionsHelper
 
             //TODO: issue will occure if we want multiple objects of same type so change it to a list of objects <objectType, List<gameobject>>
             character.Memory.AddToPossessions(targetObject.ObjectType, targetObject);
-            character.Memory.AddToInventory(targetObject.ObjectType, targetObject);
+            character.Inventory.AddToInventory(targetObject.ObjectType, targetObject);
 
             character.Ui.CurrentStepInAction = "picked up object";
             return true;
@@ -121,7 +121,7 @@ public static class ActionsHelper
     public static void DestroyObject(Character character, WorldObject objectToDestroy)
     {
         character.Memory.RemoveObjectFromPossessions(objectToDestroy);
-        character.Memory.RemoveObjectFromInventory(objectToDestroy);
+        character.Inventory.RemoveObjectFromInventory(objectToDestroy);
     }
 
 

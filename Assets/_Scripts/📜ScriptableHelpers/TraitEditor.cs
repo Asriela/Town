@@ -151,6 +151,7 @@ public class TraitEditor : Editor
             Mind.ActionType.findKnowledge => typeof(Mind.KnowledgeType),
             Mind.ActionType.shareKnowledge => typeof(Mind.KnowledgeType),
             Mind.ActionType.gotoLocation => typeof(Mind.TargetLocationType),
+            Mind.ActionType.gotoPerson => typeof(Mind.CharacterName),
             Mind.ActionType.socialize => typeof(Mind.SocializeType),
             Mind.ActionType.useOneOfMyPossesions => typeof(Mind.ObjectType),
             Mind.ActionType.useObjectInInventory => typeof(Mind.ObjectType),

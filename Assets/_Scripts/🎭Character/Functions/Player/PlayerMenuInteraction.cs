@@ -317,7 +317,7 @@ public class PlayerMenuInteraction : MonoBehaviour
         string doWord;
         string characterWord;
 
-        string pathChosen = "";
+        string pathChosen = ""; 
         bool subjectIsWhoWeAreSpeakingTo = false;
         bool subjectIsMe = false;
         string subjectName = "";

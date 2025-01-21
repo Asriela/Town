@@ -68,7 +68,12 @@ public class Appearance : MonoBehaviour
         }
 
     }
+    public void SetSprite(string spriteName)
+    {
 
+        _spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/characters/"+spriteName);
+        var tem = _spriteRenderer.sprite;
+    }
     void FlipSpriteBasedOnMovement()
     {
 

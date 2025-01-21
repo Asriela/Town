@@ -13,6 +13,9 @@ using UnityEngine;
 [RequireComponent(typeof(Views))]
 [RequireComponent(typeof(Relationships))]
 [RequireComponent(typeof(VisualStatusKnowledge))]
+[RequireComponent(typeof(Inventory))]
+[RequireComponent(typeof(DialogueResponsesToPersonInformation))]
+[RequireComponent(typeof(Generalizations))]
 public class Character : MonoBehaviour
 {
     private Collider2D _collider2D;
@@ -37,9 +40,12 @@ public class Character : MonoBehaviour
 
     public PersonKnowledge PersonKnowledge { get; set; }
     public Views Views { get; set; }
-
+    public Generalizations Generalizations { get; set; }
     public Relationships Relationships { get; set; }
     public VisualStatusKnowledge VisualStatusKnowledge { get; set; }
+    public Inventory Inventory { get; set; }
+
+    public DialogueResponsesToPersonInformation DialogueResponsesToPersonInformation { get; set; }
     public SpriteRenderer SpriteRenderer { get; set; }
     private void Awake()
     { 
@@ -52,7 +58,8 @@ public class Character : MonoBehaviour
         Appearance.Initialize(this);
         PersonKnowledge = GetComponent<PersonKnowledge>();
         Views = GetComponent<Views>();
-
+        Generalizations = GetComponent<Generalizations>();
+        DialogueResponsesToPersonInformation = GetComponent<DialogueResponsesToPersonInformation>();
         Memory = GetComponent<Memory>();
         Ui = GetComponent<UI>();
         Ui.Initialize(this);
@@ -63,7 +70,8 @@ public class Character : MonoBehaviour
         Relationships = GetComponent<Relationships>();
         Relationships.Initialize(this);
         VisualStatusKnowledge = GetComponent<VisualStatusKnowledge>();
-
+        Inventory = GetComponent<Inventory>();
+        Inventory.Initialize(this);
     }
 
 

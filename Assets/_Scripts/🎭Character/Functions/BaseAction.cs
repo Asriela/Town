@@ -64,7 +64,7 @@ public static class BaseAction
 
             var boughtItem = seller.Memory.RemoveFromPossessions(objectType);
             buyer.Memory.AddToPossessions(objectType, boughtItem);
-            buyer.Memory.AddToInventory(objectType, boughtItem);
+            buyer.Inventory.AddToInventory(objectType, boughtItem);
             seller.Ui.Speak($"Good doing business with you");
 
         }

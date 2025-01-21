@@ -128,7 +128,7 @@ public class Relationships : MonoBehaviour
 
         return effectFromInteraction;
     }
-
+    
     private float CalculateInteractionEffectValue(SocializeType socializeType, int todaysRepeats, float relationshipValueWithGiverOfInteraction, out string responseDialogue)
     {
         float effectValue = 0f;

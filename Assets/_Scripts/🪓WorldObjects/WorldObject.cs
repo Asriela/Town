@@ -9,7 +9,8 @@ public enum ObjectFeatureType
     UpkeepFeature,
     InteractionFeature,
     GrowFeature,
-    RentFeature
+    RentFeature,
+    EffectsFeature
 }
 
 public class WorldObject : MonoBehaviour
@@ -26,6 +27,7 @@ public class WorldObject : MonoBehaviour
     private GrowFeature _growFeature;
     private InteractFeature _interactFeature;
     private RentFeature _rentFeature;
+    private EffectsFeature _effectsFeature;
     private ObjectActions _objectActions; // The new ObjectActions class
 
     private void Awake()
@@ -76,6 +78,10 @@ public class WorldObject : MonoBehaviour
                         _rentFeature = gameObject.AddComponent<RentFeature>();
                         _rentFeature.Setup(this);
                         break;
+                    case ObjectFeatureType.EffectsFeature:
+                        _effectsFeature = gameObject.AddComponent<EffectsFeature>();
+                        _effectsFeature.Setup(this);
+                        break;
                 }
             }
         }
@@ -112,7 +118,13 @@ public class WorldObject : MonoBehaviour
             renderer.enabled = isVisible;
         }
     }
+    protected Character whoIAmInPossesionOf;
 
+    public Character WhoImInPossesionOf
+    {
+        get => whoIAmInPossesionOf;
+        set => whoIAmInPossesionOf = value;
+    }
     // Now access ObjectType from WorldObjectData
     public ObjectType ObjectType => worldObjectData?.objectType ?? ObjectType.none; // Default to None if not set
 }

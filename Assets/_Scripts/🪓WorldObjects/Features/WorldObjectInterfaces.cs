@@ -22,7 +22,10 @@ public interface IUseable
 {
     void Use(Character user);
 }
-
+public interface IEffetable
+{
+    void EffectWearer(Character wearer);
+}
 public interface IInteractable
 {
     List<InteractionOption> GetInteractionOptions(Character character);

@@ -26,7 +26,9 @@ namespace Mind
         monsterKiller,
         captainOfTheGuard,
         werewolf,
-        concernedWife
+        concernedWife,
+        tailor,
+        seamstress
     }
     [Serializable]
     public enum ActionType : short
@@ -53,6 +55,7 @@ namespace Mind
         gotoOccupant,
         rentItem,
         sharePersonKnowledgeAbout,
+        gotoPerson
 
     }
     [Serializable]
@@ -270,8 +273,9 @@ namespace Mind
         bookOfTheDead,
         pumpkin,
         ale,
-        barStool
-        
+        barStool,
+        cursedWerewolfAmulet
+
     }
 
     [Serializable]
