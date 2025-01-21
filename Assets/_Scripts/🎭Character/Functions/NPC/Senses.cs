@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Mind;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class Senses : MonoBehaviour
 {
@@ -266,11 +268,15 @@ public class Senses : MonoBehaviour
     {
         foreach (var character in _charactersInSight)
         {
-            foreach (Mind.TraitType tag in tags)
+            foreach (Mind.MemoryTags tag in tags)
             {
-                if (character.VisualStatusKnowledge.HasVisualStatus(_npc, character, tags[0]))
+                // Check if the character has a visual status knowledge matching the tag
+                if (character.State.IsForm(tag,_npc))
                 {
-                    return character;
+
+              
+                        return character;
+                    
                 }
             }
         }

@@ -38,8 +38,8 @@ public class Acting : MonoBehaviour
         { ActionType.buyItem, param => BuyAnItem((ObjectType)param,_npc.Memory.ReachedOccupant) },
         { ActionType.rentItem, param => RentAnItem((ObjectType)param,_npc.Memory.ReachedOccupant) },
         { ActionType.socialize, param => DoSocialActionWithSomeone((SocializeType)param,_npc.Memory.SocialTarget) },
-        { ActionType.sharePersonKnowledgeAbout , param => sharePersonKnowledge((CharacterName)param) }
-
+        { ActionType.sharePersonKnowledgeAbout , param => sharePersonKnowledge((CharacterName)param) },
+        { ActionType.gotoTarget , param => GotoTarget((TargetType)param) }
     };
 
     private void Update() => PerformCurrentBehavior();
@@ -170,6 +170,24 @@ public class Acting : MonoBehaviour
                 if (occupant != null && ActionsHelper.Reached(_npc, occupant.transform.position, 3f))
                 {
                     _npc.Memory.ReachedOccupant = occupant;
+                    IncrementStepInAction();
+                }
+                break;
+            case 2:
+                ActionsHelper.EndThisBehaviour(_npc, _doingActionTypeOf);
+                break;
+        }
+    }
+
+    private void GotoTarget(TargetType targetType)
+    {
+        switch (StepInAction)
+        {
+            case 1:
+                var target = _npc.Memory.Targets[targetType];
+                if (target != null && ActionsHelper.Reached(_npc, target.transform.position, 3f))
+                {
+                    _npc.Memory.ReachedTarget = target;
                     IncrementStepInAction();
                 }
                 break;

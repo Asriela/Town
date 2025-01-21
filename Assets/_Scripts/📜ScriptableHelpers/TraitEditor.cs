@@ -160,6 +160,7 @@ public class TraitEditor : Editor
             Mind.ActionType.findOccupant => typeof(Mind.TraitType),
             Mind.ActionType.gotoOccupant => typeof(Mind.TraitType),
             Mind.ActionType.sharePersonKnowledgeAbout => typeof(Mind.CharacterName),
+            Mind.ActionType.gotoTarget => typeof(Mind.TargetType),
             _ => null
         };
 
@@ -215,6 +216,10 @@ public class TraitEditor : Editor
             Mind.ConditionType.NotSeePersonKnowledge => typeof(Mind.MemoryTags),
             Mind.ConditionType.SeePersonForm => typeof(Mind.MemoryTags),
             Mind.ConditionType.NotSeePersonForm => typeof(Mind.MemoryTags),
+            Mind.ConditionType.knowsSomeoneWithTag => typeof(Mind.MemoryTags),
+            Mind.ConditionType.doesNotKnowSomeoneWithTag => typeof(Mind.MemoryTags),
+            Mind.ConditionType.reachedTarget => typeof(Mind.TargetType),
+            Mind.ConditionType.hasNotReachedTarget => typeof(Mind.TargetType),
             _ => null
         };
 

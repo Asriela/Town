@@ -80,7 +80,18 @@ public class State : MonoBehaviour
         _formstate.AddRange(memTags);
 
     }
-
+    public bool IsForm(Mind.MemoryTags memoryTag, Character personWhoIsLookingAtForm)
+    {
+        var thsiPerson = _character;
+        foreach (var tag in _formstate)
+        {
+            if (tag == memoryTag || personWhoIsLookingAtForm.Generalizations.IsTagA(tag, memoryTag))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private void ResetStateToNormal()
     {

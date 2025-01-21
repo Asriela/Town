@@ -57,6 +57,7 @@ public class Character : MonoBehaviour
         Appearance = GetComponent<Appearance>();
         Appearance.Initialize(this);
         PersonKnowledge = GetComponent<PersonKnowledge>();
+        PersonKnowledge.Initialize(this);
         Views = GetComponent<Views>();
         Generalizations = GetComponent<Generalizations>();
         DialogueResponsesToPersonInformation = GetComponent<DialogueResponsesToPersonInformation>();

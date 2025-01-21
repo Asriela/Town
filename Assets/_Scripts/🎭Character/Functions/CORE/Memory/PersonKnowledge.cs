@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 
 [Serializable]
 public class CharacterMemoryTagsPair
@@ -19,6 +20,8 @@ public class CharacterKnowledgeTagsPair
 
 public class PersonKnowledge : MonoBehaviour
 {
+    private Character _character;
+    public void Initialize(Character character) => _character = character;
     [SerializeField]
     private List<CharacterKnowledgeTagsPair> _peopleKnowledge = new();
 
@@ -55,11 +58,12 @@ public class PersonKnowledge : MonoBehaviour
         var knowerPair = _peopleKnowledge.FirstOrDefault(kp => kp.knower == knower);
 
         return knowerPair?.knowledge
-            .Where(k => tags.All(tag => k.memoryTags.Contains(tag)))
+            .Where(k => tags.All(tag =>
+                k.memoryTags.Any(memoryTag => _character.Generalizations.IsTagA(memoryTag, tag))  // Check if the tag is under the generalization
+            ))
             .Select(k => k.character)
             .ToList() ?? new List<Character>();
     }
-
     // Add knowledge about a person with a list of memory tags
     public void AddKnowledge(Character knower, Character person, List<Mind.MemoryTags> tags)
     {

@@ -116,6 +116,8 @@ public class Memory : MonoBehaviour
     }
 
     public Character ReachedOccupant { get; set; }
+    public Character ReachedTarget { get; set; }
+    
     public Dictionary<Mind.TargetType, Character> Targets { get; set; } = new();
 
     public Dictionary<Mind.TraitType, Character> OccupantTargets { get; set; } = new();

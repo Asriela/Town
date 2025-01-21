@@ -13,7 +13,66 @@ MonoBehaviour:
   m_Name: Guard
   m_EditorClassIdentifier: 
   Type: 6
-  Behaviors: []
+  Behaviors:
+  - _name: goto criminal
+    _dialogue: 
+    _action: 23
+    _actionParameter:
+      rid: 2000162770358632677
+    _conditions:
+    - conditionType: 35
+      parameter:
+        rid: 2000162770358632678
+    - conditionType: 38
+      parameter:
+        rid: 2000162770358632677
+    _priority: 0
+    _actionTags: 
+  - _name: arrest criminal
+    _dialogue: Are you a werewolf?
+    _action: 10
+    _actionParameter:
+      rid: 2000162770358632679
+    _conditions:
+    - conditionType: 35
+      parameter:
+        rid: 2000162770358632678
+    - conditionType: 37
+      parameter:
+        rid: 2000162770358632677
+    _priority: 0
+    _actionTags: 
+  - _name: kill threat
+    _dialogue: 
+    _action: 1
+    _actionParameter:
+      rid: 2000162770358632683
+    _conditions:
+    - conditionType: 33
+      parameter:
+        rid: 2000162770358632680
+    _priority: 0
+    _actionTags: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2000162770358632677
+      type: {class: TargetType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 7
+    - rid: 2000162770358632678
+      type: {class: MemoryTags, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 27
+    - rid: 2000162770358632679
+      type: {class: SocializeType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 12
+    - rid: 2000162770358632680
+      type: {class: MemoryTags, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 29
+    - rid: 2000162770358632683
+      type: {class: TargetType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 6

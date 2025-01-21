@@ -45,6 +45,11 @@ public static class Conditions
         _conditionDelegates.Add(ConditionType.NotSeePersonKnowledge, new ConditionDelegate<MemoryTags>(CheckSeesPersonKnowledge));
         _conditionDelegates.Add(ConditionType.SeePersonForm, new ConditionDelegate<MemoryTags>(CheckSeesFormStatus));
         _conditionDelegates.Add(ConditionType.NotSeePersonForm, new ConditionDelegate<MemoryTags>(CheckSeesFormStatus));
+        _conditionDelegates.Add(ConditionType.hasKnowledge, new ConditionDelegate<MemoryTags>(CheckSeesFormStatus));
+        _conditionDelegates.Add(ConditionType.knowsSomeoneWithTag, new ConditionDelegate<MemoryTags>(CheckKnowsSomeoneWithTag));
+        _conditionDelegates.Add(ConditionType.doesNotKnowSomeoneWithTag, new ConditionDelegate<MemoryTags>(CheckKnowsSomeoneWithTag));
+        _conditionDelegates.Add(ConditionType.reachedTarget, new ConditionDelegate<TargetType>(ReachedTarget));
+        _conditionDelegates.Add(ConditionType.hasNotReachedTarget, new ConditionDelegate<TargetType>(ReachedTarget));
     }
 
     public static bool CheckCondition(Condition condition, NPC npc)
@@ -113,6 +118,11 @@ public static class Conditions
 
                 ConditionType.SeePersonForm => ConditionHandler<MemoryTags>((ConditionDelegate<MemoryTags>)conditionDelegate, condition.parameter, npc, true),
                 ConditionType.NotSeePersonForm => ConditionHandler<MemoryTags>((ConditionDelegate<MemoryTags>)conditionDelegate, condition.parameter, npc, false),
+                ConditionType.knowsSomeoneWithTag => ConditionHandler<MemoryTags>((ConditionDelegate<MemoryTags>)conditionDelegate, condition.parameter, npc, true),
+                ConditionType.doesNotKnowSomeoneWithTag => ConditionHandler<MemoryTags>((ConditionDelegate<MemoryTags>)conditionDelegate, condition.parameter, npc, false),
+                ConditionType.reachedTarget => ConditionHandler<TargetType>((ConditionDelegate<TargetType>)conditionDelegate, condition.parameter, npc, true),
+                ConditionType.hasNotReachedTarget => ConditionHandler<TargetType>((ConditionDelegate<TargetType>)conditionDelegate, condition.parameter, npc, false),
+
                 _ => false
             };
 
@@ -137,7 +147,7 @@ public static class Conditions
     private static bool CheckActionDoneForDay(ActionType parameter, NPC npc, bool trueStatement)
     {
         var value = npc.Memory.GetActionCount(parameter);
-        if (value>0 && trueStatement)
+        if (value > 0 && trueStatement)
         {
             return true;
         }
@@ -149,7 +159,7 @@ public static class Conditions
         return false;
     }
 
-    
+
     private static bool CheckNeed(NeedType parameter, NPC npc, bool trueStatement)
     {
         if (npc.Vitality.Needs.ContainsKey(parameter) && npc.Vitality.Needs[parameter] > 80)
@@ -189,7 +199,7 @@ public static class Conditions
     private static bool CheckSeesPersonKnowledge(MemoryTags parameter, NPC npc, bool trueStatement)
     {
 
-        if (npc.Senses.SeeSomeoneWithKnowledgeAboutThem(parameter)!=null)
+        if (npc.Senses.SeeSomeoneWithKnowledgeAboutThem(parameter) != null)
         {
             return trueStatement;
         }
@@ -201,11 +211,24 @@ public static class Conditions
         var someoneWithForm = npc.Senses.SeeSomeoneWithForm(parameter);
         if (someoneWithForm != null)
         {
-            return trueStatement;
             npc.Memory.Targets[TargetType.seeTarget] = someoneWithForm;
+            return trueStatement;
+
         }
         return !trueStatement;
     }
+    private static bool CheckKnowsSomeoneWithTag(MemoryTags parameter, NPC npc, bool trueStatement)
+    {
+        var someoneWithTags = npc.PersonKnowledge.GetPeopleByTag(npc, parameter);
+        if (npc != null && someoneWithTags!=null && someoneWithTags.Count>0)
+        {
+            npc.Memory.Targets[TargetType.knowTarget] = someoneWithTags[0];
+            return trueStatement;
+
+        }
+        return !trueStatement;
+    }
+
     private static bool CheckSeesSomeoneWithTrait(TraitType parameter, NPC npc, bool trueStatement)
     {
         var senses = npc.Senses;
@@ -321,6 +344,16 @@ public static class Conditions
         //check if we have a reached occupant and if its trait matches what we are looking for
         var occupantToReach = npc.Memory.ReachedOccupant;
         if (occupantToReach != null && occupantToReach.Memory.HasTrait(GameManager.Instance.TraitsInPlay[parameter]))
+        { return trueStatement; }
+
+        return !trueStatement;
+    }
+
+    private static bool ReachedTarget(TargetType parameter, NPC npc, bool trueStatement)
+    {
+        //check if we have a reached occupant and if its trait matches what we are looking for
+        var occupantToReach = npc.Memory.ReachedTarget;
+        if (occupantToReach != null)
         { return trueStatement; }
 
         return !trueStatement;

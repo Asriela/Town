@@ -2300,12 +2300,44 @@ PrefabInstance:
       objectReference: {fileID: 5736567765161263512, guid: 5fb98ff914485bc4ca8afd239cf8fa6d, type: 3}
     - target: {fileID: 1594025001117945278, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
       propertyPath: _traits.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1594025001117945278, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
       propertyPath: '_traits.Array.data[0]'
       value: 
       objectReference: {fileID: 11400000, guid: 0bb8eb2bb0ed97e46b813aef9cc78288, type: 2}
+    - target: {fileID: 1594025001117945278, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: '_traits.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 918d968a6fe6ba743ba2b83ffb19b87f, type: 2}
+    - target: {fileID: 3544037272735875304, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: _generalizations.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3544037272735875304, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: _generalizations.Array.data[0].primeTag
+      value: 29
+      objectReference: {fileID: 0}
+    - target: {fileID: 3544037272735875304, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: _generalizations.Array.data[1].primeTag
+      value: 27
+      objectReference: {fileID: 0}
+    - target: {fileID: 3544037272735875304, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: _generalizations.Array.data[0].subTags.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3544037272735875304, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: _generalizations.Array.data[1].subTags.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3544037272735875304, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: '_generalizations.Array.data[0].subTags.Array.data[0]'
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 3544037272735875304, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: '_generalizations.Array.data[1].subTags.Array.data[0]'
+      value: 17
+      objectReference: {fileID: 0}
     - target: {fileID: 3993706518021667939, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.31
@@ -7010,6 +7042,7 @@ GameObject:
   - component: {fileID: 1359901507}
   - component: {fileID: 1359901508}
   - component: {fileID: 1359901509}
+  - component: {fileID: 1359901510}
   m_Layer: 8
   m_Name: Player
   m_TagString: Character
@@ -7376,6 +7409,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _peopleDialogues: []
+--- !u!114 &1359901510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1359901485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f48a4c2f7e7f61e42972c91513772665, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _generalizations: []
 --- !u!1 &1421062915
 GameObject:
   m_ObjectHideFlags: 0

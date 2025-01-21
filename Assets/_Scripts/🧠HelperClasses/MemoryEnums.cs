@@ -34,7 +34,8 @@ namespace Mind
         focused,
         grumpy,
         crime,
-        monster
+        monster,
+        deadlyThreat
 
     }
 

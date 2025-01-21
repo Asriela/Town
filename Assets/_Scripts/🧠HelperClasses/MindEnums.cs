@@ -55,8 +55,8 @@ namespace Mind
         gotoOccupant,
         rentItem,
         sharePersonKnowledgeAbout,
-        gotoPerson
-
+        gotoPerson,
+        gotoTarget
     }
     [Serializable]
     public enum RemoveSocial : short
@@ -166,7 +166,8 @@ namespace Mind
         murderVictim,
         turnUndeadVictim,
         occupant,
-        seeTarget
+        seeTarget,
+        knowTarget
     }
 
 
@@ -216,7 +217,11 @@ namespace Mind
         SeePersonKnowledge,
         NotSeePersonKnowledge,
         SeePersonForm,
-        NotSeePersonForm
+        NotSeePersonForm,
+        knowsSomeoneWithTag,
+        doesNotKnowSomeoneWithTag,
+        reachedTarget,
+        hasNotReachedTarget
     }
     [Serializable]
     public enum TimeOfDayType : short
