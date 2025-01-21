@@ -29,9 +29,12 @@ public class Appearance : MonoBehaviour
     {
         ChangeAppearanceAccordingToState();
         FlipSpriteBasedOnMovement();
-
+        SortByY();
     }
-
+    private void SortByY()
+    {
+        _spriteRenderer.sortingOrder = Mathf.RoundToInt(-transform.position.y * 100);
+    }
     public void ChangeColor(Color color)
     {
         _spriteRenderer.color = color;
