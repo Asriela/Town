@@ -298,10 +298,10 @@ public class PlayerMenuInteraction : MonoBehaviour
 
 
 
-        if (_currentMenuOptions == null)
+        if (_currentMenuOptions == null || _currentMenuOptions.Count==0)
         { _interactionMenu.HideMenu(); }
         else
-        { OpenInteractionMenu(_currentMenuOptions, _titleText, _player.transform, _personWeAreSpeakingTo.transform); }
+        { OpenInteractionMenu(_currentMenuOptions, _titleText, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo); }
     }
 
     private List<MenuOption> ProcessComplexMenuOptions(int positionInList)
@@ -484,8 +484,8 @@ public class PlayerMenuInteraction : MonoBehaviour
                 }
 
 
-                    //TELL
-                    var tellText = "";
+                //TELL
+                var tellText = "";
                 var gossipText = "";
 
 
@@ -668,7 +668,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                 };
 
                 MenuState = SocialMenuState.start;
-                OpenInteractionMenu(buttonLabels, "Social Interactions", _player.transform, _personWeAreSpeakingTo.transform);
+                OpenInteractionMenu(buttonLabels, "Social Interactions", _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
             }
             else
             {
@@ -683,8 +683,8 @@ public class PlayerMenuInteraction : MonoBehaviour
                     _screenPosition = Camera.main.WorldToScreenPoint(hit.point);
 
 
-                     _selectedWorldObject.ObjectActions.TryGetInteractionOptions(_player, out List<InteractionOption> worldObjectInteractionOptions);
-                    if (!worldObjectInteractionOptions.Any())
+                    _selectedWorldObject.ObjectActions.TryGetInteractionOptions(_player, out List<InteractionOption> worldObjectInteractionOptions);
+                    if (worldObjectInteractionOptions == null || !worldObjectInteractionOptions.Any())
                     {
                         return;
                     }
@@ -699,8 +699,12 @@ public class PlayerMenuInteraction : MonoBehaviour
 
 
                     MenuState = SocialMenuState.objectInteraction;  // Assuming you have a separate menu state for WorldObjects
+                    if (_currentMenuOptions != null)
+                    {
+                        OpenInteractionMenu(_currentMenuOptions, "Object Interactions", _player.transform, _selectedWorldObject.transform, null); 
+                        
+                    }
 
-                    OpenInteractionMenu(_currentMenuOptions, "Object Interactions", _player.transform, _personWeAreSpeakingTo.transform);
                 }
             }
 
@@ -712,10 +716,10 @@ public class PlayerMenuInteraction : MonoBehaviour
 
     }
 
-    private void OpenInteractionMenu(List<MenuOption> options, string title, Transform subject, Transform target)
+    private void OpenInteractionMenu(List<MenuOption> options, string title, Transform subject, Transform target, Character personWeAreSpeakingTo)
     {
         EventManager.TriggerSwitchCameraToInteractionMode(subject, target);
-        _interactionMenu.ShowMenu(options, title, _personWeAreSpeakingTo);
+        _interactionMenu.ShowMenu(options, title, personWeAreSpeakingTo);
     }
 
     public bool NotInteractingWithMenu()

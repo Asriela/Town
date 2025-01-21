@@ -85,7 +85,10 @@ public class InteractionMenu : MonoBehaviour
 
         // Add the background image first
         menuContainer.Add(backgroundImage);
+        if (personWeAreSpeakingTo != null)
+        {
 
+      
         // Add the portrait images
         menuContainer.Add(portraitBackImage);
         menuContainer.Add(portraitImage);
@@ -127,7 +130,7 @@ public class InteractionMenu : MonoBehaviour
 
         // Add the container for the name button to the menu (it won't affect the other button layout)
         menuContainer.Add(nameButtonContainer);
-
+        }
         // Continue with the context button (if any)
         if (!string.IsNullOrEmpty(lastMenuOption))
         {

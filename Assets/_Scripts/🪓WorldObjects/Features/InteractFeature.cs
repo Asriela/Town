@@ -8,10 +8,10 @@ public enum ObjectInteractionType : short
 }
 public class InteractFeature : MonoBehaviour, IInteractable
 {
-    private readonly WorldObject _worldObject;
-    private readonly List<InteractionOption> _interactionOptions = new List<InteractionOption>();
+    private WorldObject _worldObject;
+    private readonly List<InteractionOption> _interactionOptions = new();
 
-    public InteractFeature(WorldObject worldObject)
+    public void Setup(WorldObject worldObject)
     {
         _worldObject = worldObject;
     }
@@ -47,6 +47,7 @@ public class InteractFeature : MonoBehaviour, IInteractable
     // Get a list of available interaction options based on the features present on the object
     public List<InteractionOption> GetInteractionOptions(Character character)
     {
+        var world = _worldObject;
         _interactionOptions.Clear();
 
         // Check for features and add relevant interaction options
@@ -57,7 +58,7 @@ public class InteractFeature : MonoBehaviour, IInteractable
 
         if (_worldObject.HasFeature<UpkeepFeature>())
         {
-            _interactionOptions.Add(new InteractionOption("Care For", ObjectInteractionType.careFor));
+            _interactionOptions.Add(new InteractionOption("Maintain", ObjectInteractionType.careFor));
         }
 
         return _interactionOptions;

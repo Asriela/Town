@@ -2,14 +2,14 @@
 
 public class RentFeature : MonoBehaviour, IRentable
 {
-    private readonly WorldObject _worldObject;
+    private WorldObject _worldObject;
 
     public float RentHoursLeft { get; set; } = 0;
     public Character RentedBy { get; set; } = null;
     public Location RentedFrom { get; set; } = null;
 
     // Constructor to inject the parent WorldObject
-    public RentFeature(WorldObject worldObject) => _worldObject = worldObject;
+    public void Setup(WorldObject worldObject) => _worldObject = worldObject;
 
 
 

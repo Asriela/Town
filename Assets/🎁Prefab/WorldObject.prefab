@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4773332652865760712}
-  - component: {fileID: 2811210731904627609}
   - component: {fileID: 1709344646783637684}
+  - component: {fileID: 2811210731904627609}
   - component: {fileID: 7643794347096829077}
   m_Layer: 7
   m_Name: WorldObject
@@ -29,11 +29,24 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.8771, y: 3.3521, z: 0}
-  m_LocalScale: {x: 2.2423856, y: 0.9957296, z: 1}
+  m_LocalScale: {x: 7, y: 7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1709344646783637684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8603015253375699284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ec6b652e234abb4186e99e20a834324, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldObjectData: {fileID: 11400000, guid: 65d6eb1f4b563dd4d84b36dda041c1a3, type: 2}
 --- !u!212 &2811210731904627609
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -78,8 +91,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Sprite: {fileID: 5167690650097798016, guid: ea2834bb30d18354ebd18a1bf29a2202, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -89,19 +102,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1709344646783637684
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8603015253375699284}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ec6b652e234abb4186e99e20a834324, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _objectType: 0
 --- !u!61 &7643794347096829077
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -136,15 +136,15 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.0025116578, y: 0.0013474971}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 0.5, y: 0.29}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.4930002, y: 0.28586265}
   m_EdgeRadius: 0

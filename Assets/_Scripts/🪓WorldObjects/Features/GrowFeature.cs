@@ -2,14 +2,14 @@
 
 public class GrowFeature : MonoBehaviour, IGrowable
 {
-    private readonly WorldObject _worldObject;
+    private WorldObject _worldObject;
 
 
 
 
 
 
-    public GrowFeature(WorldObject worldObject) => _worldObject = worldObject;
+     public void Setup(WorldObject worldObject) => _worldObject = worldObject;
 
 
 

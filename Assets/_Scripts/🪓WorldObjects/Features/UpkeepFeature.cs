@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class UpkeepFeature : MonoBehaviour, IUpkeepable
 {
-    private readonly WorldObject _worldObject;
+    private WorldObject _worldObject;
 
 
 
 
 
-    public UpkeepFeature(WorldObject worldObject) => _worldObject = worldObject;
+    public void Setup(WorldObject worldObject) => _worldObject = worldObject;
 
 
 

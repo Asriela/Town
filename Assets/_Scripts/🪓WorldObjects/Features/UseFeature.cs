@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class UseFeature : MonoBehaviour, IUseable
 {
-    private readonly WorldObject _worldObject;
+    private WorldObject _worldObject;
 
-    public UseFeature(WorldObject worldObject) => _worldObject = worldObject;
+    public void Setup(WorldObject worldObject) => _worldObject = worldObject;
 
     public void Use(Character userOfObject)
     {

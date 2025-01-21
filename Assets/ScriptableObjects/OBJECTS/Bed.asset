@@ -21,5 +21,6 @@ MonoBehaviour:
     _enabled: 1
   - featureType: 2
     _enabled: 1
-  - featureType: 2
+  - featureType: 4
     _enabled: 1
+  objectType: 1

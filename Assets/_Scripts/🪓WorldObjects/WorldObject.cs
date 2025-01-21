@@ -58,18 +58,23 @@ public class WorldObject : MonoBehaviour
                 {
                     case ObjectFeatureType.UseFeature:
                         _useFeature = gameObject.AddComponent<UseFeature>();
+                        _useFeature.Setup(this); // Setup with WorldObject reference
                         break;
                     case ObjectFeatureType.UpkeepFeature:
                         _upkeepFeature = gameObject.AddComponent<UpkeepFeature>();
+                        _upkeepFeature.Setup(this);
                         break;
                     case ObjectFeatureType.InteractionFeature:
                         _interactFeature = gameObject.AddComponent<InteractFeature>();
+                        _interactFeature.Setup(this);
                         break;
                     case ObjectFeatureType.GrowFeature:
                         _growFeature = gameObject.AddComponent<GrowFeature>();
+                        _growFeature.Setup(this);
                         break;
                     case ObjectFeatureType.RentFeature:
                         _rentFeature = gameObject.AddComponent<RentFeature>();
+                        _rentFeature.Setup(this);
                         break;
                 }
             }

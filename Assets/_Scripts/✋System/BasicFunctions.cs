@@ -68,7 +68,7 @@ public static class BasicFunctions
         { LogType.game,             BinaryBool(0)},
         { LogType.file,             BinaryBool(0)},
         { LogType.error,            BinaryBool(1)},
-        { LogType.ui,               BinaryBool(0)},
+        { LogType.ui,               BinaryBool(1)},
         { LogType.player,           BinaryBool(0)},
         { LogType.step,             BinaryBool(0)},
         { LogType.weird,            BinaryBool(0)},
@@ -81,7 +81,7 @@ public static class BasicFunctions
 
     public static void Log(string text, LogType type)
     {
-        if (type == LogType.error || type == LogType.ui)
+        if (type == LogType.error )
         {
             text = "ERROR! " + text;
             if (LogTypesOn[type] == true)
