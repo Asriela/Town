@@ -37,7 +37,6 @@ public class InteractionMenu : MonoBehaviour
             menuContainer.style.position = Position.Absolute;
             menuContainer.style.width = new Length(240, LengthUnit.Pixel);
             menuContainer.style.display = DisplayStyle.None;
-            menuContainer.style.left = new Length(200, LengthUnit.Pixel);
 
             // Add the background image as a child of the menu container
             backgroundImage = new VisualElement();
@@ -79,7 +78,6 @@ public class InteractionMenu : MonoBehaviour
     }
 
 
-
     public void ShowMenu(List<MenuOption> menuButtons, string contextTitle, string lastChosenOption, string currentDialogue, List<MenuOption> diaButtons, Character personWeAreSpeakingTo)
     {
         GameManager.Instance.BlockingPlayerUIOnScreen = true;
@@ -114,12 +112,10 @@ public class InteractionMenu : MonoBehaviour
         }
         };
         pastDialogueButton.Add(pastDialogueLabel);
-        pastDialogueButton.style.marginLeft = new Length(130 + 120, LengthUnit.Pixel);
-        pastDialogueButton.style.marginTop = new Length(20, LengthUnit.Pixel);
-        pastDialogueButton.style.marginBottom = new Length(10, LengthUnit.Pixel);
-        pastDialogueButton.style.width = new Length(300, LengthUnit.Pixel);
-        pastDialogueButton.style.alignSelf = Align.Center;
-        pastDialogueButton.style.flexDirection = FlexDirection.Row;
+        pastDialogueButton.style.marginLeft = new Length(buttonLeftMargin, LengthUnit.Pixel);
+        pastDialogueButton.style.marginTop = new Length(buttonSpacing, LengthUnit.Pixel);
+        pastDialogueButton.style.width = new Length(buttonWidth, LengthUnit.Pixel);
+        pastDialogueButton.AddToClassList("button"); // Add the same class for consistent styling
         pastDialogueButton.style.backgroundColor = new StyleColor(Color.clear); // Remove button background
         pastDialogueButton.focusable = false; // Prevent focus
         pastDialogueButton.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
@@ -147,12 +143,10 @@ public class InteractionMenu : MonoBehaviour
             };
 
             contextButton.Add(contextLabel);
-            contextButton.style.marginLeft = new Length(130 + 120, LengthUnit.Pixel);
-            contextButton.style.marginTop = new Length(20, LengthUnit.Pixel);
-            contextButton.style.marginBottom = new Length(10, LengthUnit.Pixel);
-            contextButton.style.width = new Length(300, LengthUnit.Pixel);
-            contextButton.style.alignSelf = Align.Center;
-            contextButton.style.flexDirection = FlexDirection.Row;
+            contextButton.style.marginLeft = new Length(buttonLeftMargin, LengthUnit.Pixel);
+            contextButton.style.marginTop = new Length(buttonSpacing, LengthUnit.Pixel);
+            contextButton.style.width = new Length(buttonWidth, LengthUnit.Pixel);
+            contextButton.AddToClassList("button"); // Add the same class for consistent styling
             contextButton.style.backgroundColor = new StyleColor(Color.clear); // Remove button background
             contextButton.focusable = false; // Prevent focus
             contextButton.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
@@ -168,8 +162,8 @@ public class InteractionMenu : MonoBehaviour
 
         // Display the menu
         menuContainer.style.display = DisplayStyle.Flex;
-
     }
+
 
 
     private Button CreateMenuButton(List<MenuOption> menuButtons, MenuOption menuOption)
