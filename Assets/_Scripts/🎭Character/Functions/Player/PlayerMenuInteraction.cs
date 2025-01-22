@@ -18,6 +18,7 @@ public struct MenuOption
     public object Data1;
     public object Data2;
 
+
     public MenuOption(string buttonLabel, object data, object data2)
     {
 
@@ -321,7 +322,7 @@ public class PlayerMenuInteraction : MonoBehaviour
     private void OpenInteractionMenu(List<MenuOption> options, string title, Transform subject, Transform target, Character personWeAreSpeakingTo)
     {
         EventManager.TriggerSwitchCameraToInteractionMode(subject, target);
-        _interactionMenu.ShowMenu(options, title, personWeAreSpeakingTo);
+        _interactionMenu.ShowMenu(options, title, "option chosen" ,"new dialogue", null, personWeAreSpeakingTo);
     }
 
     public bool NotInteractingWithMenu()
