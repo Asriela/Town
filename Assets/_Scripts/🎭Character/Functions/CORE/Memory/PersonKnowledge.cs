@@ -213,5 +213,40 @@ public class PersonKnowledge : MonoBehaviour
 
         return knowerPair?.knowledge.Select(k => k.character).ToList() ?? new List<Character>();
     }
+    public bool DoWeHavePersonKnowledge(Character knower)
+    {
+        // Retrieve the knower's knowledge
+        var knowerPair = _peopleKnowledge.FirstOrDefault(kp => kp.knower == knower);
+
+        // If knower exists and has knowledge data, return true, meaning the knower has knowledge about someone
+        if (knowerPair != null && knowerPair.knowledge.Any())
+        {
+            return true;
+        }
+
+        // If the knower has no knowledge, return false
+        return false;
+    }
+    public bool DoWeHavePersonKnowledgeOn(Character knower, Character aboutwho)
+    {
+        // Retrieve the knower's knowledge
+        var knowerPair = _peopleKnowledge.FirstOrDefault(kp => kp.knower == knower);
+
+        // If knower exists and has knowledge about the specific person
+        if (knowerPair != null)
+        {
+            // Check if the knower has knowledge about the specified person
+            var knowledgePair = knowerPair.knowledge.FirstOrDefault(k => k.character == aboutwho);
+
+            // If knowledge exists for that person, return true
+            if (knowledgePair != null && knowledgePair.memoryTags.Any())
+            {
+                return true;
+            }
+        }
+
+        // If the knower doesn't have knowledge about the person, return false
+        return false;
+    }
 
 }

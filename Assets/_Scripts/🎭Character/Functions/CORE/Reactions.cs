@@ -54,7 +54,7 @@ public class Reactions : MonoBehaviour
 
                             SocialHelper.ShareKnowledgeAbout(_npc, sender, knower, aboutWho, Mind.KnowledgeType.person, newKnowledge, null);
                             if (memTag != null && memTag.Count > 0)
-                            { _npc.Ui.Speak(DialogueHelper.GetTellDialogue(memTag[0])); }
+                            { _npc.Ui.Speak(DialogueHelper.GetTellDialogue(memTag[0], _npc,knower, aboutWho, aboutWho == WorldManager.Instance.ThePlayer)); }
                             else
                             {
                                 _npc.Ui.Speak("Not much.");
@@ -161,17 +161,17 @@ public class Reactions : MonoBehaviour
             string response = view switch
             {
                 ViewTowards.unforgivable => "WHAT!? I WON'T STAND FOR THIS!",
-                ViewTowards.despise => "That's horrifying!",
-                ViewTowards.extremelyNegative => "That's extremely upsetting.",
-                ViewTowards.veryNegative => "I'm not okay with that...",
-                ViewTowards.negative => "I don't like that...",
+                ViewTowards.despise => "I HATE this!",
+                ViewTowards.extremelyNegative => "I REALLY dont like that",
+                ViewTowards.veryNegative => "I'm dont like that...",
+                ViewTowards.negative => "uhhh...",
                 ViewTowards.neutral => "Oh, okay...",
                 ViewTowards.positive => "That's nice...",
-                ViewTowards.veryPositive => "I really like that...",
-                ViewTowards.extremelyPositive => "How wonderful!",
-                ViewTowards.adore => "That's amazing!",
+                ViewTowards.veryPositive => "I like that...",
+                ViewTowards.extremelyPositive => "I really like that!",
+                ViewTowards.adore => "Oh! I love it!",
                 ViewTowards.obsessed => "WOW! UNBELIEVABLE!",
-                _ => "I don't know how I feel about that."
+                _ => "Oh ok.."
             };
 
             _npc.Ui.Speak(response);

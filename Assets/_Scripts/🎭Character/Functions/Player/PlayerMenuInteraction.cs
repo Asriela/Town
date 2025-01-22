@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mind;
 using TMPro.Examples;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.TextCore.Text;
@@ -331,7 +332,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                     memoryTagsList = new() { memoryTag };
 
                     SocialHelper.ShareKnowledgeAbout(_player, _personWeAreSpeakingTo, _personWeAreSpeakingTo, _player, KnowledgeType.person, memoryTagsList, null);
-                    _player.Ui.Speak(DialogueHelper.GetTellDialogue(memoryTag));
+                    _player.Ui.Speak(DialogueHelper.GetTellDialogue(memoryTag, _player, _player, _player, true));
 
                 }
                 else
@@ -361,7 +362,8 @@ public class PlayerMenuInteraction : MonoBehaviour
                     characterWord = "you";
                 }
 
-
+                if (_aboutWho == _player)
+                { aboutWhoString = "me"; }
                 _passOnTitleText = $"So what {doWord} {characterWord} think about <b>{aboutWhoString}?</b>";
 
 
@@ -457,7 +459,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                 }
                 else
                 {
-                    tellText = $"let me tell you something about {subjectName}...";
+                    tellText = $"So {subjectName} is...";
                     tellGossipText = $"{subjectName} said..";
                 }
 
@@ -466,18 +468,38 @@ public class PlayerMenuInteraction : MonoBehaviour
                 {
                     newOptions.Add(Option(askText, _knower, SocialMenuPath.askAboutThisPerson));
                     newOptions.Add(Option(askGossipText, _knower, SocialMenuPath.askGossip));
-                    newOptions.Add(Option(tellText, _knower, SocialMenuPath.shareInfoAboutThisPerson));
-                    newOptions.Add(Option(tellGossipText, _knower, SocialMenuPath.shareInfoThisPersonSaid));
+
+                    // Only add shareInfoAboutThisPerson if the player knows about the person
+                    if (_player.PersonKnowledge.DoWeHavePersonKnowledgeOn(_player, _knower))
+                    {
+                        newOptions.Add(Option(tellText, _knower, SocialMenuPath.shareInfoAboutThisPerson));
+                    }
+
+                    // Only add shareInfoThisPersonSaid if the player knows the person said this information
+                    if (_player.PersonKnowledge.DoWeHavePersonKnowledge(_knower))
+                    {
+                        newOptions.Add(Option(tellGossipText, _knower, SocialMenuPath.shareInfoThisPersonSaid));
+                    }
                 }
                 else
                 {
-                    var options = new List<MenuOption>
-                {
-                    Option(subjectIsMe ? tellText : askText, _knower, subjectIsMe ? SocialMenuPath.shareInfoAboutThisPerson: SocialMenuPath.askAboutThisPerson ),
-                    Option(subjectIsMe ? askText : tellText, _knower, subjectIsMe ? SocialMenuPath.askAboutThisPerson : SocialMenuPath.shareInfoAboutThisPerson),
-                    Option( askGossipText  , _knower,  SocialMenuPath.askGossip )
-                };
-                    newOptions.AddRange(options);
+                    if (_player.PersonKnowledge.DoWeHavePersonKnowledgeOn(_player, _knower))
+                    {
+                        var options = new List<MenuOption>
+                        {
+                            Option(subjectIsMe ? tellText : askText, _knower, subjectIsMe ? SocialMenuPath.shareInfoAboutThisPerson : SocialMenuPath.askAboutThisPerson),
+                            Option(subjectIsMe ? askText : tellText, _knower, subjectIsMe ? SocialMenuPath.askAboutThisPerson : SocialMenuPath.shareInfoAboutThisPerson),
+                            Option(askGossipText, _knower, SocialMenuPath.askGossip)
+                        };
+                        newOptions.AddRange(options);
+                    }
+                    else
+                    {
+                        newOptions.Add(Option(askText, _knower, SocialMenuPath.askAboutThisPerson));
+                        newOptions.Add(Option(askGossipText, _knower, SocialMenuPath.askGossip));
+                    }
+
+
                 }
 
                 //
@@ -508,24 +530,40 @@ public class PlayerMenuInteraction : MonoBehaviour
                         var charactersToAskAbout = _player.VisualStatusKnowledge.GetAllCharactersViewerHasVisualStatusOn(_player);
 
                         // Build a list of menu options from the player's MemoryTags
-                        newOptions = charactersToAskAbout.Where(tag => tag != _personWeAreSpeakingTo).Select(tag =>
-                        {
-                            string labelText = tag.ToString();
-                            if (tag == _personWeAreSpeakingTo)
-                            { labelText = "you"; }
-                            // Return the menu option with the tag stored as Data
-                            return Option(labelText, _knower, tag);
-                        }).ToList();
+                        newOptions = charactersToAskAbout
+                            .Where(tag => tag != _personWeAreSpeakingTo && tag.CharacterName.ToString() != characterWord) // Filter out unwanted conditions
+                            .Select(tag =>
+                            {
+                                string labelText = tag.CharacterName.ToString();
+
+                                if (tag == _personWeAreSpeakingTo)
+                                {
+                                    labelText = "you";
+                                }
+                                if (tag == _player)
+                                {
+                                    labelText = "me";
+                                }
+
+                                // Return the menu option with the tag stored as Data
+                                return Option(labelText, _knower, tag);
+                            })
+                            .ToList();
                         break;
                     case SocialMenuPath.askAboutThisPerson:
                         _knower = (Character)chosenOption.Data;
 
                         characterWord = _knower.CharacterName.ToString();
-                
 
 
 
-                        _passOnTitleText = $"So what can you tell me about {characterWord}?</b>";
+                        if (_knower == _personWeAreSpeakingTo)
+                        {
+                            _passOnTitleText = $"Tell me a bit about you?</b>";
+                        }
+                        else
+                        { _passOnTitleText = $"So what can you tell me about {characterWord}?</b>"; }
+
 
 
                         SocialHelper.AskForKnowledgeAbout(_player, _personWeAreSpeakingTo, _personWeAreSpeakingTo, _knower, KnowledgeType.person, null, true);
@@ -587,9 +625,16 @@ public class PlayerMenuInteraction : MonoBehaviour
                         // Build a list of menu options from the player's MemoryTags
                         newOptions.AddRange(charactersToTalkAbout.Select(tag =>
                         {
-                            string labelText = tag.ToString();
+                            string labelText = tag.CharacterName.ToString();
+
                             if (tag == _personWeAreSpeakingTo)
+                            {
                                 labelText = "you";
+                            }
+                            if (tag == _player)
+                            {
+                                labelText = "me";
+                            }
                             // Return the menu option with the tag stored as Data
                             return Option(labelText, _knower, tag);
                         }).ToList());
@@ -607,17 +652,26 @@ public class PlayerMenuInteraction : MonoBehaviour
                 _knower = (Character)chosenOption.Data;
                 _aboutWho = (Character)chosenOption.Data2;
                 aboutWhoString = _aboutWho.CharacterName.ToString();
+
+                var aboutWhoString2 = _aboutWho.CharacterName.ToString();
                 word = "is";
                 if (_aboutWho == _personWeAreSpeakingTo)
                 {
                     aboutWhoString = "you";
+                    aboutWhoString2 = "you";
                     word = "are";
 
                 }
+                if (_aboutWho == _player)
+                {
+                    aboutWhoString = "me";
+                    aboutWhoString2 = "I";
+                    word = "am";
 
+                }
 
-                _titleText = $"So {_knower.CharacterName} was talking about <b>{aboutWhoString} and said {aboutWhoString} {word}...</b>";
-                _passOnTitleText = $"So {_knower.CharacterName} was talking about {aboutWhoString} and said {aboutWhoString} {word} ";
+                _titleText = $"So {_knower.CharacterName} was talking about <b>{aboutWhoString} and said {aboutWhoString2} {word}...</b>";
+                _passOnTitleText = $"So {_knower.CharacterName} was talking about {aboutWhoString} and said {aboutWhoString2} {word} ";
 
                 knowledgeList = _player.PersonKnowledge.GetAllCharacterTags(_knower, _aboutWho);
 

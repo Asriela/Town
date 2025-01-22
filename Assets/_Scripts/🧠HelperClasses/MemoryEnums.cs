@@ -35,7 +35,11 @@ namespace Mind
         grumpy,
         crime,
         monster,
-        deadlyThreat
+        deadlyThreat,
+        wife,
+        husband,
+        seamstress,
+        tailor
 
     }
 

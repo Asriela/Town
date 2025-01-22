@@ -123,6 +123,9 @@ public class DialogueResponsesToPersonInformation : MonoBehaviour
     // Get dialogue response for a specific character, memory tag, and relationship state
     public string GetDialogue(Character character, Mind.MemoryTags memoryTag, ViewTowards relationshipState)
     {
+        // Convert relationshipState to int
+        int relationshipStateInt = (int)relationshipState;
+
         var characterDialogues = PeopleDialogues.ContainsKey(character) ? PeopleDialogues[character] : null;
 
         if (characterDialogues != null)
@@ -130,10 +133,18 @@ public class DialogueResponsesToPersonInformation : MonoBehaviour
             var memoryTagDialogue = characterDialogues.FirstOrDefault(view => view.memoryTags == memoryTag);
             if (memoryTagDialogue != null)
             {
-                var response = memoryTagDialogue.dialogueResponses.FirstOrDefault(d => d.relationshipState == relationshipState);
-                if (response != null)
+                // Check for a response with relationshipState at or above the given value
+                foreach (var response in memoryTagDialogue.dialogueResponses)
                 {
-                    return response.dialogue;
+                    // Debugging: log or inspect relationshipState and its integer value
+                    int responseStateInt = (int)response.relationshipState;
+
+                    // Check if the response relationship state is at or above the given value
+                    if (relationshipStateInt>=responseStateInt )
+                    {
+
+                        return response.dialogue;
+                    }
                 }
             }
         }
