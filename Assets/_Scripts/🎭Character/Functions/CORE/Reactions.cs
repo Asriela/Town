@@ -89,86 +89,92 @@ public class Reactions : MonoBehaviour
 
                         break;
                     case Mind.KnowledgeType.person:
-                        // BasicFunctions.Log("❤knowledge received");
                         foreach (var knowledgeItem in actionPost.KnowledgeTags)
                         {
-
                             List<Mind.MemoryTags> tags = actionPost.KnowledgeTags.Cast<Mind.MemoryTags>().ToList();
                             _npc.PersonKnowledge.AddKnowledge(knower, aboutWho, tags);
-                            var viewAboutMemoryTag = _npc.Views.GetView(_npc, tags[0]);
 
-                            if (viewAboutMemoryTag != null && sender != aboutWho && _npc is not Player)
+                            // Get relationship between the NPC and the sender
+                            var relationshipState = (ViewTowards)(int)_npc.Relationships.GetRelationshipWith(_npc, sender);
+
+                            if (sender != aboutWho && _npc is not Player)
                             {
-                                _npc.Relationships.AddInteractionEffect(SocializeType.tell, sender, (float)viewAboutMemoryTag);
-                                _npc.Relationships.RecalculateMyRelationshipWithEveryone();
-                            }
+                                // Check if there's a scripted dialogue response
+                                var dialogueResponse = _npc.DialogueResponsesToPersonInformation.GetDialogue(aboutWho, tags[0], relationshipState);
+                                var viewAboutMemoryTag = _npc.Views.GetView(_npc, tags[0]);
 
-
-
-                            //if the sender is sharing info about someone else that isnt them we need to add a Interactioneffect
-
-
-                            if (_npc is not Player)
-                            {
-                                switch (viewAboutMemoryTag)
+                                if (dialogueResponse != null)
                                 {
-                                    case ViewTowards.unforgivable:
-                                        _npc.Ui.Speak("WHAT!? I WONT STAND FOR THIS!");
-                                        break;
-
-                                    case ViewTowards.despise:
-                                        _npc.Ui.Speak("That's horrifying!");
-                                        break;
-
-                                    case ViewTowards.extremelyNegative:
-                                        _npc.Ui.Speak("That's extremely upsetting.");
-                                        break;
-
-                                    case ViewTowards.veryNegative:
-                                        _npc.Ui.Speak("Im not ok with that..");
-                                        break;
-
-                                    case ViewTowards.negative:
-                                        _npc.Ui.Speak("I don't like that...");
-                                        break;
-
-                                    case ViewTowards.neutral:
-                                        _npc.Ui.Speak("Oh ok..");
-                                        break;
-
-                                    case ViewTowards.positive:
-                                        _npc.Ui.Speak("That's nice..");
-                                        break;
-
-                                    case ViewTowards.veryPositive:
-                                        _npc.Ui.Speak("I really like that...");
-                                        break;
-
-                                    case ViewTowards.extremelyPositive:
-                                        _npc.Ui.Speak("How wonderful!");
-                                        break;
-
-                                    case ViewTowards.adore:
-                                        _npc.Ui.Speak("That's amazing!");
-                                        break;
-
-                                    case ViewTowards.obsessed:
-                                        _npc.Ui.Speak("WOW! UNBELIEVABLE!");
-                                        break;
-
-                                    default:
-                                        _npc.Ui.Speak("I don't know how I feel about that.");
-                                        break;
+                                    // Call scripted response handler
+                                    HandleScriptedResponse(sender, aboutWho, tags[0], relationshipState);
+                                }
+                                else
+                                {
+                                    // Handle default response and relationship impact
+                                    HandleDefaultRelationshipImpact(viewAboutMemoryTag, sender);
+                                    HandleDefaultResponse(viewAboutMemoryTag);
                                 }
                             }
                         }
-
                         break;
                 }
 
                 break;
         }
     }
+    private void HandleScriptedResponse(Character sender, Character aboutWho, Mind.MemoryTags memoryTag, ViewTowards relationship)
+    {
+        string dialogue = _npc.DialogueResponsesToPersonInformation.GetDialogue(aboutWho, memoryTag, relationship);
+        _npc.Ui.Speak(dialogue);
 
+        // Get the response details to handle relationship impact and output tags
+        var characterDialogues = _npc.DialogueResponsesToPersonInformation.PeopleDialogues[aboutWho];
+        var memoryTagDialogue = characterDialogues.FirstOrDefault(view => view.memoryTags == memoryTag);
+        var response = memoryTagDialogue.dialogueResponses.FirstOrDefault(d => d.relationshipState == relationship);
 
+        if (response != null)
+        {
+            // Apply scripted relationship impact
+            _npc.Relationships.AddInteractionEffect(SocializeType.tell, sender, response.relImpactOnMessenger);
+
+            // Store output tags for future use
+            foreach (var tagPair in response.tagsInDialogue)
+            {
+                // We use the knower and tagAboutWho from the CharacterMemoryTagPair to correctly associate the knowledge
+                _npc.PersonKnowledge.AddKnowledge(tagPair.knower, tagPair.tagAboutWho, new List<Mind.MemoryTags> { tagPair.tag });
+            }
+        }
+    }
+
+    private void HandleDefaultRelationshipImpact(ViewTowards? view, Character sender)
+    {
+        if (view != null)
+        {
+            _npc.Relationships.AddInteractionEffect(SocializeType.tell, sender, (float)view);
+            _npc.Relationships.RecalculateMyRelationshipWithEveryone();
+        }
+    }
+    private void HandleDefaultResponse(ViewTowards? view)
+    {
+        if (_npc is not Player)
+        {
+            string response = view switch
+            {
+                ViewTowards.unforgivable => "WHAT!? I WON'T STAND FOR THIS!",
+                ViewTowards.despise => "That's horrifying!",
+                ViewTowards.extremelyNegative => "That's extremely upsetting.",
+                ViewTowards.veryNegative => "I'm not okay with that...",
+                ViewTowards.negative => "I don't like that...",
+                ViewTowards.neutral => "Oh, okay...",
+                ViewTowards.positive => "That's nice...",
+                ViewTowards.veryPositive => "I really like that...",
+                ViewTowards.extremelyPositive => "How wonderful!",
+                ViewTowards.adore => "That's amazing!",
+                ViewTowards.obsessed => "WOW! UNBELIEVABLE!",
+                _ => "I don't know how I feel about that."
+            };
+
+            _npc.Ui.Speak(response);
+        }
+    }
 }

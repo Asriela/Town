@@ -25,10 +25,10 @@ public class DialogueViewPair
 [Serializable]
 public class CharacterMemoryTagPair
 {
+    public Character knower;  // Character that knows about the memory tag
     public Character tagAboutWho;  // Character this tag is about
     public Mind.MemoryTags tag;  // The related memory tag
 }
-
 [Serializable]
 public class CharacterMemoryDialoguePair
 {
@@ -69,15 +69,15 @@ public class DialogueResponsesToPersonInformation : MonoBehaviour
                 {
                     memoryTags = tag,
                     dialogueResponses = new List<DialogueViewPair>
+                {
+                    new DialogueViewPair
                     {
-                        new DialogueViewPair
-                        {
-                            relationshipState = relationshipState,
-                            dialogue = dialogue,
-                            tagsInDialogue = tagsInDialogue,
-                            relImpactOnMessenger = relImpactOnMessenger
-                        }
+                        relationshipState = relationshipState,
+                        dialogue = dialogue,
+                        tagsInDialogue = tagsInDialogue,
+                        relImpactOnMessenger = relImpactOnMessenger
                     }
+                }
                 }).ToList()
             });
         }
@@ -92,15 +92,15 @@ public class DialogueResponsesToPersonInformation : MonoBehaviour
                     {
                         memoryTags = tag,
                         dialogueResponses = new List<DialogueViewPair>
+                    {
+                        new DialogueViewPair
                         {
-                            new DialogueViewPair
-                            {
-                                relationshipState = relationshipState,
-                                dialogue = dialogue,
-                                tagsInDialogue = tagsInDialogue,
-                                relImpactOnMessenger = relImpactOnMessenger
-                            }
+                            relationshipState = relationshipState,
+                            dialogue = dialogue,
+                            tagsInDialogue = tagsInDialogue,
+                            relImpactOnMessenger = relImpactOnMessenger
                         }
+                    }
                     });
                 }
                 else
