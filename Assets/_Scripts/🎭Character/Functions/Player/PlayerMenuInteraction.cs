@@ -139,102 +139,109 @@ public class PlayerMenuInteraction : MonoBehaviour
 
     private void MenuButtonPressed(int positionInList, string buttonLabel)
     {
-
-
-
         _titleText = buttonLabel;
 
         switch (buttonLabel)
         {
-
             case "Trade":
-
-                _currentMenuOptions = new List<MenuOption>
-                {
-                    Label("Buy"),
-                    Label("Sell"),
-                    Label("Give"),
-                    Label("Request")
-                };
+                SetupTradeMenu();
                 break;
+
             case "Buy":
-                MenuState = SocialMenuState.buy;
-                var pricedItems = _personWeAreSpeakingTo.Memory.GetPricedItems();
-                _currentMenuOptions = pricedItems.Select(item =>
-                {
-                    string labelText = item.ToString() == "bed"
-                        ? "Room to Rent"
-                        : item.ToString();
-
-                    // Get the price using the method and append it to the label
-                    decimal price = _personWeAreSpeakingTo.Memory.GetPrice(item);
-                    string pureLabelText = labelText;
-                    return Option($"{labelText}: {price:C}", pureLabelText, item);
-                }).ToList();
+                SetupBuyMenu();
                 break;
+
             case "Action":
-                MenuState = SocialMenuState.socialAction;
-
-
-                _currentMenuOptions = BasicActions.Select(action => Option(action.ToString(), action, null)).ToList();
+                SetupActionMenu();
                 break;
-
 
             case "Talk about..":
-                _titleText = "Talk about who?";
-                MenuState = SocialMenuState.talkPaths;
-                var everyoneWeKnow = _player.VisualStatusKnowledge.GetAllCharactersViewerHasVisualStatusOn(_player);
-
-                // Create lists to hold the options
-                List<MenuOption> options = new List<MenuOption>();
-                List<MenuOption> others = new List<MenuOption>();
-
-                // Iterate over everyoneWeKnow and classify options
-                foreach (var tag in everyoneWeKnow)
-                {
-                    string labelText = tag.CharacterName.ToString();
-                    if (tag == _player)
-                    {
-                        labelText = "myself";
-                        options.Insert(0, Option(labelText, tag, null)); // Insert "myself" at the beginning
-                    }
-                    else if (tag == _personWeAreSpeakingTo)
-                    {
-                        labelText = "you";
-                        options.Add(Option(labelText, tag, null)); // Add "you" at the end
-                    }
-                    else
-                    {
-                        others.Add(Option(labelText, tag, null)); // Add other options to a separate list
-                    }
-                }
-
-                // Combine the lists: "myself", followed by others, then "you"
-                options.AddRange(others);
-
-                // Assign the final list of options
-                _currentMenuOptions = options;
-
-
+                SetupTalkAboutMenu();
                 break;
-
-
-
-
 
             default:
                 _currentMenuOptions = ProcessComplexMenuOptions(positionInList);
                 break;
         }
 
-
-
-
-        if (_currentMenuOptions == null || _currentMenuOptions.Count == 0)
-        { _interactionMenu.HideMenu(); }
-        else
-        { OpenInteractionMenu(_currentMenuOptions, _titleText, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo); }
+        HandleMenuDisplay();
     }
+
+    private void SetupTradeMenu()
+    {
+        _currentMenuOptions = new List<MenuOption>
+    {
+        Label("Buy"),
+        Label("Sell"),
+        Label("Give"),
+        Label("Request")
+    };
+    }
+
+    private void SetupBuyMenu()
+    {
+        MenuState = SocialMenuState.buy;
+        var pricedItems = _personWeAreSpeakingTo.Memory.GetPricedItems();
+
+        _currentMenuOptions = pricedItems.Select(item =>
+        {
+            string labelText = item.ToString() == "bed" ? "Room to Rent" : item.ToString();
+            decimal price = _personWeAreSpeakingTo.Memory.GetPrice(item);
+            return Option($"{labelText}: {price:C}", labelText, item);
+        }).ToList();
+    }
+
+    private void SetupActionMenu()
+    {
+        MenuState = SocialMenuState.socialAction;
+        _currentMenuOptions = BasicActions.Select(action => Option(action.ToString(), action, null)).ToList();
+    }
+
+    private void SetupTalkAboutMenu()
+    {
+        _titleText = "Talk about who?";
+        MenuState = SocialMenuState.talkPaths;
+
+        var everyoneWeKnow = _player.VisualStatusKnowledge.GetAllCharactersViewerHasVisualStatusOn(_player);
+        var options = new List<MenuOption>();
+        var others = new List<MenuOption>();
+
+        foreach (var tag in everyoneWeKnow)
+        {
+            string labelText = tag.CharacterName.ToString();
+            if (tag == _player)
+            {
+                labelText = "myself";
+                options.Insert(0, Option(labelText, tag, null)); // Insert "myself" at the beginning
+            }
+            else if (tag == _personWeAreSpeakingTo)
+            {
+                labelText = "you";
+                options.Add(Option(labelText, tag, null)); // Add "you" at the end
+            }
+            else
+            {
+                others.Add(Option(labelText, tag, null)); // Add other options to a separate list
+            }
+        }
+
+        // Combine the lists: "myself", followed by others, then "you"
+        options.AddRange(others);
+        _currentMenuOptions = options;
+    }
+
+    private void HandleMenuDisplay()
+    {
+        if (_currentMenuOptions == null || _currentMenuOptions.Count == 0)
+        {
+            _interactionMenu.HideMenu();
+        }
+        else
+        {
+            OpenInteractionMenu(_currentMenuOptions, _titleText, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
+        }
+    }
+
 
 
 
