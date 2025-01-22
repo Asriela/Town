@@ -150,10 +150,10 @@ public class InteractionMenu : MonoBehaviour
             contextButton.Add(contextLabel);
 
             // Apply button styling to mimic other buttons
-            contextButton.style.marginLeft = new Length(130, LengthUnit.Pixel);
+            contextButton.style.marginLeft = new Length(130+120, LengthUnit.Pixel);
             contextButton.style.marginTop = new Length(20, LengthUnit.Pixel);
             contextButton.style.marginBottom = new Length(10, LengthUnit.Pixel);
-            contextButton.style.width = new Length(180, LengthUnit.Pixel);
+            contextButton.style.width = new Length(300, LengthUnit.Pixel);
             contextButton.style.alignSelf = Align.Center;
             contextButton.style.flexDirection = FlexDirection.Row;
             contextButton.style.backgroundColor = new StyleColor(Color.clear);  // Remove button background

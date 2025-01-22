@@ -436,6 +436,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                 if (subjectIsWhoWeAreSpeakingTo)
                 {
                     askText = "tell me more about you..";
+                     askGossipText = $"what do you think about..";
                 }
                 if (subjectIsMe)
                 {
