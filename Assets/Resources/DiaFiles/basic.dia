@@ -1,0 +1,5 @@
+"greetings do you want to come in?"
+>yes
+	"wondeful"
+>no
+	"suit yourself"

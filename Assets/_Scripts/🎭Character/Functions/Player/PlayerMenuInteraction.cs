@@ -98,7 +98,7 @@ public class PlayerMenuInteraction : MonoBehaviour
             BasicFunctions.Log("🎈PieMenu component not found in the scene.", LogType.error);
         }
 
-        _interactionMenu.OnButtonClicked += HandleButtonClicked;
+        _interactionMenu.OnButtonClicked += MenuButtonPressed;
 
 
         var root = _interactionMenu.root;
@@ -110,7 +110,7 @@ public class PlayerMenuInteraction : MonoBehaviour
 
     private void Update()
     {
-        InteractionMenuInteraction();
+        HandleMenuInteraction();
 
         _leftClick = false;
         _leftClick = Input.GetMouseButtonDown(0);
@@ -137,7 +137,7 @@ public class PlayerMenuInteraction : MonoBehaviour
 
 
 
-    private void HandleButtonClicked(int positionInList, string buttonLabel)
+    private void MenuButtonPressed(int positionInList, string buttonLabel)
     {
 
 
@@ -179,47 +179,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                 _currentMenuOptions = BasicActions.Select(action => Option(action.ToString(), action, null)).ToList();
                 break;
 
-            ///=======
-            ////ASK
-            /// ===
-            case "Ask about":
 
-                _currentMenuOptions = new List<MenuOption>
-                {
-                    Label("Ask about a person"),
-                    Label("Ask about a location")
-                };
-                break;
-
-
-            case "Ask about a person":
-                MenuState = SocialMenuState.askAboutPerson;
-                _titleText = "So what do...";
-
-                // MenuState = SocialMenuState.tellPerson;
-                var charactersToAskAbout = _player.PersonKnowledge.GetAllCharactersPersonHasDataOn(_player);
-
-                // Build a list of menu options from the player's MemoryTags
-                _currentMenuOptions = charactersToAskAbout.Where(tag => tag != _player) // Exclude the player
-                    .Select(tag =>
-                    {
-                        string labelText = tag.ToString();
-                        if (tag == _personWeAreSpeakingTo)
-                            labelText = "you";
-
-                        // Return the menu option with the tag stored as Data
-                        return Option(labelText, tag, null);
-                    }).ToList();
-                break;
-
-            case "Ask about a location":
-                MenuState = SocialMenuState.askLocation;
-
-
-                break;
-            ///=======
-            ////TELL
-            /// ===
             case "Talk about..":
                 _titleText = "Talk about who?";
                 MenuState = SocialMenuState.talkPaths;
@@ -276,6 +236,114 @@ public class PlayerMenuInteraction : MonoBehaviour
         { OpenInteractionMenu(_currentMenuOptions, _titleText, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo); }
     }
 
+
+
+
+    private void HandleMenuInteraction()
+    {
+        if (!_leftClick || GameManager.Instance.BlockingPlayerUIOnScreen)
+            return;
+
+        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        var hit = Physics2D.Raycast(mousePosition, Vector2.zero);
+
+        if (hit.collider != null)
+        {
+            if (HandleCharacterInteraction(hit))
+                return;
+
+            HandleObjectInteraction(hit);
+        }
+    }
+
+    private bool HandleCharacterInteraction(RaycastHit2D hit)
+    {
+        _personWeAreSpeakingTo = hit.collider.GetComponent<Character>();
+        if (_personWeAreSpeakingTo != null && _personWeAreSpeakingTo != _player)
+        {
+            _player.Movement.Stop();
+            BasicFunctions.Log("Selected player", LogType.ui);
+
+            _personWeAreSpeakingTo.Reactions.PersonWeAreSpeakingTo = _player;
+            _justOpenedPieMenu = true;
+            _screenPosition = Camera.main.WorldToScreenPoint(hit.point);
+
+            List<MenuOption> buttonLabels = new List<MenuOption>
+        {
+            Label("Talk about.."),
+            Label("Action"),
+            Label("Trade")
+        };
+
+            MenuState = SocialMenuState.start;
+            OpenInteractionMenu(buttonLabels, "Social Interactions", _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
+            return true;
+        }
+        return false;
+    }
+
+    private void HandleObjectInteraction(RaycastHit2D hit)
+    {
+        _selectedWorldObject = hit.collider.GetComponent<WorldObject>();
+        if (_selectedWorldObject != null)
+        {
+            BasicFunctions.Log("Selected world object", LogType.ui);
+
+            _justOpenedPieMenu = true;
+            _screenPosition = Camera.main.WorldToScreenPoint(hit.point);
+
+            _selectedWorldObject.ObjectActions.TryGetInteractionOptions(_player, out List<InteractionOption> worldObjectInteractionOptions);
+            if (worldObjectInteractionOptions == null || !worldObjectInteractionOptions.Any())
+                return;
+
+            _currentMenuOptions = worldObjectInteractionOptions.Select(option =>
+                new MenuOption
+                {
+                    ButtonLabel = option.Label,
+                    Data1 = option.InteractionAction
+                }).ToList();
+
+            MenuState = SocialMenuState.objectInteraction;
+            if (_currentMenuOptions != null)
+            {
+                OpenInteractionMenu(_currentMenuOptions, "Object Interactions", _player.transform, _selectedWorldObject.transform, null);
+            }
+        }
+    }
+
+    private void OpenInteractionMenu(List<MenuOption> options, string title, Transform subject, Transform target, Character personWeAreSpeakingTo)
+    {
+        EventManager.TriggerSwitchCameraToInteractionMode(subject, target);
+        _interactionMenu.ShowMenu(options, title, personWeAreSpeakingTo);
+    }
+
+    public bool NotInteractingWithMenu()
+    {
+
+
+        if (!_leftClick && _personWeAreSpeakingTo != null)
+            return false;
+        if (_justOpenedPieMenu)
+        { _justOpenedPieMenu = false; return false; }
+        if (isMouseOverUI)
+            return false;
+
+
+        if (GameManager.Instance.BlockingPlayerUIOnScreen)
+        {
+            _interactionMenu.HideMenu();
+            return false;
+        }
+
+        return true;
+
+
+
+
+
+
+    }
+
     private List<MenuOption> ProcessComplexMenuOptions(int positionInList)
     {
         var chosenOption = _currentMenuOptions[positionInList];
@@ -296,9 +364,7 @@ public class PlayerMenuInteraction : MonoBehaviour
 
         switch (MenuState)
         {
-            case SocialMenuState.memories:
-                Speak(chosenOption.Data1);
-                break;
+
             case SocialMenuState.buy:
 
 
@@ -336,7 +402,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                 MenuState = SocialMenuState.talkAboutSomeone;
                 _subject = (Character)chosenOption.Data1;
                 subjectName = _subject.CharacterName.ToString();
-                
+
                 if (_subject == _player)
                 {
                     _titleText = $"So about me, I am..";
@@ -355,7 +421,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                         return Option(labelText, tag, null);
                     }).ToList();
 
-        
+
                 }
                 else
                 {
@@ -373,7 +439,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                         newOptions.Add(Option($"Gossip about {subjectName}", _subject, "gossip"));
                     }
 
-                    
+
                 }
 
                 //
@@ -454,7 +520,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                 switch (path)
                 {
                     case "ask":
-           
+
 
                         characterWord = _subject.CharacterName.ToString();
 
@@ -508,7 +574,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                                 // If there are less than two statuses, handle normally
                                 status = string.Join(" ,", statuses.Select(s => s.ToString()));
                             }
-                            
+
                             // Handle the "you seem" case for the player
                             newOptions.Add(Option((subjectIsWhoWeAreSpeakingTo ? "you look " : $"{subjectName} looks ") + status + "..", _subject, SocialMenuPath.shareVisualStatusOfThisPerson));
 
@@ -527,7 +593,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                             newOptions.Add(Option(tellGossipText, _subject, SocialMenuPath.shareGossip));
                         }
                         break;
-                } 
+                }
 
 
 
@@ -755,131 +821,5 @@ public class PlayerMenuInteraction : MonoBehaviour
 
         return newOptions;
     }
-    private void Speak(object messageData)
-    {
-
-    }
-
-
-    private void InteractionMenuInteraction()
-    {
-
-
-        if (!_leftClick || GameManager.Instance.BlockingPlayerUIOnScreen)
-            return;
-
-        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        var hit = Physics2D.Raycast(mousePosition, Vector2.zero);
-
-        if (hit.collider != null)
-        {
-
-            _personWeAreSpeakingTo = hit.collider.GetComponent<Character>();
-            if (_personWeAreSpeakingTo != null && _personWeAreSpeakingTo != _player)
-            {
-
-                _player.Movement.Stop();
-                BasicFunctions.Log("Selected player", LogType.ui);
-                // CameraController.Instance.EnterDialogueMode(_personWeAreSpeakingTo.transform);
-
-                _personWeAreSpeakingTo.Reactions.PersonWeAreSpeakingTo = _player;
-                _justOpenedPieMenu = true;
-                _screenPosition = Camera.main.WorldToScreenPoint(hit.point);
-
-
-                Vector2 clickPosition = Input.mousePosition;
-
-
-                List<MenuOption> buttonLabels = new List<MenuOption>
-                {
-                    Label("Talk about.."),
-                     Label("Action"),
-                    Label("Trade")
-
-
-
-
-                };
-
-                MenuState = SocialMenuState.start;
-                OpenInteractionMenu(buttonLabels, "Social Interactions", _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
-            }
-            else
-            {
-                // If no character is clicked, check for a WorldObject
-                _selectedWorldObject = hit.collider.GetComponent<WorldObject>();
-                if (_selectedWorldObject != null)
-                {
-                    BasicFunctions.Log("Selected world object", LogType.ui);
-
-                    // Set up interactions for the world object
-                    _justOpenedPieMenu = true;
-                    _screenPosition = Camera.main.WorldToScreenPoint(hit.point);
-
-
-                    _selectedWorldObject.ObjectActions.TryGetInteractionOptions(_player, out List<InteractionOption> worldObjectInteractionOptions);
-                    if (worldObjectInteractionOptions == null || !worldObjectInteractionOptions.Any())
-                    {
-                        return;
-                    }
-
-                    // Convert InteractionOptions to MenuOption (assuming InteractionOption has a 'Label' and 'Action' method)
-                    _currentMenuOptions = worldObjectInteractionOptions.Select(option =>
-                    new MenuOption
-                    {
-                        ButtonLabel = option.Label,
-                        Data1 = option.InteractionAction
-                    }).ToList();
-
-
-                    MenuState = SocialMenuState.objectInteraction;  // Assuming you have a separate menu state for WorldObjects
-                    if (_currentMenuOptions != null)
-                    {
-                        OpenInteractionMenu(_currentMenuOptions, "Object Interactions", _player.transform, _selectedWorldObject.transform, null);
-
-                    }
-
-                }
-            }
-
-        }
-
-
-
-
-
-    }
-
-    private void OpenInteractionMenu(List<MenuOption> options, string title, Transform subject, Transform target, Character personWeAreSpeakingTo)
-    {
-        EventManager.TriggerSwitchCameraToInteractionMode(subject, target);
-        _interactionMenu.ShowMenu(options, title, personWeAreSpeakingTo);
-    }
-
-    public bool NotInteractingWithMenu()
-    {
-
-
-        if (!_leftClick && _personWeAreSpeakingTo != null)
-            return false;
-        if (_justOpenedPieMenu)
-        { _justOpenedPieMenu = false; return false; }
-        if (isMouseOverUI)
-            return false;
-
-
-        if (GameManager.Instance.BlockingPlayerUIOnScreen)
-        {
-            _interactionMenu.HideMenu();
-            return false;
-        }
-
-        return true;
-
-
-
-
-
-
-    }
 }
+

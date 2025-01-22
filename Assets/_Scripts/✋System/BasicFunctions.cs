@@ -42,7 +42,8 @@ public enum LogType : short
     basic,
     memory,
     thinking,
-    social
+    social,
+    dia
 }
 
 public static class BasicFunctions
@@ -60,7 +61,7 @@ public static class BasicFunctions
     private static Dictionary<LogType, bool> LogTypesOn = new Dictionary<LogType, bool>()
     {
         { LogType.alarms,           BinaryBool(0)},
-        { LogType.test,           BinaryBool(1)},
+        { LogType.test,           BinaryBool(0)},
         { LogType.nearest,          BinaryBool(0)},
         { LogType.action,           BinaryBool(0)},
         { LogType.timedFunction,    BinaryBool(0)},
@@ -68,14 +69,15 @@ public static class BasicFunctions
         { LogType.game,             BinaryBool(0)},
         { LogType.file,             BinaryBool(0)},
         { LogType.error,            BinaryBool(1)},
-        { LogType.ui,               BinaryBool(1)},
+        { LogType.ui,               BinaryBool(0)},
         { LogType.player,           BinaryBool(0)},
         { LogType.step,             BinaryBool(0)},
         { LogType.weird,            BinaryBool(0)},
         { LogType.memory,           BinaryBool(0)},
         { LogType.basic,             BinaryBool(0)},
         { LogType.thinking,            BinaryBool(0)},
-        { LogType.social,            BinaryBool(1)}
+        { LogType.dia,            BinaryBool(1)},
+        { LogType.social,            BinaryBool(0)}
     };
 
 
