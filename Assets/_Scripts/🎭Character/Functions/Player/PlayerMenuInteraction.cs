@@ -512,7 +512,18 @@ public class PlayerMenuInteraction : MonoBehaviour
                 switch (pathChosen)
                 {
                     case SocialMenuPath.shareVisualStatusOfThisPerson:
+                        MenuState = SocialMenuState.tellAboutPerson;
+                        List<MemoryTags> statuses = _player.VisualStatusKnowledge.GetVisualStatus(_player, _knower);
 
+                        // Build a list of menu options from the player's MemoryTags
+                        newOptions = statuses.Select(tag =>
+                        {
+                            // Convert the MemoryTag to a displayable label
+                            string labelText = tag.ToString(); // You can customize this based on how you want the tags displayed
+
+                            // Return the menu option with the tag stored as Data
+                            return Option(labelText, tag, null);
+                        }).ToList();
                         break;
 
                     case SocialMenuPath.askGossip:
