@@ -7,7 +7,8 @@ public enum DiaActionType : short
 {
     none,
     menu,
-    hangout
+    menu_askAbout,
+    action_hangout
 }
 
 public enum DiaOptionType
@@ -81,9 +82,11 @@ public static class DiaReader
 
         var chosenOption = currentOptions[optionIndex];
         currentLine = chosenOption.LineNumber;
+        actionFromChosenOption = chosenOption.Action;
 
-        BasicFunctions.Log($"✅ CHOSE: {chosenOption.Label}", LogType.dia);
+        BasicFunctions.Log($"✅ CHOSE: {chosenOption.Label} ACTIVATE: {actionFromChosenOption}", LogType.dia);
         Next(false, false, chosenOption);
+
 
         return actionFromChosenOption;
     }
@@ -134,22 +137,25 @@ public static class DiaReader
         for (int i = currentLine; i < allLines.Count; i++)
         {
             string line = allLines[i];
-
-            // Check if the line contains quotes
-            int firstQuote = line.IndexOf('"');
-            int secondQuote = line.IndexOf('"', firstQuote + 1);
-
-            if (firstQuote != -1 && secondQuote != -1)
+            if (allTabs[i] == currentTab)
             {
-                // Extract the text between the quotes
-                currentDialogue = line.Substring(firstQuote + 1, secondQuote - firstQuote - 1);
+                // Check if the line contains quotes
+                int firstQuote = line.IndexOf('"');
+                int secondQuote = line.IndexOf('"', firstQuote + 1);
 
-                // Update currentLine to the next line for future searches
-                currentLine = i + 1;
-                currentTab = allTabs[i];
+                if (firstQuote != -1 && secondQuote != -1)
+                {
+                    // Extract the text between the quotes
+                    currentDialogue = line.Substring(firstQuote + 1, secondQuote - firstQuote - 1);
 
-                return; // Exit the method once the dialogue is found
+                    // Update currentLine to the next line for future searches
+                    currentLine = i + 1;
+                    currentTab = allTabs[i];
+
+                    return; // Exit the method once the dialogue is found
+                }
             }
+
         }
 
         // If no dialogue is found, set currentDialogue to an empty string
@@ -218,15 +224,15 @@ public static class DiaReader
         }
 
         // Iterate through all lines starting from the currentLine
-        for (int i = currentLine; i < allLines.Count; i++)
+        for (int i = currentLine; i < allLines.Count; i++) 
         {
             string line = allLines[i].Trim();
 
-            if (allTabs[i] < currentTab)
+            if (allTabs[i] < currentTab || line.StartsWith("=="))
             {
-                break;
+                i = allLines.Count;
             }
-
+            else
             // Check if the line starts with '>', '-', or '+'
             if (allTabs[i] == currentTab)
             {
@@ -241,8 +247,21 @@ public static class DiaReader
                     // Extract the label (everything after the symbol)
                     string label = line.Substring(1).Trim();
 
+                    // Check for an action in square brackets
+                    DiaActionType actionType = DiaActionType.none;
+                    string labelWithoutAction = label;
+                    int actionStart = label.IndexOf('[');
+                    int actionEnd = label.IndexOf(']');
+
+                    if (actionStart >= 0 && actionEnd > actionStart)
+                    {
+                        string actionString = label.Substring(actionStart + 1, actionEnd - actionStart - 1).Trim();
+                        actionType = GetActionFromString(actionString);
+                        labelWithoutAction = label.Substring(0, actionStart).Trim();
+                    }
+
                     // Create a new DiaOption object
-                    DiaOption newOption = new(i, label, optionType, DiaActionType.none, currentOptions.Count, allTabs[i]);
+                    DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, currentOptions.Count, allTabs[i]);
 
                     // Add the new option to the current options list
                     currentOptions.Add(newOption);
@@ -264,6 +283,27 @@ public static class DiaReader
             return 0;
         });
     }
+    private static DiaActionType GetActionFromString(string theString)
+    {
+        if (string.IsNullOrWhiteSpace(theString))
+            return DiaActionType.none;
+
+        // Normalize spacing and case
+        theString = theString.ToLowerInvariant().Replace(" ", "");
+
+        if (theString == "menu")
+            return DiaActionType.menu;
+
+        if (theString.StartsWith("menu:") && theString.Contains("askabout"))
+            return DiaActionType.menu_askAbout;
+
+        if (theString.StartsWith("action:") && theString.Contains("hangout"))
+            return DiaActionType.action_hangout;
+
+        return DiaActionType.none;
+    }
+
+
 
 
 
@@ -295,6 +335,8 @@ public static class DiaReader
 
                 // Update currentLine to the next line for future searches
                 currentLine = i + 1;
+                currentTab = allTabs[i]+1;
+                           
                 return;
             }
         }
