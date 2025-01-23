@@ -1,6 +1,17 @@
 ==start==
 	"greetings do you want to come in?"
 	>yes
-		"wondeful"
+		"wondeful, want some coffee"
+		>id love some coffee
+			"here is your coffee"
+			<2>
+		>no thanks
+			"no coffee then"
+			<2>
 	>no
 		"suit yourself"
+		<2>
+		
+==2==
+	"so now what do you want to do?"
+		

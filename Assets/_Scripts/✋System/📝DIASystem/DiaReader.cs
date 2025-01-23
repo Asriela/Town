@@ -12,6 +12,7 @@ public enum DiaActionType : short
 
 public enum DiaOptionType
 {
+    none,
     permanent,
     subtract,
     clear
@@ -21,16 +22,22 @@ public class DiaOption
 {
     public int LineNumber { get; }
     public string Label { get; }
+
+    public int Index { get; }
+
+    public int TabLevel { get; }
     public DiaActionType Action { get; }
 
     public DiaOptionType OptionType { get; }
 
-    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action)
+    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action, int index, int tabLevel)
     {
         LineNumber = lineNumber;
         Label = label;
         Action = action;
         OptionType = optionType;
+        Index = index;
+        TabLevel = tabLevel;
     }
 }
 
@@ -39,11 +46,12 @@ public static class DiaReader
 {
     private static string currentFileText = "";
     private static List<string> allLines = new();
+    private static List<int> allTabs = new();
     private static string currentSection = "";
     private static string currentDialogue = "";
-    private static int currentIndent = 1;
+    private static int currentTab = 1;
     private static int currentLine = 0;
-    private static List<DiaOption> currentOptions= new();
+    private static List<DiaOption> currentOptions = new();
 
 
 
@@ -51,7 +59,7 @@ public static class DiaReader
     {
         SetCurrentDialogueFile(filename);
         FindNextSection();
-        Next(true);
+        Next(true, false, null);
     }
 
 
@@ -62,34 +70,61 @@ public static class DiaReader
         var chosenOption = FindOptionInCurrentOptions(chosenOptionLabel);
         currentLine = chosenOption.LineNumber;
 
-        Next(false);
+        Next(false, false, chosenOption);
 
         return actionFromChosenOption;
     }
 
+    public static DiaActionType? ChooseOption(int optionIndex)
+    {
+        DiaActionType? actionFromChosenOption = null;
 
+        var chosenOption = currentOptions[optionIndex];
+        currentLine = chosenOption.LineNumber;
 
-    public static void Next(bool firstNext)
+        BasicFunctions.Log($"✅ CHOSE: {chosenOption.Label}", LogType.dia);
+        Next(false, false, chosenOption);
+
+        return actionFromChosenOption;
+    }
+
+    public static void Next(bool firstNext, bool gotoDifferentSection, DiaOption lastOption)
     {
         //indent
-        if (!firstNext)
+        if (!firstNext && !gotoDifferentSection)
         {
-            currentIndent++;
+            currentTab = lastOption.TabLevel + 1;
+            currentLine = lastOption.LineNumber;
         }
 
 
         //find the next dialogue at indent
         FindNextDialogue();
-
-        //find the next options at the indent
-        FindNextOptions();
-        BasicFunctions.Log($"new section is: {currentSection}", LogType.dia);
-
-        BasicFunctions.Log($"new dialogue is: {currentDialogue}", LogType.dia);
-
-        foreach (var option in currentOptions)
+        if (FindGotoNextSection(out string sectionToFind))
         {
-            BasicFunctions.Log($"new option is: {option.Label}", LogType.dia);
+            BasicFunctions.Log($"🗨: {currentDialogue}", LogType.dia);
+            BasicFunctions.Log($"⭐: LOOKING FOR NEW SECTION: {sectionToFind}", LogType.dia);
+            if (FindSpecificSection(sectionToFind))
+            {
+                Next(false, true, null);
+                BasicFunctions.Log($"⭐: FOUND NEW SECTION: {sectionToFind}", LogType.dia);
+            }
+
+        }
+        else
+        {
+            FindNextOptions(lastOption);
+
+
+            BasicFunctions.Log($"======NEXT=====", LogType.dia);
+            BasicFunctions.Log($"⛔: {currentSection}", LogType.dia);
+
+            BasicFunctions.Log($"🗨: {currentDialogue}", LogType.dia);
+
+            foreach (var option in currentOptions)
+            {
+                BasicFunctions.Log($"▶: {option.Label}   [{option.OptionType}]", LogType.dia);
+            }
         }
     }
 
@@ -111,6 +146,7 @@ public static class DiaReader
 
                 // Update currentLine to the next line for future searches
                 currentLine = i + 1;
+                currentTab = allTabs[i];
 
                 return; // Exit the method once the dialogue is found
             }
@@ -120,47 +156,86 @@ public static class DiaReader
         currentDialogue = string.Empty;
     }
 
-    private static void FindNextOptions()
+    public static bool FindGotoNextSection(out string sectionToFind)
     {
-        // Clear the current options list
-        currentOptions.Clear();
+        sectionToFind = "";
+        // Start from the currentLine index
+        for (int i = currentLine; i < allLines.Count; i++)
+        {
+            string line = allLines[i];
+
+            if (allTabs[i] == currentTab)
+            {
+
+
+
+
+                // Check if the line contains quotes
+                int firstQuote = line.IndexOf('<');
+                int secondQuote = line.IndexOf('>', firstQuote + 1);
+
+                if (firstQuote != -1 && secondQuote != -1)
+                {
+                    // Extract the text between the quotes
+                    sectionToFind = line.Substring(firstQuote + 1, secondQuote - firstQuote - 1);
+
+
+                    return true; // Exit the method once the dialogue is found
+                }
+            }
+            else
+                return false;
+
+        }
+        return false;
+    }
+
+    private static void FindNextOptions(DiaOption lastOption)
+    {
+
+        if (lastOption != null)
+        {
+            // Clear the current options list
+            if (lastOption.OptionType == DiaOptionType.clear)
+            { currentOptions.Clear(); }
+
+            if (lastOption.OptionType == DiaOptionType.subtract)
+            {
+                currentOptions.RemoveAt(lastOption.Index);
+            }
+        }
+
 
         // Iterate through all lines starting from the currentLine
         for (int i = currentLine; i < allLines.Count; i++)
         {
             string line = allLines[i].Trim();
 
-            // Count the number of leading tabs
-            int indentLevel = 0;
-            while (indentLevel < line.Length && line[indentLevel] == '\t')
-            {
-                indentLevel++;
-            }
 
-            // Stop searching when we reach a line with fewer tabs than currentIndent
-            if (indentLevel < currentIndent)
+            if (allTabs[i] < currentTab)
             {
                 break;
             }
 
             // Check if the line starts with '>', '-', or '+'
-            if (line.StartsWith(">") || line.StartsWith("-") || line.StartsWith("+"))
-            {
-                // Determine the OptionType based on the symbol at the beginning of the line
-                var optionType = line.StartsWith("-") ? DiaOptionType.subtract :
-                                 line.StartsWith("+") ? DiaOptionType.permanent :
-                                 line.StartsWith(">") ? DiaOptionType.clear :
-                                 DiaOptionType.permanent;
+            if (allTabs[i] == currentTab)
+                if (line.StartsWith(">") || line.StartsWith("-") || line.StartsWith("+"))
+                {
+                    // Determine the OptionType based on the symbol at the beginning of the line
+                    var optionType = line.StartsWith("-") ? DiaOptionType.subtract :
+                                     line.StartsWith("+") ? DiaOptionType.permanent :
+                                     line.StartsWith(">") ? DiaOptionType.clear :
+                                     DiaOptionType.permanent;
 
-                // Extract the label (everything after the symbol)
-                string label = line.Substring(1).Trim();
+                    // Extract the label (everything after the symbol)
+                    string label = line.Substring(1).Trim();
 
-                // Create a new DiaOption object
-                DiaOption newOption = new(i, label, optionType, DiaActionType.none);
+                    // Create a new DiaOption object
+                    DiaOption newOption = new(i, label, optionType, DiaActionType.none, currentOptions.Count, allTabs[i]);
 
-                // Add the new option to the current options list
-                currentOptions.Add(newOption);
-            }
+                    // Add the new option to the current options list
+                    currentOptions.Add(newOption);
+                }
         }
     }
 
@@ -200,6 +275,34 @@ public static class DiaReader
         // No section found
         currentSection = string.Empty;
     }
+    private static bool FindSpecificSection(string sectionToFind)
+    {
+        currentLine = 0;
+
+        // Iterate through all lines starting from the current line
+        for (int i = currentLine; i < allLines.Count; i++)
+        {
+            string line = allLines[i];
+
+            // Check if the line contains "==" marking a section
+            if (line.Contains($"=={sectionToFind}=="))
+            {
+                currentLine = i + 1;
+                currentTab = allTabs[i];
+                currentSection = sectionToFind;
+                currentOptions.Clear();
+                return true;
+            }
+
+
+
+
+        }
+
+        // No section found
+        currentSection = string.Empty;
+        return false;
+    }
 
     private static DiaOption FindOptionInCurrentOptions(string optionLabel)
     {
@@ -219,7 +322,10 @@ public static class DiaReader
     {
         currentFileText = DiaImporter.GetDiaFileText(fileName);
         TurnFileIntoLines();
-
+        for (int i = 0; i < allLines.Count; i++)
+        {
+            BasicFunctions.Log($"{i} - {allTabs[i]} tabs - {allLines[i]}", LogType.dia);
+        }
     }
     public static void TurnFileIntoLines()
     {
@@ -231,7 +337,15 @@ public static class DiaReader
         // Split the string by line breaks and add each line to the list
         allLines.AddRange(currentFileText.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
 
+        // Ensure allTabs is initialized
+        allTabs = new List<int>();
 
+        // Count tabs in each line and add to allTabs
+        foreach (string line in allLines)
+        {
+            int tabCount = line.Count(c => c == '\t');
+            allTabs.Add(tabCount);
+        }
     }
 
 
