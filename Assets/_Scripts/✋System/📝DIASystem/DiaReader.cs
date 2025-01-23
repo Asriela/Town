@@ -42,6 +42,18 @@ public class DiaOption
     }
 }
 
+public class DiaPackage
+{
+    public string Dialogue { get; }
+    public List<DiaOption> OptionType { get; }
+
+    public DiaPackage(string dialogue, List<DiaOption> options)
+    {
+        Dialogue = dialogue;
+        OptionType = options;
+    }
+
+}
 
 public static class DiaReader
 {
@@ -56,11 +68,12 @@ public static class DiaReader
 
 
 
-    public static void OpenNewDialogue(string filename)
+
+    public static DiaPackage OpenNewDialogue(string filename)
     {
         SetCurrentDialogueFile(filename);
         FindNextSection();
-        Next(true, false, null);
+        return Next(true, false, null);
     }
 
 
@@ -91,7 +104,7 @@ public static class DiaReader
         return actionFromChosenOption;
     }
 
-    public static void Next(bool firstNext, bool gotoDifferentSection, DiaOption lastOption)
+    public static DiaPackage Next(bool firstNext, bool gotoDifferentSection, DiaOption lastOption)
     {
         //indent
         if (!firstNext && !gotoDifferentSection)
@@ -129,6 +142,10 @@ public static class DiaReader
                 BasicFunctions.Log($"▶: {option.Label}   [{option.OptionType}]", LogType.dia);
             }
         }
+
+
+        return new DiaPackage(currentDialogue, currentOptions);
+
     }
 
     public static void FindNextDialogue()
