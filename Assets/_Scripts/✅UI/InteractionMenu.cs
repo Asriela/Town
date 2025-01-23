@@ -91,12 +91,48 @@ public class InteractionMenu : MonoBehaviour
 
         if (personWeAreSpeakingTo != null)
         {
+
             // Add the portrait images
             menuContainer.Add(portraitBackImage);
             menuContainer.Add(portraitImage);
 
             // Update the portrait image with the character's name
             portraitImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>($"Sprites/portraits/portrait{personWeAreSpeakingTo.CharacterName}"));
+
+            // Create a separate container for the name button (this will not affect the menu options layout)
+            VisualElement nameButtonContainer = new VisualElement();
+            nameButtonContainer.style.position = Position.Absolute;
+            nameButtonContainer.style.top = new Length(110, LengthUnit.Pixel); // Position below the portrait
+            nameButtonContainer.style.left = new Length(-70, LengthUnit.Pixel); // Align to the left margin
+            nameButtonContainer.style.width = new Length(180, LengthUnit.Pixel);
+
+            // Add a button below the portrait image with the character's name
+            Button nameButton = new Button();
+            Label nameLabel = new Label(personWeAreSpeakingTo.CharacterName.ToString())
+            {
+                style =
+        {
+            color = Color.white,
+            unityTextAlign = TextAnchor.MiddleCenter,
+            fontSize = 14
+        }
+            };
+            nameButton.Add(nameLabel);
+
+            nameButton.style.marginTop = new Length(10, LengthUnit.Pixel); // Adjust this margin if necessary
+            nameButton.style.backgroundColor = new StyleColor(Color.clear);  // Transparent background
+            nameButton.focusable = false;  // Prevent focus
+
+            nameButton.AddToClassList("button");
+
+            // Override click event to do nothing
+            nameButton.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
+
+            // Add the name button to the container
+            nameButtonContainer.Add(nameButton);
+
+            // Add the container for the name button to the menu (it won't affect the other button layout)
+            menuContainer.Add(nameButtonContainer);
         }
 
         // Add the pastDialogue as the first button
