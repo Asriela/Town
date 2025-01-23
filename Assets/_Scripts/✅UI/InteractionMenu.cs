@@ -14,7 +14,7 @@ public class InteractionMenu : MonoBehaviour
     private VisualElement portraitImage;
 
     [SerializeField]
-    private float buttonLeftMargin = -230;
+    private float buttonLeftMargin = 230;
     [SerializeField]
     private float buttonWidth = 280;
 
@@ -37,6 +37,7 @@ public class InteractionMenu : MonoBehaviour
             menuContainer.style.position = Position.Absolute;
             menuContainer.style.width = new Length(240, LengthUnit.Pixel);
             menuContainer.style.display = DisplayStyle.None;
+            menuContainer.style.left = new Length(650, LengthUnit.Pixel);
 
             // Add the background image as a child of the menu container
             backgroundImage = new VisualElement();
@@ -78,33 +79,28 @@ public class InteractionMenu : MonoBehaviour
     }
 
 
-    private void ApplyButtonStyle(Button button)
-    {
-        button.style.left = new Length(buttonLeftMargin, LengthUnit.Pixel);
-        button.style.marginTop = new Length(buttonSpacing, LengthUnit.Pixel);
-        button.style.width = new Length(buttonWidth, LengthUnit.Pixel);
-        button.style.alignSelf = Align.FlexStart;
-        button.AddToClassList("button");
-        button.style.backgroundColor = new StyleColor(Color.clear);
-        button.focusable = false;
-        button.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
-    }
-
     public void ShowMenu(string lastChosenOption, string currentDialogue, List<MenuOption> diaButtons, string contextTitle, List<MenuOption> menuButtons, Character personWeAreSpeakingTo)
     {
         GameManager.Instance.BlockingPlayerUIOnScreen = true;
         menuContainer.Clear();
 
+        var myRed = new Color(0.768f, 0.251f, 0.075f);
+
+        // Add the background image first
         menuContainer.Add(backgroundImage);
 
         if (personWeAreSpeakingTo != null)
         {
+            // Add the portrait images
             menuContainer.Add(portraitBackImage);
             menuContainer.Add(portraitImage);
+
+            // Update the portrait image with the character's name
             portraitImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>($"Sprites/portraits/portrait{personWeAreSpeakingTo.CharacterName}"));
         }
 
-        pastDialogue += $"{lastChosenOption}\n{currentDialogue}\n";
+        // Add the pastDialogue as the first button
+        pastDialogue += $"{lastChosenOption}\n{currentDialogue}\n";  // Combine the last chosen option and current dialogue
         Button pastDialogueButton = new Button();
         Label pastDialogueLabel = new Label(pastDialogue)
         {
@@ -116,9 +112,16 @@ public class InteractionMenu : MonoBehaviour
         }
         };
         pastDialogueButton.Add(pastDialogueLabel);
-        ApplyButtonStyle(pastDialogueButton);
+        pastDialogueButton.style.left = new Length(buttonLeftMargin, LengthUnit.Pixel);
+        pastDialogueButton.style.marginTop = new Length(buttonSpacing, LengthUnit.Pixel);
+        pastDialogueButton.style.width = new Length(buttonWidth, LengthUnit.Pixel);
+        pastDialogueButton.AddToClassList("button"); // Add the same class for consistent styling
+        pastDialogueButton.style.backgroundColor = new StyleColor(Color.clear); // Remove button background
+        pastDialogueButton.focusable = false; // Prevent focus
+        pastDialogueButton.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
         menuContainer.Add(pastDialogueButton);
 
+        // Add the diaButtons options
         if (diaButtons != null)
         {
             foreach (var diaButton in diaButtons)
@@ -128,6 +131,8 @@ public class InteractionMenu : MonoBehaviour
             }
         }
 
+
+        // Continue with the context button (if any)
         if (!string.IsNullOrEmpty(contextTitle))
         {
             Button contextButton = new Button();
@@ -140,11 +145,19 @@ public class InteractionMenu : MonoBehaviour
                 fontSize = 12
             }
             };
+
             contextButton.Add(contextLabel);
-            ApplyButtonStyle(contextButton);
+            contextButton.style.marginLeft = new Length(buttonLeftMargin, LengthUnit.Pixel);
+            contextButton.style.marginTop = new Length(buttonSpacing, LengthUnit.Pixel);
+            contextButton.style.width = new Length(buttonWidth, LengthUnit.Pixel);
+            contextButton.AddToClassList("button"); // Add the same class for consistent styling
+            contextButton.style.backgroundColor = new StyleColor(Color.clear); // Remove button background
+            contextButton.focusable = false; // Prevent focus
+            contextButton.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
             menuContainer.Add(contextButton);
         }
 
+        // Arrange the menu buttons
         if (menuButtons != null)
         {
             foreach (var menuButton in menuButtons)
@@ -154,8 +167,12 @@ public class InteractionMenu : MonoBehaviour
             }
         }
 
+
+        // Display the menu
         menuContainer.style.display = DisplayStyle.Flex;
     }
+
+
 
     private Button CreateMenuButton(List<MenuOption> menuButtons, MenuOption menuOption)
     {
@@ -170,13 +187,20 @@ public class InteractionMenu : MonoBehaviour
         }
         };
         button.Add(label);
-        ApplyButtonStyle(button);
+        button.style.marginLeft = new Length(buttonLeftMargin, LengthUnit.Pixel);
+        button.style.marginTop = new Length(buttonSpacing, LengthUnit.Pixel);
+        button.style.width = new Length(buttonWidth, LengthUnit.Pixel);
+        button.AddToClassList("button");
 
+        // Track the button's index using the menuOptions list index
         int buttonIndex = (int)menuOption.Data1;
+
         button.clicked += () =>
         {
-            BasicFunctions.Log($"\ud83c\udf0e Button clicked: {menuOption.ButtonLabel}", LogType.ui);
+            BasicFunctions.Log($"🌎 Button clicked: {menuOption.ButtonLabel}", LogType.ui);
             GameManager.Instance.UIClicked = true;
+
+            // Now call the event with the index from the list
             OnButtonClicked?.Invoke(buttonIndex, menuOption.ButtonLabel, menuOption.menuOptionType);
             StartCoroutine(CheckForInputAfterDelay());
         };
