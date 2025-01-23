@@ -382,10 +382,6 @@ dotnet_naming_style.camelcase.required_suffix =
 dotnet_naming_style.camelcase.word_separator = 
 dotnet_naming_style.camelcase.capitalization = camel_case
 
-dotnet_naming_style.camelcasewith_.required_prefix = _
-dotnet_naming_style.camelcasewith_.required_suffix = 
-dotnet_naming_style.camelcasewith_.word_separator = 
-dotnet_naming_style.camelcasewith_.capitalization = camel_case
 
 dotnet_naming_style.pascalcase.required_prefix = 
 dotnet_naming_style.pascalcase.required_suffix = 

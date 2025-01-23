@@ -1,5 +1,6 @@
-"greetings do you want to come in?"
->yes
-	"wondeful"
->no
-	"suit yourself"
+==start==
+	"greetings do you want to come in?"
+	>yes
+		"wondeful"
+	>no
+		"suit yourself"
