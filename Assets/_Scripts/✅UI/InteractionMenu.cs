@@ -78,13 +78,19 @@ public class InteractionMenu : MonoBehaviour
         }
     }
 
-
+    private string StripColorTags(string input)
+    {
+        return System.Text.RegularExpressions.Regex.Replace(input, "<color[^>]*?>|</color>", string.Empty);
+    }
     public void ShowMenu(string lastChosenOption, string currentDialogue, List<MenuOption> diaButtons, string contextTitle, List<MenuOption> menuButtons, Character personWeAreSpeakingTo)
     {
+
         GameManager.Instance.BlockingPlayerUIOnScreen = true;
         menuContainer.Clear();
 
         var myRed = new Color(0.768f, 0.251f, 0.075f);
+        var myGrey = new Color(0.478f, 0.494f, 0.518f);
+
 
         // Add the background image first
         menuContainer.Add(backgroundImage);
@@ -111,11 +117,12 @@ public class InteractionMenu : MonoBehaviour
             Label nameLabel = new Label(personWeAreSpeakingTo.CharacterName.ToString())
             {
                 style =
-        {
-            color = Color.white,
-            unityTextAlign = TextAnchor.MiddleCenter,
-            fontSize = 14
-        }
+                {
+                    color = Color.white,
+                    unityTextAlign = TextAnchor.MiddleCenter,
+                    fontSize = 14,
+
+                }
             };
             nameButton.Add(nameLabel);
 
@@ -134,37 +141,137 @@ public class InteractionMenu : MonoBehaviour
             // Add the container for the name button to the menu (it won't affect the other button layout)
             menuContainer.Add(nameButtonContainer);
         }
+        //////DIALOGUE
+        string strippedPastDialogue = StripColorTags(pastDialogue);
+        var speakerName = personWeAreSpeakingTo.CharacterName.ToString().ToUpper();
+        pastDialogue = $"<color=#8F887E>" +
+                  $"{strippedPastDialogue}";
 
-        // Add the pastDialogue as the first button
-        pastDialogue += $"{lastChosenOption}\n{currentDialogue}\n";  // Combine the last chosen option and current dialogue
-        Button pastDialogueButton = new Button();
-        Label pastDialogueLabel = new Label(pastDialogue)
+        // Conditionally add "YOU-{lastChosenOption}" if it's not an empty string
+        if (!string.IsNullOrEmpty(lastChosenOption))
+        {
+            pastDialogue += @$"<color=#82848A>YOU-""{lastChosenOption}""</color>" + "\n\n";
+        }
+
+        // Add the speaker and current dialogue in white
+        pastDialogue += @$"<color=#FFFFFF>{speakerName}-""{currentDialogue}""</color>" +
+                        "</color>" + "\n\n"; // End the grey color tag for the whole block
+
+
+        // Create the button and add the label
+        Button dialogueButton = new Button();
+
+        // Add a label to the button
+        Label dialogueLabel = new Label(pastDialogue)
         {
             style =
-        {
-            color = Color.white,
-            unityTextAlign = TextAnchor.MiddleLeft,
-            fontSize = 12
-        }
+    {
+        color = Color.white,  // Default color, will be overridden by rich text
+        unityTextAlign = TextAnchor.MiddleLeft,
+        fontSize = 16,
+                        whiteSpace = WhiteSpace.Normal, // Allow text wrapping within the label
+                overflow = Overflow.Hidden,
+                
+    }
         };
-        pastDialogueButton.Add(pastDialogueLabel);
-        pastDialogueButton.style.left = new Length(buttonLeftMargin, LengthUnit.Pixel);
-        pastDialogueButton.style.marginTop = new Length(buttonSpacing, LengthUnit.Pixel);
-        pastDialogueButton.style.width = new Length(buttonWidth, LengthUnit.Pixel);
-        pastDialogueButton.AddToClassList("button"); // Add the same class for consistent styling
-        pastDialogueButton.style.backgroundColor = new StyleColor(Color.clear); // Remove button background
-        pastDialogueButton.focusable = false; // Prevent focus
-        pastDialogueButton.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
-        menuContainer.Add(pastDialogueButton);
+
+        dialogueButton.Add(dialogueLabel);
+
+        // Apply button styling to mimic other buttons
+        dialogueButton.style.marginLeft = new Length(130 + 120+60-19-9, LengthUnit.Pixel);
+        dialogueButton.style.marginTop = new Length(20, LengthUnit.Pixel);
+        dialogueButton.style.marginBottom = new Length(10, LengthUnit.Pixel);
+        dialogueButton.style.width = new Length(340, LengthUnit.Pixel);
+        dialogueButton.style.alignSelf = Align.Center;
+        dialogueButton.style.flexDirection = FlexDirection.Row;
+
+        dialogueButton.style.backgroundColor = new StyleColor(Color.clear);  // Remove button background
+        dialogueButton.focusable = false;  // Prevent focus
+
+        dialogueButton.AddToClassList("button");
+
+        // Override click event to do nothing
+        dialogueButton.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
+
+        menuContainer.Add(dialogueButton);
+
+
+        ///DIALOGUE
+
 
         // Add the diaButtons options
         if (diaButtons != null)
         {
-            foreach (var diaButton in diaButtons)
+            var buttonCount = diaButtons.Count;
+            // Arrange buttons vertically
+            for (int i = 0; i < buttonCount; i++)
             {
-                Button button = CreateMenuButton(menuButtons, diaButton);
+                string label = diaButtons[i].ButtonLabel;
+                Button button = new Button();
+
+                // Create a container label with different styling
+                Label numberLabel = new Label($"{i + 1}.")
+                {
+                    style =
+            {
+                color = Color.white,
+                unityTextAlign = TextAnchor.MiddleLeft,
+                fontSize = 16,
+                alignSelf = Align.FlexStart  // Align to the top of the button
+            }
+                };
+
+                Label textLabel = new Label(label)
+                {
+                    style =
+            {
+                color = myRed,
+                unityTextAlign = TextAnchor.MiddleLeft,
+                fontSize = 16,
+                whiteSpace = WhiteSpace.Normal, // Allow text wrapping within the label
+                overflow = Overflow.Hidden, // Prevent text from overflowing horizontally
+                alignSelf = Align.FlexStart, // Align to the top of the button
+                 unityFontStyleAndWeight = FontStyle.Bold
+            }
+                };
+
+                // Add labels to the button
+                button.Add(numberLabel);
+                button.Add(textLabel);
+
+                // Reduced marginTop for closer buttons
+                button.style.marginLeft = new Length(buttonLeftMargin-30+6+8, LengthUnit.Pixel); // Example left margin
+                button.style.marginTop = new Length(-20, LengthUnit.Pixel); // Adjusted margin for closer buttons
+                button.style.width = new Length(buttonWidth, LengthUnit.Pixel); // Fixed width for button
+                button.style.alignSelf = Align.Center;
+                button.style.flexDirection = FlexDirection.Row; // Ensure elements are side by side
+
+                button.AddToClassList("button");
+
+                // Button click handler
+                int index = i;
+                button.clicked += () =>
+                {
+                    BasicFunctions.Log($"🌎Button clicked: {label}", LogType.ui);
+                    GameManager.Instance.UIClicked = true;
+                    OnButtonClicked?.Invoke(index, label, MenuOptionType.dia);
+                    StartCoroutine(CheckForInputAfterDelay());
+                };
+
+                // Add button to the container
                 menuContainer.Add(button);
             }
+
+            // Move the menu up by the height (400px) and right by the width (240px)
+            menuContainer.style.left = new Length((1600 + 100) / 2 - 150, LengthUnit.Pixel); // Move right by 240px
+            menuContainer.style.top = new Length((900 + 200) / 2 - 500, LengthUnit.Pixel); // Move up by 400px
+            menuContainer.style.flexDirection = FlexDirection.Column;
+            menuContainer.style.alignItems = Align.FlexStart;
+            menuContainer.style.justifyContent = Justify.FlexStart;
+
+            // Display the menu
+            menuContainer.style.display = DisplayStyle.Flex;
+
         }
 
 
@@ -172,24 +279,35 @@ public class InteractionMenu : MonoBehaviour
         if (!string.IsNullOrEmpty(contextTitle))
         {
             Button contextButton = new Button();
+
+            // Add a label to the button
             Label contextLabel = new Label(contextTitle)
             {
                 style =
             {
                 color = Color.white,
                 unityTextAlign = TextAnchor.MiddleLeft,
-                fontSize = 12
+                fontSize = 16
             }
             };
 
             contextButton.Add(contextLabel);
-            contextButton.style.marginLeft = new Length(buttonLeftMargin, LengthUnit.Pixel);
-            contextButton.style.marginTop = new Length(buttonSpacing, LengthUnit.Pixel);
-            contextButton.style.width = new Length(buttonWidth, LengthUnit.Pixel);
-            contextButton.AddToClassList("button"); // Add the same class for consistent styling
-            contextButton.style.backgroundColor = new StyleColor(Color.clear); // Remove button background
-            contextButton.focusable = false; // Prevent focus
+
+            // Apply button styling to mimic other buttons
+            contextButton.style.marginLeft = new Length(130 + 120, LengthUnit.Pixel);
+            contextButton.style.marginTop = new Length(20, LengthUnit.Pixel);
+            contextButton.style.marginBottom = new Length(10, LengthUnit.Pixel);
+            contextButton.style.width = new Length(300, LengthUnit.Pixel);
+            contextButton.style.alignSelf = Align.Center;
+            contextButton.style.flexDirection = FlexDirection.Row;
+            contextButton.style.backgroundColor = new StyleColor(Color.clear);  // Remove button background
+            contextButton.focusable = false;  // Prevent focus
+
+            contextButton.AddToClassList("button");
+
+            // Override click event to do nothing
             contextButton.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
+
             menuContainer.Add(contextButton);
         }
 
@@ -219,7 +337,7 @@ public class InteractionMenu : MonoBehaviour
         {
             color = Color.white,
             unityTextAlign = TextAnchor.MiddleLeft,
-            fontSize = 12
+            fontSize = 16
         }
         };
         button.Add(label);
@@ -240,6 +358,8 @@ public class InteractionMenu : MonoBehaviour
             OnButtonClicked?.Invoke(buttonIndex, menuOption.ButtonLabel, menuOption.menuOptionType);
             StartCoroutine(CheckForInputAfterDelay());
         };
+
+
 
         return button;
     }
