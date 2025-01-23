@@ -24,7 +24,7 @@ public class DiaOption
     public int LineNumber { get; }
     public string Label { get; }
 
-    public int Index { get; }
+    public int Index { get; set; }
 
     public int TabLevel { get; }
     public DiaActionType Action { get; }
@@ -119,13 +119,14 @@ public static class DiaReader
         }
         else
         {
-            FindNextOptions(lastOption);
-
-
             BasicFunctions.Log($"======NEXT=====", LogType.dia);
             BasicFunctions.Log($"⛔: {currentSection}", LogType.dia);
 
             BasicFunctions.Log($"🗨: {currentDialogue}", LogType.dia);
+            FindNextOptions(lastOption);
+
+
+
 
             foreach (var option in currentOptions)
             {
@@ -166,7 +167,7 @@ public static class DiaReader
         }
 
         // If no dialogue is found, set currentDialogue to an empty string
-        currentDialogue = string.Empty;
+
     }
 
     public static bool FindGotoNextSection(out string sectionToFind)
@@ -289,6 +290,11 @@ public static class DiaReader
             }
             return 0;
         });
+
+        for (int i = 0; i < currentOptions.Count; i++)
+        {
+            currentOptions[i].Index = i;  // Set the new index position
+        }
     }
     private static DiaActionType GetActionFromString(string theString)
     {

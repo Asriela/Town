@@ -152,9 +152,9 @@ public class InteractionMenu : MonoBehaviour
         {
             pastDialogue += @$"<color=#82848A>YOU-""{lastChosenOption}""</color>" + "\n\n";
         }
-
+        
         // Add the speaker and current dialogue in white
-        pastDialogue += @$"<color=#FFFFFF>{speakerName}-""{currentDialogue}""</color>" +
+        pastDialogue += @$"<color=#FFFFFF>{speakerName}</color><color=#D5D6C8>-""{currentDialogue}""</color>" +
                         "</color>" + "\n\n"; // End the grey color tag for the whole block
 
 
@@ -225,22 +225,33 @@ public class InteractionMenu : MonoBehaviour
                 {
                     style =
             {
-                color = myRed,
+                color = myRed,  // Default color
                 unityTextAlign = TextAnchor.MiddleLeft,
                 fontSize = 16,
                 whiteSpace = WhiteSpace.Normal, // Allow text wrapping within the label
                 overflow = Overflow.Hidden, // Prevent text from overflowing horizontally
                 alignSelf = Align.FlexStart, // Align to the top of the button
-                 unityFontStyleAndWeight = FontStyle.Bold
+                unityFontStyleAndWeight = FontStyle.Bold
             }
                 };
+
+                // Register the MouseEnter and MouseLeave events to change the color on hover
+                button.RegisterCallback<MouseEnterEvent>(evt =>
+                {
+                    textLabel.style.color = Color.white;  // Change to white on hover
+                });
+
+                button.RegisterCallback<MouseLeaveEvent>(evt =>
+                {
+                    textLabel.style.color = myRed;  // Change back to the original red color when not hovered
+                });
 
                 // Add labels to the button
                 button.Add(numberLabel);
                 button.Add(textLabel);
 
                 // Reduced marginTop for closer buttons
-                button.style.marginLeft = new Length(buttonLeftMargin-30+6+8, LengthUnit.Pixel); // Example left margin
+                button.style.marginLeft = new Length(buttonLeftMargin - 30 + 6 + 8, LengthUnit.Pixel); // Example left margin
                 button.style.marginTop = new Length(-20, LengthUnit.Pixel); // Adjusted margin for closer buttons
                 button.style.width = new Length(buttonWidth, LengthUnit.Pixel); // Fixed width for button
                 button.style.alignSelf = Align.Center;
@@ -271,8 +282,8 @@ public class InteractionMenu : MonoBehaviour
 
             // Display the menu
             menuContainer.style.display = DisplayStyle.Flex;
-
         }
+
 
 
         // Continue with the context button (if any)
