@@ -17,6 +17,7 @@ public struct MenuOption
     public string ButtonLabel;
     public object Data1;
     public object Data2;
+    public MenuOptionType menuOptionType;
 
 
     public MenuOption(string buttonLabel, object data, object data2)
@@ -25,7 +26,14 @@ public struct MenuOption
         ButtonLabel = buttonLabel;
         Data1 = data;
         Data2 = data2;
+        menuOptionType = MenuOptionType.general;
     }
+}
+
+public enum MenuOptionType
+{
+    general,
+    dia
 }
 
 public enum SocialMenuPath
@@ -36,6 +44,7 @@ public enum SocialMenuPath
     shareVisualStatusOfThisPerson,
     askGossip
 }
+
 public class PlayerMenuInteraction : MonoBehaviour
 {
     public enum SocialMenuState
@@ -75,6 +84,7 @@ public class PlayerMenuInteraction : MonoBehaviour
     private string _passOnTitleText = "";
     private Character _subject = null;
     private Character _aboutWho = null;
+    private DiaPackage currentDiaPackage;
 
     public SocialMenuState MenuState { get; set; }
     private List<MenuOption> _currentMenuOptions = new List<MenuOption> { new MenuOption("NULL", null, null) };
@@ -138,7 +148,26 @@ public class PlayerMenuInteraction : MonoBehaviour
 
 
 
-    private void MenuButtonPressed(int positionInList, string buttonLabel)
+    private void MenuButtonPressed(int positionInList, string buttonLabel, MenuOptionType menuOptionType)
+    {
+        if (menuOptionType == MenuOptionType.dia)
+        {
+            HandleDiaMenuOptions(positionInList, buttonLabel);
+        }
+        else
+        { HandleGeneralMenuOptions(positionInList, buttonLabel); }
+    }
+    private void HandleDiaMenuOptions(int positionInList, string buttonLabel)
+    {
+
+        currentDiaPackage = DiaReader.ChooseOption(positionInList, out DiaActionType? diaActionToExecute);
+        var diaDialogue = currentDiaPackage.Dialogue;
+        var diaOptions = DiaMenuHelper.ConvertDiaOptionToMenuOptions(currentDiaPackage.Options);
+
+        HandleMenuDisplay(buttonLabel, diaDialogue, diaOptions, "", null);
+
+    }
+    private void HandleGeneralMenuOptions(int positionInList, string buttonLabel)
     {
         _titleText = buttonLabel;
 
@@ -165,7 +194,136 @@ public class PlayerMenuInteraction : MonoBehaviour
                 break;
         }
 
-        HandleMenuDisplay();
+        HandleMenuDisplay("", "", null, _titleText, _currentMenuOptions);
+    }
+
+
+
+    private void HandleMenuDisplay(string lastChosenOption, string currentDialogue, List<MenuOption> diaButtons, string contextTitle, List<MenuOption> menuButtons)
+    {
+        if (_currentMenuOptions == null || _currentMenuOptions.Count == 0)
+        {
+            _interactionMenu.HideMenu();
+        }
+        else
+        {
+            OpenInteractionMenu(lastChosenOption, currentDialogue, diaButtons, contextTitle, menuButtons, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
+        }
+    }
+
+    private void HandleMenuInteraction()
+    {
+        if (!_leftClick || GameManager.Instance.BlockingPlayerUIOnScreen)
+            return;
+
+        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        var hit = Physics2D.Raycast(mousePosition, Vector2.zero);
+
+        if (hit.collider != null)
+        {
+            if (HandleCharacterInteraction(hit))
+                return;
+
+            HandleObjectInteraction(hit);
+        }
+    }
+
+    private bool HandleCharacterInteraction(RaycastHit2D hit)
+    {
+        _personWeAreSpeakingTo = hit.collider.GetComponent<Character>();
+        if (_personWeAreSpeakingTo != null && _personWeAreSpeakingTo != _player)
+        {
+            _player.Movement.Stop();
+            BasicFunctions.Log("Selected player", LogType.ui);
+
+            _personWeAreSpeakingTo.Reactions.PersonWeAreSpeakingTo = _player;
+            _justOpenedPieMenu = true;
+            _screenPosition = Camera.main.WorldToScreenPoint(hit.point);
+
+
+            currentDiaPackage = DiaMenuHelper.OpenInteractionWithCharacter(_personWeAreSpeakingTo);
+            var diaDialogue = currentDiaPackage.Dialogue;
+            var diaOptions = DiaMenuHelper.ConvertDiaOptionToMenuOptions(currentDiaPackage.Options);
+
+
+            OpenInteractionMenu("", diaDialogue, diaOptions, "", null, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
+            return true;
+        }
+        return false;
+    }
+
+    private List<MenuOption> OpenGeneralMenu()
+    {
+        List<MenuOption> buttonLabels = new List<MenuOption>
+        {
+            Label("Talk about.."),
+            Label("Action"),
+            Label("Trade")
+        };
+
+        MenuState = SocialMenuState.start;
+        return buttonLabels;
+    }
+    private void HandleObjectInteraction(RaycastHit2D hit)
+    {
+        _selectedWorldObject = hit.collider.GetComponent<WorldObject>();
+        if (_selectedWorldObject != null)
+        {
+            BasicFunctions.Log("Selected world object", LogType.ui);
+
+            _justOpenedPieMenu = true;
+            _screenPosition = Camera.main.WorldToScreenPoint(hit.point);
+
+            _selectedWorldObject.ObjectActions.TryGetInteractionOptions(_player, out List<InteractionOption> worldObjectInteractionOptions);
+            if (worldObjectInteractionOptions == null || !worldObjectInteractionOptions.Any())
+                return;
+
+            _currentMenuOptions = worldObjectInteractionOptions.Select(option =>
+                new MenuOption
+                {
+                    ButtonLabel = option.Label,
+                    Data1 = option.InteractionAction
+                }).ToList();
+
+            MenuState = SocialMenuState.objectInteraction;
+            if (_currentMenuOptions != null)
+            {
+                OpenInteractionMenu("", "", null, "Object Interactions", _currentMenuOptions, _player.transform, _selectedWorldObject.transform, null);
+            }
+        }
+    }
+
+    private void OpenInteractionMenu(string lastChosenOption, string currentDialogue, List<MenuOption> diaButtons, string contextTitle, List<MenuOption> menuButtons, Transform openerOfMenu, Transform target, Character whoWeAreSpeakingTo)
+    {
+        EventManager.TriggerSwitchCameraToInteractionMode(openerOfMenu, target);
+        _interactionMenu.ShowMenu(lastChosenOption, currentDialogue, diaButtons, contextTitle, menuButtons, whoWeAreSpeakingTo);
+    }
+
+    public bool NotInteractingWithMenu()
+    {
+
+
+        if (!_leftClick && _personWeAreSpeakingTo != null)
+            return false;
+        if (_justOpenedPieMenu)
+        { _justOpenedPieMenu = false; return false; }
+        if (isMouseOverUI)
+            return false;
+
+
+        if (GameManager.Instance.BlockingPlayerUIOnScreen)
+        {
+            _interactionMenu.HideMenu();
+            return false;
+        }
+
+        return true;
+
+
+
+
+
+
     }
 
     private void SetupTradeMenu()
@@ -231,128 +389,6 @@ public class PlayerMenuInteraction : MonoBehaviour
         _currentMenuOptions = options;
     }
 
-    private void HandleMenuDisplay()
-    {
-        if (_currentMenuOptions == null || _currentMenuOptions.Count == 0)
-        {
-            _interactionMenu.HideMenu();
-        }
-        else
-        {
-            OpenInteractionMenu(_currentMenuOptions, _titleText, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
-        }
-    }
-
-
-
-
-
-    private void HandleMenuInteraction()
-    {
-        if (!_leftClick || GameManager.Instance.BlockingPlayerUIOnScreen)
-            return;
-
-        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        var hit = Physics2D.Raycast(mousePosition, Vector2.zero);
-
-        if (hit.collider != null)
-        {
-            if (HandleCharacterInteraction(hit))
-                return;
-
-            HandleObjectInteraction(hit);
-        }
-    }
-
-    private bool HandleCharacterInteraction(RaycastHit2D hit)
-    {
-        _personWeAreSpeakingTo = hit.collider.GetComponent<Character>();
-        if (_personWeAreSpeakingTo != null && _personWeAreSpeakingTo != _player)
-        {
-            _player.Movement.Stop();
-            BasicFunctions.Log("Selected player", LogType.ui);
-
-            _personWeAreSpeakingTo.Reactions.PersonWeAreSpeakingTo = _player;
-            _justOpenedPieMenu = true;
-            _screenPosition = Camera.main.WorldToScreenPoint(hit.point);
-
-
-
-            List<MenuOption> buttonLabels = new List<MenuOption>
-        {
-            Label("Talk about.."),
-            Label("Action"),
-            Label("Trade")
-        };
-
-            MenuState = SocialMenuState.start;
-            OpenInteractionMenu(buttonLabels, "Social Interactions", _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
-            return true;
-        }
-        return false;
-    }
-
-    private void HandleObjectInteraction(RaycastHit2D hit)
-    {
-        _selectedWorldObject = hit.collider.GetComponent<WorldObject>();
-        if (_selectedWorldObject != null)
-        {
-            BasicFunctions.Log("Selected world object", LogType.ui);
-
-            _justOpenedPieMenu = true;
-            _screenPosition = Camera.main.WorldToScreenPoint(hit.point);
-
-            _selectedWorldObject.ObjectActions.TryGetInteractionOptions(_player, out List<InteractionOption> worldObjectInteractionOptions);
-            if (worldObjectInteractionOptions == null || !worldObjectInteractionOptions.Any())
-                return;
-
-            _currentMenuOptions = worldObjectInteractionOptions.Select(option =>
-                new MenuOption
-                {
-                    ButtonLabel = option.Label,
-                    Data1 = option.InteractionAction
-                }).ToList();
-
-            MenuState = SocialMenuState.objectInteraction;
-            if (_currentMenuOptions != null)
-            {
-                OpenInteractionMenu(_currentMenuOptions, "Object Interactions", _player.transform, _selectedWorldObject.transform, null);
-            }
-        }
-    }
-
-    private void OpenInteractionMenu(List<MenuOption> options, string title, Transform subject, Transform target, Character personWeAreSpeakingTo)
-    {
-        EventManager.TriggerSwitchCameraToInteractionMode(subject, target);
-        _interactionMenu.ShowMenu(options, title, "option chosen" ,"new dialogue", null, personWeAreSpeakingTo);
-    }
-
-    public bool NotInteractingWithMenu()
-    {
-
-
-        if (!_leftClick && _personWeAreSpeakingTo != null)
-            return false;
-        if (_justOpenedPieMenu)
-        { _justOpenedPieMenu = false; return false; }
-        if (isMouseOverUI)
-            return false;
-
-
-        if (GameManager.Instance.BlockingPlayerUIOnScreen)
-        {
-            _interactionMenu.HideMenu();
-            return false;
-        }
-
-        return true;
-
-
-
-
-
-
-    }
 
     private List<MenuOption> ProcessComplexMenuOptions(int positionInList)
     {

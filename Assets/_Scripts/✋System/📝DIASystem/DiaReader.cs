@@ -45,12 +45,12 @@ public class DiaOption
 public class DiaPackage
 {
     public string Dialogue { get; }
-    public List<DiaOption> OptionType { get; }
+    public List<DiaOption> Options { get; }
 
     public DiaPackage(string dialogue, List<DiaOption> options)
     {
         Dialogue = dialogue;
-        OptionType = options;
+        Options = options;
     }
 
 }
@@ -77,31 +77,21 @@ public static class DiaReader
     }
 
 
-    public static DiaActionType? ChooseOption(string chosenOptionLabel)
+
+
+    public static DiaPackage ChooseOption(int optionIndex, out DiaActionType? actionFromChosenOption)
     {
-        DiaActionType? actionFromChosenOption = null;
-
-        var chosenOption = FindOptionInCurrentOptions(chosenOptionLabel);
-        currentLine = chosenOption.LineNumber;
-
-        Next(false, false, chosenOption);
-
-        return actionFromChosenOption;
-    }
-
-    public static DiaActionType? ChooseOption(int optionIndex)
-    {
-        DiaActionType? actionFromChosenOption = null;
 
         var chosenOption = currentOptions[optionIndex];
         currentLine = chosenOption.LineNumber;
         actionFromChosenOption = chosenOption.Action;
 
         BasicFunctions.Log($"✅ CHOSE: {chosenOption.Label} ACTIVATE: {actionFromChosenOption}", LogType.dia);
-        Next(false, false, chosenOption);
 
 
-        return actionFromChosenOption;
+
+        return Next(false, false, chosenOption);
+
     }
 
     public static DiaPackage Next(bool firstNext, bool gotoDifferentSection, DiaOption lastOption)
@@ -241,7 +231,7 @@ public static class DiaReader
         }
 
         // Iterate through all lines starting from the currentLine
-        for (int i = currentLine; i < allLines.Count; i++) 
+        for (int i = currentLine; i < allLines.Count; i++)
         {
             string line = allLines[i].Trim();
 
@@ -352,8 +342,8 @@ public static class DiaReader
 
                 // Update currentLine to the next line for future searches
                 currentLine = i + 1;
-                currentTab = allTabs[i]+1;
-                           
+                currentTab = allTabs[i] + 1;
+
                 return;
             }
         }

@@ -11,6 +11,7 @@
 	-what is this place? 
 		"Its a lonely town on a long road" 
 	-tell me about you.. [menu : askAbout]
+		"im the inn keeper"
 	+do something else.. [menu]
 
 	

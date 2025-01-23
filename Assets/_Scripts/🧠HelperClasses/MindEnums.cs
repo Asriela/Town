@@ -71,7 +71,7 @@ namespace Mind
     {
         none,
         player,
-        Valina,
+        Alrine,
         Zerath,
         Alex,
         Ludwar,
