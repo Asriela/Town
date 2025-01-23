@@ -192,12 +192,24 @@ public static class DiaReader
 
     private static void FindNextOptions(DiaOption lastOption)
     {
-
         if (lastOption != null)
         {
             // Clear the current options list
             if (lastOption.OptionType == DiaOptionType.clear)
-            { currentOptions.Clear(); }
+            {
+                List<DiaOption> optionsToKeep = new List<DiaOption>();
+
+                foreach (var option in currentOptions)
+                {
+                    if (option.OptionType == DiaOptionType.permanent)
+                    {
+                        optionsToKeep.Add(option);
+                    }
+                }
+
+                currentOptions.Clear();
+                currentOptions.AddRange(optionsToKeep);
+            }
 
             if (lastOption.OptionType == DiaOptionType.subtract)
             {
@@ -205,12 +217,10 @@ public static class DiaReader
             }
         }
 
-
         // Iterate through all lines starting from the currentLine
         for (int i = currentLine; i < allLines.Count; i++)
         {
             string line = allLines[i].Trim();
-
 
             if (allTabs[i] < currentTab)
             {
@@ -219,6 +229,7 @@ public static class DiaReader
 
             // Check if the line starts with '>', '-', or '+'
             if (allTabs[i] == currentTab)
+            {
                 if (line.StartsWith(">") || line.StartsWith("-") || line.StartsWith("+"))
                 {
                     // Determine the OptionType based on the symbol at the beginning of the line
@@ -236,8 +247,24 @@ public static class DiaReader
                     // Add the new option to the current options list
                     currentOptions.Add(newOption);
                 }
+            }
         }
+
+        // Sort the options so that all options with option type permanent are at the end
+        currentOptions.Sort((a, b) =>
+        {
+            if (a.OptionType == DiaOptionType.permanent && b.OptionType != DiaOptionType.permanent)
+            {
+                return 1;
+            }
+            if (a.OptionType != DiaOptionType.permanent && b.OptionType == DiaOptionType.permanent)
+            {
+                return -1;
+            }
+            return 0;
+        });
     }
+
 
 
 
