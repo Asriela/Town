@@ -104,8 +104,8 @@ public class InteractionMenu : MonoBehaviour
                     item.style.top = 240 + 90 + scrolldown2;
                 }
                 scrolldown -= 1;
-                scrolldown2 -= 2;
-
+               scrolldown2 -= 2;
+            
             }
         }
     }
@@ -117,8 +117,8 @@ public class InteractionMenu : MonoBehaviour
     public void ShowMenu(string lastChosenOption, string currentDialogue, List<MenuOption> dialogueOptions, string contextTitle, List<MenuOption> menuButtons, Character personWeAreSpeakingTo)
     {
 
-            scrolldown = 70;
-        scrolldown2 = 70;
+            scrolldown = 0;
+        scrolldown2 = 0;
             
 
         GameManager.Instance.BlockingPlayerUIOnScreen = true;
@@ -205,6 +205,7 @@ public class InteractionMenu : MonoBehaviour
                 whiteSpace = WhiteSpace.Normal,  // Allow text wrapping within the label
                 overflow = Overflow.Hidden,
                 paddingBottom = new Length(5, LengthUnit.Pixel),  // Prevent cutting off text
+                paddingTop = new Length(20, LengthUnit.Pixel),
             }
         };
         dialogue.Add(dialogueLabel);
@@ -223,7 +224,13 @@ public class InteractionMenu : MonoBehaviour
         dialogue.focusable = false;  // Prevent focus
         dialogue.style.left = 80;
         dialogue.style.top = 220;
-        dialogue.style.marginTop = 160 + 40;
+
+
+
+
+
+            dialogue.style.marginTop = 160 + 40;
+        dialogue.style.paddingTop= new Length(5, LengthUnit.Pixel);
         dialogue.AddToClassList("button");
 
         // Override click event to do nothing
@@ -298,8 +305,10 @@ public class InteractionMenu : MonoBehaviour
                 button.style.width = new Length(buttonWidth, LengthUnit.Pixel); // Fixed width for button
                 button.style.alignSelf = Align.Center;
                 button.style.flexDirection = FlexDirection.Row; // Ensure elements are side by side
-                button.style.top = 240 + 90;
-                button.AddToClassList("button");
+                button.style.top = 260 ;
+
+
+                    button.AddToClassList("button");
 
                 // Button click handler
                 int index = i;
