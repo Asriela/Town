@@ -62,7 +62,7 @@ public class WorldManager : Singleton<WorldManager>
     public float TotalHoursPassed { get; set; } = 0;
     public float TimeThatsChanged { get; set; } = 0;
 
-    public Character ThePlayer => _thePlayer;
+    public Player ThePlayer => _thePlayer;
 
     private float _lastTimeOfDay = 0;
 

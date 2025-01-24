@@ -43,10 +43,11 @@ public class Reactions : MonoBehaviour
                         newKnowledge = _npc.Memory.GetLocationsByTag(knowledgeTags).Cast<Enum>().ToList();
                         var originalTags = actionPost.KnowledgeTags;
                         SocialHelper.ShareKnowledgeAbout(_npc, sender, knower, aboutWho, Mind.KnowledgeType.location, newKnowledge, originalTags);
-                        _npc.Ui.Speak("Let me mark that on your map...");
+                        _npc.Ui.Speak(null,"Let me mark that on your map...");
                         break;
                     case Mind.KnowledgeType.person:
 
+                      
                         if (_npc.Relationships.GetRelationshipWith(_npc, sender) >= (float)ViewTowards.positive)
                         {
                             var memTag = _npc.PersonKnowledge.GetRandomKnowledge(knower, aboutWho);
@@ -54,16 +55,16 @@ public class Reactions : MonoBehaviour
 
                             SocialHelper.ShareKnowledgeAbout(_npc, sender, knower, aboutWho, Mind.KnowledgeType.person, newKnowledge, null);
                             if (memTag != null && memTag.Count > 0)
-                            { _npc.Ui.Speak(DialogueHelper.GetTellDialogue(memTag[0], _npc,knower, aboutWho, aboutWho == WorldManager.Instance.ThePlayer)); }
+                            { _npc.Ui.Speak(_npc, DialogueHelper.GetTellDialogue(memTag[0], _npc,knower, aboutWho, aboutWho == WorldManager.Instance.ThePlayer)); }
                             else
                             {
-                                _npc.Ui.Speak("Not much.");
+                                _npc.Ui.Speak(_npc, "Not much." );
                             }
                         }
                         else
                         {
 
-                            _npc.Ui.Speak("Impress me and I will tell you more..");
+                            _npc.Ui.Speak(_npc, "Impress me and I will tell you more..");
                         }
 
 
@@ -125,7 +126,7 @@ public class Reactions : MonoBehaviour
     private void HandleScriptedResponse(Character sender, Character aboutWho, Mind.MemoryTags memoryTag, ViewTowards relationship)
     {
         string dialogue = _npc.DialogueResponsesToPersonInformation.GetDialogue(aboutWho, memoryTag, relationship);
-        _npc.Ui.Speak(dialogue);
+        _npc.Ui.Speak(_npc,dialogue);
 
         // Get the response details to handle relationship impact and output tags
         var characterDialogues = _npc.DialogueResponsesToPersonInformation.PeopleDialogues[aboutWho];
@@ -174,7 +175,7 @@ public class Reactions : MonoBehaviour
                 _ => "Oh ok.."
             };
 
-            _npc.Ui.Speak(response);
+            _npc.Ui.Speak(_npc, response);
         }
     }
 }

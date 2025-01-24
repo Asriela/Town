@@ -160,13 +160,31 @@ public class UI : MonoBehaviour
             _actionLabel.text = message;
         }
     }
-    public void Speak(string message)
+    public void Speak(Character speaker, string message)
+    {
+        var inDialogueMenu= GameManager.Instance.IsInDialogueMenu(speaker);
+        if (inDialogueMenu!=null)
+        {
+            GameManager.Instance.UpdateInteractionMenu(inDialogueMenu,message);
+        }
+        else
+        {
+            _speechBubble.SetActive(true);
+            _speechBubbleLabel.text = message;
+            _lastSpokenMessage = message;
+            _speechBubbleLifeLeft = 5f;
+        }
+
+    }
+
+    public void SpeakInMenu(string message)
     {
         _speechBubble.SetActive(true);
         _speechBubbleLabel.text = message;
         _lastSpokenMessage = message;
         _speechBubbleLifeLeft = 5f;
     }
+
 
     public void EndSpeech()
     {

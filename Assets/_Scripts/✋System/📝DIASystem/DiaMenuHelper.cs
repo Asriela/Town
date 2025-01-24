@@ -17,7 +17,7 @@ public static class DiaMenuHelper
 
         foreach (var diaOption in diaOptions)
         {
-            MenuOption menuOption = new(diaOption.Label, diaOption.Index, null)
+            MenuOption menuOption = new(diaOption.Label, diaOption.Index, diaOption.Action)
             {
                 menuOptionType = MenuOptionType.dia
             };

@@ -85,7 +85,7 @@ public class Relationships : MonoBehaviour
          
          
         if (responseDialogue != "")
-        { _character.Ui.Speak(responseDialogue); }
+        { _character.Ui.Speak(_character,responseDialogue); }
 
         RecalculateMyRelationshipWithEveryone();
 
@@ -123,7 +123,7 @@ public class Relationships : MonoBehaviour
 
 
         if (responseDialogue != "")
-        { _character.Ui.Speak(responseDialogue); }
+        { _character.Ui.Speak(_character,responseDialogue); }
         RecalculateMyRelationshipWithEveryone();
 
         return effectFromInteraction;

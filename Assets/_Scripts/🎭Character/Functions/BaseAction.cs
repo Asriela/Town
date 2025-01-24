@@ -25,11 +25,11 @@ public static class BaseAction
 
         if (canGetPossession == null)
         {
-            seller.Ui.Speak($"There are no more rooms available");
+            seller.Ui.Speak(seller,$"There are no more rooms available");
         }
         else if (!ActionsHelper.FinancialTransaction(buyer, seller, price))
         {
-            seller.Ui.Speak($"That's not enough coin");
+            seller.Ui.Speak(seller, $"That's not enough coin");
         }
         else
         {
@@ -37,7 +37,7 @@ public static class BaseAction
             var boughtItem = workLocation.RemoveFromPossessions(objectType);
             buyer.Memory.AddToPossessions(objectType, boughtItem);
             boughtItem.ObjectActions.TryRenting(buyer, workLocation, 24);
-            seller.Ui.Speak($"Here is the key to your room");
+            seller.Ui.Speak(seller, $"Here is the key to your room");
 
         }
 
@@ -53,11 +53,11 @@ public static class BaseAction
 
         if (canGetPossession)
         {
-            seller.Ui.Speak($"I don't have any more");
+            seller.Ui.Speak(seller,$"I don't have any more");
         }
         else if (!ActionsHelper.FinancialTransaction(buyer, seller, price))
         {
-            seller.Ui.Speak($"That's not enough coin");
+            seller.Ui.Speak(seller,$"That's not enough coin");
         }
         else
         {
@@ -65,7 +65,7 @@ public static class BaseAction
             var boughtItem = seller.Memory.RemoveFromPossessions(objectType);
             buyer.Memory.AddToPossessions(objectType, boughtItem);
             buyer.Inventory.AddToInventory(objectType, boughtItem);
-            seller.Ui.Speak($"Good doing business with you");
+            seller.Ui.Speak(seller,$"Good doing business with you");
 
         }
 

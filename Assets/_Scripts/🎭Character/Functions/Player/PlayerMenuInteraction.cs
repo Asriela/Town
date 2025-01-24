@@ -76,6 +76,7 @@ public class PlayerMenuInteraction : MonoBehaviour
 
 
     private Character _personWeAreSpeakingTo;
+    public Character PersonWeAreSpeakingTo=> _personWeAreSpeakingTo;
     private WorldObject _selectedWorldObject;
     private bool _leftClick = false;
     private bool _justOpenedPieMenu = false;
@@ -85,6 +86,7 @@ public class PlayerMenuInteraction : MonoBehaviour
     private Character _subject = null;
     private Character _aboutWho = null;
     private DiaPackage currentDiaPackage;
+    private List<MenuOption> currentDiaOptions;
 
     public SocialMenuState MenuState { get; set; }
     private List<MenuOption> _currentMenuOptions = new List<MenuOption> { new MenuOption("NULL", null, null) };
@@ -162,9 +164,9 @@ public class PlayerMenuInteraction : MonoBehaviour
 
         currentDiaPackage = DiaReader.ChooseOption(positionInList, out DiaActionType? diaActionToExecute);
         var diaDialogue = currentDiaPackage.Dialogue;
-        var diaOptions = DiaMenuHelper.ConvertDiaOptionToMenuOptions(currentDiaPackage.Options);
+        currentDiaOptions = DiaMenuHelper.ConvertDiaOptionToMenuOptions(currentDiaPackage.Options);
 
-        HandleMenuDisplay(buttonLabel, diaDialogue, diaOptions, "", null);
+        UpdateInteractionMenu(buttonLabel, diaDialogue, currentDiaOptions, "", null);
 
     }
     private void HandleGeneralMenuOptions(int positionInList, string buttonLabel)
@@ -173,6 +175,9 @@ public class PlayerMenuInteraction : MonoBehaviour
 
         switch (buttonLabel)
         {
+            case "open menu":
+                OpenGeneralMenu();
+                break;
             case "Trade":
                 SetupTradeMenu();
                 break;
@@ -194,23 +199,37 @@ public class PlayerMenuInteraction : MonoBehaviour
                 break;
         }
 
-        HandleMenuDisplay("", "", null, _titleText, _currentMenuOptions);
+        UpdateInteractionMenu("", "", currentDiaOptions, _titleText, _currentMenuOptions);
     }
 
 
 
-    private void HandleMenuDisplay(string lastChosenOption, string currentDialogue, List<MenuOption> diaButtons, string contextTitle, List<MenuOption> menuButtons)
+    public void UpdateInteractionMenu(string lastChosenOption, string currentDialogue, List<MenuOption> diaButtons, string contextTitle, List<MenuOption> menuButtons)
     {
-        if (_currentMenuOptions == null || _currentMenuOptions.Count == 0)
-        {
-            _interactionMenu.HideMenu();
-        }
-        else
-        {
-            OpenInteractionMenu(lastChosenOption, currentDialogue, diaButtons, contextTitle, menuButtons, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
-        }
+        //if (_currentMenuOptions == null || _currentMenuOptions.Count == 0)
+      //  {
+           // _interactionMenu.HideMenu();
+      //  }
+       // else
+      //  {
+            OpenInteractionMenu(lastChosenOption, currentDialogue, _personWeAreSpeakingTo.CharacterName.ToString(), diaButtons, contextTitle, menuButtons, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
+       // }
     }
+    public void UpdateInteractionMenu(string characterSpeaking, string currentDialogue)
+    {
 
+        string newOptionLabel = "do something else..";
+
+        bool optionExists = currentDiaOptions.Any(option => option.ButtonLabel == newOptionLabel);
+
+        if (!optionExists)
+        {
+            currentDiaOptions.Add(Option(newOptionLabel, currentDiaOptions.Count - 1, DiaActionType.menu));
+        }
+
+            OpenInteractionMenu("", currentDialogue, characterSpeaking, currentDiaOptions, "", null, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
+        
+    }
     private void HandleMenuInteraction()
     {
         if (!_leftClick || GameManager.Instance.BlockingPlayerUIOnScreen)
@@ -246,13 +265,13 @@ public class PlayerMenuInteraction : MonoBehaviour
             var diaOptions = DiaMenuHelper.ConvertDiaOptionToMenuOptions(currentDiaPackage.Options);
 
 
-            OpenInteractionMenu("", diaDialogue, diaOptions, "", null, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
+            OpenInteractionMenu("",  diaDialogue, _personWeAreSpeakingTo.CharacterName.ToString(), diaOptions, "", null, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
             return true;
         }
         return false;
     }
 
-    private List<MenuOption> OpenGeneralMenu()
+    private void OpenGeneralMenu()
     {
         List<MenuOption> buttonLabels = new List<MenuOption>
         {
@@ -260,9 +279,9 @@ public class PlayerMenuInteraction : MonoBehaviour
             Label("Action"),
             Label("Trade")
         };
-
+        _titleText = "extra options";
         MenuState = SocialMenuState.start;
-        return buttonLabels;
+        _currentMenuOptions= buttonLabels;
     }
     private void HandleObjectInteraction(RaycastHit2D hit)
     {
@@ -288,15 +307,15 @@ public class PlayerMenuInteraction : MonoBehaviour
             MenuState = SocialMenuState.objectInteraction;
             if (_currentMenuOptions != null)
             {
-                OpenInteractionMenu("", "", null, "Object Interactions", _currentMenuOptions, _player.transform, _selectedWorldObject.transform, null);
+                OpenInteractionMenu("", "", "",null, "Object Interactions", _currentMenuOptions, _player.transform, _selectedWorldObject.transform, null);
             }
         }
     }
 
-    private void OpenInteractionMenu(string lastChosenOption, string currentDialogue, List<MenuOption> diaButtons, string contextTitle, List<MenuOption> menuButtons, Transform openerOfMenu, Transform target, Character whoWeAreSpeakingTo)
+    private void OpenInteractionMenu(string lastChosenOption, string currentDialogue,string currentSpeaker, List<MenuOption> diaButtons, string contextTitle, List<MenuOption> menuButtons, Transform openerOfMenu, Transform target, Character whoWeAreSpeakingTo)
     {
         EventManager.TriggerSwitchCameraToInteractionMode(openerOfMenu, target);
-        _interactionMenu.ShowMenu(lastChosenOption, currentDialogue, diaButtons, contextTitle, menuButtons, whoWeAreSpeakingTo);
+        _interactionMenu.ShowMenu(lastChosenOption, currentDialogue, currentSpeaker, diaButtons, contextTitle, menuButtons, whoWeAreSpeakingTo);
     }
 
     public bool NotInteractingWithMenu()
@@ -431,7 +450,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                     memoryTagsList = new() { memoryTag };
 
                     SocialHelper.ShareKnowledgeAbout(_player, _personWeAreSpeakingTo, _personWeAreSpeakingTo, _player, KnowledgeType.person, memoryTagsList, null);
-                    _player.Ui.Speak(DialogueHelper.GetTellDialogue(memoryTag, _player, _player, _player, true));
+                    _player.Ui.Speak(_player,DialogueHelper.GetTellDialogue(memoryTag, _player, _player, _player, true));
 
                 }
                 else
@@ -514,7 +533,7 @@ public class PlayerMenuInteraction : MonoBehaviour
 
 
                 SocialHelper.AskForKnowledgeAbout(_player, _personWeAreSpeakingTo, _subject, _aboutWho, KnowledgeType.person, null, true);
-                _player.Ui.Speak(_passOnTitleText);
+                _player.Ui.Speak(_player, _passOnTitleText);
 
 
                 //
@@ -582,7 +601,7 @@ public class PlayerMenuInteraction : MonoBehaviour
 
 
                         SocialHelper.AskForKnowledgeAbout(_player, _personWeAreSpeakingTo, _personWeAreSpeakingTo, _subject, KnowledgeType.person, null, true);
-                        _player.Ui.Speak(_passOnTitleText);
+                        _player.Ui.Speak(_player, _passOnTitleText);
                         break;
                     case "share":
                         if (subjectIsMe)
@@ -835,7 +854,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                 memoryTagsList = new() { knowledge };
 
                 SocialHelper.ShareKnowledgeAbout(_player, _personWeAreSpeakingTo, _subject, _aboutWho, KnowledgeType.person, memoryTagsList, null);
-                _player.Ui.Speak(_passOnTitleText + knowledge.ToString());
+                _player.Ui.Speak(_player, _passOnTitleText + knowledge.ToString());
 
 
                 //
@@ -851,7 +870,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                 memoryTagsList = new() { knowledge };
 
                 SocialHelper.ShareKnowledgeAbout(_player, _personWeAreSpeakingTo, _player, _subject, KnowledgeType.person, memoryTagsList, null);
-                _player.Ui.Speak(_passOnTitleText + knowledge.ToString());
+                _player.Ui.Speak(_player, _passOnTitleText + knowledge.ToString());
 
 
                 //

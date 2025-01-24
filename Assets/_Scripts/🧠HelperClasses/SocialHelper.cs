@@ -14,7 +14,7 @@ public static class SocialHelper
         ActionPost actionPost = new(knowledgeType, knowledgeTags, null);
         SocialMediator.PostAction(senderOfMessage, recieverOfMessage, knower,aboutPerson, Mind.ActionType.findKnowledge, actionPost);
         if(!hasOwnDialogue)
-        {senderOfMessage.Ui.Speak($"Do you know of a {knowledgeType} that is {string.Join(" and ", knowledgeTags)}");}
+        {senderOfMessage.Ui.Speak(senderOfMessage,$"Do you know of a {knowledgeType} that is {string.Join(" and ", knowledgeTags)}");}
 
     }
 
@@ -33,7 +33,7 @@ public static class SocialHelper
 
         var socialDialogue = senderOfMessage.Memory.SocialDialogue;
         if (socialDialogue != null)
-        { senderOfMessage.Ui.Speak(socialDialogue); }
+        { senderOfMessage.Ui.Speak(senderOfMessage,socialDialogue); }
 
         float effectFromInteraction = recieverOfMessage.Relationships.AddInteractionEffect(socialActionType, senderOfMessage);
 

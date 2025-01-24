@@ -72,7 +72,7 @@ public class Acting : MonoBehaviour
                     }
                     else
                     {
-                        _npc.Ui.Speak(CurrentBehavior.Dialogue); 
+                        _npc.Ui.Speak(_npc,CurrentBehavior.Dialogue); 
 
                     }
                 }
@@ -150,7 +150,7 @@ public class Acting : MonoBehaviour
                 {
                     var knowledge = _npc.PersonKnowledge.GetRandomKnowledge(_npc, aboutWhoCharacter);
                     SocialHelper.ShareKnowledgeAbout(_npc, bestie, bestie, aboutWhoCharacter, KnowledgeType.person, knowledge.Cast<Enum>().ToList(), null);
-                    _npc.Ui.Speak($"The traveler is a mage! How exciting!");
+                    _npc.Ui.Speak(_npc,$"The traveler is a mage! How exciting!");
                     IncrementStepInAction();
                 }
                 break;

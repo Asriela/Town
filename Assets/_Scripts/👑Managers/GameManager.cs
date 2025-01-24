@@ -14,6 +14,25 @@ public class GameManager : Singleton<GameManager>
     public bool UIClicked { get; set; }
     public bool BlockingPlayerUIOnScreen { get; set; }
 
+    public void UpdateInteractionMenu(Character characterSpeaking, string currentDialogue)
+    {
+        var characterLabel = characterSpeaking.CharacterName.ToString();
+        if(characterSpeaking==WorldManager.Instance.ThePlayer) 
+        {
+            characterLabel = "You";
+        }
+        WorldManager.Instance.ThePlayer.MenuInteraction.UpdateInteractionMenu(characterLabel, currentDialogue);
+    }
+
+    public Character IsInDialogueMenu(Character character)
+    {
+        if(character is Player || character== WorldManager.Instance.ThePlayer.MenuInteraction.PersonWeAreSpeakingTo)
+        {
+            return character;
+        }
+        return null;
+    }
+
     private void Start()
     {
         UIClicked = false;
