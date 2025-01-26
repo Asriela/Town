@@ -296,7 +296,8 @@ namespace Mind
         tree,
         rock,
         desk,
-        chair
+        chair,
+        table
 
     }
     

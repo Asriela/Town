@@ -8,7 +8,7 @@ using UnityEngine.AI;
 
 [RequireComponent(typeof(Senses))]
 
-[RequireComponent(typeof(Acting))]
+[RequireComponent(typeof(Actions))]
 
 
 
@@ -19,13 +19,13 @@ public class NPC : Character
     public Senses Senses { get; set; }
 
 
-    public Acting Acting { get; set; }
+    public Actions Acting { get; set; }
 
     private void Start()
     {
         Senses = GetComponent<Senses>();
         Senses.Initialize(this);
-        Acting = GetComponent<Acting>();
+        Acting = GetComponent<Actions>();
         Acting.Initialize(this);
         Thinking = GetComponent<Thinking>();
         Thinking.Initialize(this);

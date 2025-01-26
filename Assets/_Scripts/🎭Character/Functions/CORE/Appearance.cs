@@ -19,10 +19,12 @@ public class Appearance : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
 
     private Vector3 previousPosition;
+    private Vector3 localSpritePosition;
 
     private void Start()
     {
         _spriteRenderer = _spriteTransform.GetComponent<SpriteRenderer>();
+        localSpritePosition=_spriteRenderer.transform.localPosition;
     }
 
     private void Update()
@@ -42,7 +44,7 @@ public class Appearance : MonoBehaviour
     private void ChangeAppearanceAccordingToState()
     {
         var temp = 0;
-
+        var offset = 0f;
         var currentRotation = _spriteRenderer.transform.localRotation;
 
         switch (State)
@@ -63,14 +65,14 @@ public class Appearance : MonoBehaviour
             case AppearanceState.lyingDown:
 
                 _spriteRenderer.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 90);
-        
+                offset=0.9f;
                 break;
             case AppearanceState.standing:
 
                 _spriteRenderer.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 break;
         }
-
+        _spriteRenderer.transform.localPosition= localSpritePosition+ Vector3.right * offset;
     }
     public void SetSprite(string spriteName)
     {
@@ -97,7 +99,14 @@ public class Appearance : MonoBehaviour
 
         previousPosition = transform.position;
     }
-
+    public void FaceLeft()
+    {
+        _spriteRenderer.flipX = true;
+    }
+    public void FaceRight()
+    {
+        _spriteRenderer.flipX = false;
+    }
     public void FlipSpriteToTarget(Character subject, Character target)
     {
         // Determine the direction to the target

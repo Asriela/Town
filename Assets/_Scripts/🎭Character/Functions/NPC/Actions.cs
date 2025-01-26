@@ -6,7 +6,7 @@ using Mind;
 using System.Data.Common;
 using static UnityEngine.GraphicsBuffer;
 
-public class Acting : MonoBehaviour
+public class Actions : MonoBehaviour
 {
     private NPC _npc;
     private Dictionary<ActionType, Action<object>> _actionHandlers;
@@ -374,7 +374,7 @@ public class Acting : MonoBehaviour
                 if (objectToUse != null)
                 {
                     _npc.Ui.CurrentStepInAction = $"going to bed";
-                    if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 0.1f))
+                    if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 1f))
                     {
                         _npc.Ui.CurrentStepInAction = $"sleeping";
                         BaseAction.InteractWithObject(objectToUse, _npc, ObjectInteractionType.use);
@@ -398,8 +398,9 @@ public class Acting : MonoBehaviour
         {
             case 1:
                 var objectToUse = _npc.Memory.GetPossession(ObjectType.traderChair);
-                if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 0.2f))
+                if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 1.5f))
                 {
+                    _npc.Appearance.FaceLeft();
                     //TODO: extend trader behaviour here
                 }
 

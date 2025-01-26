@@ -346,10 +346,10 @@ public class PlayerMenuInteraction : MonoBehaviour
             return false;
 
 
-        if (GameManager.Instance.BlockingPlayerUIOnScreen )
+        if (GameManager.Instance.BlockingPlayerUIOnScreen && GameManager.Instance.CantClickOffInteractionMenu==false)
 
         {
-            _interactionMenu.HideMenu();
+            CloseInteractionMenu();
             return false;
         }
 
