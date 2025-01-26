@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Mind;
 
 public enum DiaActionType : short
 {
     none,
     menu,
     menu_askAbout,
-    action_hangout
+    action_hangout,
+    scriptedAction
 }
 
 public enum DiaOptionType
@@ -29,9 +31,11 @@ public class DiaOption
     public int TabLevel { get; }
     public DiaActionType Action { get; }
 
+    public ScriptedTaskType? ActionData { get;}
+
     public DiaOptionType OptionType { get; }
 
-    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action, int index, int tabLevel)
+    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action, ScriptedTaskType? actionData, int index, int tabLevel)
     {
         LineNumber = lineNumber;
         Label = label;
@@ -39,6 +43,7 @@ public class DiaOption
         OptionType = optionType;
         Index = index;
         TabLevel = tabLevel;
+        ActionData = actionData;
     }
 }
 
@@ -72,21 +77,31 @@ public static class DiaReader
     public static DiaPackage OpenNewDialogue(string filename)
     {
         SetCurrentDialogueFile(filename);
+        ClearAllData();
         FindNextSection();
-        return Next(true, false, null,0);
+        var ret= Next(true, false, null,0);
+        return ret;
     }
 
 
+    private static void ClearAllData() {
+        currentSection="";
+        currentDialogue="";
+        currentTab=1;
+        currentLine=0;
+        currentOptions.Clear();
+    }
 
 
-    public static DiaPackage ChooseOption(int optionIndex, out DiaActionType? actionFromChosenOption)
+    public static DiaPackage ChooseOption(int optionIndex, out DiaActionType? actionFromChosenOption, out ScriptedTaskType? actionDataFromChosenOption)
     {
 
         var chosenOption = currentOptions[optionIndex];
         currentLine = chosenOption.LineNumber;
         actionFromChosenOption = chosenOption.Action;
+        actionDataFromChosenOption = chosenOption.ActionData;
 
-        BasicFunctions.Log($"✅ CHOSE: {chosenOption.Label} ACTIVATE: {actionFromChosenOption}", LogType.dia);
+        BasicFunctions.Log($"✅ CHOSE: {chosenOption.Label} ACTIVATE: {actionFromChosenOption} data: {actionDataFromChosenOption}", LogType.dia);
 
 
 
@@ -279,15 +294,17 @@ public static class DiaReader
                     int actionStart = label.IndexOf('[');
                     int actionEnd = label.IndexOf(']');
 
+                    ScriptedTaskType? actionData=null;
                     if (actionStart >= 0 && actionEnd > actionStart)
                     {
                         string actionString = label.Substring(actionStart + 1, actionEnd - actionStart - 1).Trim();
-                        actionType = GetActionFromString(actionString);
+                        actionType = GetActionFromString(actionString, out actionData);
                         labelWithoutAction = label.Substring(0, actionStart).Trim();
                     }
+                    
 
                     // Create a new DiaOption object
-                    DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, currentOptions.Count, allTabs[i]);
+                    DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, actionData, currentOptions.Count, allTabs[i]);
 
                     // Add the new option to the current options list
                     currentOptions.Add(newOption);
@@ -314,24 +331,35 @@ public static class DiaReader
             currentOptions[i].Index = i;  // Set the new index position
         }
     }
-    private static DiaActionType GetActionFromString(string theString)
+    private static DiaActionType GetActionFromString(string theString, out ScriptedTaskType? actionData)
     {
+        var text="";
+        DiaActionType ret= DiaActionType.none;
+        actionData = ScriptedTaskType.none;
         if (string.IsNullOrWhiteSpace(theString))
-            return DiaActionType.none;
+            ret= DiaActionType.none;
 
         // Normalize spacing and case
         theString = theString.ToLowerInvariant().Replace(" ", "");
 
         if (theString == "menu")
-            return DiaActionType.menu;
+            ret= DiaActionType.menu;
 
         if (theString.StartsWith("menu:") && theString.Contains("askabout"))
-            return DiaActionType.menu_askAbout;
+            ret= DiaActionType.menu_askAbout;
 
         if (theString.StartsWith("action:") && theString.Contains("hangout"))
-            return DiaActionType.action_hangout;
+            ret= DiaActionType.action_hangout;
 
-        return DiaActionType.none;
+
+        if (theString.StartsWith("scriptedaction:"))
+        {
+            ret= DiaActionType.scriptedAction;
+            actionData = ScriptedTaskType.takePlayerToInn;
+        }
+            
+
+       return ret;
     }
 
 
@@ -438,6 +466,8 @@ public static class DiaReader
         }
 
         // Split the string by line breaks and add each line to the list
+        if (allLines != null)
+        { allLines.Clear(); }
         allLines.AddRange(currentFileText.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
 
         // Ensure allTabs is initialized

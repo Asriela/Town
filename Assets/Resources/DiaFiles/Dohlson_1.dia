@@ -17,7 +17,7 @@
 ==3==	
 	-what is this place? 
 		"Never you mind that now, lets get to the tavern" 
-	-ok I will follow your lead..[scripted action : takePlayerToInn]
+	-ok I will follow your lead.. [scriptedAction : takePlayerToInn]
 		<end>
 	
 	

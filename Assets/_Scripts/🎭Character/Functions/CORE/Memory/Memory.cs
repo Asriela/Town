@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using Mind;
 using Unity.VisualScripting;
@@ -41,7 +42,18 @@ public class Memory : MonoBehaviour
     public Character SocialTarget { get; set; }
     public string SocialDialogue { get; set; }
 
-    public Dictionary<ScriptedTaskType,ScriptedTaskProgress> ScriptedTaskProgress { get; set; }
+    public Dictionary<ScriptedTaskType,ScriptedTaskProgressType> ScriptedTaskProgress { get; set; } = new();
+
+    public ScriptedTaskProgressType GetScriptedTaskProgress(ScriptedTaskType taskType )
+    {
+        if (ScriptedTaskProgress.ContainsKey(taskType))
+        { return ScriptedTaskProgress[taskType]; }
+        else
+        { return ScriptedTaskProgressType.notActive;}
+        
+    }
+   
+
     private Dictionary<ActionType, int> _actionCount = new();
 
     public int GetActionCount(ActionType action)

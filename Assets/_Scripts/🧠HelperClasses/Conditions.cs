@@ -150,22 +150,22 @@ public static class Conditions
     }
     private static bool CheckScriptedTaskCompleted(ScriptedTaskType parameter, NPC npc, bool trueStatement)
     {
-        var value = npc.Memory.ScriptedTaskProgress[parameter];
-        if (value != null &&  value == ScriptedTaskProgress.completed)
+        var value = npc.Memory.GetScriptedTaskProgress(parameter);
+        if (value != null &&  value == ScriptedTaskProgressType.completed)
         {
-            return true;
+            return trueStatement;
         }
-        return false;
+        return !trueStatement;
     }
 
     private static bool CheckScriptedTaskActive(ScriptedTaskType parameter, NPC npc, bool trueStatement)
     {
-        var value = npc.Memory.ScriptedTaskProgress[parameter];
-        if (value!=null && value == ScriptedTaskProgress.activated)
+        var value = npc.Memory.GetScriptedTaskProgress(parameter);
+        if (value!=null && value == ScriptedTaskProgressType.activated)
         {
-            return true;
+            return trueStatement;
         }
-        return false;
+        return !trueStatement;
     }
     private static bool CheckActionDoneForDay(ActionType parameter, NPC npc, bool trueStatement)
     {

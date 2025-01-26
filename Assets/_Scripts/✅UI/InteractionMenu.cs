@@ -522,5 +522,6 @@ public class InteractionMenu : MonoBehaviour
         EventManager.TriggerSwitchCameraToNormalMode();
         GameManager.Instance.BlockingPlayerUIOnScreen = false;
         menuContainer.style.display = DisplayStyle.None;
+        pastDialogue = "";
     }
 }

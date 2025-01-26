@@ -17,6 +17,7 @@ public struct MenuOption
     public string ButtonLabel;
     public object Data1;
     public object Data2;
+    public object Data3;
     public MenuOptionType menuOptionType;
 
 
@@ -26,6 +27,7 @@ public struct MenuOption
         ButtonLabel = buttonLabel;
         Data1 = data;
         Data2 = data2;
+        Data3 = null;
         menuOptionType = MenuOptionType.general;
     }
 }
@@ -162,9 +164,11 @@ public class PlayerMenuInteraction : MonoBehaviour
     private void HandleDiaMenuOptions(int positionInList, string buttonLabel)
     {
 
-        currentDiaPackage = DiaReader.ChooseOption(positionInList, out DiaActionType? diaActionToExecute);
+        currentDiaPackage = DiaReader.ChooseOption(positionInList, out DiaActionType? diaActionToExecute, out ScriptedTaskType? diaActionData);
+        DiaMenuHelper.ExecuteAction(_player, _personWeAreSpeakingTo, diaActionToExecute, diaActionData);
         if (currentDiaPackage != null)
         {
+     
             var diaDialogue = currentDiaPackage.Dialogue;
             currentDiaOptions = DiaMenuHelper.ConvertDiaOptionToMenuOptions(currentDiaPackage.Options);
 
@@ -262,6 +266,8 @@ public class PlayerMenuInteraction : MonoBehaviour
             _personWeAreSpeakingTo.Reactions.PersonWeAreSpeakingTo = _player;
             _justOpenedPieMenu = true;
             _screenPosition = Camera.main.WorldToScreenPoint(hit.point);
+
+            _currentMenuOptions.Clear();
 
 
             currentDiaPackage = DiaMenuHelper.OpenInteractionWithCharacter(_personWeAreSpeakingTo);

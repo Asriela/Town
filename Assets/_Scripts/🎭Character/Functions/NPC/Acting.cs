@@ -118,7 +118,7 @@ public class Acting : MonoBehaviour
                 break;
         }
     }
-    private void MarkScriptedTaskCompleted(ScriptedTaskType taskType)=> _npc.Memory.ScriptedTaskProgress[taskType] = ScriptedTaskProgress.completed;
+    private void MarkScriptedTaskCompleted(ScriptedTaskType taskType)=> _npc.Memory.ScriptedTaskProgress[taskType] = ScriptedTaskProgressType.completed;
     private void FindOccupant(TraitType traitType)
     {
 

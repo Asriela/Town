@@ -18,38 +18,38 @@ MonoBehaviour:
     _dialogue: this way
     _action: 16
     _actionParameter:
-      rid: 2000162887553777763
+      rid: 2000162887553777787
     _conditions:
     - conditionType: 40
       parameter:
-        rid: 2000162887553777764
+        rid: 2000162887553777788
     - conditionType: 42
       parameter:
-        rid: 2000162887553777764
-    _priority: 0
+        rid: 2000162887553777788
+    _priority: 10
     _actionTags: 
   - _name: complete taking player to inn
     _dialogue: here you go speak to Alrine
     _action: 24
     _actionParameter:
-      rid: 2000162887553777764
+      rid: 2000162887553777788
     _conditions:
     - conditionType: 12
       parameter:
-        rid: 2000162887553777763
+        rid: 2000162887553777787
     - conditionType: 42
       parameter:
-        rid: 2000162887553777764
-    _priority: 0
+        rid: 2000162887553777788
+    _priority: 10
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162887553777763
+    - rid: 2000162887553777787
       type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 2
-    - rid: 2000162887553777764
+    - rid: 2000162887553777788
       type: {class: ScriptedTaskType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 0

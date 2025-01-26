@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Mind;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -25,5 +26,22 @@ public static class DiaMenuHelper
         }
 
         return menuOptions;
+    }
+
+    public static void ExecuteAction(Character player, Character personWeAreSpeakingTo, DiaActionType? actionType, ScriptedTaskType? actionData)
+    {
+        if (actionType != null)
+        {
+            switch (actionType)
+            {
+                case DiaActionType.scriptedAction:
+                    if (actionData.HasValue)
+                    {
+                        personWeAreSpeakingTo.Memory.ScriptedTaskProgress[actionData.Value] = ScriptedTaskProgressType.activated;
+                    }
+
+                    break;
+                }
+        }
     }
 }

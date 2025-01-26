@@ -296,9 +296,10 @@ namespace Mind
     public enum ScriptedTaskType : short
     {
         takePlayerToInn,
+        none,
     }
     [Serializable]
-    public enum ScriptedTaskProgress : short
+    public enum ScriptedTaskProgressType : short
     {
         notActive,
         activated,
