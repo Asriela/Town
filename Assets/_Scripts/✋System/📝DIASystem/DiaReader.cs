@@ -73,7 +73,7 @@ public static class DiaReader
     {
         SetCurrentDialogueFile(filename);
         FindNextSection();
-        return Next(true, false, null);
+        return Next(true, false, null,0);
     }
 
 
@@ -90,29 +90,43 @@ public static class DiaReader
 
 
 
-        return Next(false, false, chosenOption);
+        return Next(false, false, chosenOption,0);
 
     }
 
-    public static DiaPackage Next(bool firstNext, bool gotoDifferentSection, DiaOption lastOption)
+    public static DiaPackage Next(bool firstNext, bool gotoDifferentSection, DiaOption lastOption, int differentSectionLine)
     {
         //indent
-        if (!firstNext && !gotoDifferentSection)
+        if (!(firstNext || gotoDifferentSection))
         {
             currentTab = lastOption.TabLevel + 1;
             currentLine = lastOption.LineNumber;
         }
-
+        if (gotoDifferentSection)
+        {
+            currentTab = 1;
+            currentLine = differentSectionLine;
+        }
 
         //find the next dialogue at indent
-        FindNextDialogue();
+        if (!FindNextDialogue())
+        {
+            currentLine++;
+            if (gotoDifferentSection)
+            { currentLine = differentSectionLine; }
+            }
         if (FindGotoNextSection(out string sectionToFind))
         {
-            BasicFunctions.Log($"🗨: {currentDialogue}", LogType.dia);
-            BasicFunctions.Log($"⭐: LOOKING FOR NEW SECTION: {sectionToFind}", LogType.dia);
-            if (FindSpecificSection(sectionToFind))
+            if(sectionToFind=="end"|| sectionToFind=="exit")
             {
-                Next(false, true, null);
+                GameManager.Instance.CloseInteractionMenu();
+                return null;
+            }
+            BasicFunctions.Log($"🗨X: {currentDialogue}", LogType.dia);
+            BasicFunctions.Log($"⭐: LOOKING FOR NEW SECTION: {sectionToFind}", LogType.dia);
+            if (FindSpecificSection(sectionToFind, out int sectionLine))
+            {
+                Next(false, true, null, sectionLine);
                 BasicFunctions.Log($"⭐: FOUND NEW SECTION: {sectionToFind}", LogType.dia);
             }
 
@@ -139,12 +153,14 @@ public static class DiaReader
 
     }
 
-    public static void FindNextDialogue()
+    public static bool FindNextDialogue()
     {
         // Start from the currentLine index
         for (int i = currentLine; i < allLines.Count; i++)
         {
+            
             string line = allLines[i];
+            BasicFunctions.Log($"🔎📖: {line} {allTabs[i]} vs {currentTab} " , LogType.dia);
             if (allTabs[i] == currentTab)
             {
                 // Check if the line contains quotes
@@ -158,14 +174,15 @@ public static class DiaReader
 
                     // Update currentLine to the next line for future searches
                     currentLine = i + 1;
+                    BasicFunctions.Log($"😄📖: CHOSE! {line} {allTabs[i]} vs {currentTab} ", LogType.dia);
                     currentTab = allTabs[i];
-
-                    return; // Exit the method once the dialogue is found
+                   
+                    return true; // Exit the method once the dialogue is found
                 }
             }
 
         }
-
+        return false;
         // If no dialogue is found, set currentDialogue to an empty string
 
     }
@@ -177,7 +194,7 @@ public static class DiaReader
         for (int i = currentLine; i < allLines.Count; i++)
         {
             string line = allLines[i];
-
+           // BasicFunctions.Log($"🔍: {line} with tab {allTabs[i]} vs currentTab {currentTab}", LogType.dia);
             if (allTabs[i] == currentTab)
             {
 
@@ -244,6 +261,7 @@ public static class DiaReader
             // Check if the line starts with '>', '-', or '+'
             if (allTabs[i] == currentTab)
             {
+                BasicFunctions.Log($"🔎📦: {line} {allTabs[i]} vs {currentTab} ", LogType.dia);
                 if (line.StartsWith(">") || line.StartsWith("-") || line.StartsWith("+"))
                 {
                     // Determine the OptionType based on the symbol at the beginning of the line
@@ -346,6 +364,8 @@ public static class DiaReader
                     currentSection = line.Substring(startIndex + 2).Trim();
                 }
 
+
+
                 // Update currentLine to the next line for future searches
                 currentLine = i + 1;
                 currentTab = allTabs[i] + 1;
@@ -357,10 +377,10 @@ public static class DiaReader
         // No section found
         currentSection = string.Empty;
     }
-    private static bool FindSpecificSection(string sectionToFind)
+    private static bool FindSpecificSection(string sectionToFind, out int sectionLine)
     {
         currentLine = 0;
-
+        sectionLine=0;
         // Iterate through all lines starting from the current line
         for (int i = currentLine; i < allLines.Count; i++)
         {
@@ -369,6 +389,7 @@ public static class DiaReader
             // Check if the line contains "==" marking a section
             if (line.Contains($"=={sectionToFind}=="))
             {
+                sectionLine=i+1;
                 currentLine = i + 1;
                 currentTab = allTabs[i];
                 currentSection = sectionToFind;

@@ -1,0 +1,18 @@
+==start==
+	"hey its the newcomer... want a drink on me?"
+	-yes [ action : hangout]
+		"That was so much fun"
+		<2>
+	-no 
+		"suit yourself but its gonna be a cold night"
+		<2>
+	
+==2==	
+	-what is this place? 
+		"Its a lonely town on a long road" 
+	-tell me about you.. [menu : askAbout]
+		"im the inn keeper"
+	+do something else.. [menu]
+
+	
+	

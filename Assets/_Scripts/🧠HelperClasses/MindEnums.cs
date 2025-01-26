@@ -56,7 +56,8 @@ namespace Mind
         rentItem,
         sharePersonKnowledgeAbout,
         gotoPerson,
-        gotoTarget
+        gotoTarget,
+        completeScriptedTask
     }
     [Serializable]
     public enum RemoveSocial : short
@@ -221,7 +222,11 @@ namespace Mind
         knowsSomeoneWithTag,
         doesNotKnowSomeoneWithTag,
         reachedTarget,
-        hasNotReachedTarget
+        hasNotReachedTarget,
+        completedDialogueFile,
+        scriptedTaskActive,
+        scriptedTaskCompleted,
+        scriptedTaskNotCompleted
     }
     [Serializable]
     public enum TimeOfDayType : short
@@ -279,10 +284,28 @@ namespace Mind
         pumpkin,
         ale,
         barStool,
-        cursedWerewolfAmulet
+        cursedWerewolfAmulet,
+        tree,
+        rock,
+        desk,
+        chair
 
     }
+    
+    [Serializable]
+    public enum ScriptedTaskType : short
+    {
+        takePlayerToInn,
+    }
+    [Serializable]
+    public enum ScriptedTaskProgress : short
+    {
+        notActive,
+        activated,
+        completed
+    }
 
+    
     [Serializable]
     public enum ObjectTrait : short
     {

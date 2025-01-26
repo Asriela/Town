@@ -161,6 +161,8 @@ public class TraitEditor : Editor
             Mind.ActionType.gotoOccupant => typeof(Mind.TraitType),
             Mind.ActionType.sharePersonKnowledgeAbout => typeof(Mind.CharacterName),
             Mind.ActionType.gotoTarget => typeof(Mind.TargetType),
+            Mind.ActionType.completeScriptedTask => typeof(Mind.ScriptedTaskType),
+
             _ => null
         };
 
@@ -220,6 +222,9 @@ public class TraitEditor : Editor
             Mind.ConditionType.doesNotKnowSomeoneWithTag => typeof(Mind.MemoryTags),
             Mind.ConditionType.reachedTarget => typeof(Mind.TargetType),
             Mind.ConditionType.hasNotReachedTarget => typeof(Mind.TargetType),
+            Mind.ConditionType.scriptedTaskActive => typeof(Mind.ScriptedTaskType),
+            Mind.ConditionType.scriptedTaskCompleted => typeof(Mind.ScriptedTaskType),
+            Mind.ConditionType.scriptedTaskNotCompleted => typeof(Mind.ScriptedTaskType),
             _ => null
         };
 

@@ -39,7 +39,8 @@ public class Acting : MonoBehaviour
         { ActionType.rentItem, param => RentAnItem((ObjectType)param,_npc.Memory.ReachedOccupant) },
         { ActionType.socialize, param => DoSocialActionWithSomeone((SocializeType)param,_npc.Memory.SocialTarget) },
         { ActionType.sharePersonKnowledgeAbout , param => sharePersonKnowledge((CharacterName)param) },
-        { ActionType.gotoTarget , param => GotoTarget((TargetType)param) }
+        { ActionType.gotoTarget , param => GotoTarget((TargetType)param) },
+        { ActionType.completeScriptedTask , param => MarkScriptedTaskCompleted((ScriptedTaskType)param) }
     };
 
     private void Update() => PerformCurrentBehavior();
@@ -117,6 +118,7 @@ public class Acting : MonoBehaviour
                 break;
         }
     }
+    private void MarkScriptedTaskCompleted(ScriptedTaskType taskType)=> _npc.Memory.ScriptedTaskProgress[taskType] = ScriptedTaskProgress.completed;
     private void FindOccupant(TraitType traitType)
     {
 

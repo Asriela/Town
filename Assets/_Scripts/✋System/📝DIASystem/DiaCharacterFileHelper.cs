@@ -1,19 +1,56 @@
-﻿using UnityEngine;
+﻿using Mind;
+using UnityEngine;
+using System.Collections.Generic;
+using System;
 
 public static class DiaCharacterFileHelper
 {
+    private static Dictionary<CharacterName, int> accessCount  = new();
+
+
+
     public static string GetFileName(Character character)
     => character.CharacterName switch
     {
 
-        Mind.CharacterName.Alrine => GetAlrineFile(),
+        Mind.CharacterName.Alrine => Default(character),
+
+        Mind.CharacterName.Dohlson => Default(character),
         _ => null
     };
 
-    private static string GetAlrineFile()
+    public static void InitializeAccessCounts()
     {
-        var ret = "Alrine_welcome";
+        // Iterate through all CharacterName enum values and initialize them to 0
+        foreach (CharacterName character in Enum.GetValues(typeof(CharacterName)))
+        {
+            accessCount[character] = 0;
+        }
+    }
 
+    private static string Default(Character character)
+    {
+        var name = character.CharacterName;
+        var ret = $"{name}_1";
+        if (accessCount[name] > 0)
+        {
+             ret = $"{name}_repeat";
+        }
+
+
+        accessCount[name]++;
+        return ret;
+    }
+    private static string GetAlrineFile(Character character)
+    {
+        var name = character.CharacterName;
+        var ret = $"{name}_1";
+        if (accessCount[name] > 0)
+        {
+            ret = $"{name}_repeat";
+        }
+
+        accessCount[name]++;
         return ret;
     }
 

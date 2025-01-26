@@ -22,7 +22,7 @@ public class Player : Character
         MenuInteraction = GetComponent<PlayerMenuInteraction>();
         MenuInteraction.Initialize(this);
         PlayerControls = GetComponent<PlayerControls>();
-  
+        PlayerControls.Initialize(this);
 
         // Initialize with the default color
 

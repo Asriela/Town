@@ -23,7 +23,10 @@ public class GameManager : Singleton<GameManager>
         }
         WorldManager.Instance.ThePlayer.MenuInteraction.UpdateInteractionMenu(characterLabel, currentDialogue);
     }
-
+    public void CloseInteractionMenu()
+    {
+        WorldManager.Instance.ThePlayer.MenuInteraction.CloseInteractionMenu();
+    }
     public Character IsInDialogueMenu(Character character)
     {
         if(character is Player || character== WorldManager.Instance.ThePlayer.MenuInteraction.PersonWeAreSpeakingTo)
@@ -32,7 +35,10 @@ public class GameManager : Singleton<GameManager>
         }
         return null;
     }
-
+    private void Awake()
+    {
+        DiaCharacterFileHelper.InitializeAccessCounts();
+    }
     private void Start()
     {
         UIClicked = false;

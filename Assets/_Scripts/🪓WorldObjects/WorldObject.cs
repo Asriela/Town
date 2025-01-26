@@ -28,7 +28,8 @@ public class WorldObject : MonoBehaviour
     private InteractFeature _interactFeature;
     private RentFeature _rentFeature;
     private EffectsFeature _effectsFeature;
-    private ObjectActions _objectActions; // The new ObjectActions class
+    private ObjectActions _objectActions; // The new ObjectActions
+    private SpriteRenderer _spriteRenderer;
 
     private void Awake()
     {
@@ -39,6 +40,11 @@ public class WorldObject : MonoBehaviour
         }
 
         _objectActions = new ObjectActions(this); // Initialize ObjectActions
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+    private void Update()
+    {
+        _spriteRenderer.sortingOrder = Mathf.RoundToInt((-transform.position.y) * 100);
     }
 
     private void InitializeFromData(WorldObjectData data)

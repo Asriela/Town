@@ -33,11 +33,15 @@ public class PricingPair
     public Mind.ObjectType objectType;
     public int price;
 }
+
+
 public class Memory : MonoBehaviour
 {
 
     public Character SocialTarget { get; set; }
     public string SocialDialogue { get; set; }
+
+    public Dictionary<ScriptedTaskType,ScriptedTaskProgress> ScriptedTaskProgress { get; set; }
     private Dictionary<ActionType, int> _actionCount = new();
 
     public int GetActionCount(ActionType action)

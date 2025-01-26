@@ -16,7 +16,12 @@ public class Settings : Singleton<Settings>
         set => _interactionDistance = value;
     }
 
-    
+    [SerializeField] private float _playerSpeed = 7;
+    public float PlayerSpeed
+    {
+        get => _playerSpeed;
+        set => _playerSpeed = value;
+    }
 }
 
 

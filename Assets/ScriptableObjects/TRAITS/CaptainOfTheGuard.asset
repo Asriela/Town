@@ -13,7 +13,43 @@ MonoBehaviour:
   m_Name: CaptainOfTheGuard
   m_EditorClassIdentifier: 
   Type: 18
-  Behaviors: []
+  Behaviors:
+  - _name: take player to inn
+    _dialogue: this way
+    _action: 16
+    _actionParameter:
+      rid: 2000162887553777763
+    _conditions:
+    - conditionType: 40
+      parameter:
+        rid: 2000162887553777764
+    - conditionType: 42
+      parameter:
+        rid: 2000162887553777764
+    _priority: 0
+    _actionTags: 
+  - _name: complete taking player to inn
+    _dialogue: here you go speak to Alrine
+    _action: 24
+    _actionParameter:
+      rid: 2000162887553777764
+    _conditions:
+    - conditionType: 12
+      parameter:
+        rid: 2000162887553777763
+    - conditionType: 42
+      parameter:
+        rid: 2000162887553777764
+    _priority: 0
+    _actionTags: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2000162887553777763
+      type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 2
+    - rid: 2000162887553777764
+      type: {class: ScriptedTaskType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 0

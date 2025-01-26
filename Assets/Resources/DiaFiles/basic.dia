@@ -1,18 +1,18 @@
 ==start==
-	"greetings do you want to come in?"
-	>yes
-		"wondeful, want some coffee"
-		>id love some coffee
-			"here is your coffee"
-			<2>
-		>no thanks
-			"no coffee then"
-			<2>
-	>no
-		"suit yourself"
-		<2>
-	+Other actions
-		
-==2==
-	"so now what do you want to do?"
+	"would you like some coffee"
+	yes
+		"great let me make some for you"
+	no
+		"maybe some tea?"
+		yes [drink tea]
+			"cool here is your tea"
+		no
+			"geeze what do you want then?"
+			<juice>
+==juice==
+	"ok so I have some juice will juice work?"
+	yes
+		"finally we have something you drink"
+	no 
+		"i give up"
 		

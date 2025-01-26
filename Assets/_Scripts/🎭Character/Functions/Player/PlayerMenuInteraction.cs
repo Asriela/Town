@@ -163,10 +163,14 @@ public class PlayerMenuInteraction : MonoBehaviour
     {
 
         currentDiaPackage = DiaReader.ChooseOption(positionInList, out DiaActionType? diaActionToExecute);
-        var diaDialogue = currentDiaPackage.Dialogue;
-        currentDiaOptions = DiaMenuHelper.ConvertDiaOptionToMenuOptions(currentDiaPackage.Options);
+        if (currentDiaPackage != null)
+        {
+            var diaDialogue = currentDiaPackage.Dialogue;
+            currentDiaOptions = DiaMenuHelper.ConvertDiaOptionToMenuOptions(currentDiaPackage.Options);
 
-        UpdateInteractionMenu(buttonLabel, diaDialogue, currentDiaOptions, "", null);
+            UpdateInteractionMenu(buttonLabel, diaDialogue, currentDiaOptions, "", null);
+        }
+
 
     }
     private void HandleGeneralMenuOptions(int positionInList, string buttonLabel)
@@ -344,6 +348,11 @@ public class PlayerMenuInteraction : MonoBehaviour
 
 
     }
+
+    public void CloseInteractionMenu()
+    {
+        _interactionMenu.HideMenu();
+    }   
 
     private void SetupTradeMenu()
     {

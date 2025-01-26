@@ -3,13 +3,19 @@
 public class PlayerControls : MonoBehaviour
 {
     [Header("Movement Settings")]
-    public float moveSpeed = 5f;            // Maximum movement speed
+    public float moveSpeed = 2.5f;            // Maximum movement speed
     public float acceleration = 10f;       // How quickly the player accelerates
-    public float deceleration = 15f;       // How quickly the player decelerates
+    public float deceleration = 40f;       // How quickly the player decelerates
 
     private Rigidbody2D rb;
     private Vector2 currentVelocity;
     private Vector2 targetVelocity;
+
+    private Player _player;
+    public void Initialize(Player player)
+    {
+        _player = player;
+    }
 
     void Start()
     {
@@ -24,10 +30,11 @@ public class PlayerControls : MonoBehaviour
 
         // Calculate target velocity based on input
         targetVelocity = inputDirection * moveSpeed;
-
+        targetVelocity= Vector2.ClampMagnitude(targetVelocity, Settings.Instance.PlayerSpeed);
         // Apply acceleration or deceleration
         if (inputDirection.magnitude > 0)
         {
+            _player.Movement.Agent.ResetPath();
             // Accelerate towards the target velocity
             currentVelocity = Vector2.MoveTowards(currentVelocity, targetVelocity, acceleration * Time.deltaTime);
         }
@@ -36,6 +43,8 @@ public class PlayerControls : MonoBehaviour
             // Decelerate smoothly to zero when no input
             currentVelocity = Vector2.MoveTowards(currentVelocity, Vector2.zero, deceleration * Time.deltaTime);
         }
+
+
     }
 
     void FixedUpdate()

@@ -50,6 +50,9 @@ public static class Conditions
         _conditionDelegates.Add(ConditionType.doesNotKnowSomeoneWithTag, new ConditionDelegate<MemoryTags>(CheckKnowsSomeoneWithTag));
         _conditionDelegates.Add(ConditionType.reachedTarget, new ConditionDelegate<TargetType>(ReachedTarget));
         _conditionDelegates.Add(ConditionType.hasNotReachedTarget, new ConditionDelegate<TargetType>(ReachedTarget));
+        _conditionDelegates.Add(ConditionType.scriptedTaskCompleted, new ConditionDelegate<ScriptedTaskType>(CheckScriptedTaskCompleted));
+        _conditionDelegates.Add(ConditionType.scriptedTaskNotCompleted, new ConditionDelegate<ScriptedTaskType>(CheckScriptedTaskCompleted));
+        _conditionDelegates.Add(ConditionType.scriptedTaskActive , new ConditionDelegate<ScriptedTaskType>(CheckScriptedTaskActive));
     }
 
     public static bool CheckCondition(Condition condition, NPC npc)
@@ -122,7 +125,9 @@ public static class Conditions
                 ConditionType.doesNotKnowSomeoneWithTag => ConditionHandler<MemoryTags>((ConditionDelegate<MemoryTags>)conditionDelegate, condition.parameter, npc, false),
                 ConditionType.reachedTarget => ConditionHandler<TargetType>((ConditionDelegate<TargetType>)conditionDelegate, condition.parameter, npc, true),
                 ConditionType.hasNotReachedTarget => ConditionHandler<TargetType>((ConditionDelegate<TargetType>)conditionDelegate, condition.parameter, npc, false),
-
+                ConditionType.scriptedTaskActive => ConditionHandler<ScriptedTaskType>((ConditionDelegate<ScriptedTaskType>)conditionDelegate, condition.parameter, npc, true),
+                ConditionType.scriptedTaskCompleted => ConditionHandler<ScriptedTaskType>((ConditionDelegate<ScriptedTaskType>)conditionDelegate, condition.parameter, npc, true),
+                ConditionType.scriptedTaskNotCompleted => ConditionHandler<ScriptedTaskType>((ConditionDelegate<ScriptedTaskType>)conditionDelegate, condition.parameter, npc, false),
                 _ => false
             };
 
@@ -143,7 +148,25 @@ public static class Conditions
         }
         return false;
     }
+    private static bool CheckScriptedTaskCompleted(ScriptedTaskType parameter, NPC npc, bool trueStatement)
+    {
+        var value = npc.Memory.ScriptedTaskProgress[parameter];
+        if (value != null &&  value == ScriptedTaskProgress.completed)
+        {
+            return true;
+        }
+        return false;
+    }
 
+    private static bool CheckScriptedTaskActive(ScriptedTaskType parameter, NPC npc, bool trueStatement)
+    {
+        var value = npc.Memory.ScriptedTaskProgress[parameter];
+        if (value!=null && value == ScriptedTaskProgress.activated)
+        {
+            return true;
+        }
+        return false;
+    }
     private static bool CheckActionDoneForDay(ActionType parameter, NPC npc, bool trueStatement)
     {
         var value = npc.Memory.GetActionCount(parameter);
