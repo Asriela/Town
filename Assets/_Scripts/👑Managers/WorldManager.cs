@@ -18,6 +18,11 @@ public class EnumCharacterPair
 }
 
 
+    public enum SpeedOfTime
+{
+    normal,
+    fast
+}
 
 public class WorldManager : Singleton<WorldManager>
 {
@@ -94,7 +99,20 @@ public class WorldManager : Singleton<WorldManager>
         }
     }
 
+    public void SetSpeedOfTime(SpeedOfTime speedOfTime)
+    {
+        switch (speedOfTime)
+        {
 
+            case SpeedOfTime.normal:
+                Time.timeScale = 1.0f;
+                break;
+            case SpeedOfTime.fast:
+                Time.timeScale = 2.0f;
+                break;
+        }
+
+    }
     public TimeOfDayType GetTimeOfDayAsEnum()
     {
         int hour = (int)(TimeOfDay % 24);
