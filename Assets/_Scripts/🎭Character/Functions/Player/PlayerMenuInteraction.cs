@@ -257,7 +257,14 @@ public class PlayerMenuInteraction : MonoBehaviour
 
     private bool HandleCharacterInteraction(RaycastHit2D hit)
     {
-        _personWeAreSpeakingTo = hit.collider.GetComponent<Character>();
+       return OpenDialoguePlayer( _personWeAreSpeakingTo = hit.collider.GetComponent<Character>());
+
+    }
+
+
+    public bool OpenDialoguePlayer(Character target)
+    {
+        _personWeAreSpeakingTo = target;
         if (_personWeAreSpeakingTo != null && _personWeAreSpeakingTo != _player)
         {
             _player.Movement.Stop();
@@ -265,7 +272,7 @@ public class PlayerMenuInteraction : MonoBehaviour
 
             _personWeAreSpeakingTo.Reactions.PersonWeAreSpeakingTo = _player;
             _justOpenedPieMenu = true;
-            _screenPosition = Camera.main.WorldToScreenPoint(hit.point);
+           // _screenPosition = Camera.main.WorldToScreenPoint(hit.point);
 
             _currentMenuOptions.Clear();
 
@@ -275,12 +282,11 @@ public class PlayerMenuInteraction : MonoBehaviour
             var diaOptions = DiaMenuHelper.ConvertDiaOptionToMenuOptions(currentDiaPackage.Options);
 
 
-            OpenInteractionMenu("",  diaDialogue, _personWeAreSpeakingTo.CharacterName.ToString(), diaOptions, "", null, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
+            OpenInteractionMenu("", diaDialogue, _personWeAreSpeakingTo.CharacterName.ToString(), diaOptions, "", null, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
             return true;
         }
         return false;
     }
-
     private void OpenGeneralMenu()
     {
         List<MenuOption> buttonLabels = new List<MenuOption>
@@ -340,7 +346,8 @@ public class PlayerMenuInteraction : MonoBehaviour
             return false;
 
 
-        if (GameManager.Instance.BlockingPlayerUIOnScreen)
+        if (GameManager.Instance.BlockingPlayerUIOnScreen )
+
         {
             _interactionMenu.HideMenu();
             return false;
@@ -357,6 +364,8 @@ public class PlayerMenuInteraction : MonoBehaviour
 
     public void CloseInteractionMenu()
     {
+        GameManager.Instance.CantClickOffInteractionMenu=false;
+        _personWeAreSpeakingTo =null;
         _interactionMenu.HideMenu();
     }   
 

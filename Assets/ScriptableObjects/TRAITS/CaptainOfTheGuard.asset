@@ -18,38 +18,64 @@ MonoBehaviour:
     _dialogue: this way
     _action: 16
     _actionParameter:
-      rid: 2000162887553777787
+      rid: 2000162890491101375
     _conditions:
     - conditionType: 40
       parameter:
-        rid: 2000162887553777788
+        rid: 2000162890491101376
     - conditionType: 42
       parameter:
-        rid: 2000162887553777788
+        rid: 2000162890491101376
     _priority: 10
     _actionTags: 
   - _name: complete taking player to inn
     _dialogue: here you go speak to Alrine
     _action: 24
     _actionParameter:
-      rid: 2000162887553777788
+      rid: 2000162890491101376
     _conditions:
     - conditionType: 12
       parameter:
-        rid: 2000162887553777787
+        rid: 2000162890491101375
     - conditionType: 42
       parameter:
-        rid: 2000162887553777788
+        rid: 2000162890491101376
+    _priority: 10
+    _actionTags: 
+  - _name: talk to player
+    _dialogue: 
+    _action: 25
+    _actionParameter:
+      rid: 2000162890491101377
+    _conditions:
+    - conditionType: 42
+      parameter:
+        rid: 2000162890491101378
+    - conditionType: 24
+      parameter:
+        rid: 2000162890491101379
     _priority: 10
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162887553777787
+    - rid: 2000162890491101375
       type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 2
-    - rid: 2000162887553777788
+    - rid: 2000162890491101376
+      type: {class: ScriptedTaskType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 2
+    - rid: 2000162890491101377
       type: {class: ScriptedTaskType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 0
+    - rid: 2000162890491101378
+      type: {class: ScriptedTaskType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 1
+    - rid: 2000162890491101379
+      type: {class: TraitType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 23

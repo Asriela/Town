@@ -1,18 +1,12 @@
 ==start==
-	"hey its the newcomer... want a drink on me?"
-	-yes [ action : hangout]
-		"That was so much fun"
+	"Yes..?"
+	-Why does this place need a captain?
+		"This is an outpost, this trade route has to be defended."
 		<2>
-	-no 
-		"suit yourself but its gonna be a cold night"
-		<2>
+
 	
 ==2==	
-	-what is this place? 
-		"Its a lonely town on a long road" 
-	-tell me about you.. [menu : askAbout]
-		"im the inn keeper"
-	+do something else.. [menu]
+	-What can you tell me about you?
 
 	
 	

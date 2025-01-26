@@ -45,7 +45,7 @@ public class Player : Character
     }
     private void HandleInput()
     {
-        if (Vitality.Dead)
+        if (Vitality.Dead )
         { return; }
         if (Input.GetMouseButtonDown(0)) // Left-click
         {

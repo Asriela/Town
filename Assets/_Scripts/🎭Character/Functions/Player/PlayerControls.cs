@@ -25,12 +25,23 @@ public class PlayerControls : MonoBehaviour
 
     void Update()
     {
+        if (!GameManager.Instance.BlockingPlayerUIOnScreen)
+        {
+            PlayerKeyboardMovement();
+        }
+
+
+
+    }
+
+    void PlayerKeyboardMovement()
+    {
         // Get movement input
         Vector2 inputDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
 
         // Calculate target velocity based on input
         targetVelocity = inputDirection * moveSpeed;
-        targetVelocity= Vector2.ClampMagnitude(targetVelocity, Settings.Instance.PlayerSpeed);
+        targetVelocity = Vector2.ClampMagnitude(targetVelocity, Settings.Instance.PlayerSpeed);
         // Apply acceleration or deceleration
         if (inputDirection.magnitude > 0)
         {
@@ -43,8 +54,6 @@ public class PlayerControls : MonoBehaviour
             // Decelerate smoothly to zero when no input
             currentVelocity = Vector2.MoveTowards(currentVelocity, Vector2.zero, deceleration * Time.deltaTime);
         }
-
-
     }
 
     void FixedUpdate()

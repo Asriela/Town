@@ -162,7 +162,7 @@ public class TraitEditor : Editor
             Mind.ActionType.sharePersonKnowledgeAbout => typeof(Mind.CharacterName),
             Mind.ActionType.gotoTarget => typeof(Mind.TargetType),
             Mind.ActionType.completeScriptedTask => typeof(Mind.ScriptedTaskType),
-
+            Mind.ActionType.openDialogueWithPlayer => typeof(ScriptedTaskType),
             _ => null
         };
 

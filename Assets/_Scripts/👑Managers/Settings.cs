@@ -22,6 +22,14 @@ public class Settings : Singleton<Settings>
         get => _playerSpeed;
         set => _playerSpeed = value;
     }
+
+
+    [SerializeField] private float _worldSpeed = 2;
+    public float WorldSpeed
+    {
+        get => _worldSpeed;
+        set => _worldSpeed = value;
+    }
 }
 
 

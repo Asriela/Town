@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7dc8225a4be6fd4d87acb8e49149fbb, type: 3}
+  m_Name: Patrol1
+  m_EditorClassIdentifier: 
+  Type: 24
+  Behaviors:
+  - _name: patrol to point1
+    _dialogue: 
+    _action: 16
+    _actionParameter:
+      rid: 2000162890491101393
+    _conditions:
+    - conditionType: 41
+      parameter:
+        rid: 2000162890491101394
+    - conditionType: 8
+      parameter:
+        rid: 2000162890491101397
+    _priority: 10
+    _actionTags: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 2000162890491101393
+      type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 4
+    - rid: 2000162890491101394
+      type: {class: ScriptedTaskType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 2
+    - rid: 2000162890491101397
+      type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 8

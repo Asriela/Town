@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 [System.Serializable]
 public class TraitTypeTraitPair
@@ -14,6 +15,8 @@ public class GameManager : Singleton<GameManager>
     public bool UIClicked { get; set; }
     public bool BlockingPlayerUIOnScreen { get; set; }
 
+    public bool CantClickOffInteractionMenu { get; set; }
+
     public void UpdateInteractionMenu(Character characterSpeaking, string currentDialogue)
     {
         var characterLabel = characterSpeaking.CharacterName.ToString();
@@ -25,6 +28,15 @@ public class GameManager : Singleton<GameManager>
     }
     public void CloseInteractionMenu()
     {
+        StartCoroutine(CloseInteractionMenuDelayed());
+    }
+    public void OpenDialoguePlayer(Character personSpeaking)
+    {
+        WorldManager.Instance.ThePlayer.MenuInteraction.OpenDialoguePlayer(personSpeaking);
+    }
+    private IEnumerator CloseInteractionMenuDelayed()
+    {
+        yield return null; // Wait until the next frame
         WorldManager.Instance.ThePlayer.MenuInteraction.CloseInteractionMenu();
     }
     public Character IsInDialogueMenu(Character character)
@@ -41,6 +53,7 @@ public class GameManager : Singleton<GameManager>
     }
     private void Start()
     {
+        CantClickOffInteractionMenu=true;
         UIClicked = false;
         BlockingPlayerUIOnScreen = false;
     }

@@ -40,7 +40,8 @@ public class Acting : MonoBehaviour
         { ActionType.socialize, param => DoSocialActionWithSomeone((SocializeType)param,_npc.Memory.SocialTarget) },
         { ActionType.sharePersonKnowledgeAbout , param => sharePersonKnowledge((CharacterName)param) },
         { ActionType.gotoTarget , param => GotoTarget((TargetType)param) },
-        { ActionType.completeScriptedTask , param => MarkScriptedTaskCompleted((ScriptedTaskType)param) }
+        { ActionType.completeScriptedTask , param => MarkScriptedTaskCompleted((ScriptedTaskType)param) },
+        { ActionType.openDialogueWithPlayer , param => OpenDialogueWithPlayer() }
     };
 
     private void Update() => PerformCurrentBehavior();
@@ -100,6 +101,17 @@ public class Acting : MonoBehaviour
         }
     }
     //TODO: add dynamic tags  when searching for a character
+
+    private void OpenDialogueWithPlayer()
+    {
+        
+        if(_npc.Memory.GetScriptedTaskProgress(ScriptedTaskType.talkToPlayer)!= ScriptedTaskProgressType.completed)
+        {
+            _npc.Memory.ScriptedTaskProgress[ScriptedTaskType.talkToPlayer] = ScriptedTaskProgressType.completed;
+            GameManager.Instance.OpenDialoguePlayer(_npc);
+        }
+
+    }
     private void FindCharacter(TargetType targetType)
     {
        

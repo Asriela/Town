@@ -39,7 +39,8 @@ namespace Mind
         wife,
         husband,
         seamstress,
-        tailor
+        tailor,
+        cheerful
 
     }
 

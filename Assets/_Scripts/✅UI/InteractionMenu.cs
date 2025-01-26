@@ -90,8 +90,13 @@ public class InteractionMenu : MonoBehaviour
         {
             Debug.LogError("InteractionMenuTemplate is not assigned in the Inspector.");
         }
-    }
 
+
+    }
+    private void Start()
+    {
+        HideMenu();
+    }
     private void Update()
     {
         if (dialogue != null)

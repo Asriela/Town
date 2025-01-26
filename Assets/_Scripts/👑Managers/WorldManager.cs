@@ -82,11 +82,12 @@ public class WorldManager : Singleton<WorldManager>
     {
         _timeOfDay = _startingTime;
         _lastTimeOfDay = _timeOfDay;
+        Time.timeScale=Settings.Instance.WorldSpeed;
     }
 
     private void RunTimeOfDay()
     {
-        TimeOfDay = TimeOfDay < 24 ? TimeOfDay + _timeOfDaySpeed : 0;
+        TimeOfDay = TimeOfDay < 24 ? TimeOfDay + _timeOfDaySpeed* Time.timeScale : 0;
         TimeThatsChanged = TimeOfDay - _lastTimeOfDay;
         _lastTimeOfDay = TimeOfDay;
         TotalHoursPassed += TimeThatsChanged;

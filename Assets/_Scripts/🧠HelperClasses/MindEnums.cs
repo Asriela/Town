@@ -28,7 +28,9 @@ namespace Mind
         werewolf,
         concernedWife,
         tailor,
-        seamstress
+        seamstress,
+        player,
+        patrol
     }
     [Serializable]
     public enum ActionType : short
@@ -57,7 +59,8 @@ namespace Mind
         sharePersonKnowledgeAbout,
         gotoPerson,
         gotoTarget,
-        completeScriptedTask
+        completeScriptedTask,
+        openDialogueWithPlayer
     }
     [Serializable]
     public enum RemoveSocial : short
@@ -89,7 +92,12 @@ namespace Mind
         none,
         ruinsOfLazeel,
         belethorsInn,
-        AlexsPumpkinHome
+        AlexsPumpkinHome,
+        guardPost,
+        gate,
+        lordsManor,
+        tailorsHome,
+
     }
     [Serializable]
     public enum TargetLocationType : short
@@ -295,8 +303,11 @@ namespace Mind
     [Serializable]
     public enum ScriptedTaskType : short
     {
-        takePlayerToInn,
         none,
+        talkToPlayer,
+        takePlayerToInn
+        
+
     }
     [Serializable]
     public enum ScriptedTaskProgressType : short

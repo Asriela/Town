@@ -18,61 +18,61 @@ MonoBehaviour:
     _dialogue: 
     _action: 23
     _actionParameter:
-      rid: 2000162770358632719
+      rid: 2000162890491101338
     _conditions:
     - conditionType: 35
       parameter:
-        rid: 2000162770358632720
+        rid: 2000162890491101339
     - conditionType: 38
       parameter:
-        rid: 2000162770358632719
-    _priority: 0
+        rid: 2000162890491101338
+    _priority: 10
     _actionTags: 
   - _name: arrest criminal
     _dialogue: Are you a werewolf?
     _action: 10
     _actionParameter:
-      rid: 2000162770358632721
+      rid: 2000162890491101340
     _conditions:
     - conditionType: 35
       parameter:
-        rid: 2000162770358632720
+        rid: 2000162890491101339
     - conditionType: 37
       parameter:
-        rid: 2000162770358632719
-    _priority: 0
+        rid: 2000162890491101338
+    _priority: 10
     _actionTags: 
   - _name: kill threat
     _dialogue: 
     _action: 1
     _actionParameter:
-      rid: 2000162770358632722
+      rid: 2000162890491101341
     _conditions:
     - conditionType: 33
       parameter:
-        rid: 2000162770358632723
-    _priority: 0
+        rid: 2000162890491101342
+    _priority: 10
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162770358632719
+    - rid: 2000162890491101338
       type: {class: TargetType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 7
-    - rid: 2000162770358632720
+    - rid: 2000162890491101339
       type: {class: MemoryTags, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 27
-    - rid: 2000162770358632721
+    - rid: 2000162890491101340
       type: {class: SocializeType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 12
-    - rid: 2000162770358632722
+    - rid: 2000162890491101341
       type: {class: TargetType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 6
-    - rid: 2000162770358632723
+    - rid: 2000162890491101342
       type: {class: MemoryTags, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 29
