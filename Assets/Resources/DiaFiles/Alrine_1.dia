@@ -1,17 +1,27 @@
 ==start==
-	"hey its the newcomer... want a drink on me?"
-	-yes [ action : hangout]
-		"That was so much fun"
-		<2>
-	-no 
-		"suit yourself but its gonna be a cold night"
-		<2>
+	"So you are the one that Agnar saw stumbling between the treelines. First things first, do you remember your name?"
+	>Everything is a haze I cant...
+		"That will be these woods for you.. look.. you aren't a stick in the snow so you are doing great. Can I get you a drink, its on me.."
+		>yes please [ action : hangout]
+			"Now that you are all warmed up, how about you try remembering something about yourself.."
+			<you>
+		>no thank you
+			"You are going to have to warm up somehow.."
+			<askHer>
 	
-==2==	
+==you==
+	>I'm a mage.. [share : mage]
+		<end>
+	>I grew up in a small town.. [share : smallTown]
+		<askHer>
+		 
+==askHer==	
+	-in which direction is the nearest city?
+		"No one is going anywhere until the winter is over, you go out there you are as good as dead, it's a miracle you even found this place."
 	-what is this place? 
-		"Its a lonely town on a long road" 
-	-tell me about you.. [menu : askAbout]
-		"im the inn keeper"
+		"Its a lonely outpost for the trade line between two major cities. Winter makes this road impossible to travel, we find bodies every spring..  " 
+	-tell me about you.. 
+		"I'm the inn keeper, I inherited it from my father Bellethor and I run it with my adopted father Agnar the grumpy haha."
 	+do something else.. [menu]
 
 	

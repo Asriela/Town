@@ -30,7 +30,9 @@ namespace Mind
         tailor,
         seamstress,
         player,
-        patrol
+        patrol,
+        doctor,
+        tavernGuard
     }
     [Serializable]
     public enum ActionType : short
@@ -108,7 +110,8 @@ namespace Mind
         tavern,
         home,
         work,
-        pumpkinFarm
+        pumpkinFarm,
+        tailorsShop
     }
     [Serializable]
     public enum SpellType : short
@@ -133,7 +136,8 @@ namespace Mind
         food,
         generalGoods,
         barKeeper,
-        innkeeper
+        innkeeper,
+        innGuard
     }
     public enum FarmerType : short
     {

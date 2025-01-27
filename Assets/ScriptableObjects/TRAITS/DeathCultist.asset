@@ -18,64 +18,64 @@ MonoBehaviour:
     _dialogue: now to find someone to test this spell on
     _action: 16
     _actionParameter:
-      rid: 2000162685109141519
+      rid: 2000162902653010120
     _conditions:
     - conditionType: 13
       parameter:
-        rid: 2000162685109141519
+        rid: 2000162902653010120
     - conditionType: 8
       parameter:
-        rid: 2000162685109141520
+        rid: 2000162902653010121
     - conditionType: 1
       parameter:
-        rid: 2000162685109141521
+        rid: 2000162902653010122
     _priority: 7
     _actionTags: 
   - _name: Find victim
     _dialogue: Where are you...
     _action: 2
     _actionParameter:
-      rid: 2000162685109141522
+      rid: 2000162902653010123
     _conditions:
     - conditionType: 3
       parameter:
-        rid: 2000162685109141522
+        rid: 2000162902653010123
     - conditionType: 12
       parameter:
-        rid: 2000162685109141523
+        rid: 2000162902653010124
     _priority: 7
     _actionTags: 
   - _name: Kill Victim
     _dialogue: Die!
     _action: 1
     _actionParameter:
-      rid: 2000162685109141522
+      rid: 2000162902653010123
     _conditions:
     - conditionType: 2
       parameter:
-        rid: 2000162685109141522
+        rid: 2000162902653010123
     _priority: 7
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162685109141519
+    - rid: 2000162902653010120
       type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 5
-    - rid: 2000162685109141520
+    - rid: 2000162902653010121
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 19
-    - rid: 2000162685109141521
+    - rid: 2000162902653010122
       type: {class: NeedType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 3
-    - rid: 2000162685109141522
+    - rid: 2000162902653010123
       type: {class: TargetType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 3
-    - rid: 2000162685109141523
+    - rid: 2000162902653010124
       type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 4

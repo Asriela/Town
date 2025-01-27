@@ -40,7 +40,8 @@ namespace Mind
         husband,
         seamstress,
         tailor,
-        cheerful
+        cheerful,
+        calm
 
     }
 

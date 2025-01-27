@@ -2,22 +2,22 @@
 	"You there stranger hold it right there! Who are you and where are you from!?"
 	>Who.. who is there?
 		"I am the captain of guard for this outpost... so who are you and where are you from?"
-		>I dont know... I cant remember 
+		>I don't know... I cant remember 
 			<2>
-	>I dont know... I cant remember 
+	>I don't know... I cant remember 
 		<2>
 ==2==
 	"Are you sure..."
 	>YES!
 		"Easy now... head over to the tavern so Alrine can have you checked out"
 		<3>
-	-Im so cold...
+	-I'm so cold...
 		"I bet you are.. head over to the tavern so Alrine can have you checked out"
 		<3>
 ==3==	
 	-what is this place? 
 		"Never you mind that now, lets get to the tavern" 
-	-ok I will follow your lead.. [scriptedAction : takePlayerToInn]
+	-OK I will follow your lead.. [scriptedAction : takePlayerToInn]
 		<end>
 	
 	

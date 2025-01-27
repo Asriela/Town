@@ -13,10 +13,8 @@ public static class DiaCharacterFileHelper
     => character.CharacterName switch
     {
 
-        Mind.CharacterName.Alrine => Default(character),
-
-        Mind.CharacterName.Dohlson => Default(character),
-        _ => null
+        Mind.CharacterName.Agnar => Default(character),
+        _ => Default(character)
     };
 
     public static void InitializeAccessCounts()
@@ -41,13 +39,16 @@ public static class DiaCharacterFileHelper
         accessCount[name]++;
         return ret;
     }
-    private static string GetAlrineFile(Character character)
+    private static string GetAgnarFile(Character character)
     {
         var name = character.CharacterName;
         var ret = $"{name}_1";
         if (accessCount[name] > 0)
         {
-            ret = $"{name}_repeat";
+            if (character.Relationships.GetRelationshipWith(character, WorldManager.Instance.ThePlayer) < 0)
+            { ret = $"{name}_badRelationship"; }
+            else
+            { ret = $"{name}_repeat"; }
         }
 
         accessCount[name]++;

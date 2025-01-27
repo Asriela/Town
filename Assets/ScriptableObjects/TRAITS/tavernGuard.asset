@@ -10,29 +10,36 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7dc8225a4be6fd4d87acb8e49149fbb, type: 3}
-  m_Name: Tailor
+  m_Name: tavernGuard
   m_EditorClassIdentifier: 
-  Type: 21
+  Type: 26
   Behaviors:
-  - _name: take outfit to captain of guard
+  - _name: stand at post
     _dialogue: 
-    _action: 22
+    _action: 11
     _actionParameter:
-      rid: 2000162902653010100
+      rid: 2000162902653010148
     _conditions:
     - conditionType: 8
       parameter:
-        rid: 2000162902653010101
-    _priority: 0
+        rid: 2000162902653010149
+    - conditionType: 9
+      parameter:
+        rid: 2000162902653010146
+    _priority: 12
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162902653010100
-      type: {class: CharacterName, ns: Mind, asm: Assembly-CSharp}
-      data:
-        value__: 11
-    - rid: 2000162902653010101
+    - rid: 2000162902653010146
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
-        value__: 21
+        value__: 22
+    - rid: 2000162902653010148
+      type: {class: TraderType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 5
+    - rid: 2000162902653010149
+      type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 19

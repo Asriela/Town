@@ -141,7 +141,29 @@ public class PersonKnowledge : MonoBehaviour
         return new List<Mind.MemoryTags> { knowledgePair.memoryTags[randomIndex] };
     }
 
+    public List<Mind.MemoryTags> GetAllKnowledge(Character knower, Character person)
+    {
+        // Find the knower pair from the knowledge collection
+        var knowerPair = _peopleKnowledge.FirstOrDefault(kp => kp.knower == knower);
 
+        // If no knower pair is found, return an empty list
+        if (knowerPair == null)
+        {
+            return new List<Mind.MemoryTags>();
+        }
+
+        // Find the knowledge pair for the given person
+        var knowledgePair = knowerPair.knowledge.FirstOrDefault(k => k.character == person);
+
+        // If no knowledge pair is found, return an empty list
+        if (knowledgePair == null)
+        {
+            return new List<Mind.MemoryTags>();
+        }
+
+        // Return all memory tags about the person
+        return knowledgePair.memoryTags;
+    }
     // Check if a knower has specific knowledge about a person
     public bool HasKnowledge(Character knower, Character person, Mind.MemoryTags tag)
     {

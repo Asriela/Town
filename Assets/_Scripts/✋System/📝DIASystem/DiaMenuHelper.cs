@@ -28,20 +28,27 @@ public static class DiaMenuHelper
         return menuOptions;
     }
 
-    public static void ExecuteAction(Character player, Character personWeAreSpeakingTo, DiaActionType? actionType, ScriptedTaskType? actionData)
+    public static void ExecuteAction(Character player, Character personWeAreSpeakingTo, DiaActionType? actionType, object actionData)
     {
         if (actionType != null)
         {
             switch (actionType)
             {
                 case DiaActionType.scriptedAction:
-                    if (actionData.HasValue)
+                    if (actionData!=null)
                     {
-                        personWeAreSpeakingTo.Memory.ScriptedTaskProgress[actionData.Value] = ScriptedTaskProgressType.activated;
+                        personWeAreSpeakingTo.Memory.ScriptedTaskProgress[(ScriptedTaskType)actionData] = ScriptedTaskProgressType.activated;
                     }
 
                     break;
-                }
+                case DiaActionType.share:
+                    if (actionData != null)
+                    {
+                        personWeAreSpeakingTo.PersonKnowledge.AddKnowledge(personWeAreSpeakingTo, player, new List<MemoryTags> { (MemoryTags)actionData });
+                    }
+
+                    break;
+            }
         }
     }
 }

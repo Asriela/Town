@@ -18,61 +18,61 @@ MonoBehaviour:
     _dialogue: 
     _action: 23
     _actionParameter:
-      rid: 2000162890491101338
+      rid: 2000162902653010071
     _conditions:
     - conditionType: 35
       parameter:
-        rid: 2000162890491101339
+        rid: 2000162902653010072
     - conditionType: 38
       parameter:
-        rid: 2000162890491101338
+        rid: 2000162902653010071
     _priority: 10
     _actionTags: 
   - _name: arrest criminal
     _dialogue: Are you a werewolf?
     _action: 10
     _actionParameter:
-      rid: 2000162890491101340
+      rid: 2000162902653010073
     _conditions:
     - conditionType: 35
       parameter:
-        rid: 2000162890491101339
+        rid: 2000162902653010072
     - conditionType: 37
       parameter:
-        rid: 2000162890491101338
+        rid: 2000162902653010071
     _priority: 10
     _actionTags: 
   - _name: kill threat
     _dialogue: 
     _action: 1
     _actionParameter:
-      rid: 2000162890491101341
+      rid: 2000162902653010074
     _conditions:
     - conditionType: 33
       parameter:
-        rid: 2000162890491101342
+        rid: 2000162902653010075
     _priority: 10
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162890491101338
+    - rid: 2000162902653010071
       type: {class: TargetType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 7
-    - rid: 2000162890491101339
+    - rid: 2000162902653010072
       type: {class: MemoryTags, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 27
-    - rid: 2000162890491101340
+    - rid: 2000162902653010073
       type: {class: SocializeType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 12
-    - rid: 2000162890491101341
+    - rid: 2000162902653010074
       type: {class: TargetType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 6
-    - rid: 2000162890491101342
+    - rid: 2000162902653010075
       type: {class: MemoryTags, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 29

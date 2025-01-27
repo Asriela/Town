@@ -89,6 +89,7 @@ public class PlayerMenuInteraction : MonoBehaviour
     private Character _aboutWho = null;
     private DiaPackage currentDiaPackage;
     private List<MenuOption> currentDiaOptions;
+    private bool closingMenu=false;
 
     public SocialMenuState MenuState { get; set; }
     private List<MenuOption> _currentMenuOptions = new List<MenuOption> { new MenuOption("NULL", null, null) };
@@ -164,7 +165,7 @@ public class PlayerMenuInteraction : MonoBehaviour
     private void HandleDiaMenuOptions(int positionInList, string buttonLabel)
     {
 
-        currentDiaPackage = DiaReader.ChooseOption(positionInList, out DiaActionType? diaActionToExecute, out ScriptedTaskType? diaActionData);
+        currentDiaPackage = DiaReader.ChooseOption(positionInList, out DiaActionType? diaActionToExecute, out object diaActionData);
         DiaMenuHelper.ExecuteAction(_player, _personWeAreSpeakingTo, diaActionToExecute, diaActionData);
         if (currentDiaPackage != null)
         {
@@ -206,8 +207,15 @@ public class PlayerMenuInteraction : MonoBehaviour
                 _currentMenuOptions = ProcessComplexMenuOptions(positionInList);
                 break;
         }
-
-        UpdateInteractionMenu("", "", currentDiaOptions, _titleText, _currentMenuOptions);
+        if(closingMenu)
+        {
+            closingMenu=false;
+        }
+        else
+        {
+            UpdateInteractionMenu("", "", currentDiaOptions, _titleText, _currentMenuOptions);
+        }
+        
     }
 
 
@@ -244,7 +252,13 @@ public class PlayerMenuInteraction : MonoBehaviour
             return;
 
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        var hit = Physics2D.Raycast(mousePosition, Vector2.zero);
+        // Get the layer mask for a specific layer (e.g., "MyLayerName")
+        LayerMask layerMask = LayerMask.GetMask("characters");
+
+        // Perform the raycast with the layer mask
+        RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero, Mathf.Infinity, layerMask);
+
+
 
         if (hit.collider != null)
         {
@@ -466,6 +480,8 @@ public class PlayerMenuInteraction : MonoBehaviour
             case SocialMenuState.objectInteraction:
 
                 _player.GotoAndInteractWithObject(_selectedWorldObject, (ObjectInteractionType)chosenOption.Data1);
+                closingMenu=true;
+                CloseInteractionMenu();
                 break;
 
             case SocialMenuState.tellAboutYourself:

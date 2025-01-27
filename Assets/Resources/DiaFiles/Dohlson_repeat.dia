@@ -1,12 +1,10 @@
 ==start==
-	"Yes..?"
-	-Why does this place need a captain?
-		"This is an outpost, this trade route has to be defended."
-		<2>
-
+	(event : killedWerewolf)
+	"-There was no choice. Everyone saw what he became.." 
+	"-We are weary of outsiders here , especially when they stumble right out of the cold dark.. That being said I also cannot kick you back into the frost, you can stay but as soon as the snow begins melting in a few weeks you best be on your way.  "
+	(before event : killedWerewolf)
+	"-Watch out for werewolves near the tree lines..."
 	
-==2==	
-	-What can you tell me about you?
 
 	
 	

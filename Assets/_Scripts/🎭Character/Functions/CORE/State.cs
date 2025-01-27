@@ -104,9 +104,13 @@ public class State : MonoBehaviour
 
     private void RunState()
     {
+        if(_character==WorldManager.Instance.ThePlayer)
+        WorldManager.Instance.SetSpeedOfTime(SpeedOfTime.normal);
         switch (_actionState)
         {
             case StateType.sleeping:
+                if (_character == WorldManager.Instance.ThePlayer)
+                    WorldManager.Instance.SetSpeedOfTime(SpeedOfTime.fast);
                 _character.Vitality.Needs[NeedType.sleep] -= 0.1f;
                 break;
         }

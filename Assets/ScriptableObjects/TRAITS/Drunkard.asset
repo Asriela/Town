@@ -18,20 +18,20 @@ MonoBehaviour:
     _dialogue: Lets drink
     _action: 16
     _actionParameter:
-      rid: 2000162685109141524
+      rid: 2000162902653010076
     _conditions:
     - conditionType: 13
       parameter:
-        rid: 2000162685109141524
+        rid: 2000162902653010076
     - conditionType: 22
       parameter:
-        rid: 2000162685109141524
+        rid: 2000162902653010076
     _priority: 3
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162685109141524
+    - rid: 2000162902653010076
       type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 2

@@ -10,7 +10,8 @@ public enum DiaActionType : short
     menu,
     menu_askAbout,
     action_hangout,
-    scriptedAction
+    scriptedAction,
+    share
 }
 
 public enum DiaOptionType
@@ -31,11 +32,11 @@ public class DiaOption
     public int TabLevel { get; }
     public DiaActionType Action { get; }
 
-    public ScriptedTaskType? ActionData { get;}
+    public object ActionData { get;}
 
     public DiaOptionType OptionType { get; }
 
-    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action, ScriptedTaskType? actionData, int index, int tabLevel)
+    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action, object actionData, int index, int tabLevel)
     {
         LineNumber = lineNumber;
         Label = label;
@@ -93,7 +94,7 @@ public static class DiaReader
     }
 
 
-    public static DiaPackage ChooseOption(int optionIndex, out DiaActionType? actionFromChosenOption, out ScriptedTaskType? actionDataFromChosenOption)
+    public static DiaPackage ChooseOption(int optionIndex, out DiaActionType? actionFromChosenOption, out object actionDataFromChosenOption)
     {
 
         var chosenOption = currentOptions[optionIndex];
@@ -176,6 +177,8 @@ public static class DiaReader
             
             string line = allLines[i];
             BasicFunctions.Log($"🔎📖: {line} {allTabs[i]} vs {currentTab} " , LogType.dia);
+            if (allTabs[i] < currentTab)
+            { return false;}
             if (allTabs[i] == currentTab)
             {
                 // Check if the line contains quotes
@@ -294,7 +297,7 @@ public static class DiaReader
                     int actionStart = label.IndexOf('[');
                     int actionEnd = label.IndexOf(']');
 
-                    ScriptedTaskType? actionData=null;
+                    object actionData=null;
                     if (actionStart >= 0 && actionEnd > actionStart)
                     {
                         string actionString = label.Substring(actionStart + 1, actionEnd - actionStart - 1).Trim();
@@ -331,7 +334,7 @@ public static class DiaReader
             currentOptions[i].Index = i;  // Set the new index position
         }
     }
-    private static DiaActionType GetActionFromString(string theString, out ScriptedTaskType? actionData)
+    private static DiaActionType GetActionFromString(string theString, out object actionData)
     {
         var text="";
         DiaActionType ret= DiaActionType.none;
@@ -357,9 +360,13 @@ public static class DiaReader
             ret= DiaActionType.scriptedAction;
             actionData = ScriptedTaskType.takePlayerToInn;
         }
-            
 
-       return ret;
+        if (theString.StartsWith("share:"))
+        {
+            ret = DiaActionType.share;
+            actionData = MemoryTags.mage;
+        }
+        return ret;
     }
 
 

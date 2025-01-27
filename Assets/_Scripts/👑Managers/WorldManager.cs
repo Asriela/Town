@@ -82,7 +82,7 @@ public class WorldManager : Singleton<WorldManager>
     {
         _timeOfDay = _startingTime;
         _lastTimeOfDay = _timeOfDay;
-        Time.timeScale=Settings.Instance.WorldSpeed;
+        Time.timeScale= Settings.Instance.WorldSpeed;
     }
 
     private void RunTimeOfDay()
@@ -106,10 +106,10 @@ public class WorldManager : Singleton<WorldManager>
         {
 
             case SpeedOfTime.normal:
-                Time.timeScale = 1.0f;
+                Time.timeScale = Settings.Instance.WorldSpeed;
                 break;
             case SpeedOfTime.fast:
-                Time.timeScale = 2.0f;
+                Time.timeScale = 30.0f;
                 break;
         }
 

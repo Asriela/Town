@@ -13,7 +13,48 @@ MonoBehaviour:
   m_Name: ConcernedWife
   m_EditorClassIdentifier: 
   Type: 20
-  Behaviors: []
+  Behaviors:
+  - _name: go homr
+    _dialogue: 
+    _action: 16
+    _actionParameter:
+      rid: 2000162902653010176
+    _conditions:
+    - conditionType: 8
+      parameter:
+        rid: 2000162902653010177
+    _priority: 11
+    _actionTags: 
+  - _name: go to doctor
+    _dialogue: 
+    _action: 16
+    _actionParameter:
+      rid: 2000162902653010178
+    _conditions:
+    - conditionType: 8
+      parameter:
+        rid: 2000162902653010179
+    - conditionType: 13
+      parameter:
+        rid: 2000162902653010178
+    _priority: 10
+    _actionTags: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2000162902653010176
+      type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 3
+    - rid: 2000162902653010177
+      type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 21
+    - rid: 2000162902653010178
+      type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 2
+    - rid: 2000162902653010179
+      type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 20

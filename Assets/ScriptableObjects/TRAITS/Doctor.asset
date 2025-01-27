@@ -10,29 +10,39 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7dc8225a4be6fd4d87acb8e49149fbb, type: 3}
-  m_Name: Tailor
+  m_Name: Doctor
   m_EditorClassIdentifier: 
-  Type: 21
+  Type: 20
   Behaviors:
-  - _name: take outfit to captain of guard
+  - _name: go to doctor
     _dialogue: 
-    _action: 22
+    _action: 16
     _actionParameter:
-      rid: 2000162902653010100
+      rid: 2000162902653010066
     _conditions:
     - conditionType: 8
       parameter:
-        rid: 2000162902653010101
-    _priority: 0
+        rid: 2000162902653010067
+    - conditionType: 9
+      parameter:
+        rid: 2000162902653010068
+    - conditionType: 13
+      parameter:
+        rid: 2000162902653010066
+    _priority: 10
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162902653010100
-      type: {class: CharacterName, ns: Mind, asm: Assembly-CSharp}
+    - rid: 2000162902653010066
+      type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
-        value__: 11
-    - rid: 2000162902653010101
+        value__: 6
+    - rid: 2000162902653010067
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
-        value__: 21
+        value__: 22
+    - rid: 2000162902653010068
+      type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 17

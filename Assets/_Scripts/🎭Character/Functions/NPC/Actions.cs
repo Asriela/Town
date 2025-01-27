@@ -162,9 +162,9 @@ public class Actions : MonoBehaviour
 
                 if (bestie != null && ActionsHelper.Reached(_npc, bestie.transform.position, 3f))
                 {
-                    var knowledge = _npc.PersonKnowledge.GetRandomKnowledge(_npc, aboutWhoCharacter);
+                    var knowledge = _npc.PersonKnowledge.GetAllKnowledge(_npc, aboutWhoCharacter);
                     SocialHelper.ShareKnowledgeAbout(_npc, bestie, bestie, aboutWhoCharacter, KnowledgeType.person, knowledge.Cast<Enum>().ToList(), null);
-                    _npc.Ui.Speak(_npc,$"The traveler is a mage! How exciting!");
+                    _npc.Ui.Speak(_npc,$"The stranger is a mage");
                     IncrementStepInAction();
                 }
                 break;
@@ -393,15 +393,30 @@ public class Actions : MonoBehaviour
 
     private void TraderJob(TraderType traderType)
     {
-
+        WorldObject objectToUse=null;
         switch (StepInAction)
         {
             case 1:
-                var objectToUse = _npc.Memory.GetPossession(ObjectType.traderChair);
-                if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 1.5f))
+                switch (traderType)
                 {
-                    _npc.Appearance.FaceLeft();
-                    //TODO: extend trader behaviour here
+                    case TraderType.innkeeper:
+                         objectToUse = _npc.Memory.GetPossession(ObjectType.traderChair);
+                        if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 1.5f))
+                        {
+                            _npc.Appearance.FaceLeft();
+                            //TODO: extend trader behaviour here
+                        }
+
+                        break;
+                    case TraderType.innGuard:
+                         objectToUse = _npc.Memory.GetPossession(ObjectType.traderChair);
+                        if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 1.5f))
+                        {
+                            _npc.Appearance.FaceLeft();
+                            //TODO: extend trader behaviour here
+                        }
+
+                        break;
                 }
 
                 break;
