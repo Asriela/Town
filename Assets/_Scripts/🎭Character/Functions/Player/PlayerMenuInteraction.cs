@@ -78,7 +78,7 @@ public class PlayerMenuInteraction : MonoBehaviour
 
 
     private Character _personWeAreSpeakingTo;
-    public Character PersonWeAreSpeakingTo=> _personWeAreSpeakingTo;
+    public Character PersonWeAreSpeakingTo => _personWeAreSpeakingTo;
     private WorldObject _selectedWorldObject;
     private bool _leftClick = false;
     private bool _justOpenedPieMenu = false;
@@ -89,7 +89,9 @@ public class PlayerMenuInteraction : MonoBehaviour
     private Character _aboutWho = null;
     private DiaPackage currentDiaPackage;
     private List<MenuOption> currentDiaOptions;
-    private bool closingMenu=false;
+    private bool closingMenu = false;
+    private SocializeType socialAction = SocializeType.none;
+    private float socializeTimeLeft = -1;
 
     public SocialMenuState MenuState { get; set; }
     private List<MenuOption> _currentMenuOptions = new List<MenuOption> { new MenuOption("NULL", null, null) };
@@ -131,7 +133,45 @@ public class PlayerMenuInteraction : MonoBehaviour
         _leftClick = false;
         _leftClick = Input.GetMouseButtonDown(0);
         //ClickedOnUI=false;
+        if (socialAction != SocializeType.none)
+        {
+            DoSocialAction();
+        }
 
+    }
+
+    private void DoSocialAction()
+    {
+
+
+        switch (socialAction)
+        {
+            case SocializeType.hangOut:
+                if (socializeTimeLeft == -1)
+                {
+                    socializeTimeLeft = 200;
+                    _player.Appearance.SetSpriteAction("drinking");
+                    WorldManager.Instance.SetSpeedOfTime(SpeedOfTime.fast);
+                }
+
+                break;
+        }
+
+
+
+
+
+        socializeTimeLeft -= Time.timeScale;
+
+        if (socializeTimeLeft < 0)
+        {
+
+            socializeTimeLeft = -1;
+            ExecuteSocialAction(socialAction);
+            socialAction = SocializeType.none;
+            _player.Appearance.ResetSprite();
+
+        }
 
     }
     private bool isMouseOverUI = false;
@@ -155,6 +195,8 @@ public class PlayerMenuInteraction : MonoBehaviour
 
     private void MenuButtonPressed(int positionInList, string buttonLabel, MenuOptionType menuOptionType)
     {
+        if (socialAction != SocializeType.none)
+            return;
         if (menuOptionType == MenuOptionType.dia)
         {
             HandleDiaMenuOptions(positionInList, buttonLabel);
@@ -166,10 +208,11 @@ public class PlayerMenuInteraction : MonoBehaviour
     {
 
         currentDiaPackage = DiaReader.ChooseOption(positionInList, out DiaActionType? diaActionToExecute, out object diaActionData);
-        DiaMenuHelper.ExecuteAction(_player, _personWeAreSpeakingTo, diaActionToExecute, diaActionData);
+        socialAction = DiaMenuHelper.ExecuteAction(_player, _personWeAreSpeakingTo, diaActionToExecute, diaActionData);
+
         if (currentDiaPackage != null)
         {
-     
+
             var diaDialogue = currentDiaPackage.Dialogue;
             currentDiaOptions = DiaMenuHelper.ConvertDiaOptionToMenuOptions(currentDiaPackage.Options);
 
@@ -207,15 +250,15 @@ public class PlayerMenuInteraction : MonoBehaviour
                 _currentMenuOptions = ProcessComplexMenuOptions(positionInList);
                 break;
         }
-        if(closingMenu)
+        if (closingMenu)
         {
-            closingMenu=false;
+            closingMenu = false;
         }
         else
         {
             UpdateInteractionMenu("", "", currentDiaOptions, _titleText, _currentMenuOptions);
         }
-        
+
     }
 
 
@@ -223,13 +266,13 @@ public class PlayerMenuInteraction : MonoBehaviour
     public void UpdateInteractionMenu(string lastChosenOption, string currentDialogue, List<MenuOption> diaButtons, string contextTitle, List<MenuOption> menuButtons)
     {
         //if (_currentMenuOptions == null || _currentMenuOptions.Count == 0)
-      //  {
-           // _interactionMenu.HideMenu();
-      //  }
-       // else
-      //  {
-            OpenInteractionMenu(lastChosenOption, currentDialogue, _personWeAreSpeakingTo.CharacterName.ToString(), diaButtons, contextTitle, menuButtons, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
-       // }
+        //  {
+        // _interactionMenu.HideMenu();
+        //  }
+        // else
+        //  {
+        OpenInteractionMenu(lastChosenOption, currentDialogue, _personWeAreSpeakingTo.CharacterName.ToString(), diaButtons, contextTitle, menuButtons, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
+        // }
     }
     public void UpdateInteractionMenu(string characterSpeaking, string currentDialogue)
     {
@@ -243,8 +286,8 @@ public class PlayerMenuInteraction : MonoBehaviour
             currentDiaOptions.Add(Option(newOptionLabel, currentDiaOptions.Count - 1, DiaActionType.menu));
         }
 
-            OpenInteractionMenu("", currentDialogue, characterSpeaking, currentDiaOptions, "", null, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
-        
+        OpenInteractionMenu("", currentDialogue, characterSpeaking, currentDiaOptions, "", null, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
+
     }
     private void HandleMenuInteraction()
     {
@@ -271,7 +314,7 @@ public class PlayerMenuInteraction : MonoBehaviour
 
     private bool HandleCharacterInteraction(RaycastHit2D hit)
     {
-       return OpenDialoguePlayer( _personWeAreSpeakingTo = hit.collider.GetComponent<Character>());
+        return OpenDialoguePlayer(_personWeAreSpeakingTo = hit.collider.GetComponent<Character>());
 
     }
 
@@ -286,7 +329,7 @@ public class PlayerMenuInteraction : MonoBehaviour
 
             _personWeAreSpeakingTo.Reactions.PersonWeAreSpeakingTo = _player;
             _justOpenedPieMenu = true;
-           // _screenPosition = Camera.main.WorldToScreenPoint(hit.point);
+            // _screenPosition = Camera.main.WorldToScreenPoint(hit.point);
 
             _currentMenuOptions.Clear();
 
@@ -311,7 +354,7 @@ public class PlayerMenuInteraction : MonoBehaviour
         };
         _titleText = "extra options";
         MenuState = SocialMenuState.start;
-        _currentMenuOptions= buttonLabels;
+        _currentMenuOptions = buttonLabels;
     }
     private void HandleObjectInteraction(RaycastHit2D hit)
     {
@@ -337,12 +380,12 @@ public class PlayerMenuInteraction : MonoBehaviour
             MenuState = SocialMenuState.objectInteraction;
             if (_currentMenuOptions != null)
             {
-                OpenInteractionMenu("", "", "",null, "Object Interactions", _currentMenuOptions, _player.transform, _selectedWorldObject.transform, null);
+                OpenInteractionMenu("", "", "", null, "Object Interactions", _currentMenuOptions, _player.transform, _selectedWorldObject.transform, null);
             }
         }
     }
 
-    private void OpenInteractionMenu(string lastChosenOption, string currentDialogue,string currentSpeaker, List<MenuOption> diaButtons, string contextTitle, List<MenuOption> menuButtons, Transform openerOfMenu, Transform target, Character whoWeAreSpeakingTo)
+    private void OpenInteractionMenu(string lastChosenOption, string currentDialogue, string currentSpeaker, List<MenuOption> diaButtons, string contextTitle, List<MenuOption> menuButtons, Transform openerOfMenu, Transform target, Character whoWeAreSpeakingTo)
     {
         EventManager.TriggerSwitchCameraToInteractionMode(openerOfMenu, target);
         _interactionMenu.ShowMenu(lastChosenOption, currentDialogue, currentSpeaker, diaButtons, contextTitle, menuButtons, whoWeAreSpeakingTo);
@@ -360,7 +403,7 @@ public class PlayerMenuInteraction : MonoBehaviour
             return false;
 
 
-        if (GameManager.Instance.BlockingPlayerUIOnScreen && GameManager.Instance.CantClickOffInteractionMenu==false)
+        if (GameManager.Instance.BlockingPlayerUIOnScreen && GameManager.Instance.CantClickOffInteractionMenu == false)
 
         {
             CloseInteractionMenu();
@@ -378,10 +421,10 @@ public class PlayerMenuInteraction : MonoBehaviour
 
     public void CloseInteractionMenu()
     {
-        GameManager.Instance.CantClickOffInteractionMenu=false;
-        _personWeAreSpeakingTo =null;
+        GameManager.Instance.CantClickOffInteractionMenu = false;
+        _personWeAreSpeakingTo = null;
         _interactionMenu.HideMenu();
-    }   
+    }
 
     private void SetupTradeMenu()
     {
@@ -480,7 +523,7 @@ public class PlayerMenuInteraction : MonoBehaviour
             case SocialMenuState.objectInteraction:
 
                 _player.GotoAndInteractWithObject(_selectedWorldObject, (ObjectInteractionType)chosenOption.Data1);
-                closingMenu=true;
+                closingMenu = true;
                 CloseInteractionMenu();
                 break;
 
@@ -490,7 +533,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                     memoryTagsList = new() { memoryTag };
 
                     SocialHelper.ShareKnowledgeAbout(_player, _personWeAreSpeakingTo, _personWeAreSpeakingTo, _player, KnowledgeType.person, memoryTagsList, null);
-                    _player.Ui.Speak(_player,DialogueHelper.GetTellDialogue(memoryTag, _player, _player, _player, true));
+                    _player.Ui.Speak(_player, DialogueHelper.GetTellDialogue(memoryTag, _player, _player, _player, true));
 
                 }
                 else
@@ -916,7 +959,7 @@ public class PlayerMenuInteraction : MonoBehaviour
                 //
                 break;
             case SocialMenuState.socialAction:
-                float effectFromInteraction = _personWeAreSpeakingTo.Relationships.AddInteractionEffect((SocializeType)chosenOption.Data1, _player);
+                ExecuteSocialAction((SocializeType)chosenOption.Data1);
                 //TODO: add that if its a negative response that we dont do the action such as smalltalk which takes time to complete
                 //TODO: add that actions like smalltalk take time
                 //TODO: add animations here for interactions
@@ -926,5 +969,11 @@ public class PlayerMenuInteraction : MonoBehaviour
 
         return newOptions;
     }
+    private void ExecuteSocialAction(SocializeType socialAction)
+    {
+        float effectFromInteraction = _personWeAreSpeakingTo.Relationships.AddInteractionEffect(socialAction, _player);
+
+    }
+
 }
 

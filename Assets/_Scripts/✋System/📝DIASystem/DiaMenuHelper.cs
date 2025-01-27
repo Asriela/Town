@@ -28,8 +28,9 @@ public static class DiaMenuHelper
         return menuOptions;
     }
 
-    public static void ExecuteAction(Character player, Character personWeAreSpeakingTo, DiaActionType? actionType, object actionData)
+    public static SocializeType ExecuteAction(Character player, Character personWeAreSpeakingTo, DiaActionType? actionType, object actionData)
     {
+        SocializeType socialAction= SocializeType.none;
         if (actionType != null)
         {
             switch (actionType)
@@ -48,7 +49,16 @@ public static class DiaMenuHelper
                     }
 
                     break;
+                case DiaActionType.action_hangout:
+                    if (actionData != null)
+                    {
+                        socialAction= SocializeType.hangOut;
+                    }
+
+                    break;
+
             }
         }
+        return socialAction;
     }
 }

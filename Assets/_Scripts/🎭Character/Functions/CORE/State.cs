@@ -110,7 +110,7 @@ public class State : MonoBehaviour
         {
             case StateType.sleeping:
                 if (_character == WorldManager.Instance.ThePlayer)
-                    WorldManager.Instance.SetSpeedOfTime(SpeedOfTime.fast);
+                    WorldManager.Instance.SetSpeedOfTime(SpeedOfTime.veryFast);
                 _character.Vitality.Needs[NeedType.sleep] -= 0.1f;
                 break;
         }

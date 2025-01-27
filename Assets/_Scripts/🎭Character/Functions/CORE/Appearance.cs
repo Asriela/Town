@@ -71,6 +71,7 @@ public class Appearance : MonoBehaviour
 
                 _spriteRenderer.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 break;
+
         }
         _spriteRenderer.transform.localPosition= localSpritePosition+ Vector3.right * offset;
     }
@@ -78,6 +79,19 @@ public class Appearance : MonoBehaviour
     {
 
         _spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/characters/"+spriteName);
+        var tem = _spriteRenderer.sprite;
+    }
+    public void SetSpriteAction(string actionName)
+    {
+
+        _spriteRenderer.sprite = Resources.Load<Sprite>($"Sprites/characters/{_character.CharacterName}_" + actionName);
+        var tem = _spriteRenderer.sprite;
+    }
+
+    public void ResetSprite()
+    {
+
+        _spriteRenderer.sprite = Resources.Load<Sprite>($"Sprites/characters/{_character.CharacterName}");
         var tem = _spriteRenderer.sprite;
     }
     void FlipSpriteBasedOnMovement()
