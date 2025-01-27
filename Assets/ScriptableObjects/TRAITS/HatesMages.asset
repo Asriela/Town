@@ -14,84 +14,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 15
   Behaviors:
-  - _name: goto tavern
+  - _name: talk to player
     _dialogue: 
-    _action: 16
+    _action: 25
     _actionParameter:
-      rid: 2000162685109141528
+      rid: 2000162902653010364
     _conditions:
-    - conditionType: 13
+    - conditionType: 42
       parameter:
-        rid: 2000162685109141528
+        rid: 2000162902653010364
     - conditionType: 28
       parameter:
-        rid: 2000162685109141529
-    - conditionType: 8
-      parameter:
-        rid: 2000162685109141530
-    _priority: 3
-    _actionTags: 
-  - _name: find mage
-    _dialogue: 
-    _action: 3
-    _actionParameter:
-      rid: 2000162685109141531
-    _conditions:
-    - conditionType: 28
-      parameter:
-        rid: 2000162685109141529
-    - conditionType: 8
-      parameter:
-        rid: 2000162685109141532
-    - conditionType: 12
-      parameter:
-        rid: 2000162685109141528
-    - conditionType: 5
-      parameter:
-        rid: 2000162685109141531
-    _priority: 3
-    _actionTags: 
-  - _name: Kill
-    _dialogue: We dont want mages here, time to die!
-    _action: 1
-    _actionParameter:
-      rid: 2000162685109141533
-    _conditions:
-    - conditionType: 28
-      parameter:
-        rid: 2000162685109141529
-    - conditionType: 8
-      parameter:
-        rid: 2000162685109141532
-    - conditionType: 4
-      parameter:
-        rid: 2000162685109141531
-    _priority: 3
+        rid: 2000162902653010365
+    _priority: 15
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162685109141528
-      type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
+    - rid: 2000162902653010364
+      type: {class: ScriptedTaskType, ns: Mind, asm: Assembly-CSharp}
       data:
-        value__: 2
-    - rid: 2000162685109141529
+        value__: 1
+    - rid: 2000162902653010365
       type: {class: MemoryTags, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 4
-    - rid: 2000162685109141530
-      type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
-      data:
-        value__: 19
-    - rid: 2000162685109141531
-      type: {class: TraitType, ns: Mind, asm: Assembly-CSharp}
-      data:
-        value__: 16
-    - rid: 2000162685109141532
-      type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
-      data:
-        value__: 20
-    - rid: 2000162685109141533
-      type: {class: TargetType, ns: Mind, asm: Assembly-CSharp}
-      data:
-        value__: 5

@@ -71,7 +71,7 @@ public static class DiaReader
     private static int currentTab = 1;
     private static int currentLine = 0;
     private static List<DiaOption> currentOptions = new();
-
+    private static bool skipNextLineDueToBadCondition=false;
 
 
 
@@ -125,7 +125,7 @@ public static class DiaReader
         }
 
         //find the next dialogue at indent
-        if (!FindNextDialogue())
+        if (!FindNextDialogue(out bool noOptions))
         {
             currentLine++;
             if (gotoDifferentSection)
@@ -153,7 +153,8 @@ public static class DiaReader
             BasicFunctions.Log($"⛔: {currentSection}", LogType.dia);
 
             BasicFunctions.Log($"🗨: {currentDialogue}", LogType.dia);
-            FindNextOptions(lastOption);
+            if (noOptions == false)
+            { FindNextOptions(lastOption); }
 
 
 
@@ -168,9 +169,46 @@ public static class DiaReader
         return new DiaPackage(currentDialogue, currentOptions);
 
     }
-
-    public static bool FindNextDialogue()
+    private static void CheckForCondition(String line)
     {
+        if (line.Contains("(") && line.Contains(")"))
+        {
+            int start = line.IndexOf('(');
+            int end = line.IndexOf(')');
+            string condition = line.Substring(start + 1, end - start - 1);
+            BasicFunctions.Log($"✋: {condition}", LogType.dia);
+            condition = condition.ToLowerInvariant().Replace(" ", "");
+
+            string dataString = string.Empty;
+
+            int colonIndex = condition.IndexOf(':');
+            if (colonIndex != -1 && colonIndex < condition.Length - 1)
+            {
+                dataString = condition.Substring(colonIndex + 1);
+            }
+            var personWeAreSpeakingTo= GameManager.Instance.GetPersonWeAreSpeakingTo();
+            var player = WorldManager.Instance.ThePlayer;
+
+
+            if (condition.StartsWith("know:"))
+            {
+                if (Enum.TryParse(typeof(MemoryTags), dataString, true, out object rawData))
+                {
+                    MemoryTags enumData = (MemoryTags)rawData;
+                    if (personWeAreSpeakingTo.PersonKnowledge.HasKnowledge(personWeAreSpeakingTo, player, enumData)==false)
+                    {
+                        skipNextLineDueToBadCondition=true;
+                    }
+                }
+                else
+                { BasicFunctions.Log($"⚠️ Invalid MemoryTag: {dataString}", LogType.dia);}
+
+            }
+        }
+    }
+    public static bool FindNextDialogue(out bool noOptions)
+    {
+        noOptions=false;
         // Start from the currentLine index
         for (int i = currentLine; i < allLines.Count; i++)
         {
@@ -181,21 +219,36 @@ public static class DiaReader
             { return false;}
             if (allTabs[i] == currentTab)
             {
+                CheckForCondition(line);
+
+                
                 // Check if the line contains quotes
                 int firstQuote = line.IndexOf('"');
                 int secondQuote = line.IndexOf('"', firstQuote + 1);
 
                 if (firstQuote != -1 && secondQuote != -1)
                 {
-                    // Extract the text between the quotes
-                    currentDialogue = line.Substring(firstQuote + 1, secondQuote - firstQuote - 1);
+                    if (skipNextLineDueToBadCondition==false)
+                    {
+                        // Extract the text between the quotes
+                        currentDialogue = line.Substring(firstQuote + 1, secondQuote - firstQuote - 1);
 
-                    // Update currentLine to the next line for future searches
-                    currentLine = i + 1;
-                    BasicFunctions.Log($"😄📖: CHOSE! {line} {allTabs[i]} vs {currentTab} ", LogType.dia);
-                    currentTab = allTabs[i];
-                   
-                    return true; // Exit the method once the dialogue is found
+                        // Update currentLine to the next line for future searches
+                        currentLine = i + 1;
+                        BasicFunctions.Log($"😄📖: CHOSE! {line} {allTabs[i]} vs {currentTab} ", LogType.dia);
+                        currentTab = allTabs[i];
+
+                        line = allLines[currentLine];
+                        firstQuote = line.IndexOf('"');
+                        secondQuote = line.IndexOf('"', firstQuote + 1);
+                        if (firstQuote != -1 && secondQuote != -1)
+                        { noOptions = true; }
+                        return true; // Exit the method once the dialogue is found
+                    }
+                    else
+                    {
+                        skipNextLineDueToBadCondition=false;
+                    }
                 }
             }
 
@@ -271,7 +324,9 @@ public static class DiaReader
         {
             string line = allLines[i].Trim();
 
-            if (allTabs[i] < currentTab || line.StartsWith("=="))
+
+        
+            if (allTabs[i] < currentTab || line.StartsWith("==") )
             {
                 i = allLines.Count;
             }

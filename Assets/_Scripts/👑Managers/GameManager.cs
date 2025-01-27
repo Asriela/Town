@@ -34,6 +34,10 @@ public class GameManager : Singleton<GameManager>
     {
         WorldManager.Instance.ThePlayer.MenuInteraction.OpenDialoguePlayer(personSpeaking);
     }
+    public Character GetPersonWeAreSpeakingTo()
+    {
+       return WorldManager.Instance.ThePlayer.MenuInteraction.PersonWeAreSpeakingTo;
+    }
     private IEnumerator CloseInteractionMenuDelayed()
     {
         yield return null; // Wait until the next frame

@@ -9092,7 +9092,7 @@ MonoBehaviour:
   _allNPCsShowLogUI: 0
   _interactionDistance: 0.0002
   _playerSpeed: 7
-  _worldSpeed: 1
+  _worldSpeed: 3
 --- !u!1 &1303676867
 GameObject:
   m_ObjectHideFlags: 0

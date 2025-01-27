@@ -45,7 +45,8 @@ public static class DiaCharacterFileHelper
         var ret = $"{name}_1";
         if (accessCount[name] > 0)
         {
-            if (character.Relationships.GetRelationshipWith(character, WorldManager.Instance.ThePlayer) < 0)
+            var relationshipValue= character.Relationships.GetRelationshipWith(character, WorldManager.Instance.ThePlayer);
+            if (relationshipValue < 0)
             { ret = $"{name}_badRelationship"; }
             else
             { ret = $"{name}_repeat"; }
