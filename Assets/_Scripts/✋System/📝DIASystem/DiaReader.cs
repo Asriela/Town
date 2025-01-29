@@ -32,7 +32,7 @@ public class DiaOption
     public int TabLevel { get; }
     public DiaActionType Action { get; }
 
-    public object ActionData { get;}
+    public object ActionData { get; }
 
     public DiaOptionType OptionType { get; }
 
@@ -71,7 +71,7 @@ public static class DiaReader
     private static int currentTab = 1;
     private static int currentLine = 0;
     private static List<DiaOption> currentOptions = new();
-    private static bool skipNextLineDueToBadCondition=false;
+    private static bool skipNextLineDueToBadCondition = false;
 
 
 
@@ -80,16 +80,17 @@ public static class DiaReader
         SetCurrentDialogueFile(filename);
         ClearAllData();
         FindNextSection();
-        var ret= Next(true, false, null,0);
+        var ret = Next(true, false, null, 0);
         return ret;
     }
 
 
-    private static void ClearAllData() {
-        currentSection="";
-        currentDialogue="";
-        currentTab=1;
-        currentLine=0;
+    private static void ClearAllData()
+    {
+        currentSection = "";
+        currentDialogue = "";
+        currentTab = 1;
+        currentLine = 0;
         currentOptions.Clear();
     }
 
@@ -106,7 +107,7 @@ public static class DiaReader
 
 
 
-        return Next(false, false, chosenOption,0);
+        return Next(false, false, chosenOption, 0);
 
     }
 
@@ -116,7 +117,7 @@ public static class DiaReader
         if (!(firstNext || gotoDifferentSection))
         {
             currentTab = lastOption.TabLevel + 1;
-            currentLine = lastOption.LineNumber;
+            currentLine = lastOption.LineNumber + 1;
         }
         if (gotoDifferentSection)
         {
@@ -127,13 +128,13 @@ public static class DiaReader
         //find the next dialogue at indent
         if (!FindNextDialogue(out bool noOptions))
         {
-            currentLine++;
+            //currentLine++;
             if (gotoDifferentSection)
             { currentLine = differentSectionLine; }
-            }
+        }
         if (FindGotoNextSection(out string sectionToFind))
         {
-            if(sectionToFind=="end"|| sectionToFind=="exit")
+            if (sectionToFind == "end" || sectionToFind == "exit")
             {
                 GameManager.Instance.CloseInteractionMenu();
                 return null;
@@ -186,7 +187,7 @@ public static class DiaReader
             {
                 dataString = condition.Substring(colonIndex + 1);
             }
-            var personWeAreSpeakingTo= GameManager.Instance.GetPersonWeAreSpeakingTo();
+            var personWeAreSpeakingTo = GameManager.Instance.GetPersonWeAreSpeakingTo();
             var player = WorldManager.Instance.ThePlayer;
 
 
@@ -195,40 +196,40 @@ public static class DiaReader
                 if (Enum.TryParse(typeof(MemoryTags), dataString, true, out object rawData))
                 {
                     MemoryTags enumData = (MemoryTags)rawData;
-                    if (personWeAreSpeakingTo.PersonKnowledge.HasKnowledge(personWeAreSpeakingTo, player, enumData)==false)
+                    if (personWeAreSpeakingTo.PersonKnowledge.HasKnowledge(personWeAreSpeakingTo, player, enumData) == false)
                     {
-                        skipNextLineDueToBadCondition=true;
+                        skipNextLineDueToBadCondition = true;
                     }
                 }
                 else
-                { BasicFunctions.Log($"⚠️ Invalid MemoryTag: {dataString}", LogType.dia);}
+                { BasicFunctions.Log($"⚠️ Invalid MemoryTag: {dataString}", LogType.dia); }
 
             }
         }
     }
     public static bool FindNextDialogue(out bool noOptions)
     {
-        noOptions=false;
+        noOptions = false;
         // Start from the currentLine index
         for (int i = currentLine; i < allLines.Count; i++)
         {
-            
+
             string line = allLines[i];
-            BasicFunctions.Log($"🔎📖: {line} {allTabs[i]} vs {currentTab} " , LogType.dia);
-            if (allTabs[i] < currentTab)
-            { return false;}
+            BasicFunctions.Log($"🔎📖: {line} {allTabs[i]} vs {currentTab} ", LogType.dia);
+            if (allTabs[i] < currentTab || line.Contains("<"))
+            { return false; }
             if (allTabs[i] == currentTab)
             {
                 CheckForCondition(line);
 
-                
+
                 // Check if the line contains quotes
                 int firstQuote = line.IndexOf('"');
                 int secondQuote = line.IndexOf('"', firstQuote + 1);
 
                 if (firstQuote != -1 && secondQuote != -1)
                 {
-                    if (skipNextLineDueToBadCondition==false)
+                    if (skipNextLineDueToBadCondition == false)
                     {
                         // Extract the text between the quotes
                         currentDialogue = line.Substring(firstQuote + 1, secondQuote - firstQuote - 1);
@@ -247,7 +248,7 @@ public static class DiaReader
                     }
                     else
                     {
-                        skipNextLineDueToBadCondition=false;
+                        skipNextLineDueToBadCondition = false;
                     }
                 }
             }
@@ -265,7 +266,7 @@ public static class DiaReader
         for (int i = currentLine; i < allLines.Count; i++)
         {
             string line = allLines[i];
-           // BasicFunctions.Log($"🔍: {line} with tab {allTabs[i]} vs currentTab {currentTab}", LogType.dia);
+             BasicFunctions.Log($"🔍: {line} with tab {allTabs[i]} vs currentTab {currentTab}", LogType.dia);
             if (allTabs[i] == currentTab)
             {
 
@@ -325,8 +326,8 @@ public static class DiaReader
             string line = allLines[i].Trim();
 
 
-        
-            if (allTabs[i] < currentTab || line.StartsWith("==") )
+
+            if (allTabs[i] < currentTab || line.StartsWith("=="))
             {
                 i = allLines.Count;
             }
@@ -352,14 +353,14 @@ public static class DiaReader
                     int actionStart = label.IndexOf('[');
                     int actionEnd = label.IndexOf(']');
 
-                    object actionData=null;
+                    object actionData = null;
                     if (actionStart >= 0 && actionEnd > actionStart)
                     {
                         string actionString = label.Substring(actionStart + 1, actionEnd - actionStart - 1).Trim();
                         actionType = GetActionFromString(actionString, out actionData);
                         labelWithoutAction = label.Substring(0, actionStart).Trim();
                     }
-                    
+
 
                     // Create a new DiaOption object
                     DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, actionData, currentOptions.Count, allTabs[i]);
@@ -391,28 +392,28 @@ public static class DiaReader
     }
     private static DiaActionType GetActionFromString(string theString, out object actionData)
     {
-        var text="";
-        DiaActionType ret= DiaActionType.none;
+        var text = "";
+        DiaActionType ret = DiaActionType.none;
         actionData = ScriptedTaskType.none;
         if (string.IsNullOrWhiteSpace(theString))
-            ret= DiaActionType.none;
+            ret = DiaActionType.none;
 
         // Normalize spacing and case
         theString = theString.ToLowerInvariant().Replace(" ", "");
 
         if (theString == "menu")
-            ret= DiaActionType.menu;
+            ret = DiaActionType.menu;
 
         if (theString.StartsWith("menu:") && theString.Contains("askabout"))
-            ret= DiaActionType.menu_askAbout;
+            ret = DiaActionType.menu_askAbout;
 
         if (theString.StartsWith("action:") && theString.Contains("hangout"))
-            ret= DiaActionType.action_hangout;
+            ret = DiaActionType.action_hangout;
 
 
         if (theString.StartsWith("scriptedaction:"))
         {
-            ret= DiaActionType.scriptedAction;
+            ret = DiaActionType.scriptedAction;
             actionData = ScriptedTaskType.takePlayerToInn;
         }
 
@@ -470,7 +471,7 @@ public static class DiaReader
     private static bool FindSpecificSection(string sectionToFind, out int sectionLine)
     {
         currentLine = 0;
-        sectionLine=0;
+        sectionLine = 0;
         // Iterate through all lines starting from the current line
         for (int i = currentLine; i < allLines.Count; i++)
         {
@@ -479,7 +480,7 @@ public static class DiaReader
             // Check if the line contains "==" marking a section
             if (line.Contains($"=={sectionToFind}=="))
             {
-                sectionLine=i+1;
+                sectionLine = i + 1;
                 currentLine = i + 1;
                 currentTab = allTabs[i];
                 currentSection = sectionToFind;

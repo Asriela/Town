@@ -149,8 +149,9 @@ public class PlayerMenuInteraction : MonoBehaviour
             case SocializeType.hangOut:
                 if (socializeTimeLeft == -1)
                 {
-                    socializeTimeLeft = 200;
+                    socializeTimeLeft = 10000;
                     _player.Appearance.SetSpriteAction("drinking");
+                    _personWeAreSpeakingTo.Appearance.SetSpriteAction("drinking");
                     WorldManager.Instance.SetSpeedOfTime(SpeedOfTime.fast);
                 }
 
@@ -168,9 +169,11 @@ public class PlayerMenuInteraction : MonoBehaviour
 
             socializeTimeLeft = -1;
             ExecuteSocialAction(socialAction);
-            socialAction = SocializeType.none;
-            _player.Appearance.ResetSprite();
 
+            _player.Appearance.ResetSprite();
+            WorldManager.Instance.SetSpeedOfTime(SpeedOfTime.normal);
+            _personWeAreSpeakingTo.Appearance.ResetSprite();
+            socialAction = SocializeType.none;
         }
 
     }

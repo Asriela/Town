@@ -25,10 +25,10 @@ public class PlayerControls : MonoBehaviour
 
     void Update()
     {
-        if (!GameManager.Instance.BlockingPlayerUIOnScreen)
-        {
+     
             PlayerKeyboardMovement();
-        }
+        
+
 
 
 
@@ -37,8 +37,11 @@ public class PlayerControls : MonoBehaviour
     void PlayerKeyboardMovement()
     {
         // Get movement input
-        Vector2 inputDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
-
+        Vector2 inputDirection = Vector2.zero;
+        if (!GameManager.Instance.BlockingPlayerUIOnScreen)
+        {
+             inputDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+        }
         // Calculate target velocity based on input
         targetVelocity = inputDirection * moveSpeed;
         targetVelocity = Vector2.ClampMagnitude(targetVelocity, Settings.Instance.PlayerSpeed);
@@ -59,7 +62,8 @@ public class PlayerControls : MonoBehaviour
     void FixedUpdate()
     {
         // Move the player using the current velocity
-        rb.linearVelocity = currentVelocity;
+
+            rb.linearVelocity = currentVelocity;
 
         // Pixel-perfect snapping after applying velocity
         PixelSnap();

@@ -84,15 +84,26 @@ public class Appearance : MonoBehaviour
     public void SetSpriteAction(string actionName)
     {
 
-        _spriteRenderer.sprite = Resources.Load<Sprite>($"Sprites/characters/{_character.CharacterName}_" + actionName);
+        _spriteRenderer.sprite = Resources.Load<Sprite>($"Sprites/characters/{GetCharacterName(_character)}_" + actionName);
         var tem = _spriteRenderer.sprite;
     }
 
     public void ResetSprite()
     {
 
-        _spriteRenderer.sprite = Resources.Load<Sprite>($"Sprites/characters/{_character.CharacterName}");
+        _spriteRenderer.sprite = Resources.Load<Sprite>($"Sprites/characters/{GetCharacterName(_character)}");
         var tem = _spriteRenderer.sprite;
+    }
+
+    private string GetCharacterName(Character character)
+    {
+        if (character == WorldManager.Instance.ThePlayer)
+        {
+            return "Traveler";
+        }
+        else
+        { return _character.CharacterName.ToString(); }
+    
     }
     void FlipSpriteBasedOnMovement()
     {

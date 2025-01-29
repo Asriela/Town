@@ -13,7 +13,7 @@ public static class DiaCharacterFileHelper
     => character.CharacterName switch
     {
 
-        Mind.CharacterName.Agnar => Default(character),
+        Mind.CharacterName.Agnar => GetAgnarFile(character),
         _ => Default(character)
     };
 

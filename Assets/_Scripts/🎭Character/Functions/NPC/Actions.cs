@@ -401,7 +401,7 @@ public class Actions : MonoBehaviour
                 {
                     case TraderType.innkeeper:
                          objectToUse = _npc.Memory.GetPossession(ObjectType.traderChair);
-                        if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 1.5f))
+                        if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 3f))
                         {
                             _npc.Appearance.FaceLeft();
                             //TODO: extend trader behaviour here
@@ -410,7 +410,7 @@ public class Actions : MonoBehaviour
                         break;
                     case TraderType.innGuard:
                          objectToUse = _npc.Memory.GetPossession(ObjectType.traderChair);
-                        if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 1.5f))
+                        if (ActionsHelper.Reached(_npc, objectToUse.transform.position, 3f))
                         {
                             _npc.Appearance.FaceLeft();
                             //TODO: extend trader behaviour here

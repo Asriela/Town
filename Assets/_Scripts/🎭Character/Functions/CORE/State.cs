@@ -26,7 +26,8 @@ public class State : MonoBehaviour
 
     [SerializeField]
     private List<MemoryTags> _formstate = new();
-    
+
+    private bool resetTime = false;
 
     public StateType ActionState => _actionState;
 
@@ -104,13 +105,21 @@ public class State : MonoBehaviour
 
     private void RunState()
     {
-        if(_character==WorldManager.Instance.ThePlayer)
-        WorldManager.Instance.SetSpeedOfTime(SpeedOfTime.normal);
+
+        if (_character == WorldManager.Instance.ThePlayer && resetTime)
+        {
+            resetTime = false;
+            WorldManager.Instance.SetSpeedOfTime(SpeedOfTime.normal);
+        }
         switch (_actionState)
         {
             case StateType.sleeping:
                 if (_character == WorldManager.Instance.ThePlayer)
-                    WorldManager.Instance.SetSpeedOfTime(SpeedOfTime.veryFast);
+                {
+                    resetTime = true;
+                   WorldManager.Instance.SetSpeedOfTime(SpeedOfTime.veryFast);
+                    
+                }
                 _character.Vitality.Needs[NeedType.sleep] -= 0.1f;
                 break;
         }

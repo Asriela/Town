@@ -53,7 +53,12 @@ public class InteractFeature : MonoBehaviour, IInteractable
         // Check for features and add relevant interaction options
         if (_worldObject.HasFeature<UseFeature>())
         {
-            _interactionOptions.Add(new InteractionOption("Use", ObjectInteractionType.use));
+            if (character.Memory.IsOurPossession(_worldObject))
+            { _interactionOptions.Add(new InteractionOption("Use", ObjectInteractionType.use)); }
+            else
+            {
+                _interactionOptions.Add(new InteractionOption("Use (does not belong to you!)", ObjectInteractionType.use));
+            }
         }
 
         if (_worldObject.HasFeature<UpkeepFeature>())

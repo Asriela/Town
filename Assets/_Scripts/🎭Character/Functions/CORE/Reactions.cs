@@ -98,7 +98,7 @@ public class Reactions : MonoBehaviour
                             // Get relationship between the NPC and the sender
                             var relationshipState = (ViewTowards)(int)_npc.Relationships.GetRelationshipWith(_npc, sender);
 
-                            if (sender != aboutWho && _npc is not Player)
+                            if ( _npc is not Player)
                             {
                                 // Check if there's a scripted dialogue response
                                 var dialogueResponse = _npc.DialogueResponsesToPersonInformation.GetDialogue(aboutWho, tags[0], relationshipState);

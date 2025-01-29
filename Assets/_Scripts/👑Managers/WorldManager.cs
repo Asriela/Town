@@ -110,7 +110,7 @@ public class WorldManager : Singleton<WorldManager>
                 Time.timeScale = Settings.Instance.WorldSpeed;
                 break;
             case SpeedOfTime.fast:
-                Time.timeScale = 8f;
+                Time.timeScale = 15f;
                 break;
             case SpeedOfTime.veryFast:
                 Time.timeScale = 30.0f;

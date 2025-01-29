@@ -8,7 +8,7 @@
 		<2>
 ==2==
 	"Are you sure..."
-	>YES!
+	>Of course I'm sure!
 		"Easy now... head over to the tavern so Alrine can have you checked out"
 		<3>
 	-I'm so cold...
