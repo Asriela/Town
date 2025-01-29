@@ -42,18 +42,22 @@ public class PlayerControls : MonoBehaviour
         {
              inputDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
         }
+
+
         // Calculate target velocity based on input
         targetVelocity = inputDirection * moveSpeed;
         targetVelocity = Vector2.ClampMagnitude(targetVelocity, Settings.Instance.PlayerSpeed);
         // Apply acceleration or deceleration
         if (inputDirection.magnitude > 0)
         {
+            _player.Movement.IsMoving=true;
             _player.Movement.Agent.ResetPath();
             // Accelerate towards the target velocity
             currentVelocity = Vector2.MoveTowards(currentVelocity, targetVelocity, acceleration * Time.deltaTime);
         }
         else
         {
+            _player.Movement.IsMoving = false;
             // Decelerate smoothly to zero when no input
             currentVelocity = Vector2.MoveTowards(currentVelocity, Vector2.zero, deceleration * Time.deltaTime);
         }

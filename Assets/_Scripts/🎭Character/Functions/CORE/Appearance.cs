@@ -17,20 +17,26 @@ public class Appearance : MonoBehaviour
     private Transform _spriteTransform;
 
     private SpriteRenderer _spriteRenderer;
+    private Animator animator;
 
     private Vector3 previousPosition;
     private Vector3 localSpritePosition;
+    private float waitToIdle = 0;
+    string currentAnimationName="";
+
 
     private void Start()
     {
         _spriteRenderer = _spriteTransform.GetComponent<SpriteRenderer>();
-        localSpritePosition=_spriteRenderer.transform.localPosition;
+        animator = _spriteTransform.GetComponent<Animator>();
+        localSpritePosition = _spriteRenderer.transform.localPosition;
     }
 
     private void Update()
     {
         ChangeAppearanceAccordingToState();
-        FlipSpriteBasedOnMovement();
+        MovementBasedFunctions();
+
         SortByY();
     }
     private void SortByY()
@@ -50,7 +56,7 @@ public class Appearance : MonoBehaviour
         switch (State)
         {
             case AppearanceState.dead:
-     
+
                 Sprite deadSprite = Resources.Load<Sprite>("Assets/Sprites/characters/TravelerDead.png");
                 if (deadSprite != null)
                 {
@@ -65,7 +71,7 @@ public class Appearance : MonoBehaviour
             case AppearanceState.lyingDown:
 
                 _spriteRenderer.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 90);
-                offset=0.9f;
+                offset = 0.9f;
                 break;
             case AppearanceState.standing:
 
@@ -73,12 +79,12 @@ public class Appearance : MonoBehaviour
                 break;
 
         }
-        _spriteRenderer.transform.localPosition= localSpritePosition+ Vector3.right * offset;
+        _spriteRenderer.transform.localPosition = localSpritePosition + Vector3.right * offset;
     }
     public void SetSprite(string spriteName)
     {
 
-        _spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/characters/"+spriteName);
+        _spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/characters/" + spriteName);
         var tem = _spriteRenderer.sprite;
     }
     public void SetSpriteAction(string actionName)
@@ -103,12 +109,53 @@ public class Appearance : MonoBehaviour
         }
         else
         { return _character.CharacterName.ToString(); }
-    
+
     }
-    void FlipSpriteBasedOnMovement()
+    void MovementBasedFunctions()
+    {
+        Vector3 movementDirection = transform.position - previousPosition;
+        FlipSpriteBasedOnMovement(movementDirection);
+        WalkAnimation(movementDirection);
+
+        previousPosition = transform.position;
+    }
+    void SetAnimation(string name)
+    {
+        animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>($"Sprites/characters/animations/{GetCharacterName(_character)}_{name}");
+        currentAnimationName=name;
+        }
+
+    bool IsAnimation(string name)
+    {
+        if (currentAnimationName == name)
+        { return true;}
+        else
+        { return false;}
+    }
+
+    void WalkAnimation(Vector3 movementDirection)
+    {
+        if (_character.Movement.IsMoving)
+        {
+            if (IsAnimation("walk")==false)
+            {
+                SetAnimation("walk");
+  
+            }
+            waitToIdle = 2;
+        }
+        else
+        if(waitToIdle<0 && !IsAnimation("idle"))
+        {
+        
+            SetAnimation("idle");
+        }
+        waitToIdle-=Time.timeScale;
+    }
+    void FlipSpriteBasedOnMovement(Vector3 movementDirection)
     {
 
-        Vector3 movementDirection = transform.position - previousPosition;
+
 
 
         if (movementDirection.x > 0.005f)
@@ -122,7 +169,6 @@ public class Appearance : MonoBehaviour
         }
 
 
-        previousPosition = transform.position;
     }
     public void FaceLeft()
     {

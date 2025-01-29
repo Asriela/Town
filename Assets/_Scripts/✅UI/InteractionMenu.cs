@@ -2,6 +2,8 @@
 using UnityEngine.UIElements;
 using System.Collections.Generic;
 using System.Collections;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 
 public class InteractionMenu : MonoBehaviour
@@ -198,8 +200,11 @@ public class InteractionMenu : MonoBehaviour
         // Add the speaker and current dialogue in white
         if (currentDialogue != "")
         {
-            pastDialogue += @$"<color=#FFFFFF>{currentSpeaker.ToUpper()}</color><color=#D5D6C8>-""{currentDialogue}""</color>" +
-            "</color>" + "\n\n";
+            pastDialogue += @$"<color=#FFFFFF>{currentSpeaker.ToUpper()}</color><color=#D5D6C8>- " +
+                Regex.Replace(currentDialogue, @"^#(.*?)#(.*)", @"  <color=#a0a095>$1</color>"+"\n"+@"""$2""") +
+                "</color>\n\n";
+
+
         }
 
 
