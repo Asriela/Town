@@ -1,10 +1,6 @@
 ==start==
-	(know : mage)
-	"Alrine here says you are a mage, your kind isn't welcome, you have done enough.. my advice find your way back through the cold because as long as you stay here , you wont be welcome"
-	-leave
-		<end>
 	"Hello, are you a mage?"
-	>yes
+	>yes [share : mage]
 		"Then you are not welcome here, you best be moving along, if not now , as soon as possible."
 		-leave
 			<end>

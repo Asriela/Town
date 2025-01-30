@@ -23,7 +23,7 @@ public class Appearance : MonoBehaviour
     private Vector3 localSpritePosition;
     private float waitToIdle = 0;
     string currentAnimationName="";
-
+    string currentSocialAction="";
 
     private void Start()
     {
@@ -89,16 +89,14 @@ public class Appearance : MonoBehaviour
     }
     public void SetSpriteAction(string actionName)
     {
-
-        _spriteRenderer.sprite = Resources.Load<Sprite>($"Sprites/characters/{GetCharacterName(_character)}_" + actionName);
-        var tem = _spriteRenderer.sprite;
+        SetAnimation(actionName);
+        currentSocialAction= actionName;
     }
 
     public void ResetSprite()
     {
 
-        _spriteRenderer.sprite = Resources.Load<Sprite>($"Sprites/characters/{GetCharacterName(_character)}");
-        var tem = _spriteRenderer.sprite;
+        currentSocialAction="";
     }
 
     private string GetCharacterName(Character character)
@@ -121,9 +119,16 @@ public class Appearance : MonoBehaviour
     }
     void SetAnimation(string name)
     {
-        animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>($"Sprites/characters/animations/{GetCharacterName(_character)}_{name}");
-        currentAnimationName=name;
+
+        var path= $"Animations/Characters/{GetCharacterName(_character)}_{name}";
+
+        if (_character.CharacterName == Mind.CharacterName.Alrine)
+        {
+           var testc="";
         }
+        animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>(path);
+        currentAnimationName=name;
+    }
 
     bool IsAnimation(string name)
     {
@@ -135,7 +140,7 @@ public class Appearance : MonoBehaviour
 
     void WalkAnimation(Vector3 movementDirection)
     {
-        if (_character.Movement.IsMoving || _character.Movement.Agent.remainingDistance>0.5)
+        if (_character.Movement.IsMoving || _character.Movement.Agent.remainingDistance> _character.Movement.CurrentInteractionDistance)
         {
             if (IsAnimation("walk")==false)
             {
@@ -145,12 +150,15 @@ public class Appearance : MonoBehaviour
             waitToIdle = 2;
         }
         else
-        if(waitToIdle<0 && !IsAnimation("idle"))
+        if(waitToIdle<0 && currentSocialAction=="" && !IsAnimation("idle"))
         {
         
             SetAnimation("idle");
         }
+        if(waitToIdle>=0)
         waitToIdle-=Time.timeScale;
+
+    
     }
     void FlipSpriteBasedOnMovement(Vector3 movementDirection)
     {

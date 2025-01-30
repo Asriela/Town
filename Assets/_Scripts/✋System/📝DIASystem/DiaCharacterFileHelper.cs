@@ -5,17 +5,33 @@ using System;
 
 public static class DiaCharacterFileHelper
 {
-    private static Dictionary<CharacterName, int> accessCount  = new();
+    private static Dictionary<CharacterName, int> accessCount = new();
 
 
 
-    public static string GetFileName(Character character)
-    => character.CharacterName switch
+    public static string GetFileName(Character character, DialogueFileType fileType)
     {
+        string ret= string.Empty;
+        var name = character.CharacterName;
+        switch (fileType)
+        {
+            case DialogueFileType.auto:
+                ret = character.CharacterName switch
+                {
 
-        Mind.CharacterName.Agnar => GetAgnarFile(character),
-        _ => Default(character)
-    };
+                    Mind.CharacterName.Agnar => GetAgnarFile(character),
+                    _ => Default(character)
+                };
+                break;
+            case DialogueFileType.confront:
+                ret = $"{name}_confront";
+                accessCount[name]++;
+                break;
+        }
+
+
+        return ret;
+    }
 
     public static void InitializeAccessCounts()
     {
@@ -32,7 +48,7 @@ public static class DiaCharacterFileHelper
         var ret = $"{name}_1";
         if (accessCount[name] > 0)
         {
-             ret = $"{name}_repeat";
+            ret = $"{name}_repeat";
         }
 
 
@@ -45,7 +61,7 @@ public static class DiaCharacterFileHelper
         var ret = $"{name}_1";
         if (accessCount[name] > 0)
         {
-            var relationshipValue= character.Relationships.GetRelationshipWith(character, WorldManager.Instance.ThePlayer);
+            var relationshipValue = character.Relationships.GetRelationshipWith(character, WorldManager.Instance.ThePlayer);
             if (relationshipValue < 0)
             { ret = $"{name}_badRelationship"; }
             else

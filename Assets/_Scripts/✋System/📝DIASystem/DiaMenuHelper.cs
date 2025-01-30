@@ -5,9 +5,9 @@ using UnityEngine;
 
 public static class DiaMenuHelper
 {
-    public static DiaPackage OpenInteractionWithCharacter(Character characerWeAreSpeakingTo)
+    public static DiaPackage OpenInteractionWithCharacter(Character characerWeAreSpeakingTo, DialogueFileType fileType)
     {
-        string charactersFileName = DiaCharacterFileHelper.GetFileName(characerWeAreSpeakingTo);
+        string charactersFileName = DiaCharacterFileHelper.GetFileName(characerWeAreSpeakingTo, fileType);
         return DiaReader.OpenNewDialogue(charactersFileName);
     }
 
@@ -52,7 +52,7 @@ public static class DiaMenuHelper
                 case DiaActionType.action_hangout:
                     if (actionData != null)
                     {
-                        socialAction= SocializeType.hangOut;
+                        socialAction= SocializeType.drinking;
                     }
 
                     break;

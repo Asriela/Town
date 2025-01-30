@@ -22,7 +22,8 @@ public class EnumCharacterPair
 {
     normal,
     fast,
-    veryFast
+    veryFast,
+    none
 }
 
 public class WorldManager : Singleton<WorldManager>
@@ -64,7 +65,11 @@ public class WorldManager : Singleton<WorldManager>
     [SerializeField]
     private Player _thePlayer;
 
-
+    float rampUpTimeScaleTo=0;
+    float rampAccel=0;
+    float rampUpWait=400;
+    SpeedOfTime currentTimesScale= SpeedOfTime.normal;
+    SpeedOfTime rampingUpTo = SpeedOfTime.none;
     public float TotalHoursPassed { get; set; } = 0;
     public float TimeThatsChanged { get; set; } = 0;
 
@@ -77,8 +82,11 @@ public class WorldManager : Singleton<WorldManager>
         get => _timeOfDay;
         set => _timeOfDay = value;
     }
-    private void Update() => RunTimeOfDay();
-
+    private void Update()
+    {
+        RunTimeOfDay();
+        RampUpTimeScale();
+    }
     private void Start()
     {
         _timeOfDay = _startingTime;
@@ -108,15 +116,62 @@ public class WorldManager : Singleton<WorldManager>
 
             case SpeedOfTime.normal:
                 Time.timeScale = Settings.Instance.WorldSpeed;
+                currentTimesScale= speedOfTime;
                 break;
             case SpeedOfTime.fast:
                 Time.timeScale = 30f;
+                currentTimesScale = speedOfTime;
                 break;
             case SpeedOfTime.veryFast:
                 Time.timeScale = 30.0f;
+                currentTimesScale = speedOfTime;
                 break;
         }
 
+    }
+    void RampUpTimeScale()
+    {
+       if( rampingUpTo != currentTimesScale)
+        { return; }
+        if (Time.timeScale< rampUpTimeScaleTo  )
+        {
+            Time.timeScale+=rampAccel;
+            if (rampUpWait <= 0)
+            { rampAccel += 0.01f; }
+            else
+            { rampUpWait-=1;}
+            
+        }
+        else
+        {
+            Time.timeScale= rampUpTimeScaleTo;
+            rampingUpTo=SpeedOfTime.none;
+            rampUpWait=400;
+        }
+            
+    }
+    public void SetRampUpSpeedOfTime(SpeedOfTime speedOfTime)
+    {
+        switch (speedOfTime)
+        {
+
+            case SpeedOfTime.normal:
+                rampUpTimeScaleTo = Settings.Instance.WorldSpeed;
+                currentTimesScale= speedOfTime;
+                rampingUpTo= speedOfTime;
+                break;
+            case SpeedOfTime.fast:
+                rampUpTimeScaleTo = 30f;
+                currentTimesScale = speedOfTime;
+                rampingUpTo = speedOfTime;
+                break;
+            case SpeedOfTime.veryFast:
+                rampUpTimeScaleTo = 30.0f;
+                currentTimesScale = speedOfTime;
+                rampingUpTo = speedOfTime;
+                break;
+        }
+        rampAccel=0;
     }
     public TimeOfDayType GetTimeOfDayAsEnum()
     {

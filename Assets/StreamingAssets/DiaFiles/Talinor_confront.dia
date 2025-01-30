@@ -1,0 +1,8 @@
+==start==
+	"#He looks at you with wild eyes sweat dripping from his face despite the cold# DONT LOOK AT ME! "
+	>Where... where am I?
+		"JUST STAY AWAY!"
+		>ok..
+			<end>
+	
+	

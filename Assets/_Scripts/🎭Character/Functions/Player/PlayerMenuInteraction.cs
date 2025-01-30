@@ -154,13 +154,14 @@ public class PlayerMenuInteraction : MonoBehaviour
 
         switch (SocialAction)
         {
-            case SocializeType.hangOut:
+            case SocializeType.drinking:
                 if (socializeTimeLeft == -1)
                 {
                     socializeTimeLeft = 10000;
                     _player.Appearance.SetSpriteAction("drinking");
                     _personWeAreSpeakingTo.Appearance.SetSpriteAction("drinking");
-                    WorldManager.Instance.SetSpeedOfTime(SpeedOfTime.fast);
+
+                    WorldManager.Instance.SetRampUpSpeedOfTime(SpeedOfTime.fast);
                 }
 
                 break;
@@ -338,12 +339,12 @@ public class PlayerMenuInteraction : MonoBehaviour
 
     private bool HandleCharacterInteraction(RaycastHit2D hit)
     {
-        return OpenDialoguePlayer(_personWeAreSpeakingTo = hit.collider.GetComponent<Character>());
+        return OpenDialoguePlayer(_personWeAreSpeakingTo = hit.collider.GetComponent<Character>(), DialogueFileType.auto);
 
     }
 
 
-    public bool OpenDialoguePlayer(Character target)
+    public bool OpenDialoguePlayer(Character target, DialogueFileType fileType)
     {
         _personWeAreSpeakingTo = target;
         if (_personWeAreSpeakingTo != null && _personWeAreSpeakingTo != _player)
@@ -358,7 +359,7 @@ public class PlayerMenuInteraction : MonoBehaviour
             _currentMenuOptions.Clear();
 
 
-            currentDiaPackage = DiaMenuHelper.OpenInteractionWithCharacter(_personWeAreSpeakingTo);
+            currentDiaPackage = DiaMenuHelper.OpenInteractionWithCharacter(_personWeAreSpeakingTo, fileType);
             var diaDialogue = currentDiaPackage.Dialogue;
             var diaOptions = DiaMenuHelper.ConvertDiaOptionToMenuOptions(currentDiaPackage.Options);
 

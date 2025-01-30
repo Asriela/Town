@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Mind;
+using UnityEditor.Build.Content;
 using UnityEngine;
 [System.Serializable]
 public class TraitTypeTraitPair
@@ -36,9 +37,9 @@ public class GameManager : Singleton<GameManager>
     {
         StartCoroutine(CloseInteractionMenuDelayed());
     }
-    public void OpenDialoguePlayer(Character personSpeaking)
+    public void OpenDialoguePlayer(Character personSpeaking,DialogueFileType fileType)
     {
-        WorldManager.Instance.ThePlayer.MenuInteraction.OpenDialoguePlayer(personSpeaking);
+        WorldManager.Instance.ThePlayer.MenuInteraction.OpenDialoguePlayer(personSpeaking, fileType);
     }
     public Character GetPersonWeAreSpeakingTo()
     {

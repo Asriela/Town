@@ -18,28 +18,28 @@ MonoBehaviour:
     _dialogue: 
     _action: 11
     _actionParameter:
-      rid: 2000162973557981265
+      rid: 2000162973866262936
     _conditions:
     - conditionType: 8
       parameter:
-        rid: 2000162973557981266
+        rid: 2000162973866262937
     - conditionType: 9
       parameter:
-        rid: 2000162973557981267
+        rid: 2000162973866262938
     _priority: 12
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162973557981265
+    - rid: 2000162973866262936
       type: {class: TraderType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 5
-    - rid: 2000162973557981266
+    - rid: 2000162973866262937
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 19
-    - rid: 2000162973557981267
+    - rid: 2000162973866262938
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 22

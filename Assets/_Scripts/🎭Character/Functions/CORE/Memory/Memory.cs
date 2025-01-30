@@ -42,6 +42,7 @@ public class Memory : MonoBehaviour
     public Character SocialTarget { get; set; }
     public string SocialDialogue { get; set; }
 
+    public CharacterName LastSpokeTo { get; set; }
     public Dictionary<ScriptedTaskType,ScriptedTaskProgressType> ScriptedTaskProgress { get; set; } = new();
 
     public ScriptedTaskProgressType GetScriptedTaskProgress(ScriptedTaskType taskType )

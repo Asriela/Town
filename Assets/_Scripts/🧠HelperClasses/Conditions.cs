@@ -53,6 +53,7 @@ public static class Conditions
         _conditionDelegates.Add(ConditionType.scriptedTaskCompleted, new ConditionDelegate<ScriptedTaskType>(CheckScriptedTaskCompleted));
         _conditionDelegates.Add(ConditionType.scriptedTaskNotCompleted, new ConditionDelegate<ScriptedTaskType>(CheckScriptedTaskCompleted));
         _conditionDelegates.Add(ConditionType.scriptedTaskActive , new ConditionDelegate<ScriptedTaskType>(CheckScriptedTaskActive));
+        _conditionDelegates.Add(ConditionType.lastSpokeTo, new ConditionDelegate<CharacterName>(CheckLastSpokeTo));
     }
 
     public static bool CheckCondition(Condition condition, NPC npc)
@@ -128,6 +129,8 @@ public static class Conditions
                 ConditionType.scriptedTaskActive => ConditionHandler<ScriptedTaskType>((ConditionDelegate<ScriptedTaskType>)conditionDelegate, condition.parameter, npc, true),
                 ConditionType.scriptedTaskCompleted => ConditionHandler<ScriptedTaskType>((ConditionDelegate<ScriptedTaskType>)conditionDelegate, condition.parameter, npc, true),
                 ConditionType.scriptedTaskNotCompleted => ConditionHandler<ScriptedTaskType>((ConditionDelegate<ScriptedTaskType>)conditionDelegate, condition.parameter, npc, false),
+                ConditionType.lastSpokeTo => ConditionHandler<CharacterName>((ConditionDelegate<CharacterName>)conditionDelegate, condition.parameter, npc, true),
+
                 _ => false
             };
 
@@ -148,6 +151,17 @@ public static class Conditions
         }
         return false;
     }
+    private static bool CheckLastSpokeTo(CharacterName parameter, NPC npc, bool trueStatement)
+    {
+        var value = npc.Memory.LastSpokeTo;
+        if (value== parameter)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    
     private static bool CheckScriptedTaskCompleted(ScriptedTaskType parameter, NPC npc, bool trueStatement)
     {
         var value = npc.Memory.GetScriptedTaskProgress(parameter);

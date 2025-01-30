@@ -599,7 +599,7 @@ public class InteractionMenu : MonoBehaviour
         var ret="";
         switch (type)
         {
-            case SocializeType.hangOut:
+            case SocializeType.drinking:
                 ret= $"drinking with {character}";
                 break;
         }

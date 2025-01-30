@@ -136,6 +136,7 @@ public static class DiaReader
         {
             if (sectionToFind == "end" || sectionToFind == "exit")
             {
+                BasicFunctions.Log($"🚪: exit menu", LogType.dia);
                 GameManager.Instance.CloseInteractionMenu();
                 return null;
             }
@@ -216,7 +217,7 @@ public static class DiaReader
 
             string line = allLines[i];
             BasicFunctions.Log($"🔎📖: {line} {allTabs[i]} vs {currentTab} ", LogType.dia);
-            if (allTabs[i] < currentTab || line.Contains("<"))
+            if ((allTabs[i] < currentTab || line.Contains("<")) && allTabs[i]== currentTab)
             { return false; }
             if (allTabs[i] == currentTab)
             {
@@ -248,6 +249,7 @@ public static class DiaReader
                     }
                     else
                     {
+                        BasicFunctions.Log($"🔎📖🛑: SKIPPING!! {line} ", LogType.dia);
                         skipNextLineDueToBadCondition = false;
                     }
                 }
@@ -327,7 +329,7 @@ public static class DiaReader
 
 
 
-            if (allTabs[i] < currentTab || line.StartsWith("==") || line.StartsWith('"'))
+            if (allTabs[i] < currentTab || line.StartsWith("==") || (allTabs[i]<= currentTab && line.StartsWith('"')))
             {
                 i = allLines.Count;
             }
@@ -395,8 +397,18 @@ public static class DiaReader
         var text = "";
         DiaActionType ret = DiaActionType.none;
         actionData = ScriptedTaskType.none;
+
+
+
         if (string.IsNullOrWhiteSpace(theString))
             ret = DiaActionType.none;
+        var dataString=string.Empty;
+
+        int colonIndex = theString.IndexOf(':');
+        if (colonIndex != -1 && colonIndex < theString.Length - 1)
+        {
+            dataString = theString.Substring(colonIndex + 1);
+        }
 
         // Normalize spacing and case
         theString = theString.ToLowerInvariant().Replace(" ", "");
@@ -420,7 +432,11 @@ public static class DiaReader
         if (theString.StartsWith("share:"))
         {
             ret = DiaActionType.share;
-            actionData = MemoryTags.mage;
+            if (Enum.TryParse(typeof(MemoryTags), dataString, true, out object rawData))
+            {
+                actionData = (MemoryTags)rawData;
+            }
+
         }
         return ret;
     }

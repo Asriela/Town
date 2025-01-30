@@ -154,6 +154,21 @@ namespace Mind
         innkeeper,
         innGuard
     }
+    [Serializable]
+    public enum DialogueFileType : short
+    {
+        auto,
+        repeat,
+        confront,
+        bad,
+        good,
+        _1,
+        _2,
+        _3,
+        _4,
+        _5
+    }
+
     public enum FarmerType : short
     {
         none,
@@ -181,7 +196,7 @@ namespace Mind
         hug,
         kiss,
         smallTalk,
-        hangOut,
+        drinking,
         ask,
         tell
     }
@@ -254,7 +269,8 @@ namespace Mind
         completedDialogueFile,
         scriptedTaskActive,
         scriptedTaskCompleted,
-        scriptedTaskNotCompleted
+        scriptedTaskNotCompleted,
+        lastSpokeTo
     }
     [Serializable]
     public enum TimeOfDayType : short
@@ -320,14 +336,14 @@ namespace Mind
         table
 
     }
-    
+
     [Serializable]
     public enum ScriptedTaskType : short
     {
         none,
         talkToPlayer,
         takePlayerToInn
-        
+
 
     }
     [Serializable]
@@ -338,7 +354,7 @@ namespace Mind
         completed
     }
 
-    
+
     [Serializable]
     public enum ObjectTrait : short
     {

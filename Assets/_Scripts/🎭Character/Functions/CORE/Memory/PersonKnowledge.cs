@@ -103,6 +103,8 @@ public class PersonKnowledge : MonoBehaviour
                 }
             }
         }
+
+        _character.Relationships.RecalculateMyRelationshipWithEveryone();
     }
 
     // Retrieve knowledge about a specific character

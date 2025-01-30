@@ -30,9 +30,9 @@ public static class ActionsHelper
  
         float remainingDistance = character.Movement.Agent.remainingDistance;
 
+        character.Movement.CurrentInteractionDistance= distance;
 
-
-        if (!character.Movement.Agent.pathPending &&  remainingDistance < distance)
+        if (!character.Movement.Agent.pathPending &&  remainingDistance <= distance)
         {
             character.Movement.Stop();
             return true;

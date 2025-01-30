@@ -162,7 +162,7 @@ public class TraitEditor : Editor
             Mind.ActionType.sharePersonKnowledgeAbout => typeof(Mind.CharacterName),
             Mind.ActionType.gotoTarget => typeof(Mind.TargetType),
             Mind.ActionType.completeScriptedTask => typeof(Mind.ScriptedTaskType),
-            Mind.ActionType.openDialogueWithPlayer => typeof(IsClosable),
+            Mind.ActionType.openDialogueWithPlayer => typeof(DialogueFileType),
             _ => null
         };
 
@@ -225,6 +225,7 @@ public class TraitEditor : Editor
             Mind.ConditionType.scriptedTaskActive => typeof(Mind.ScriptedTaskType),
             Mind.ConditionType.scriptedTaskCompleted => typeof(Mind.ScriptedTaskType),
             Mind.ConditionType.scriptedTaskNotCompleted => typeof(Mind.ScriptedTaskType),
+            Mind.ConditionType.lastSpokeTo => typeof(Mind.CharacterName),
             _ => null
         };
 

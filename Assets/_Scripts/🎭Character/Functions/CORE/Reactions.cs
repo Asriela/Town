@@ -135,7 +135,7 @@ public class Reactions : MonoBehaviour
 
         if (response != null)
         {
-            // Apply scripted relationship impact
+      
             _npc.Relationships.AddInteractionEffect(SocializeType.tell, sender, response.relImpactOnMessenger);
 
             // Store output tags for future use
