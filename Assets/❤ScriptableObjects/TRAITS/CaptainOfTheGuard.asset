@@ -18,64 +18,64 @@ MonoBehaviour:
     _dialogue: this way
     _action: 16
     _actionParameter:
-      rid: 2000162890491101375
+      rid: 2000162973866262624
     _conditions:
     - conditionType: 40
       parameter:
-        rid: 2000162890491101376
+        rid: 2000162973866262625
     - conditionType: 42
       parameter:
-        rid: 2000162890491101376
+        rid: 2000162973866262625
     _priority: 10
     _actionTags: 
   - _name: complete taking player to inn
     _dialogue: here you go speak to Alrine
     _action: 24
     _actionParameter:
-      rid: 2000162890491101376
+      rid: 2000162973866262625
     _conditions:
     - conditionType: 12
       parameter:
-        rid: 2000162890491101375
+        rid: 2000162973866262624
     - conditionType: 42
       parameter:
-        rid: 2000162890491101376
+        rid: 2000162973866262625
     _priority: 10
     _actionTags: 
   - _name: talk to player
     _dialogue: 
     _action: 25
     _actionParameter:
-      rid: 2000162890491101377
+      rid: 2000162973866262629
     _conditions:
     - conditionType: 42
       parameter:
-        rid: 2000162890491101378
+        rid: 2000162973866262627
     - conditionType: 24
       parameter:
-        rid: 2000162890491101379
+        rid: 2000162973866262628
     _priority: 10
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162890491101375
+    - rid: 2000162973866262624
       type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 2
-    - rid: 2000162890491101376
+    - rid: 2000162973866262625
       type: {class: ScriptedTaskType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 2
-    - rid: 2000162890491101377
-      type: {class: ScriptedTaskType, ns: Mind, asm: Assembly-CSharp}
-      data:
-        value__: 0
-    - rid: 2000162890491101378
+    - rid: 2000162973866262627
       type: {class: ScriptedTaskType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1
-    - rid: 2000162890491101379
+    - rid: 2000162973866262628
       type: {class: TraitType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 23
+    - rid: 2000162973866262629
+      type: {class: IsClosable, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 1

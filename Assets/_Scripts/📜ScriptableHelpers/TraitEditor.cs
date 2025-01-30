@@ -1,4 +1,4 @@
-﻿/*
+﻿
 using System;
 using Mind;
 using UnityEditor;
@@ -162,7 +162,7 @@ public class TraitEditor : Editor
             Mind.ActionType.sharePersonKnowledgeAbout => typeof(Mind.CharacterName),
             Mind.ActionType.gotoTarget => typeof(Mind.TargetType),
             Mind.ActionType.completeScriptedTask => typeof(Mind.ScriptedTaskType),
-            Mind.ActionType.openDialogueWithPlayer => typeof(ScriptedTaskType),
+            Mind.ActionType.openDialogueWithPlayer => typeof(IsClosable),
             _ => null
         };
 
@@ -301,4 +301,4 @@ public class TraitEditor : Editor
 }
 
 
-*/
+

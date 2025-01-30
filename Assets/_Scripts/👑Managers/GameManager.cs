@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Mind;
 using UnityEngine;
 [System.Serializable]
 public class TraitTypeTraitPair
@@ -25,6 +26,11 @@ public class GameManager : Singleton<GameManager>
             characterLabel = "You";
         }
         WorldManager.Instance.ThePlayer.MenuInteraction.UpdateInteractionMenu(characterLabel, currentDialogue);
+    }
+
+    public SocializeType GetPlayersCurrentSocialAction()
+    {
+        return WorldManager.Instance.ThePlayer.MenuInteraction.SocialAction;
     }
     public void CloseInteractionMenu()
     {
@@ -57,7 +63,7 @@ public class GameManager : Singleton<GameManager>
     }
     private void Start()
     {
-        CantClickOffInteractionMenu=true;
+
         UIClicked = false;
         BlockingPlayerUIOnScreen = false;
     }

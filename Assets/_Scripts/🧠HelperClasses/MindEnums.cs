@@ -63,6 +63,21 @@ namespace Mind
         gotoTarget,
         completeScriptedTask,
         openDialogueWithPlayer
+
+    }
+    [Serializable]
+    public enum BoolType : short
+    {
+        True,
+        False
+
+    }
+    [Serializable]
+    public enum IsClosable : short
+    {
+        canBeClosed,
+        cantBeClosed,
+
     }
     [Serializable]
     public enum RemoveSocial : short

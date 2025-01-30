@@ -90,7 +90,15 @@ public class PlayerMenuInteraction : MonoBehaviour
     private DiaPackage currentDiaPackage;
     private List<MenuOption> currentDiaOptions;
     private bool closingMenu = false;
-    private SocializeType socialAction = SocializeType.none;
+
+    string savedLastChosenOption;
+    string savedCurrentDialogue;
+    List<MenuOption> savedDiaButtons;
+    string savedContextTitle;
+    List<MenuOption> savedMenuButtons;
+
+    public SocializeType SocialAction { get; set; } = SocializeType.none;
+
     private float socializeTimeLeft = -1;
 
     public SocialMenuState MenuState { get; set; }
@@ -133,7 +141,7 @@ public class PlayerMenuInteraction : MonoBehaviour
         _leftClick = false;
         _leftClick = Input.GetMouseButtonDown(0);
         //ClickedOnUI=false;
-        if (socialAction != SocializeType.none)
+        if (SocialAction != SocializeType.none)
         {
             DoSocialAction();
         }
@@ -144,7 +152,7 @@ public class PlayerMenuInteraction : MonoBehaviour
     {
 
 
-        switch (socialAction)
+        switch (SocialAction)
         {
             case SocializeType.hangOut:
                 if (socializeTimeLeft == -1)
@@ -168,12 +176,16 @@ public class PlayerMenuInteraction : MonoBehaviour
         {
 
             socializeTimeLeft = -1;
-            ExecuteSocialAction(socialAction);
-
+            ExecuteSocialAction(SocialAction);
+            SocialAction = SocializeType.none;
             _player.Appearance.ResetSprite();
             WorldManager.Instance.SetSpeedOfTime(SpeedOfTime.normal);
             _personWeAreSpeakingTo.Appearance.ResetSprite();
-            socialAction = SocializeType.none;
+
+
+            OpenInteractionMenu(savedLastChosenOption, savedCurrentDialogue, _personWeAreSpeakingTo.CharacterName.ToString(), savedDiaButtons, savedContextTitle, savedMenuButtons, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
+
+
         }
 
     }
@@ -198,7 +210,7 @@ public class PlayerMenuInteraction : MonoBehaviour
 
     private void MenuButtonPressed(int positionInList, string buttonLabel, MenuOptionType menuOptionType)
     {
-        if (socialAction != SocializeType.none)
+        if (SocialAction != SocializeType.none)
             return;
         if (menuOptionType == MenuOptionType.dia)
         {
@@ -211,7 +223,7 @@ public class PlayerMenuInteraction : MonoBehaviour
     {
 
         currentDiaPackage = DiaReader.ChooseOption(positionInList, out DiaActionType? diaActionToExecute, out object diaActionData);
-        socialAction = DiaMenuHelper.ExecuteAction(_player, _personWeAreSpeakingTo, diaActionToExecute, diaActionData);
+        SocialAction = DiaMenuHelper.ExecuteAction(_player, _personWeAreSpeakingTo, diaActionToExecute, diaActionData);
 
         if (currentDiaPackage != null)
         {
@@ -274,6 +286,15 @@ public class PlayerMenuInteraction : MonoBehaviour
         //  }
         // else
         //  {
+
+        if (SocialAction != SocializeType.none)
+        {
+            savedLastChosenOption = lastChosenOption;
+            savedCurrentDialogue = currentDialogue;
+            savedDiaButtons = diaButtons;
+            savedContextTitle = contextTitle;
+            savedMenuButtons = menuButtons;
+        }
         OpenInteractionMenu(lastChosenOption, currentDialogue, _personWeAreSpeakingTo.CharacterName.ToString(), diaButtons, contextTitle, menuButtons, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
         // }
     }
@@ -406,8 +427,7 @@ public class PlayerMenuInteraction : MonoBehaviour
             return false;
 
 
-        if (GameManager.Instance.BlockingPlayerUIOnScreen && GameManager.Instance.CantClickOffInteractionMenu == false)
-
+        if (GameManager.Instance.BlockingPlayerUIOnScreen && GameManager.Instance.CantClickOffInteractionMenu == false && SocialAction == SocializeType.none)
         {
             CloseInteractionMenu();
             return false;

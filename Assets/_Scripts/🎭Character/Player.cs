@@ -45,7 +45,7 @@ public class Player : Character
     }
     private void HandleInput()
     {
-        if (Vitality.Dead || GameManager.Instance.CantClickOffInteractionMenu)
+        if (Vitality.Dead || GameManager.Instance.CantClickOffInteractionMenu || GameManager.Instance.GetPlayersCurrentSocialAction()!=SocializeType.none)
         { return; }
         if (Input.GetMouseButtonDown(0)) // Left-click
         {
@@ -54,6 +54,7 @@ public class Player : Character
 
             if (MenuInteraction.NotInteractingWithMenu())
             {
+
                 BaseAction.MoveTo(this, hit.point);
                 _currentInteraction = null;
             }

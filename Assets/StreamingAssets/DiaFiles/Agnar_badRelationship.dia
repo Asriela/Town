@@ -1,6 +1,7 @@
 ==start==
 	-hello?
 		"#grumbles#"
-
+		-leave
+			<end>
 	
 	

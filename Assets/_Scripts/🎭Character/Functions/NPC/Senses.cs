@@ -32,11 +32,14 @@ public class Senses : MonoBehaviour
         CreateViewCone();
     }
 
-
+    private void Start()
+    {
+        _lookDirection= Vector3.down;
+    }
 
     private void Update()
     {
-        DrawViewCone();
+        //DrawViewCone();
         SetViewDirection();
         SetLoggersCharactersInSight();
     }
@@ -49,7 +52,11 @@ public class Senses : MonoBehaviour
             _npc.Ui.CharactersInSight += @$"{character.CharacterName}\n";
         }
     }
-    private void SetViewDirection() => _lookDirection = _npc.Movement.GetMovementDirection().normalized;
+    private void SetViewDirection()
+    {
+        var moveDirection=_npc.Movement.GetMovementDirection().normalized;
+        _lookDirection = moveDirection == Vector3.zero ? _lookDirection : moveDirection;
+    }
 
     private void CreateViewCone()
     {

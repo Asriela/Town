@@ -135,7 +135,7 @@ public class Appearance : MonoBehaviour
 
     void WalkAnimation(Vector3 movementDirection)
     {
-        if (_character.Movement.IsMoving)
+        if (_character.Movement.IsMoving || _character.Movement.Agent.remainingDistance>0.5)
         {
             if (IsAnimation("walk")==false)
             {

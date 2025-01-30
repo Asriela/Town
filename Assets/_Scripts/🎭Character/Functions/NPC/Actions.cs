@@ -41,7 +41,8 @@ public class Actions : MonoBehaviour
         { ActionType.sharePersonKnowledgeAbout , param => sharePersonKnowledge((CharacterName)param) },
         { ActionType.gotoTarget , param => GotoTarget((TargetType)param) },
         { ActionType.completeScriptedTask , param => MarkScriptedTaskCompleted((ScriptedTaskType)param) },
-        { ActionType.openDialogueWithPlayer , param => OpenDialogueWithPlayer() }
+        { ActionType.openDialogueWithPlayer , param => OpenDialogueWithPlayer((IsClosable)param) }
+
     };
 
     private void Update() => PerformCurrentBehavior();
@@ -102,12 +103,17 @@ public class Actions : MonoBehaviour
     }
     //TODO: add dynamic tags  when searching for a character
 
-    private void OpenDialogueWithPlayer()
+    private void OpenDialogueWithPlayer(IsClosable isClosable)
     {
         
         if(_npc.Memory.GetScriptedTaskProgress(ScriptedTaskType.talkToPlayer)!= ScriptedTaskProgressType.completed)
         {
             _npc.Memory.ScriptedTaskProgress[ScriptedTaskType.talkToPlayer] = ScriptedTaskProgressType.completed;
+
+            if (isClosable==IsClosable.cantBeClosed)
+            {
+                GameManager.Instance.CantClickOffInteractionMenu=true;
+            }
             GameManager.Instance.OpenDialoguePlayer(_npc);
         }
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Mind;
 
 
 public class InteractionMenu : MonoBehaviour
@@ -181,6 +182,64 @@ public class InteractionMenu : MonoBehaviour
 
             // Add the container for the name button to the menu (it won't affect the other button layout)
             menuContainer.Add(nameButtonContainer);
+        }
+        var currentPlayerSocialAction= GameManager.Instance.GetPlayersCurrentSocialAction();
+        if (currentPlayerSocialAction != SocializeType.none)
+        {
+            string socialActionText=$"<color=#7F807A>INTERACTION PAUSED BECAUSE YOU ARE BUSY \n{ChangeSocialInteractionToText(currentPlayerSocialAction, currentSpeaker)}</color>";
+            // Create the button and add the label
+            var socialAction = new Button();
+
+            // Add a label to the button
+            Label socialActionLabel = new Label(socialActionText)
+            {
+                style =
+            {
+                color = Color.white,  // Default color, will be overridden by rich text
+                unityTextAlign = TextAnchor.MiddleCenter,
+                fontSize = 17,
+                whiteSpace = WhiteSpace.Normal,  // Allow text wrapping within the label
+                overflow = Overflow.Hidden,
+                paddingBottom = new Length(5, LengthUnit.Pixel),  // Prevent cutting off text
+                paddingTop = new Length(20, LengthUnit.Pixel),
+            }
+            };
+            socialAction.Add(socialActionLabel);
+
+            // Apply button styling to mimic other buttons
+            socialAction.style.position = Position.Absolute; // Set position to absolute
+            socialAction.style.left = new Length(130 + 120 + 60 - 19 - 9, LengthUnit.Pixel);
+            socialAction.style.top = new Length(90 + scrolldown, LengthUnit.Pixel); // Set initial top position
+            socialAction.style.width = new Length(340, LengthUnit.Pixel);
+            socialAction.style.flexDirection = FlexDirection.ColumnReverse;  // Makes new content push upward
+
+            socialAction.style.overflow = Overflow.Hidden;  // Prevents content from pushing layout
+
+            socialAction.style.alignItems = Align.FlexStart;  // Ensure text starts from the top
+            socialAction.style.backgroundColor = new StyleColor(Color.clear);  // Remove button background
+            socialAction.focusable = false;  // Prevent focus
+            socialAction.style.left = 80;
+            socialAction.style.top = 220;
+
+
+
+
+
+            socialAction.style.marginTop = 160 + 40;
+            socialAction.style.paddingTop = new Length(5, LengthUnit.Pixel);
+            socialAction.AddToClassList("button");
+
+            // Override click event to do nothing
+            socialAction.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
+
+            menuContainer.Add(socialAction);
+
+            // Adjust the top position dynamically based on content height
+            socialAction.RegisterCallback<GeometryChangedEvent>(evt =>
+            {
+                socialAction.style.top = new Length(90 + scrolldown - socialAction.resolvedStyle.height, LengthUnit.Pixel);
+            });
+            return;
         }
 
         //////DIALOGUE
@@ -533,5 +592,17 @@ public class InteractionMenu : MonoBehaviour
         GameManager.Instance.BlockingPlayerUIOnScreen = false;
         menuContainer.style.display = DisplayStyle.None;
         pastDialogue = "";
+    }
+
+    string ChangeSocialInteractionToText(SocializeType type, string character)
+    {
+        var ret="";
+        switch (type)
+        {
+            case SocializeType.hangOut:
+                ret= $"drinking with {character}";
+                break;
+        }
+        return ret.ToUpper();
     }
 }

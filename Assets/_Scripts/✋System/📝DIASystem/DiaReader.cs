@@ -327,7 +327,7 @@ public static class DiaReader
 
 
 
-            if (allTabs[i] < currentTab || line.StartsWith("=="))
+            if (allTabs[i] < currentTab || line.StartsWith("==") || line.StartsWith('"'))
             {
                 i = allLines.Count;
             }
