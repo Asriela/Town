@@ -16,49 +16,59 @@ MonoBehaviour:
   Behaviors:
   - _name: drawn by amulet
     _dialogue: 
-    _action: 22
+    _action: 16
     _actionParameter:
-      rid: 2000162973866263033
+      rid: 2000162984405762524
     _conditions:
     - conditionType: 8
       parameter:
-        rid: 2000162973866263034
-    _priority: 0
+        rid: 2000162984405762525
+    - conditionType: 13
+      parameter:
+        rid: 2000162984405762524
+    - conditionType: 9
+      parameter:
+        rid: 2000162984405762526
+    _priority: 10
     _actionTags: 
   - _name: talk to player
     _dialogue: 
     _action: 25
     _actionParameter:
-      rid: 2000162973866263041
+      rid: 2000162984405762527
     _conditions:
     - conditionType: 24
       parameter:
-        rid: 2000162973866263036
+        rid: 2000162984405762528
     - conditionType: 42
       parameter:
-        rid: 2000162973866263037
-    _priority: 0
+        rid: 2000162984405762529
+    _priority: 10
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162973866263033
-      type: {class: CharacterName, ns: Mind, asm: Assembly-CSharp}
+    - rid: 2000162984405762524
+      type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
-        value__: 11
-    - rid: 2000162973866263034
+        value__: 7
+    - rid: 2000162984405762525
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
-        value__: 21
-    - rid: 2000162973866263036
-      type: {class: TraitType, ns: Mind, asm: Assembly-CSharp}
+        value__: 0
+    - rid: 2000162984405762526
+      type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
-        value__: 23
-    - rid: 2000162973866263037
-      type: {class: ScriptedTaskType, ns: Mind, asm: Assembly-CSharp}
-      data:
-        value__: 1
-    - rid: 2000162973866263041
+        value__: 8
+    - rid: 2000162984405762527
       type: {class: DialogueFileType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 2
+    - rid: 2000162984405762528
+      type: {class: TraitType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 23
+    - rid: 2000162984405762529
+      type: {class: ScriptedTaskType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 1

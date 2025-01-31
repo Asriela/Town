@@ -57,21 +57,19 @@ public class Appearance : MonoBehaviour
         {
             case AppearanceState.dead:
 
-                Sprite deadSprite = Resources.Load<Sprite>("Assets/Sprites/characters/TravelerDead.png");
-                if (deadSprite != null)
-                {
-                    _spriteRenderer.sprite = deadSprite;
-                }
-                else
-                {
-                    Debug.LogWarning("Sprite not found at path: Sprites/Characters/TravelerDead");
-                }
-                _spriteRenderer.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 90);
+          
+                    SetAnimation("dead");
+
+            // _spriteRenderer.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 90);
                 break;
             case AppearanceState.lyingDown:
 
                 _spriteRenderer.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 90);
-                offset = 0.9f;
+                if (_character is Player)
+                { offset = 1.5f; }
+                else
+                { offset = 0.9f; }
+                
                 break;
             case AppearanceState.standing:
 
@@ -122,7 +120,7 @@ public class Appearance : MonoBehaviour
 
         var path= $"Animations/Characters/{GetCharacterName(_character)}_{name}";
 
-        if (_character.CharacterName == Mind.CharacterName.Alrine)
+        if (name=="dead")
         {
            var testc="";
         }
@@ -140,6 +138,8 @@ public class Appearance : MonoBehaviour
 
     void WalkAnimation(Vector3 movementDirection)
     {
+        if (State==AppearanceState.dead)
+        { return;}
         if (_character.Movement.IsMoving || _character.Movement.Agent.remainingDistance> _character.Movement.CurrentInteractionDistance)
         {
             if (IsAnimation("walk")==false)

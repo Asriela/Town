@@ -1,9 +1,7 @@
 ==start==
 	(know : mage)
-	"Alrine here says you are a mage, your kind isn't welcome, you have done enough.. my advice find your way back through the cold because as long as you stay here , you wont be welcome"
+	"Alrine say you mage, not welcome, done enough.. you find way back into darkness you come from"
 	-leave
 		<end>
-	"You keep telling people you are a mage is a sure way to get yourself banished from this outpost.."
-	-leave
-		<end>
+
 	

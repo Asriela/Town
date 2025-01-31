@@ -3,6 +3,7 @@ using Mind;
 using NUnit.Framework;
 using UnityEngine;
 
+
 public static class DiaMenuHelper
 {
     public static DiaPackage OpenInteractionWithCharacter(Character characerWeAreSpeakingTo, DialogueFileType fileType)
@@ -50,10 +51,13 @@ public static class DiaMenuHelper
 
                     break;
                 case DiaActionType.action_hangout:
-                    if (actionData != null)
-                    {
+         
                         socialAction= SocializeType.drinking;
-                    }
+                    
+
+                    break;
+                case DiaActionType.action_rentRoom:
+                    BaseAction.RentItem(ObjectType.bed, player, personWeAreSpeakingTo);
 
                     break;
 

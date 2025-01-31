@@ -29,7 +29,7 @@ public class State : MonoBehaviour
 
     private bool resetTime = false;
 
-    public StateType ActionState => _actionState;
+    public StateType ActionState { get=>_actionState; set=> _actionState=value;}
 
     public List<MemoryTags> VisualState => _visualState;
 
@@ -43,6 +43,7 @@ public class State : MonoBehaviour
     {
         _alarm.Run();
         RunState();
+        if(_actionState!= StateType.dead)
         ResetStateToNormal();
     }
 

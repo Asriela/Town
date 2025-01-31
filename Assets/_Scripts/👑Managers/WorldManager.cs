@@ -123,7 +123,7 @@ public class WorldManager : Singleton<WorldManager>
                 currentTimesScale = speedOfTime;
                 break;
             case SpeedOfTime.veryFast:
-                Time.timeScale = 30.0f;
+                Time.timeScale = 60.0f;
                 currentTimesScale = speedOfTime;
                 break;
         }
@@ -202,7 +202,10 @@ public class WorldManager : Singleton<WorldManager>
         }
     }
 
-
+   public Character GetCharacter(CharacterName name)
+    {
+        return AllCharacters[name];
+    }
 
 
 }

@@ -10,8 +10,8 @@ public class Senses : MonoBehaviour
     private NPC _npc;
 
     [Header("Senses Settings")]
-    [SerializeField] private float _detectionRadius = 10f;
-    [SerializeField] private float _viewAngle = 100;
+    [SerializeField] private float _detectionRadius = 20f;
+    [SerializeField] private float _viewAngle = 300;
     [SerializeField] private LayerMask _characterDetectionLayer;
     [SerializeField] private LayerMask _objectDetectionLayer;
     [SerializeField] private Material _viewConeMaterial;
@@ -39,7 +39,7 @@ public class Senses : MonoBehaviour
 
     private void Update()
     {
-        //DrawViewCone();
+      //  DrawViewCone();
         SetViewDirection();
         SetLoggersCharactersInSight();
     }
@@ -203,8 +203,8 @@ public class Senses : MonoBehaviour
 
         var dirToTarget = (targetPosition - ourPosition).normalized;
 
-        if (Vector3.Angle(_lookDirection, dirToTarget) > _viewAngle / 2f)
-        { return false; }
+       // if (Vector3.Angle(_lookDirection, dirToTarget) > _viewAngle / 2f)
+        //{ return false; }
 
         int oldLayer = _npc.gameObject.layer;
         _npc.gameObject.layer = Physics.IgnoreRaycastLayer;

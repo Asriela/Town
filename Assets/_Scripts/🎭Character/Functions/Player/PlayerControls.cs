@@ -50,6 +50,8 @@ public class PlayerControls : MonoBehaviour
         // Apply acceleration or deceleration
         if (inputDirection.magnitude > 0)
         {
+            if(_player.State.ActionState== StateType.sleeping)
+            { _player.State.SetState(StateType.normal);}
             _player.Movement.IsMoving=true;
             _player.Movement.Agent.ResetPath();
             // Accelerate towards the target velocity

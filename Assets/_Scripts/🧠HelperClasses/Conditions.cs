@@ -54,6 +54,12 @@ public static class Conditions
         _conditionDelegates.Add(ConditionType.scriptedTaskNotCompleted, new ConditionDelegate<ScriptedTaskType>(CheckScriptedTaskCompleted));
         _conditionDelegates.Add(ConditionType.scriptedTaskActive , new ConditionDelegate<ScriptedTaskType>(CheckScriptedTaskActive));
         _conditionDelegates.Add(ConditionType.lastSpokeTo, new ConditionDelegate<CharacterName>(CheckLastSpokeTo));
+        _conditionDelegates.Add(ConditionType.notLastSpokeTo, new ConditionDelegate<CharacterName>(CheckLastSpokeTo));
+        _conditionDelegates.Add(ConditionType.reachedPerson, new ConditionDelegate<CharacterName>(CheckReachedPerson));
+        _conditionDelegates.Add(ConditionType.notReachedPerson, new ConditionDelegate<CharacterName>(CheckReachedPerson));
+        _conditionDelegates.Add(ConditionType.hasNamedOccupant, new ConditionDelegate<CharacterName>(CheckForOccupantByName));
+        _conditionDelegates.Add(ConditionType.notHaveNamedOccupant, new ConditionDelegate<CharacterName>(CheckForOccupantByName));
+        _conditionDelegates.Add(ConditionType.attackedPerson, new ConditionDelegate<CharacterName>(CheckLastAttacked));
     }
 
     public static bool CheckCondition(Condition condition, NPC npc)
@@ -130,7 +136,13 @@ public static class Conditions
                 ConditionType.scriptedTaskCompleted => ConditionHandler<ScriptedTaskType>((ConditionDelegate<ScriptedTaskType>)conditionDelegate, condition.parameter, npc, true),
                 ConditionType.scriptedTaskNotCompleted => ConditionHandler<ScriptedTaskType>((ConditionDelegate<ScriptedTaskType>)conditionDelegate, condition.parameter, npc, false),
                 ConditionType.lastSpokeTo => ConditionHandler<CharacterName>((ConditionDelegate<CharacterName>)conditionDelegate, condition.parameter, npc, true),
+                ConditionType.notLastSpokeTo => ConditionHandler<CharacterName>((ConditionDelegate<CharacterName>)conditionDelegate, condition.parameter, npc, false),
 
+                ConditionType.reachedPerson => ConditionHandler<CharacterName>((ConditionDelegate<CharacterName>)conditionDelegate, condition.parameter, npc, true),
+                ConditionType.notReachedPerson => ConditionHandler<CharacterName>((ConditionDelegate<CharacterName>)conditionDelegate, condition.parameter, npc, false),
+                ConditionType.hasNamedOccupant => ConditionHandler<CharacterName>((ConditionDelegate<CharacterName>)conditionDelegate, condition.parameter, npc, true),
+                ConditionType.notHaveNamedOccupant => ConditionHandler<CharacterName>((ConditionDelegate<CharacterName>)conditionDelegate, condition.parameter, npc, false),
+                ConditionType.attackedPerson => ConditionHandler<CharacterName>((ConditionDelegate<CharacterName>)conditionDelegate, condition.parameter, npc, true),
                 _ => false
             };
 
@@ -156,12 +168,30 @@ public static class Conditions
         var value = npc.Memory.LastSpokeTo;
         if (value== parameter)
         {
-            return true;
+            return trueStatement;
         }
-        return false;
+        return !trueStatement;
+    }
+    private static bool CheckLastAttacked(CharacterName parameter, NPC npc, bool trueStatement)
+    {
+        var value = npc.Memory.LastWeAttacked;
+        if (value == parameter)
+        {
+            return trueStatement;
+        }
+        return !trueStatement;
+    }
+    
+    private static bool CheckReachedPerson(CharacterName parameter, NPC npc, bool trueStatement)
+    {
+        var value = npc.Memory.ReachedPerson;
+        if (value == parameter)
+        {
+            return trueStatement;
+        }
+        return !trueStatement;
     }
 
-    
     private static bool CheckScriptedTaskCompleted(ScriptedTaskType parameter, NPC npc, bool trueStatement)
     {
         var value = npc.Memory.GetScriptedTaskProgress(parameter);
@@ -214,7 +244,16 @@ public static class Conditions
         }
         return !trueStatement;
     }
+    private static bool CheckForOccupantByName(CharacterName parameter, NPC npc, bool trueStatement)
+    {
+        var currentLocation= WorldManager.Instance.GetLocation(npc.Movement.CurrentLocation);
 
+        if (currentLocation.HasOccupant(WorldManager.Instance.GetCharacter( parameter)) )
+        {
+            return trueStatement;
+        }
+        return !trueStatement;
+    }
     private static bool CheckTarget(TargetType parameter, NPC npc, bool trueStatement)
     {
 

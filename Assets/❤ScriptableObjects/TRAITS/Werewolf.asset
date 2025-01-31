@@ -14,32 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 19
   Behaviors:
-  - _name: rage
-    _dialogue: Rooaaarr!
-    _action: 2
-    _actionParameter:
-      rid: 2000162770358632581
-    _conditions:
-    - conditionType: 3
-      parameter:
-        rid: 2000162770358632581
-    _priority: 10
-    _actionTags: 
   - _name: kill
     _dialogue: Rooaaarr!
-    _action: 1
+    _action: 22
     _actionParameter:
-      rid: 2000162770358632581
-    _conditions:
-    - conditionType: 2
-      parameter:
-        rid: 2000162770358632581
+      rid: 2000162984405762708
+    _conditions: []
     _priority: 10
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162770358632581
-      type: {class: TargetType, ns: Mind, asm: Assembly-CSharp}
+    - rid: 2000162984405762708
+      type: {class: CharacterName, ns: Mind, asm: Assembly-CSharp}
       data:
-        value__: 3
+        value__: 11

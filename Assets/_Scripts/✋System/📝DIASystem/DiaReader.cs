@@ -10,6 +10,7 @@ public enum DiaActionType : short
     menu,
     menu_askAbout,
     action_hangout,
+    action_rentRoom,
     scriptedAction,
     share
 }
@@ -206,6 +207,34 @@ public static class DiaReader
                 { BasicFunctions.Log($"⚠️ Invalid MemoryTag: {dataString}", LogType.dia); }
 
             }
+            if (condition.StartsWith("completed:"))
+            {
+                if (Enum.TryParse(typeof(ScriptedTaskType), dataString, true, out object rawData))
+                {
+                    ScriptedTaskType enumData = (ScriptedTaskType)rawData;
+                    if (personWeAreSpeakingTo.Memory.GetScriptedTaskProgress(enumData) != ScriptedTaskProgressType.completed)
+                    {
+                        skipNextLineDueToBadCondition = true;
+                    }
+                }
+                else
+                { BasicFunctions.Log($"⚠️ Invalid MemoryTag: {dataString}", LogType.dia); }
+
+            }
+            if (condition.StartsWith("notcompleted:"))
+            {
+                if (Enum.TryParse(typeof(ScriptedTaskType), dataString, true, out object rawData))
+                {
+                    ScriptedTaskType enumData = (ScriptedTaskType)rawData;
+                    if (personWeAreSpeakingTo.Memory.GetScriptedTaskProgress(enumData) == ScriptedTaskProgressType.completed)
+                    {
+                        skipNextLineDueToBadCondition = true;
+                    }
+                }
+                else
+                { BasicFunctions.Log($"⚠️ Invalid MemoryTag: {dataString}", LogType.dia); }
+
+            }
         }
     }
     public static bool FindNextDialogue(out bool noOptions)
@@ -217,7 +246,10 @@ public static class DiaReader
 
             string line = allLines[i];
             BasicFunctions.Log($"🔎📖: {line} {allTabs[i]} vs {currentTab} ", LogType.dia);
-            if ((allTabs[i] < currentTab || line.Contains("<")) && allTabs[i]== currentTab)
+            if ((allTabs[i] < currentTab ) || (line.Contains("<") && allTabs[i] == currentTab) )
+            { currentDialogue="";return false; }
+
+            if (allTabs[i] <= currentTab && (line.StartsWith('-') || line.StartsWith('+') || line.StartsWith('>')))
             { return false; }
             if (allTabs[i] == currentTab)
             {
@@ -422,6 +454,8 @@ public static class DiaReader
         if (theString.StartsWith("action:") && theString.Contains("hangout"))
             ret = DiaActionType.action_hangout;
 
+        if (theString.StartsWith("action:") && theString.Contains("rentroom"))
+            ret = DiaActionType.action_rentRoom;
 
         if (theString.StartsWith("scriptedaction:"))
         {

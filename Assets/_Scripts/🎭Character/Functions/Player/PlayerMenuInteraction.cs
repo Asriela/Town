@@ -542,7 +542,7 @@ public class PlayerMenuInteraction : MonoBehaviour
 
                     BaseAction.RentItem((ObjectType)chosenOption.Data2, _player, _personWeAreSpeakingTo);
 
-                //
+                
                 break;
             case SocialMenuState.objectInteraction:
 

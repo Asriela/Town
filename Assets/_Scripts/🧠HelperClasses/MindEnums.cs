@@ -32,7 +32,8 @@ namespace Mind
         player,
         patrol,
         doctor,
-        tavernGuard
+        tavernGuard,
+        
     }
     [Serializable]
     public enum ActionType : short
@@ -62,8 +63,10 @@ namespace Mind
         gotoPerson,
         gotoTarget,
         completeScriptedTask,
-        openDialogueWithPlayer
-
+        openDialogueWithPlayer,
+        shareTag,
+        becomeOccupant,
+        removeAsOccupant
     }
     [Serializable]
     public enum BoolType : short
@@ -115,6 +118,7 @@ namespace Mind
         gate,
         lordsManor,
         tailorsHome,
+        villageEntrance
 
     }
     [Serializable]
@@ -126,7 +130,8 @@ namespace Mind
         home,
         work,
         pumpkinFarm,
-        tailorsShop
+        tailorsShop,
+        villageEntrance
     }
     [Serializable]
     public enum SpellType : short
@@ -270,7 +275,13 @@ namespace Mind
         scriptedTaskActive,
         scriptedTaskCompleted,
         scriptedTaskNotCompleted,
-        lastSpokeTo
+        lastSpokeTo,
+        reachedPerson,
+        notReachedPerson,
+        hasNamedOccupant,
+        notHaveNamedOccupant,
+        notLastSpokeTo,
+        attackedPerson
     }
     [Serializable]
     public enum TimeOfDayType : short
@@ -342,7 +353,8 @@ namespace Mind
     {
         none,
         talkToPlayer,
-        takePlayerToInn
+        takePlayerToInn,
+        killedWerewolf,
 
 
     }

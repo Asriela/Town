@@ -1,5 +1,5 @@
 ==start==
-	"You there stranger hold it right there! Who are you and where are you from!?"
+	"You there.. hold it right there! Who are you and where are you from!?"
 	>Who.. who is there?
 		"I am the captain of guard for this outpost... so who are you and where are you from?"
 		>I don't know... I cant remember 
@@ -7,17 +7,16 @@
 	>I don't know... I cant remember 
 		<2>
 ==2==
-	"Are you sure..."
-	>Of course I'm sure!
-		"Easy now... head over to the tavern so Alrine can have you checked out"
+	"You as well..."
+	>What do you mean, me as well?
+		"Never mind that now... follow me, there is a werewolf on the loose.."
 		<3>
-	-I'm so cold...
-		"I bet you are.. head over to the tavern so Alrine can have you checked out"
-		<3>
+
+
 ==3==	
+	-I'm so cold...
+		"I bet you are with this dang blizzard, lets get you inside stranger.."
 	-what is this place? 
-		"Never you mind that now, lets get to the tavern" 
+		"Never you mind that now, lets just to the tavern!" 
 	-OK I will follow your lead.. [scriptedAction : takePlayerToInn]
 		<end>
-	
-	

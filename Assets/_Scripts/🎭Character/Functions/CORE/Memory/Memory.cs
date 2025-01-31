@@ -38,11 +38,13 @@ public class PricingPair
 
 public class Memory : MonoBehaviour
 {
-
+    public Mind.CharacterName ReachedPerson { get; set; }
     public Character SocialTarget { get; set; }
     public string SocialDialogue { get; set; }
 
     public CharacterName LastSpokeTo { get; set; }
+
+    public CharacterName LastWeAttacked { get; set;}
     public Dictionary<ScriptedTaskType,ScriptedTaskProgressType> ScriptedTaskProgress { get; set; } = new();
 
     public ScriptedTaskProgressType GetScriptedTaskProgress(ScriptedTaskType taskType )

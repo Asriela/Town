@@ -18,97 +18,97 @@ MonoBehaviour:
     _dialogue: 
     _action: 11
     _actionParameter:
-      rid: 2000162973866263096
+      rid: 2000162984405762281
     _conditions:
     - conditionType: 8
       parameter:
-        rid: 2000162973866263097
+        rid: 2000162984405762282
     - conditionType: 9
       parameter:
-        rid: 2000162973866263098
+        rid: 2000162984405762283
     - conditionType: 30
       parameter:
-        rid: 2000162973866263099
+        rid: 2000162984405762284
     _priority: 6
     _actionTags: 
   - _name: Innkeeper
     _dialogue: Off to bed with me then
     _action: 5
     _actionParameter:
-      rid: 2000162973866263100
+      rid: 2000162984405762285
     _conditions:
     - conditionType: 8
       parameter:
-        rid: 2000162973866263098
+        rid: 2000162984405762283
     - conditionType: 9
       parameter:
-        rid: 2000162973866263101
+        rid: 2000162984405762286
     _priority: 6
     _actionTags: 
   - _name: sharing news of mage
     _dialogue: 
     _action: 21
     _actionParameter:
-      rid: 2000162973866263102
+      rid: 2000162984405762287
     _conditions:
     - conditionType: 8
       parameter:
-        rid: 2000162973866263103
+        rid: 2000162984405762288
     - conditionType: 9
       parameter:
-        rid: 2000162973866263104
+        rid: 2000162984405762289
     - conditionType: 28
       parameter:
-        rid: 2000162973866263105
+        rid: 2000162984405762290
     - conditionType: 30
       parameter:
-        rid: 2000162973866263106
+        rid: 2000162984405762291
     _priority: 8
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162973866263096
+    - rid: 2000162984405762281
       type: {class: TraderType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 4
-    - rid: 2000162973866263097
+    - rid: 2000162984405762282
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 6
-    - rid: 2000162973866263098
+    - rid: 2000162984405762283
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 21
-    - rid: 2000162973866263099
+    - rid: 2000162984405762284
       type: {class: ActionType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 11
-    - rid: 2000162973866263100
+    - rid: 2000162984405762285
       type: {class: NeedType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1
-    - rid: 2000162973866263101
+    - rid: 2000162984405762286
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 2
-    - rid: 2000162973866263102
+    - rid: 2000162984405762287
       type: {class: CharacterName, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1
-    - rid: 2000162973866263103
+    - rid: 2000162984405762288
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 7
-    - rid: 2000162973866263104
+    - rid: 2000162984405762289
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 22
-    - rid: 2000162973866263105
+    - rid: 2000162984405762290
       type: {class: MemoryTags, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 4
-    - rid: 2000162973866263106
+    - rid: 2000162984405762291
       type: {class: ActionType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 21

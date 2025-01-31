@@ -1,7 +1,7 @@
 ==start==
-	"So you are the one that Agnar saw stumbling between the treelines. First things first, do you remember your name?"
-	>Everything is a haze I cant...
-		"That will be these woods for you.. look.. you aren't a stick in the snow so you are doing great. Can I get you a drink, its on me.."
+	"Oh! you are definitely not the werewolf, sorry I'm getting ahead of myself, my name is Alrine, you are?"
+	>My head... I cant seem to recall my own name...
+		"Hey hey don't worry it will come back to you.. its a damn blizzard out there, I genuinely cannot believe you are alive stranger...  that deserves a drink, on me"
 		>yes please [ action : hangout]
 			"Now that you are all warmed up, how about you try remembering something about yourself.."
 			<you>

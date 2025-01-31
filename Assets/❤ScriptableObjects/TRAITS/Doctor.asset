@@ -14,35 +14,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 20
   Behaviors:
-  - _name: go to doctor
+  - _name: go with Elara to home
     _dialogue: 
     _action: 16
     _actionParameter:
-      rid: 2000162902653010066
+      rid: 2000162982275842387
     _conditions:
-    - conditionType: 8
-      parameter:
-        rid: 2000162902653010067
-    - conditionType: 9
-      parameter:
-        rid: 2000162902653010068
     - conditionType: 13
       parameter:
-        rid: 2000162902653010066
+        rid: 2000162982275842387
+    - conditionType: 28
+      parameter:
+        rid: 2000162982275842392
+    - conditionType: 43
+      parameter:
+        rid: 2000162982275842395
     _priority: 10
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162902653010066
+    - rid: 2000162982275842387
       type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 6
-    - rid: 2000162902653010067
-      type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
+    - rid: 2000162982275842392
+      type: {class: MemoryTags, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 22
-    - rid: 2000162902653010068
-      type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
+    - rid: 2000162982275842395
+      type: {class: CharacterName, ns: Mind, asm: Assembly-CSharp}
       data:
-        value__: 17
+        value__: 10

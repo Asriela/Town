@@ -1,6 +1,7 @@
 ==start==
 	"-So have you decided to stay, can I get you a room?"
 	--yes please [ action : rentRoom]
+		"Your room is behind me, get some rest so you can recover from the storm.."
 	-lets hang out some more [action : hangout] 
 		"Always.."
 	+do something else.. [menu]

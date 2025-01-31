@@ -14,47 +14,91 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 20
   Behaviors:
-  - _name: go homr
+  - _name: go to tavern
     _dialogue: 
     _action: 16
     _actionParameter:
-      rid: 2000162902653010176
+      rid: 2000162984405762200
     _conditions:
+    - conditionType: 13
+      parameter:
+        rid: 2000162984405762200
+    - conditionType: 47
+      parameter:
+        rid: 2000162984405762201
     - conditionType: 8
       parameter:
-        rid: 2000162902653010177
-    _priority: 11
+        rid: 2000162984405762205
+    _priority: 10
     _actionTags: 
   - _name: go to doctor
     _dialogue: 
+    _action: 22
+    _actionParameter:
+      rid: 2000162984405762201
+    _conditions:
+    - conditionType: 45
+      parameter:
+        rid: 2000162984405762201
+    - conditionType: 12
+      parameter:
+        rid: 2000162984405762200
+    _priority: 10
+    _actionTags: 
+  - _name: speak to Keth about worry
+    _dialogue: 
+    _action: 26
+    _actionParameter:
+      rid: 2000162984405762203
+    _conditions:
+    - conditionType: 44
+      parameter:
+        rid: 2000162984405762201
+    - conditionType: 48
+      parameter:
+        rid: 2000162984405762201
+    - conditionType: 12
+      parameter:
+        rid: 2000162984405762200
+    _priority: 10
+    _actionTags: 
+  - _name: go home to conspire with Keth
+    _dialogue: 
     _action: 16
     _actionParameter:
-      rid: 2000162902653010178
+      rid: 2000162984405762204
     _conditions:
-    - conditionType: 8
+    - conditionType: 44
       parameter:
-        rid: 2000162902653010179
+        rid: 2000162984405762201
+    - conditionType: 43
+      parameter:
+        rid: 2000162984405762201
     - conditionType: 13
       parameter:
-        rid: 2000162902653010178
+        rid: 2000162984405762204
     _priority: 10
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162902653010176
-      type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
-      data:
-        value__: 3
-    - rid: 2000162902653010177
-      type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
-      data:
-        value__: 21
-    - rid: 2000162902653010178
+    - rid: 2000162984405762200
       type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 2
-    - rid: 2000162902653010179
+    - rid: 2000162984405762201
+      type: {class: CharacterName, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 12
+    - rid: 2000162984405762203
+      type: {class: MemoryTags, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 22
+    - rid: 2000162984405762204
+      type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 3
+    - rid: 2000162984405762205
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
-        value__: 20
+        value__: 18

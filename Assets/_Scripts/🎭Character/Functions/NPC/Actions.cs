@@ -41,7 +41,8 @@ public class Actions : MonoBehaviour
         { ActionType.sharePersonKnowledgeAbout , param => sharePersonKnowledge((CharacterName)param) },
         { ActionType.gotoTarget , param => GotoTarget((TargetType)param) },
         { ActionType.completeScriptedTask , param => MarkScriptedTaskCompleted((ScriptedTaskType)param) },
-        { ActionType.openDialogueWithPlayer , param => OpenDialogueWithPlayer((DialogueFileType)param) }
+        { ActionType.openDialogueWithPlayer , param => OpenDialogueWithPlayer((DialogueFileType)param) },
+        { ActionType.shareTag , param => ShareMemoryTag((MemoryTags)param) }
 
     };
 
@@ -49,7 +50,8 @@ public class Actions : MonoBehaviour
 
     private void PerformCurrentBehavior()
     {
-
+        if(_npc.State.ActionState==StateType.dead)
+        { return; }
         if (CurrentBehavior == null)
         { return; }
 
@@ -118,6 +120,19 @@ public class Actions : MonoBehaviour
         }
 
     }
+    private void ShareMemoryTag(MemoryTags memTag)
+    {
+           var whoToShareWith=WorldManager.Instance.GetCharacter(_npc.Memory.ReachedPerson);
+
+        if (whoToShareWith!=null)
+        {
+            whoToShareWith.PersonKnowledge.AddKnowledge(whoToShareWith, _npc, new List<Mind.MemoryTags> { memTag });
+            whoToShareWith.Memory.LastSpokeTo=_npc.CharacterName;
+            _npc.Memory.LastSpokeTo = whoToShareWith.CharacterName;
+        }
+
+    }
+    
     private void FindCharacter(TargetType targetType)
     {
        
@@ -171,6 +186,8 @@ public class Actions : MonoBehaviour
                     var knowledge = _npc.PersonKnowledge.GetAllKnowledge(_npc, aboutWhoCharacter);
                     SocialHelper.ShareKnowledgeAbout(_npc, bestie, bestie, aboutWhoCharacter, KnowledgeType.person, knowledge.Cast<Enum>().ToList(), null);
                     _npc.Ui.Speak(_npc,$"The stranger is a mage");
+                    bestie.Memory.LastSpokeTo= _npc.CharacterName;
+                    _npc.Memory.LastSpokeTo = bestie.CharacterName;
                     IncrementStepInAction();
                 }
                 break;
@@ -353,11 +370,12 @@ public class Actions : MonoBehaviour
             case 1:
 
                 if (_npc.Memory.Targets[targetType] is { } target &&
-                    ActionsHelper.Reached(_npc, target.transform.position, 1f))
+                    ActionsHelper.Reached(_npc, target.transform.position, 3f))
                 {
                     BaseAction.HurtSomeone(_npc, target, 100);
                     _npc.Memory.Targets[targetType] = null;
                     IncrementStepInAction();
+                    _npc.Memory.LastWeAttacked= target.CharacterName;
                 }
 
                 //TODO: killer must only kill victim if they think the victim is alone
@@ -563,7 +581,7 @@ public class Actions : MonoBehaviour
                 if (ActionsHelper.Reached(_npc, gotoPerson.transform.position, 1f))
                 {
 
-
+                    _npc.Memory.ReachedPerson= gotoPerson.CharacterName;
                     IncrementStepInAction();
                 }
 

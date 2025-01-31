@@ -27,7 +27,8 @@ public class Vitality : MonoBehaviour
     private void Die()
     {
         Dead = true;
-        _npc.Appearance.State = AppearanceState.dead;
+        _npc.State.SetState(StateType.dead);
+     
     }
 
 

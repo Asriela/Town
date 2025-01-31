@@ -1,9 +1,9 @@
 ==start==
 	"Careful now... folks around here aren't too fond of mages."
 	-who are you?
-		"I'm Keth, just a humble healer. And who might you be, traveller?"
+		"I'm Keth, just a humble healer, been here a week, but you just arrived haven't you.. you are lucky to have survived the blizzard."
 	-are you a mage?
-		"Me? Oh no, I'm simply here to care for the sick and wounded. But you... don't hide your magic well enough"
+		"Me? Oh no, I'm simply here to care for the sick and wounded. But you... don't hide your magic well enough, maybe I can take a look at you later."
 		-how do you know
 			"A doctor knows these things, my friend."
 

@@ -1,9 +1,10 @@
 ==start==
-	(event : killedWerewolf)
-	"-There was no choice. Everyone saw what he became.." 
+	(notCompleted : killedWerewolf)
+	"The werewolves are everywhere, best to stay inside for now.."
+	(completed : killedWerewolf)
+	"-There was no choice. He - he was the werewolf... I had to.." 
 	"-We are weary of outsiders here , especially when they stumble right out of the cold dark.. That being said I also cannot kick you back into the frost, you can stay but as soon as the snow begins melting in a few weeks you best be on your way.  "
-	(before event : killedWerewolf)
-	"-Watch out for werewolves near the tree lines..."
+
 	
 
 	

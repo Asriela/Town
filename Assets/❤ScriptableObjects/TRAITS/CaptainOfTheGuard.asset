@@ -18,64 +18,86 @@ MonoBehaviour:
     _dialogue: this way
     _action: 16
     _actionParameter:
-      rid: 2000162973866263059
+      rid: 2000162984405762780
     _conditions:
     - conditionType: 40
       parameter:
-        rid: 2000162973866263060
+        rid: 2000162984405762781
     - conditionType: 42
       parameter:
-        rid: 2000162973866263060
+        rid: 2000162984405762781
     _priority: 10
     _actionTags: 
   - _name: complete taking player to inn
     _dialogue: here you go speak to Alrine
     _action: 24
     _actionParameter:
-      rid: 2000162973866263060
+      rid: 2000162984405762781
     _conditions:
     - conditionType: 12
       parameter:
-        rid: 2000162973866263059
+        rid: 2000162984405762780
     - conditionType: 42
       parameter:
-        rid: 2000162973866263060
+        rid: 2000162984405762781
     _priority: 10
     _actionTags: 
   - _name: talk to player
     _dialogue: 
     _action: 25
     _actionParameter:
-      rid: 2000162973866263061
+      rid: 2000162984405762782
     _conditions:
     - conditionType: 42
       parameter:
-        rid: 2000162973866263062
+        rid: 2000162984405762783
     - conditionType: 24
       parameter:
-        rid: 2000162973866263063
+        rid: 2000162984405762784
     _priority: 10
+    _actionTags: 
+  - _name: stand watch
+    _dialogue: 
+    _action: 16
+    _actionParameter:
+      rid: 2000162984405762785
+    _conditions:
+    - conditionType: 13
+      parameter:
+        rid: 2000162984405762785
+    - conditionType: 8
+      parameter:
+        rid: 2000162984405762786
+    _priority: 12
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162973866263059
+    - rid: 2000162984405762780
       type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 2
-    - rid: 2000162973866263060
+    - rid: 2000162984405762781
       type: {class: ScriptedTaskType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 2
-    - rid: 2000162973866263061
+    - rid: 2000162984405762782
       type: {class: DialogueFileType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 2
-    - rid: 2000162973866263062
+    - rid: 2000162984405762783
       type: {class: ScriptedTaskType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1
-    - rid: 2000162973866263063
+    - rid: 2000162984405762784
       type: {class: TraitType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 23
+    - rid: 2000162984405762785
+      type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 7
+    - rid: 2000162984405762786
+      type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 21

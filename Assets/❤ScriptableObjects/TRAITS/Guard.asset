@@ -18,61 +18,83 @@ MonoBehaviour:
     _dialogue: 
     _action: 23
     _actionParameter:
-      rid: 2000162902653010071
+      rid: 2000162984405762792
     _conditions:
     - conditionType: 35
       parameter:
-        rid: 2000162902653010072
+        rid: 2000162984405762793
     - conditionType: 38
       parameter:
-        rid: 2000162902653010071
-    _priority: 10
+        rid: 2000162984405762792
+    _priority: 20
     _actionTags: 
   - _name: arrest criminal
     _dialogue: Are you a werewolf?
     _action: 10
     _actionParameter:
-      rid: 2000162902653010073
+      rid: 2000162984405762794
     _conditions:
     - conditionType: 35
       parameter:
-        rid: 2000162902653010072
+        rid: 2000162984405762793
     - conditionType: 37
       parameter:
-        rid: 2000162902653010071
-    _priority: 10
+        rid: 2000162984405762792
+    _priority: 20
+    _actionTags: 
+  - _name: kill threat
+    _dialogue: 
+    _action: 24
+    _actionParameter:
+      rid: 2000162984405762795
+    _conditions:
+    - conditionType: 49
+      parameter:
+        rid: 2000162984405762796
+    - conditionType: 42
+      parameter:
+        rid: 2000162984405762795
+    _priority: 30
     _actionTags: 
   - _name: kill threat
     _dialogue: 
     _action: 1
     _actionParameter:
-      rid: 2000162902653010074
+      rid: 2000162984405762797
     _conditions:
     - conditionType: 33
       parameter:
-        rid: 2000162902653010075
-    _priority: 10
+        rid: 2000162984405762798
+    _priority: 20
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162902653010071
+    - rid: 2000162984405762792
       type: {class: TargetType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 7
-    - rid: 2000162902653010072
+    - rid: 2000162984405762793
       type: {class: MemoryTags, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 27
-    - rid: 2000162902653010073
+    - rid: 2000162984405762794
       type: {class: SocializeType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 12
-    - rid: 2000162902653010074
+    - rid: 2000162984405762795
+      type: {class: ScriptedTaskType, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 3
+    - rid: 2000162984405762796
+      type: {class: CharacterName, ns: Mind, asm: Assembly-CSharp}
+      data:
+        value__: 9
+    - rid: 2000162984405762797
       type: {class: TargetType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 6
-    - rid: 2000162902653010075
+    - rid: 2000162984405762798
       type: {class: MemoryTags, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 29

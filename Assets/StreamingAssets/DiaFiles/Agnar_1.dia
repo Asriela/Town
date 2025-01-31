@@ -1,17 +1,19 @@
 ==start==
-	"Hello, are you a mage?"
+	"You, mage?"
 	>yes [share : mage]
-		"Then you are not welcome here, you best be moving along, if not now , as soon as possible."
+		"Then you not welcome, leave"
 		-leave
 			<end>
 	>no
-		"That's good, keep it that way, the fewer mages the quicker the world can begin to heal."
+		"Good, the fewer mages, better world."
 		<ask>
 	
 ==ask==
+	-There is a werewolf on the loose?
+		"Darkness surrounds woods.. darkness make dark" 
 	-Tell me about yourself?
-		"Not much to tell, I protect this village , keep the broken magic at bay and cook for this inn."
-		-leave
-			<end>
+		"#he just looks at you#"
+	-leave
+		<end>
 	
 	

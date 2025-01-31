@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Mind;
 using UnityEngine;
 
 [System.Serializable]
@@ -142,7 +143,19 @@ public class Location : MonoBehaviour
             .FirstOrDefault(p => p.traitType == traitType)?
             .characters
             .FirstOrDefault();
-
+    public bool HasOccupant(Character character)
+    {
+        foreach (var occupant in _occupants)
+        {
+            foreach (var chara in occupant.characters)
+            {
+                if(chara== character)
+                return true;
+            }
+            
+        }
+        return false;
+    }
 }
 
 

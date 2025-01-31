@@ -1,4 +1,4 @@
-﻿
+﻿/*
 using System;
 using Mind;
 using UnityEditor;
@@ -163,6 +163,9 @@ public class TraitEditor : Editor
             Mind.ActionType.gotoTarget => typeof(Mind.TargetType),
             Mind.ActionType.completeScriptedTask => typeof(Mind.ScriptedTaskType),
             Mind.ActionType.openDialogueWithPlayer => typeof(DialogueFileType),
+            Mind.ActionType.shareTag => typeof(MemoryTags),
+            Mind.ActionType.becomeOccupant => typeof(LocationName),
+            Mind.ActionType.removeAsOccupant => typeof(LocationName),
             _ => null
         };
 
@@ -226,6 +229,12 @@ public class TraitEditor : Editor
             Mind.ConditionType.scriptedTaskCompleted => typeof(Mind.ScriptedTaskType),
             Mind.ConditionType.scriptedTaskNotCompleted => typeof(Mind.ScriptedTaskType),
             Mind.ConditionType.lastSpokeTo => typeof(Mind.CharacterName),
+            Mind.ConditionType.notLastSpokeTo => typeof(Mind.CharacterName),
+            Mind.ConditionType.reachedPerson => typeof(Mind.CharacterName),
+            Mind.ConditionType.notReachedPerson => typeof(Mind.CharacterName),
+            Mind.ConditionType.hasNamedOccupant => typeof(Mind.CharacterName),
+            Mind.ConditionType.notHaveNamedOccupant => typeof(Mind.CharacterName),
+            Mind.ConditionType.attackedPerson => typeof(Mind.CharacterName),
             _ => null
         };
 
@@ -301,5 +310,5 @@ public class TraitEditor : Editor
 
 }
 
-
+*/
 
