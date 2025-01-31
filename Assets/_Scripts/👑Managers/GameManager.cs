@@ -68,6 +68,13 @@ public class GameManager : Singleton<GameManager>
         UIClicked = false;
         BlockingPlayerUIOnScreen = false;
     }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+    }
     public Dictionary<Mind.TraitType, Trait> TraitsInPlay
     {
         get
