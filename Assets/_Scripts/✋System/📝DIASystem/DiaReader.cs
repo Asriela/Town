@@ -235,6 +235,23 @@ public static class DiaReader
                 { BasicFunctions.Log($"⚠️ Invalid MemoryTag: {dataString}", LogType.dia); }
 
             }
+            if (condition.StartsWith("saw:"))
+            {
+                if (Enum.TryParse(typeof(CharacterName ), dataString, true, out object rawData))
+                {
+                    CharacterName enumData = (CharacterName)rawData;
+                    var characterObject = WorldManager.Instance.GetCharacter(enumData);
+                    var visualStatus= player.VisualStatusKnowledge.GetVisualStatus(player, characterObject);
+
+                    if (visualStatus == null || visualStatus.Count!=0)
+                    {
+                        skipNextLineDueToBadCondition = true;
+                    }
+                }
+                else
+                { BasicFunctions.Log($"⚠️ Invalid MemoryTag: {dataString}", LogType.dia); }
+
+            }
         }
     }
     public static bool FindNextDialogue(out bool noOptions)

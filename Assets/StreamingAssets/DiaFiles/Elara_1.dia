@@ -1,6 +1,10 @@
 ==start==
-	"..."
-	>leave
+	"Sorry I cant speak right now I am looking for my husband..."
+	>I saw him he was sweating
+		"Where did you see him!?"
+			>I saw him as I was entering the town from the south.
+				"Thank you for telling me this."
+	>Ok
 		<end>
 	
 	

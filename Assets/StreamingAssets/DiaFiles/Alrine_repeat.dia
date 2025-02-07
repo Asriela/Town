@@ -2,8 +2,13 @@
 	"-So have you decided to stay, can I get you a room?"
 	--yes please [ action : rentRoom]
 		"Your room is behind me, get some rest so you can recover from the storm.."
-	-lets hang out some more [action : hangout] 
-		"Always.."
+	-lets drink some more [action : hangout] 
+		"Always!"
+	-There was this guy in the forest he seemed sick, he was sweating.
+		"That's Talinor, our tailor , I saw he looked sick earlier.. what in the world is he doing in the woods!?"
+	(saw : Elara)
+	-Elara seems worried
+		"I wonder if its connected to her husband, Talinor being sick."
 	+do something else.. [menu]
 	
 

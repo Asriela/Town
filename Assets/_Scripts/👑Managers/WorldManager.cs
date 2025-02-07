@@ -40,6 +40,8 @@ public class WorldManager : Singleton<WorldManager>
     [SerializeField]
     private List<LocationTypeGameObjectPair> _locations = new();
 
+
+
     public Dictionary<LocationName, Location> Locations
     {
         get
@@ -58,6 +60,16 @@ public class WorldManager : Singleton<WorldManager>
 
     [SerializeField]
     private float _timeOfDay;
+
+
+    [SerializeField]
+    private int _day=1;
+
+    public int Day
+    {
+        get => _day;
+        set => _day = value;
+    }
 
     [SerializeField]
     private float _startingTime;
@@ -106,6 +118,7 @@ public class WorldManager : Singleton<WorldManager>
         if (_lastTimeOfDay > TimeOfDay)
         {
             OnMidnight?.Invoke();
+            _day++;
         }
     }
 

@@ -20,6 +20,7 @@ public static class DiaCharacterFileHelper
                 {
 
                     Mind.CharacterName.Agnar => GetAgnarFile(character),
+                    Mind.CharacterName.Elara => GetElaraFile(character),
                     _ => Default(character)
                 };
                 break;
@@ -71,5 +72,15 @@ public static class DiaCharacterFileHelper
         accessCount[name]++;
         return ret;
     }
+    private static string GetElaraFile(Character character)
+    {
+        var name = character.CharacterName;
+        var ret = $"{name}_1";
 
+        if(WorldManager.Instance.Day>1)
+            ret = $"{name}_2";
+
+        accessCount[name]++;
+        return ret;
+    }
 }
