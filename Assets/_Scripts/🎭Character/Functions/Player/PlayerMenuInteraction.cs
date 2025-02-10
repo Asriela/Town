@@ -330,8 +330,8 @@ public class PlayerMenuInteraction : MonoBehaviour
 
         if (hit.collider != null)
         {
-            if (HandleCharacterInteraction(hit))
-                return;
+           // if (HandleCharacterInteraction(hit))
+            //    return;
 
             HandleObjectInteraction(hit);
         }

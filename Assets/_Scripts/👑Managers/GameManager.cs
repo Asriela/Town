@@ -16,6 +16,7 @@ public class GameManager : Singleton<GameManager>
 
     public bool UIClicked { get; set; }
     public bool BlockingPlayerUIOnScreen { get; set; }
+    public bool BlockingPlayerUIOnScreen2 { get; set; }
 
     public bool CantClickOffInteractionMenu { get; set; }
 

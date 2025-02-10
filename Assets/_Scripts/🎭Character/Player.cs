@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(PlayerMenuInteraction))]
+[RequireComponent(typeof(PlayerRadialMenuInteraction))]
+[RequireComponent(typeof(RadialMenuActionsHelper))]
 [RequireComponent(typeof(PlayerControls))]
 public class Player : Character
 {
@@ -15,15 +17,20 @@ public class Player : Character
     private GameObject _currentRadialMenu;
     private InteractionPackage _currentInteraction = null;
     public PlayerMenuInteraction MenuInteraction { get; set; }
+    public PlayerRadialMenuInteraction RadialMenuInteraction { get; set; }
+    public RadialMenuActionsHelper RadialActionsHelper { get; set; }
     public PlayerControls PlayerControls { get; set; }
 
     private void Start()
     {
         MenuInteraction = GetComponent<PlayerMenuInteraction>();
         MenuInteraction.Initialize(this);
+        RadialMenuInteraction = GetComponent<PlayerRadialMenuInteraction>();
+        RadialMenuInteraction.Initialize(this);
         PlayerControls = GetComponent<PlayerControls>();
         PlayerControls.Initialize(this);
-
+        RadialActionsHelper = GetComponent<RadialMenuActionsHelper>();
+        RadialActionsHelper.Initialize(this);
         // Initialize with the default color
 
     }
@@ -52,7 +59,19 @@ public class Player : Character
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
-            if (MenuInteraction.NotInteractingWithMenu())
+            // Raycast from mouse position
+            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            // Get the layer mask for a specific layer (e.g., "MyLayerName")
+            LayerMask layerMask = LayerMask.GetMask("characters");
+
+            // Perform the raycast with the layer mask
+            RaycastHit2D hit2 = Physics2D.Raycast(mousePosition, Vector2.zero, Mathf.Infinity, layerMask);
+
+
+
+    
+
+            if (hit2.collider == null && MenuInteraction.NotInteractingWithMenu() && RadialMenuInteraction.NotInteractingWithMenu())
             {
 
                 BaseAction.MoveTo(this, hit.point);

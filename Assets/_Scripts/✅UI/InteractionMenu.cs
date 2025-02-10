@@ -13,6 +13,7 @@ public class InteractionMenu : MonoBehaviour
     public float buttonSpacing = 2f; // Spacing between buttons
     public VisualElement root;
     private VisualElement menuContainer;
+    private VisualElement menuContainer2;
     private VisualElement backgroundImage;
     private VisualElement portraitBackImage;
     private VisualElement portraitImage;
@@ -23,7 +24,7 @@ public class InteractionMenu : MonoBehaviour
     private int standardFontSize=14;
 
     [SerializeField]
-    private float buttonLeftMargin = 230;
+    private float buttonLeftMargin = 230-200;
     [SerializeField]
     private float buttonWidth = 280;
 
@@ -40,22 +41,43 @@ public class InteractionMenu : MonoBehaviour
         {
             VisualElement interactionMenu = interactionMenuTemplate.CloneTree();
             root.Add(interactionMenu);
-
+           VisualElement interactionMenu2 = interactionMenuTemplate.CloneTree();
+            root.Add(interactionMenu2);
             // Get references to the container
             menuContainer = interactionMenu.Q<VisualElement>("MenuContainer");
+            menuContainer2= interactionMenu2.Q<VisualElement>("MenuContainer");
+
+            menuContainer2.style.position = Position.Absolute;
+            menuContainer2.style.width = new Length(50, LengthUnit.Pixel);
+            menuContainer2.style.height = new Length(596, LengthUnit.Pixel);
+            menuContainer2.style.display = DisplayStyle.None;
+            menuContainer2.style.left = new Length(550, LengthUnit.Pixel);
+            menuContainer2.style.left = new Length((1600 + 100) / 2 - 150, LengthUnit.Pixel); // Move right by 240px
+            menuContainer2.style.top = new Length((900 + 200) / 2 - 500, LengthUnit.Pixel); // Move up by 400px
+            menuContainer2.style.flexDirection = FlexDirection.Column;
+            menuContainer2.style.alignItems = Align.FlexStart;
+            menuContainer2.style.justifyContent = Justify.FlexStart;
+            menuContainer2.style.overflow = Overflow.Visible;
+            // Display the menu
+            menuContainer2.style.display = DisplayStyle.Flex;
+
             menuContainer.style.position = Position.Absolute;
-            menuContainer.style.width = new Length(240, LengthUnit.Pixel);
+            menuContainer.style.width = new Length(440, LengthUnit.Pixel);
+            menuContainer.style.height = new Length(596, LengthUnit.Pixel);
             menuContainer.style.display = DisplayStyle.None;
-            menuContainer.style.left = new Length(650, LengthUnit.Pixel);
+            menuContainer.style.left = new Length(550, LengthUnit.Pixel);
             menuContainer.style.left = new Length((1600 + 100) / 2 - 150, LengthUnit.Pixel); // Move right by 240px
             menuContainer.style.top = new Length((900 + 200) / 2 - 500, LengthUnit.Pixel); // Move up by 400px
             menuContainer.style.flexDirection = FlexDirection.Column;
             menuContainer.style.alignItems = Align.FlexStart;
             menuContainer.style.justifyContent = Justify.FlexStart;
-
+            menuContainer.style.overflow = Overflow.Hidden;
             // Display the menu
             menuContainer.style.display = DisplayStyle.Flex;
+           
+            
 
+            
             // Add the background image as a child of the menu container
             backgroundImage = new VisualElement();
             backgroundImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/InteractionPanel"));
@@ -75,9 +97,9 @@ public class InteractionMenu : MonoBehaviour
             portraitBackImage.style.left = new Length(-38, LengthUnit.Pixel); // Left of the menu background
             portraitBackImage.style.top = new Length(20, LengthUnit.Pixel);
             portraitBackImage.style.width = new Length(portraitWidth, LengthUnit.Pixel); // Scale factor for portrait
-            portraitBackImage.style.height = new Length(49 * 3, LengthUnit.Pixel); // Scale factor for portrait
+            portraitBackImage.style.height = new Length((49 * 3)+5, LengthUnit.Pixel); // Scale factor for portrait
             portraitBackImage.style.opacity = 0.99f;
-            menuContainer.Add(portraitBackImage);
+            menuContainer2.Add(portraitBackImage);
 
             // Add the actual portrait image
             portraitImage = new VisualElement();
@@ -87,7 +109,7 @@ public class InteractionMenu : MonoBehaviour
             portraitImage.style.top = new Length(10, LengthUnit.Pixel);
             portraitImage.style.width = new Length(portraitWidth, LengthUnit.Pixel); // Scale factor X 7
             portraitImage.style.height = new Length(portraitWidth, LengthUnit.Pixel); // Scale factor Y 7
-            menuContainer.Add(portraitImage);
+            menuContainer2.Add(portraitImage);
         }
         else
         {
@@ -132,7 +154,7 @@ public class InteractionMenu : MonoBehaviour
 
         GameManager.Instance.BlockingPlayerUIOnScreen = true;
         menuContainer.Clear();
-
+        menuContainer2.Clear();
         var myRed = new Color(0.768f, 0.251f, 0.075f);
         var myGrey = new Color(0.478f, 0.494f, 0.518f);
 
@@ -142,8 +164,8 @@ public class InteractionMenu : MonoBehaviour
         if (personWeAreSpeakingTo != null)
         {
             // Add the portrait images
-            menuContainer.Add(portraitBackImage);
-            menuContainer.Add(portraitImage);
+            menuContainer2.Add(portraitBackImage);
+            menuContainer2.Add(portraitImage);
 
             // Update the portrait image with the character's name
             portraitImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>($"Sprites/portraits/portrait{personWeAreSpeakingTo.CharacterName}"));
@@ -181,7 +203,7 @@ public class InteractionMenu : MonoBehaviour
             nameButtonContainer.Add(nameButton);
 
             // Add the container for the name button to the menu (it won't affect the other button layout)
-            menuContainer.Add(nameButtonContainer);
+            menuContainer2.Add(nameButtonContainer);
         }
         var currentPlayerSocialAction= GameManager.Instance.GetPlayersCurrentSocialAction();
         if (currentPlayerSocialAction != SocializeType.none)
@@ -383,9 +405,9 @@ public class InteractionMenu : MonoBehaviour
                 button.style.alignSelf = Align.Center;
                 button.style.flexDirection = FlexDirection.Row; // Ensure elements are side by side
                 button.style.top = 260 ;
+                button.style.left = new Length(-100, LengthUnit.Pixel);
 
-
-                    button.AddToClassList("button");
+                button.AddToClassList("button");
 
                 // Button click handler
                 var diaAction = (DiaActionType)dialogueOptions[i].Data2;
@@ -541,6 +563,7 @@ public class InteractionMenu : MonoBehaviour
 
         // Display the menu
         menuContainer.style.display = DisplayStyle.Flex;
+        menuContainer2.style.display = DisplayStyle.Flex;
     }
 
     private Button CreateMenuButton(List<MenuOption> menuButtons, MenuOption menuOption)
@@ -591,6 +614,7 @@ public class InteractionMenu : MonoBehaviour
         EventManager.TriggerSwitchCameraToNormalMode();
         GameManager.Instance.BlockingPlayerUIOnScreen = false;
         menuContainer.style.display = DisplayStyle.None;
+        menuContainer2.style.display = DisplayStyle.None;
         pastDialogue = "";
     }
 

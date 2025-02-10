@@ -43,7 +43,8 @@ public enum LogType : short
     memory,
     thinking,
     social,
-    dia
+    dia,
+    radialMenu
 }
 
 public static class BasicFunctions
@@ -77,7 +78,8 @@ public static class BasicFunctions
         { LogType.basic,             BinaryBool(0)},
         { LogType.thinking,            BinaryBool(0)},
         { LogType.dia,            BinaryBool(1)},
-        { LogType.social,            BinaryBool(0)}
+        { LogType.social,            BinaryBool(0)},
+        { LogType.radialMenu,            BinaryBool(1)}
     };
 
 
