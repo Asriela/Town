@@ -1,24 +1,23 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
-
 using UnityEngine.UIElements;
-using static UnityEngine.GraphicsBuffer;
 
 
 public class RadialMenu : MonoBehaviour
 {
     public event Action<string> OnButtonClicked;
 
+
     public VisualTreeAsset _interactionMenuTemplate;
     public VisualElement _root;
     private VisualElement _menuContainer;
-    private VisualElement backgroundImage;
+    private VisualElement _tooltipBox;
+    private Label _tooltipText;
     private List<VisualElement> _buttons = new();
     private Character _targetCharacter = null;
     private const float _radius = 100;
     private Vector2 _hoverScale = new Vector2(1.2f, 1.2f);
-    private const float _animationDuration = 0.2f;
     private UIDocument _uiDocument;
 
 
@@ -26,89 +25,122 @@ public class RadialMenu : MonoBehaviour
     {
         _root = GetComponent<UIDocument>().rootVisualElement;
 
+
         if (_interactionMenuTemplate != null)
         {
             VisualElement interactionMenu = _interactionMenuTemplate.CloneTree();
             _root.Add(interactionMenu);
-            // Get UI Document Root
             _uiDocument = GetComponent<UIDocument>();
-
 
 
             _menuContainer = interactionMenu.Q<VisualElement>("MenuContainer");
             _menuContainer.style.position = Position.Absolute;
             _menuContainer.style.width = 200;
             _menuContainer.style.height = 200;
-            _menuContainer.style.left = new Length((1600 + 100) / 2 - 150, LengthUnit.Pixel); // Move right by 240px
-            _menuContainer.style.top = new Length((900 + 200) / 2 - 500, LengthUnit.Pixel);
-            _menuContainer.style.position = Position.Absolute;
 
-            backgroundImage = new VisualElement();
-            backgroundImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/UI/blackSquare"));
-            backgroundImage.style.position = Position.Absolute;
-            backgroundImage.style.left = new Length(0, LengthUnit.Pixel);
-            backgroundImage.style.top = new Length(0, LengthUnit.Pixel);
-            backgroundImage.style.width = new Length(20, LengthUnit.Pixel);
-            backgroundImage.style.height = new Length(20, LengthUnit.Pixel);
-            backgroundImage.style.opacity = 0.99f; // Optional: Slight transparency
-            _menuContainer.Add(backgroundImage);
 
+            // Tooltip Box Setup
+            _tooltipBox = new VisualElement();
+            _tooltipBox.style.backgroundColor = new Color(0, 0, 0, 0.8f);
+            _tooltipBox.style.position = Position.Absolute;
+            _tooltipBox.style.width = 300;
+            _tooltipBox.style.height = 150; // Allow it to resize properly
+            _tooltipBox.style.paddingLeft = 20;
+            _tooltipBox.style.paddingRight = 20;
+            _tooltipBox.style.paddingTop = 10;
+            _tooltipBox.style.paddingBottom = 10;
+
+            _tooltipBox.style.visibility = Visibility.Hidden;
+
+            _tooltipBox.style.left = _menuContainer.resolvedStyle.left + 220;
+            _tooltipBox.style.top = _menuContainer.resolvedStyle.top;
+
+
+
+            _tooltipText = new Label
+            {
+                style =
+                {
+                    color = Color.white,
+                    fontSize = 14,
+                    unityTextAlign = TextAnchor.MiddleCenter,
+                    whiteSpace = WhiteSpace.Normal,
+                unityFontStyleAndWeight = FontStyle.Bold,
+                alignSelf =Align.Center,
+                flexGrow = 1,
+                flexDirection=FlexDirection.Column,
+                justifyContent=Justify.Center
+                }
+            };
+            _tooltipBox.Add(_tooltipText);
+            _root.Add(_tooltipBox);
         }
     }
+
 
     private void Update()
     {
         if (_targetCharacter != null)
         {
+            Vector2 targetScreenPos = RuntimePanelUtils.CameraTransformWorldToPanel(
+                _uiDocument.rootVisualElement.panel,
+                _targetCharacter.transform.position,
+                Camera.main
+            );
 
-            Vector2 targetScreenPos = RuntimePanelUtils.CameraTransformWorldToPanel(_uiDocument.rootVisualElement.panel, _targetCharacter.transform.position, Camera.main);
 
             targetScreenPos.y -= 180;
             targetScreenPos.x -= 100;
             Vector2 menuPosition = _root.WorldToLocal(targetScreenPos);
-            _menuContainer.style.left = 0f;// menuPosition.x;
-            _menuContainer.style.top = 0f;// menuPosition.y;
-            _menuContainer.transform.position = targetScreenPos;
-        }
+            _menuContainer.style.left = menuPosition.x;
+            _menuContainer.style.top = menuPosition.y;
 
+
+
+        }
     }
 
-    public void OpenMenu(List<string> labels, Character targetCharacter)
+
+    public void OpenMenu(List<string> labels, List<string> tooltips, List<bool> isDisabled, Character targetCharacter)
     {
+        if (labels.Count != tooltips.Count || labels.Count != isDisabled.Count)
+        {
+            Debug.LogError("Labels, tooltips, and isDisabled lists must have the same length.");
+            return;
+        }
+
+
         _menuContainer.style.display = DisplayStyle.Flex;
         _targetCharacter = targetCharacter;
         _menuContainer.Clear();
         _buttons.Clear();
-
-
         GameManager.Instance.BlockingPlayerUIOnScreen2 = true;
 
 
-        // Create buttons and position them radially
         for (int i = 0; i < labels.Count; i++)
         {
-            var button = CreateButton(labels[i]);
+            var button = CreateButton(labels[i], tooltips[i], isDisabled[i]);
             _buttons.Add(button);
             _menuContainer.Add(button);
         }
 
 
         LayoutButtons();
-        //AnimateButtonsIn();
     }
+
 
     public void HideMenu()
     {
-
         GameManager.Instance.BlockingPlayerUIOnScreen2 = false;
         _menuContainer.style.display = DisplayStyle.None;
-        _targetCharacter=null;
-        BasicFunctions.Log("🎯 CLOSE menu", LogType.radialMenu);
+        _tooltipBox.style.display = DisplayStyle.None;
+        _targetCharacter = null;
     }
 
-    private VisualElement CreateButton(string label)
+
+    private VisualElement CreateButton(string label, string tooltip, bool isDisabled)
     {
-        var button = new Button { };
+        var button = new Button();
         button.style.width = 80;
         button.style.height = 40;
         //button.style.borderRadius = 10;
@@ -126,11 +158,12 @@ public class RadialMenu : MonoBehaviour
         button.style.width = StyleKeyword.Auto;
         button.style.maxWidth = StyleKeyword.None;
 
+
         Label optionLabel = new Label(label)
         {
             style =
             {
-                color = Color.black,  // Default color, will be overridden by rich text
+                color = Color.black,
                 unityTextAlign = TextAnchor.MiddleCenter,
                 fontSize = 14,
                 whiteSpace = WhiteSpace.Normal,  // Allow text wrapping within the label
@@ -139,26 +172,48 @@ public class RadialMenu : MonoBehaviour
                 unityFontStyleAndWeight = FontStyle.Bold,
             }
         };
+
+
         button.Add(optionLabel);
 
-        button.RegisterCallback<MouseEnterEvent>(evt => button.style.scale = new Scale(_hoverScale));
-        button.RegisterCallback<MouseLeaveEvent>(evt => button.style.scale = new Scale(new Vector2(1f, 1f)));
-        button.clicked += () => OnButtonClicked?.Invoke(label);
+
+        if (isDisabled)
+        {
+            button.style.backgroundColor = new Color(0.5f, 0.5f, 0.5f, 1); // Greyed-out look
+            button.RegisterCallback<MouseEnterEvent>(evt => ShowTooltip(tooltip, button));
+            button.RegisterCallback<MouseLeaveEvent>(evt => HideTooltip());
+            button.SetEnabled(false);
+        }
+        else
+        {
+            button.style.backgroundColor = Color.white;
+            button.RegisterCallback<MouseEnterEvent>(evt => EnterButton(tooltip, button));
+            button.RegisterCallback<MouseLeaveEvent>(evt => LeaveButton(button));
+            button.clicked += () => OnButtonClicked?.Invoke(label);
+        }
 
 
         return button;
     }
 
+    void EnterButton(string tooltip, VisualElement button)
+    {
+        button.style.scale = new Scale(_hoverScale);
+        ShowTooltip(tooltip, button);
+    }
+
+    void LeaveButton(VisualElement button)
+    {
+        button.style.scale = new Scale(new Vector2(1f, 1f));
+        HideTooltip();
+    }
 
     private void LayoutButtons()
     {
         int count = _buttons.Count;
-
-
-
         for (int i = 0; i < count; i++)
         {
-            float angle = ( GetPresetAngle(i, count)) * Mathf.Deg2Rad;
+            float angle = GetPresetAngle(i, count) * Mathf.Deg2Rad;
             float x = Mathf.Cos(angle) * _radius;
             float y = Mathf.Sin(angle) * _radius;
             _buttons[i].style.left = 100f + x - 40f;
@@ -169,78 +224,30 @@ public class RadialMenu : MonoBehaviour
 
     private float GetPresetAngle(int index, int count)
     {
-        var upAngle = 180;//
-        var leftAngle = 0;//co
-        var rightAngle = 270;//t
-        var downAngle = 90;//ch
-        int ret=90;
-        if (count == 1)
-        {
-            ret= upAngle;
-        }
-        if (count == 2)
-        {
-            ret=(index ==0 ? leftAngle : rightAngle);
-        }
-        if (count == 3)
-        {
-            switch (index)
-            {
-                case 0: ret = upAngle; break;
-                case 1:
-                    ret= leftAngle;
-                    break;
-                case 2:
-                    ret = rightAngle;
-                    break;
-            }
-        }
-        if (count == 4)
-        {
-            switch (index)
-            {
-                case 0:
-                    ret = upAngle;
-                    break;
-                case 1:
-                    return leftAngle;
-                    break;
-                case 2:
-                    ret = rightAngle;
-                    break;
-                case 3:
-                    ret = downAngle;
-                    break;
-            }
-        }
-        return ret;
+        int[] angles = { 180, 0, 270, 90 }; // Up, Left, Right, Down
+        return (count > 4 || index >= count) ? 90 : angles[index];
     }
 
 
-    private void AnimateButtonsIn()
+    private void ShowTooltip(string tooltip, VisualElement button)
     {
-        for (int i = 0; i < _buttons.Count; i++)
-        {
-            var button = _buttons[i];
-            button.style.opacity = 1f;
+        if (string.IsNullOrEmpty(tooltip))
+            return;
+
+        _tooltipBox.style.visibility = Visibility.Visible;
+        _tooltipText.text = tooltip;
+        _tooltipBox.style.display = DisplayStyle.Flex;
 
 
-            float targetX = button.style.left.value.value;
-            float targetY = button.style.top.value.value;
+        Vector2 menuPos = _menuContainer.worldBound.position;
+
+        _tooltipBox.style.left = menuPos.x+300;
+        _tooltipBox.style.top = menuPos.y+30;
+    }
 
 
-            button.style.left = 100f;
-            button.style.top = 100f;
-
-
-            /* button.experimental.animation.Start(new Vector2(100f, 100f), new Vector2(targetX, targetY), (int)_animationDuration, (v) =>
-             {
-                 button.style.left = v.x;
-                 button.style.top = v.y;
-             });*/
-        }
+    private void HideTooltip()
+    {
+        _tooltipBox.style.display = DisplayStyle.None;
     }
 }
-
-
-

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Mind;
+using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -108,16 +109,23 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
         }
     }
 
+    private void OpenRadialMenu(List<string> options, List<string> toolTips, List<bool> isDisabled)
+    {
+        EventManager.TriggerSwitchCameraToInteractionMode(_player.transform, _personWeAreInteractingWith.transform);
+        _radialMenu.OpenMenu(options, toolTips, isDisabled, _personWeAreInteractingWith);
+    }
 
     private void OpenPrimaryMenu()
     {
         _justOpenedPieMenu = true;
 
         List<string> options = new() { "Charm", "Coerce", "Talk" };
+        List<string> toolTips = new() { "Charm them by spending time with them, it has a positive relationship impact but takes more time.", "Coerce them, doesnt take up much time but has a negative relationship impact.", "Open dialogue with the person." };
+        List<bool> isDisabled = new() { false, false,false };
         _radialMenu.OnButtonClicked += HandlePrimarySelection;
         _radialMenu.OnButtonClicked -= HandleCoerceSelection;
         _radialMenu.OnButtonClicked -= HandleCharmSelection;
-        _radialMenu.OpenMenu(options, _personWeAreInteractingWith);
+        OpenRadialMenu(options, toolTips, isDisabled);
     }
 
 
@@ -135,7 +143,8 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
                 OpenCoerceMenu();
                 break;
             case "Talk":
-                Debug.Log("Opening dialogue interaction...");
+                GameManager.Instance.OpenDialoguePlayer(_personWeAreInteractingWith, DialogueFileType.auto);
+                CloseInteractionMenu();
                 break;
         }
     }
@@ -144,8 +153,14 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
     private void OpenCharmMenu()
     {
         List<string> options = new() { "Buy Drink", "Hangout", "Hug", "Dance" };
+        List<string> toolTips = new() {
+            "Costs 5 coin, a quick way to get someone to like you.",
+            "Takes more time out of your day but costs nothing.",
+            "Not everyone is a hugger and people in distress are more receptive to hugs." ,
+            "Dancing is only effective with people who already like you." };
+        List<bool> isDisabled = new() { false, false, false , false};
         _radialMenu.OnButtonClicked += HandleCharmSelection;
-        _radialMenu.OpenMenu(options, _personWeAreInteractingWith);
+        OpenRadialMenu(options, toolTips, isDisabled);
     }
 
 
@@ -159,6 +174,8 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
     private void OpenCoerceMenu()
     {
         List<string> options = new() { "Threaten", "Blackmail" };
+        List<string> toolTips = new() { "Threaten with physical violence, short term gain, long term loss as they will hate you.", "You need dirt on someone to blackmail them." };
+        List<bool> isDisabled = new() { false, true };
 
 
         /*   if (_actionsHelper.HasBlackmailOn(_personWeAreInteractingWith))
@@ -168,7 +185,8 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
         */
 
         _radialMenu.OnButtonClicked += HandleCoerceSelection;
-        _radialMenu.OpenMenu(options, _personWeAreInteractingWith);
+
+        OpenRadialMenu(options, toolTips, isDisabled);
     }
 
 

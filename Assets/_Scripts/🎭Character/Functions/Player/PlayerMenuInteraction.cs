@@ -413,6 +413,7 @@ public class PlayerMenuInteraction : MonoBehaviour
     private void OpenInteractionMenu(string lastChosenOption, string currentDialogue, string currentSpeaker, List<MenuOption> diaButtons, string contextTitle, List<MenuOption> menuButtons, Transform openerOfMenu, Transform target, Character whoWeAreSpeakingTo)
     {
         EventManager.TriggerSwitchCameraToInteractionMode(openerOfMenu, target);
+
         _interactionMenu.ShowMenu(lastChosenOption, currentDialogue, currentSpeaker, diaButtons, contextTitle, menuButtons, whoWeAreSpeakingTo);
     }
 
