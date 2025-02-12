@@ -8,7 +8,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class RadialMenu : MonoBehaviour
 {
-    public event Action<string,int> OnButtonClicked;
+    public event Action<ActionOption> OnButtonClicked;
 
 
     public VisualTreeAsset _interactionMenuTemplate;
@@ -23,7 +23,7 @@ public class RadialMenu : MonoBehaviour
     private Label _tooltipEmoji;
     private List<VisualElement> _buttons = new();
     private Character _targetCharacter = null;
-    private const float _radius = 100;
+    private const float _radius = 140;
     private Vector2 _hoverScale = new Vector2(1.2f, 1.2f);
     private UIDocument _uiDocument;
     [SerializeField] private StyleFontDefinition emojiFont;
@@ -59,7 +59,7 @@ public class RadialMenu : MonoBehaviour
             _backPanel = new VisualElement();
             _backPanel.style.backgroundColor = new Color(0, 0, 0, 0.9f);
             _backPanel.style.position = Position.Absolute;
-            _backPanel.style.width = 350;
+            _backPanel.style.width = 370;
             _backPanel.style.height = 400;
             _backPanel.style.borderTopLeftRadius = 10;
             _backPanel.style.borderTopRightRadius = 10;
@@ -300,7 +300,7 @@ public class RadialMenu : MonoBehaviour
             _menuContainer.style.left = menuPosition.x;
             _menuContainer.style.top = menuPosition.y;
 
-            _backPanel.style.left = menuPosition.x+260+40;
+            _backPanel.style.left = menuPosition.x+260+40+40;
             _backPanel.style.top = menuPosition.y-40;
 
 
@@ -308,7 +308,7 @@ public class RadialMenu : MonoBehaviour
             Vector2 menuPos = _menuContainer.worldBound.position;
 
 
-            _tooltipBox.style.left = menuPos.x + 300;
+            _tooltipBox.style.left = menuPos.x + 300+40;
             _tooltipBox.style.top = menuPos.y + 30;
         }
     }
@@ -336,7 +336,7 @@ public class RadialMenu : MonoBehaviour
         _inOpeningMenu=false;
         for (int i = 0; i < options.Count; i++)
         {
-            var button = CreateButton(options[i].Name, options[i].Tooltip, options[i].Emoji, options[i].Cost, options[i].IsDisabled, targetCharacter);
+            var button = CreateButton(options[i], targetCharacter);
             _buttons.Add(button);
             _menuContainer.Add(button);
             if(options[i].Name =="Talk")
@@ -368,7 +368,7 @@ public class RadialMenu : MonoBehaviour
     }
 
 
-    private VisualElement CreateButton(string label, string tooltip, string emoji, int points, bool isDisabled, Character target)
+    private VisualElement CreateButton(ActionOption actionOption, Character target)
     {
         var button = new Button();
         button.style.width = 80;
@@ -389,7 +389,7 @@ public class RadialMenu : MonoBehaviour
         button.style.maxWidth = StyleKeyword.None;
 
 
-        Label optionLabel = new Label(label)
+        Label optionLabel = new Label(actionOption.Name)
         {
             style =
             {
@@ -407,29 +407,29 @@ public class RadialMenu : MonoBehaviour
         button.Add(optionLabel);
 
 
-        if (isDisabled)
+        if (actionOption.IsDisabled)
         {
             button.style.backgroundColor = new Color(0.5f, 0.5f, 0.5f, 1); // Greyed-out look
-            button.RegisterCallback<MouseEnterEvent>(evt => ShowTooltip(optionLabel.text, tooltip, emoji, points, button, target));
+            button.RegisterCallback<MouseEnterEvent>(evt => ShowTooltip(actionOption, button, target));
             button.RegisterCallback<MouseLeaveEvent>(evt => HideTooltip(target));
             button.SetEnabled(false);
         }
         else
         {
             button.style.backgroundColor = Color.white;
-            button.RegisterCallback<MouseEnterEvent>(evt => EnterButton(optionLabel.text, tooltip, emoji, points, button, target));
+            button.RegisterCallback<MouseEnterEvent>(evt => EnterButton(actionOption, button, target));
             button.RegisterCallback<MouseLeaveEvent>(evt => LeaveButton(button, target));
-            button.clicked += () => OnButtonClicked?.Invoke(label, points);
+            button.clicked += () => OnButtonClicked?.Invoke(actionOption);
         }
 
 
         return button;
     }
 
-    void EnterButton(string title, string tooltip, string emoji, int points, VisualElement button , Character target)
+    void EnterButton(ActionOption actionOption, VisualElement button , Character target)
     {
         button.style.scale = new Scale(_hoverScale);
-        ShowTooltip(title, tooltip, emoji, points, button, target);
+        ShowTooltip(actionOption, button, target);
     }
 
     void LeaveButton(VisualElement button, Character target)
@@ -455,12 +455,15 @@ public class RadialMenu : MonoBehaviour
     private float GetPresetAngle(int index, int count)
     {
         int[] angles = { 180, 0, 270, 90 }; // Up, Left, Right, Down
-        return (count > 4 || index >= count) ? 90 : angles[index];
+        return (count > 4 || index >= count) ? (360/ count)* index : angles[index];
     }
 
 
-    private void ShowTooltip(string title, string tooltip, string emoji, int points, VisualElement button, Character targetCharacter)
+    private void ShowTooltip(ActionOption actionOption, VisualElement button, Character targetCharacter)
     {
+        var tooltip = actionOption.Tooltip;
+        var title = actionOption.Name;
+        var points = actionOption.Points;
         if (string.IsNullOrEmpty(tooltip))
             return;
 
@@ -477,7 +480,22 @@ public class RadialMenu : MonoBehaviour
         var addFear = points < 0 ? $" + {-points}" : "";
         _trustMeter.text = $"TRUST: {targetCharacter.Persuasion.TrustTowardsPlayer}{addTrust}";
         _fearMeter.text = $"FEAR: {targetCharacter.Persuasion.FearTowardsPlayer}{addFear}";
-        
+
+        var relAddition="";
+        if (actionOption.RelationshipImpact > 0)
+            relAddition = $" + {actionOption.RelationshipImpact}";
+        else if (actionOption.RelationshipImpact < 0)
+            relAddition = $" - {-actionOption.RelationshipImpact}";
+
+        _relationshipStatus.text = $"<color=#969696>RELATIONSHIP:</color>\n{TextConverter.GetRelationshipStatusText(targetCharacter)}{relAddition}";
+
+        var moodAddition="";
+        if (actionOption.ActionEffects.Count != 0)
+        {
+            moodAddition=$" => {actionOption.ActionEffects[0]}";
+        }
+
+        _moodStatus.text = $"<color=#969696>MOOD:</color>\n{targetCharacter.State.VisualState[0]}{moodAddition}";
         _tooltipBox.style.display = DisplayStyle.Flex;
 
 
@@ -498,5 +516,8 @@ public class RadialMenu : MonoBehaviour
         _tooltipEmoji.text = "";
         _trustMeter.text = $"TRUST: {targetCharacter.Persuasion.TrustTowardsPlayer}";
         _fearMeter.text = $"FEAR: {targetCharacter.Persuasion.FearTowardsPlayer}";
+        _moodStatus.text = $"<color=#969696>MOOD:</color>\n{targetCharacter.State.VisualState[0]}";
+        _relationshipStatus.text = $"<color=#969696>RELATIONSHIP:</color>\n{TextConverter.GetRelationshipStatusText(targetCharacter)}";
+
     }
 }

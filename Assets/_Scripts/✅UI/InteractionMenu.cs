@@ -389,6 +389,7 @@ public class InteractionMenu : MonoBehaviour
             dialogue.style.top = new Length(90 + scrolldown - dialogue.resolvedStyle.height, LengthUnit.Pixel);
         });
 
+   
         // Add the dialogue options
         if (dialogueOptions != null)
         {
@@ -397,15 +398,18 @@ public class InteractionMenu : MonoBehaviour
             // Arrange buttons vertically
             for (int i = 0; i < buttonCount; i++)
             {
+                if (dialogueOptions[i].menuOptionCost > trust || dialogueOptions[i].menuOptionCost < fear)
+                { continue;}
                 if (dialogueOptions[i].ButtonLabel=="do something else.." && menuButtons!=null)
                 { continue;}
                 var costText = "";
+                int cost = dialogueOptions[i].menuOptionCost;
                 if (dialogueOptions[i].menuOptionCost!=0)
                 {
-                    costText =$"[Cost: {Math.Abs(dialogueOptions[i].menuOptionCost)}] ";
+                    costText =$"[Cost: {Math.Abs(cost)}] ";
                 }
                 string label = dialogueOptions[i].ButtonLabel;
-                int cost = dialogueOptions[i].menuOptionCost;
+
                 Button button = new Button();
                 dialogueOptionButtons.Add(button);
                 // Create a container label with different styling
@@ -484,6 +488,14 @@ public class InteractionMenu : MonoBehaviour
                 {
                     BasicFunctions.Log($"🌎Button clicked: {label}", LogType.ui);
                     GameManager.Instance.UIClicked = true;
+                    if (cost > 0)
+                    {
+                        personWeAreSpeakingTo.Persuasion.TrustTowardsPlayer-= cost;
+                    }
+                    if (cost < 0)
+                    {
+                        personWeAreSpeakingTo.Persuasion.FearTowardsPlayer += cost;
+                    }
                     OnButtonClicked?.Invoke(index, finalLabel, finalMenuOptionType);
                     StartCoroutine(CheckForInputAfterDelay());
                 };

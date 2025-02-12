@@ -204,7 +204,8 @@ namespace Mind
         smallTalk,
         drinking,
         ask,
-        tell
+        tell,
+        giveFood
     }
 
     [Serializable]
@@ -316,15 +317,15 @@ namespace Mind
     public enum ViewTowards : int
     {
         unforgivable = -25,
-        despise = -5,
-        extremelyNegative = -3,
-        veryNegative = -2,
+        despise = -10,
+        extremelyNegative = -6,
+        veryNegative = -3,
         negative = -1,
         neutral = 0,
         positive = 1,
-        veryPositive = 2,
-        extremelyPositive = 3,
-        adore = 5,
+        veryPositive = 3,
+        extremelyPositive = 6,
+        adore = 10,
         obsessed = 25
 
     }

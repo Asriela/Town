@@ -104,7 +104,7 @@ public class Relationships : MonoBehaviour
             // Increment the repeat counter
             existingEffect.amountOfRepeatsToday++;
 
-            existingEffect.value += interactionEffect / 2;
+            existingEffect.value += interactionEffect;
 
 
         }
@@ -114,7 +114,7 @@ public class Relationships : MonoBehaviour
 
             // Create a new InteractionEffect and calculate its value
             var newEffect = new InteractionEffect(
-                socializeType, interactionEffect /2
+                socializeType, interactionEffect
             );
 
 
@@ -291,13 +291,16 @@ public class Relationships : MonoBehaviour
                 }
             }
 
-            foreach (var effect in TodaysInteractionEffects)
-            {
-                relationshipValue += effect.value;
-            }
+
             // Update the relationship value with the character based on the views and memory tags
             AddOrUpdateRelationship(_character, character, relationshipValue);
 
+        }
+        var player = WorldManager.Instance.ThePlayer;
+        var relationshipWithPlayer=GetRelationshipWith(_character, player);
+        foreach (var effect in TodaysInteractionEffects)
+        {
+            AddOrUpdateRelationship(_character, player, relationshipWithPlayer + effect.value);
         }
 
     }

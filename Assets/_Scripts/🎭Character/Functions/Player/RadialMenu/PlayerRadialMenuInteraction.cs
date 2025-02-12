@@ -24,29 +24,30 @@ public class ActionOption
     public string Name;
     public string Tooltip;
     public string Emoji;
-    public int Cost;
+    public int Points;
+    public int RelationshipImpact;
     public bool UsedUp;
     public bool IsDisabled;
     public ViewTowards RelationshipRequirement;
     public MemoryTags MoodRequirement;
-    public List<ActionEffects> ActionEffects;
+    public List<MemoryTags> ActionEffects;
     public SubMenu InSubMenu;
     public Dictionary<MemoryTags, int> BonusPoints;
 
 
-    public ActionOption(string name, string emoji, string tooltip, int cost, bool usedUp, bool isDisabled, ViewTowards relationshipRequirement, MemoryTags mood, SubMenu submenu, Dictionary<MemoryTags, int> bonusPoints = null, List<ActionEffects> actionEffects = null)
+    public ActionOption(string name, string emoji, string tooltip, int cost, int relationshipImpact, bool usedUp, bool isDisabled, ViewTowards relationshipRequirement, MemoryTags mood, SubMenu submenu, Dictionary<MemoryTags, int> bonusPoints = null, List<MemoryTags> actionEffects = null)
     {
         Name = name;
         Tooltip = tooltip;
-        Cost = cost;
+        Points = cost;
         UsedUp = usedUp;
         IsDisabled = isDisabled;
         Emoji = emoji;
         RelationshipRequirement = relationshipRequirement;
         MoodRequirement = mood;
-        ActionEffects= actionEffects ?? new List<ActionEffects>();
+        ActionEffects= actionEffects ?? new List<MemoryTags>();
         BonusPoints = bonusPoints ?? new Dictionary<MemoryTags, int>();
-
+        RelationshipImpact =relationshipImpact;
         InSubMenu = submenu;
 
     }
@@ -66,6 +67,7 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
 
     private List<ActionOption> coerceOptions = new();
     private List<ActionOption> charmOptions = new();
+    private List<ActionOption> mainOptions = new();
     public void Initialize(Player player)
     {
         _player = player;
@@ -79,6 +81,10 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
         var root = _radialMenu._root;
         root.RegisterCallback<MouseEnterEvent>(e => OnMouseOverUI(true));
         root.RegisterCallback<MouseLeaveEvent>(e => OnMouseOverUI(false));
+
+        SetupCharmOptions();
+        SetupCoerceOptions();
+        SetupPrimaryOptions();
     }
 
     private void Update()
@@ -169,24 +175,20 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
     {
         _justOpenedPieMenu = true;
 
-        List<string> options = new() { "Charm", "Coerce", "Talk" };
-        List<string> emoji = new() { "🌼", "🔪", "💬" };
-        List<int> points = new() { 0, 0, 0 };
-        List<string> toolTips = new() { "Charm them by spending time with them, it has a positive relationship impact but takes more time.", "Coerce them, doesnt take up much time but has a negative relationship impact.", "Open dialogue with the person." };
-        List<bool> isDisabled = new() { false, false, false };
+
         _radialMenu.OnButtonClicked += HandlePrimarySelection;
         _radialMenu.OnButtonClicked -= HandleCoerceSelection;
         _radialMenu.OnButtonClicked -= HandleCharmSelection;
-        OpenRadialMenu(options);
+        OpenRadialMenu(mainOptions);
     }
 
 
-    private void HandlePrimarySelection(string selectedOption, int points)
+    private void HandlePrimarySelection(ActionOption actionOption)
     {
         _radialMenu.OnButtonClicked -= HandlePrimarySelection; // Unsubscribe
 
 
-        switch (selectedOption)
+        switch (actionOption.Name)
         {
             case "Charm":
                 OpenCharmMenu();
@@ -204,17 +206,17 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
 
     private void OpenCharmMenu()
     {
-        List<ActionOption> options = charmOptions;
+        List<ActionOption> options = EvaluateOptions(charmOptions);
 
         _radialMenu.OnButtonClicked += HandleCharmSelection;
         OpenRadialMenu(options);
     }
 
 
-    private void HandleCharmSelection(string selectedOption, int points)
+    private void HandleCharmSelection(ActionOption actionOption)
     {
         _radialMenu.OnButtonClicked -= HandleCharmSelection; // Unsubscribe
-        _player.RadialActionsHelper.PerformCharmAction(_personWeAreInteractingWith, selectedOption, points);
+        _player.RadialActionsHelper.PerformCharmAction(_personWeAreInteractingWith, actionOption);
     }
 
 
@@ -223,17 +225,17 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
 
 
 
-        List<ActionOption> options = coerceOptions;
+        List<ActionOption> options = EvaluateOptions(coerceOptions);
         _radialMenu.OnButtonClicked += HandleCoerceSelection;
 
         OpenRadialMenu(options);
     }
 
 
-    private void HandleCoerceSelection(string selectedOption, int points)
+    private void HandleCoerceSelection(ActionOption actionOption)
     {
         _radialMenu.OnButtonClicked -= HandleCoerceSelection; // Unsubscribe
-        _player.RadialActionsHelper.PerformCoerceAction(_personWeAreInteractingWith, selectedOption, points);
+        _player.RadialActionsHelper.PerformCoerceAction(_personWeAreInteractingWith, actionOption);
     }
 
 
@@ -254,6 +256,7 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
         "💬",
         "Takes up a small amount of time but only gives 1 trust.",
         1,
+        1,
         false,
         false,
         ViewTowards.neutral,
@@ -266,6 +269,7 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
         "🤗",
         "Not everyone is a hugger and people in distress are more receptive to hugs.",
         2,
+        1,
         false,
         false,
         ViewTowards.positive,
@@ -279,13 +283,14 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
         "🍗",
         "Give them the meal you brought with you. You loose a meal but you gain a friend.",
         4,
+        2,
         false,
         false,
-        ViewTowards.negative,
+        ViewTowards.neutral,
         MemoryTags.none,
         SubMenu.charmGive,
         new Dictionary<MemoryTags, int> { },
-        new List<ActionEffects> { { ActionEffects.relaxed } }
+        new List<MemoryTags> { { MemoryTags.relaxed } }
         ));
 
         charmOptions.Add(new ActionOption(
@@ -293,9 +298,10 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
         "♟",
         "Play a game of chess, requires the person to be relaxed.",
         4,
+        3,
         false,
         false,
-        ViewTowards.negative,
+        ViewTowards.veryPositive,
         MemoryTags.relaxed,
         SubMenu.charmActions
         ));
@@ -305,6 +311,7 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
         "❤",
         "Comfort the person when they are emotional",
         4,
+        3,
         false,
         false,
         ViewTowards.veryPositive,
@@ -317,6 +324,7 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
         "👐",
         "Show sympathy when they are emotional",
         2,
+        1,
         false,
         false,
         ViewTowards.positive,
@@ -329,13 +337,14 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
         "👐",
         "Give the person alcohol, will lead to impairment",
         4,
+        1,
         false,
         false,
-        ViewTowards.negative,
+        ViewTowards.neutral,
         MemoryTags.none,
         SubMenu.charmGive,
         new Dictionary<MemoryTags, int> { { MemoryTags.emotional, 3 } },
-        new List<ActionEffects> { { ActionEffects.relaxed} }
+        new List<MemoryTags> { { MemoryTags.drunk} }
         ));
     }
 
@@ -346,13 +355,14 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
         "🔪",
         "Threaten with physical violence, short term gain, long term loss as they will hate you.",
         -4,
+        -4,
         false,
         false,
         ViewTowards.neutral,
         MemoryTags.none,
         SubMenu.coerceActions,
         new Dictionary<MemoryTags, int> {},
-        new List<ActionEffects> { { ActionEffects.tense } }
+        new List<MemoryTags> { { MemoryTags.tense } }
         ));
 
         coerceOptions.Add(new ActionOption(
@@ -360,44 +370,104 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
         "🔪",
         "You need dirt on someone to blackmail them.",
         -4,
+        -4,
         false,
         true,
         ViewTowards.neutral,
         MemoryTags.none,
         SubMenu.coerceActions,
         new Dictionary<MemoryTags, int> { },
-        new List<ActionEffects> { { ActionEffects.tense } }
+        new List<MemoryTags> { { MemoryTags.tense } }
         ));
     }
 
     private void SetupPrimaryOptions()
     {
-        coerceOptions.Add(new ActionOption(
-        "Threaten",
-        "🔪",
-        "Threaten with physical violence, short term gain, long term loss as they will hate you.",
-        -4,
+
+
+        mainOptions.Add(new ActionOption(
+        "Charm",
+        "🌼",
+        "Charm them by spending time with them, it has a positive relationship impact but takes more time.",
+        0,
+        0,
         false,
         false,
         ViewTowards.neutral,
         MemoryTags.none,
-        SubMenu.coerceActions,
+        SubMenu.main,
         new Dictionary<MemoryTags, int> { },
-        new List<ActionEffects> { { ActionEffects.tense } }
+        new List<MemoryTags> { }
         ));
 
-        coerceOptions.Add(new ActionOption(
-        "Blackmail",
+        mainOptions.Add(new ActionOption(
+        "Coerce",
         "🔪",
-        "You need dirt on someone to blackmail them.",
-        -4,
+        "Coerce them, doesnt take up much time but has a negative relationship impact.",
+        0,
+        0,
         false,
-        true,
+        false,
         ViewTowards.neutral,
         MemoryTags.none,
-        SubMenu.coerceActions,
+        SubMenu.main,
         new Dictionary<MemoryTags, int> { },
-        new List<ActionEffects> { { ActionEffects.tense } }
+        new List<MemoryTags> { }
         ));
+
+        mainOptions.Add(new ActionOption(
+        "Talk",
+        "💬",
+        "Open dialogue with the person.",
+        0,
+        0,
+        false,
+        false,
+        ViewTowards.neutral,
+        MemoryTags.none,
+        SubMenu.main,
+        new Dictionary<MemoryTags, int> { },
+        new List<MemoryTags> { }
+        ));
+    }
+
+
+    private List<ActionOption> EvaluateOptions(List<ActionOption> options)
+    {
+        var relationship = _personWeAreInteractingWith.Relationships.GetRelationshipWith(_personWeAreInteractingWith, _player);
+        BasicFunctions.Log($"❤Relationship: {relationship}", LogType.radialMenu);
+        var mood = _personWeAreInteractingWith.State.VisualState[0];
+
+        List< ActionOption > outputList = new(options);
+
+        foreach (var option in options)
+        {
+            var moodPass = false;
+            if (option.MoodRequirement ==MemoryTags.none || option.MoodRequirement == mood || (mood== MemoryTags.drunk && option.MoodRequirement== MemoryTags.relaxed))
+                moodPass=true;
+            if(moodPass==false)
+            { outputList.Remove(option); }
+            var relRequirement = (float)option.RelationshipRequirement;
+
+            if (relRequirement < 0)
+            {
+                if (!(relationship<= relRequirement))
+                { outputList.Remove(option); }
+
+            }
+            if (relRequirement > 0)
+            {
+                if (!(relationship >= relRequirement))
+                { outputList.Remove(option); }
+
+            }
+
+            if(option.UsedUp )
+            {
+                outputList.Remove(option);
+            }
+        }
+
+        return outputList;
     }
 }
