@@ -41,7 +41,12 @@ namespace Mind
         seamstress,
         tailor,
         cheerful,
-        calm
+        calm,
+        distant,
+        tense,
+        relaxed,
+        emotional,
+        none
 
     }
 

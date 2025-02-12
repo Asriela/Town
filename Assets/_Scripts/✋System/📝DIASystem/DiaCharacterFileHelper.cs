@@ -21,6 +21,7 @@ public static class DiaCharacterFileHelper
 
                     Mind.CharacterName.Agnar => GetAgnarFile(character),
                     Mind.CharacterName.Elara => GetElaraFile(character),
+                    Mind.CharacterName.Onar => GetOnarFile(character),
                     _ => Default(character)
                 };
                 break;
@@ -70,6 +71,12 @@ public static class DiaCharacterFileHelper
         }
 
         accessCount[name]++;
+        return ret;
+    }
+    private static string GetOnarFile(Character character)
+    {
+        var name = character.CharacterName;
+        var ret = $"{name}_repeat";
         return ret;
     }
     private static string GetElaraFile(Character character)

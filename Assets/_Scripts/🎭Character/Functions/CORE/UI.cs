@@ -115,8 +115,9 @@ public class UI : MonoBehaviour
     }
     private void SetVisualStatusLabel()
     {
-        _visualStatusLabel.text = string.Join(" ", _character.State.VisualState);
+        _visualStatusLabel.text = string.Join(" ", _character.State.VisualState)+"\n"+TextConverter.GetRelationshipStatusText(_character);
     }
+
     private void HandleMouseOverCharacter()
     {
         // Mouse-over check for character

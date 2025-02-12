@@ -21,7 +21,8 @@ public static class DiaMenuHelper
         {
             MenuOption menuOption = new(diaOption.Label, diaOption.Index, diaOption.Action)
             {
-                menuOptionType = MenuOptionType.dia
+                menuOptionType = MenuOptionType.dia,
+                menuOptionCost = diaOption.ActionCost
             };
             menuOptions.Add(menuOption);
         }

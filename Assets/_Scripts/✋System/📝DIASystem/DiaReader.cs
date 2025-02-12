@@ -35,9 +35,11 @@ public class DiaOption
 
     public object ActionData { get; }
 
+    public int ActionCost { get; }
+
     public DiaOptionType OptionType { get; }
 
-    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action, object actionData, int index, int tabLevel)
+    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action, object actionData, int actionCost, int index, int tabLevel)
     {
         LineNumber = lineNumber;
         Label = label;
@@ -46,6 +48,7 @@ public class DiaOption
         Index = index;
         TabLevel = tabLevel;
         ActionData = actionData;
+        ActionCost = actionCost;
     }
 }
 
@@ -237,13 +240,13 @@ public static class DiaReader
             }
             if (condition.StartsWith("saw:"))
             {
-                if (Enum.TryParse(typeof(CharacterName ), dataString, true, out object rawData))
+                if (Enum.TryParse(typeof(CharacterName), dataString, true, out object rawData))
                 {
                     CharacterName enumData = (CharacterName)rawData;
                     var characterObject = WorldManager.Instance.GetCharacter(enumData);
-                    var visualStatus= player.VisualStatusKnowledge.GetVisualStatus(player, characterObject);
+                    var visualStatus = player.VisualStatusKnowledge.GetVisualStatus(player, characterObject);
 
-                    if (visualStatus == null || visualStatus.Count!=0)
+                    if (visualStatus == null || visualStatus.Count != 0)
                     {
                         skipNextLineDueToBadCondition = true;
                     }
@@ -263,8 +266,8 @@ public static class DiaReader
 
             string line = allLines[i];
             BasicFunctions.Log($"🔎📖: {line} {allTabs[i]} vs {currentTab} ", LogType.dia);
-            if ((allTabs[i] < currentTab ) || (line.Contains("<") && allTabs[i] == currentTab) )
-            { currentDialogue="";return false; }
+            if ((allTabs[i] < currentTab) || (line.Contains("<") && allTabs[i] == currentTab))
+            { currentDialogue = ""; return false; }
 
             if (allTabs[i] <= currentTab && (line.StartsWith('-') || line.StartsWith('+') || line.StartsWith('>')))
             { return false; }
@@ -317,7 +320,7 @@ public static class DiaReader
         for (int i = currentLine; i < allLines.Count; i++)
         {
             string line = allLines[i];
-             BasicFunctions.Log($"🔍: {line} with tab {allTabs[i]} vs currentTab {currentTab}", LogType.dia);
+            BasicFunctions.Log($"🔍: {line} with tab {allTabs[i]} vs currentTab {currentTab}", LogType.dia);
             if (allTabs[i] == currentTab)
             {
 
@@ -378,7 +381,7 @@ public static class DiaReader
 
 
 
-            if (allTabs[i] < currentTab || line.StartsWith("==") || (allTabs[i]<= currentTab && line.StartsWith('"')))
+            if (allTabs[i] < currentTab || line.StartsWith("==") || (allTabs[i] <= currentTab && line.StartsWith('"')))
             {
                 i = allLines.Count;
             }
@@ -387,6 +390,22 @@ public static class DiaReader
             if (allTabs[i] == currentTab)
             {
                 BasicFunctions.Log($"🔎📦: {line} {allTabs[i]} vs {currentTab} ", LogType.dia);
+                var foundTrustCost = line.EndsWith("+");
+                var foundFearCost = line.EndsWith("-");
+                var actionCost=0;
+                if (foundTrustCost || foundFearCost)
+                {
+
+                    // Extract the number before the '+' or '-'
+                    var match = System.Text.RegularExpressions.Regex.Match(line, @"(\d+)[+-]$");
+                    if (match.Success)
+                    {
+                        actionCost = int.Parse(match.Groups[1].Value);
+                        if (foundFearCost)
+                        { actionCost = -actionCost; }
+                        BasicFunctions.Log($"COST: {actionCost}", LogType.dia);
+                    }
+                }
                 if (line.StartsWith(">") || line.StartsWith("-") || line.StartsWith("+"))
                 {
                     // Determine the OptionType based on the symbol at the beginning of the line
@@ -414,7 +433,7 @@ public static class DiaReader
 
 
                     // Create a new DiaOption object
-                    DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, actionData, currentOptions.Count, allTabs[i]);
+                    DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, actionData, actionCost, currentOptions.Count, allTabs[i]);
 
                     // Add the new option to the current options list
                     currentOptions.Add(newOption);
@@ -451,7 +470,7 @@ public static class DiaReader
 
         if (string.IsNullOrWhiteSpace(theString))
             ret = DiaActionType.none;
-        var dataString=string.Empty;
+        var dataString = string.Empty;
 
         int colonIndex = theString.IndexOf(':');
         if (colonIndex != -1 && colonIndex < theString.Length - 1)

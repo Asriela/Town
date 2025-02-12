@@ -1,0 +1,23 @@
+==start==
+	"-So have you decided to stay? Can I get you a room?"
+	--yes please [ action : rentRoom]
+		"Your room is behind me, get some rest, storms like these can bite into your bones.."
+	-lets drink some more [action : hangout] 
+		"Anytime!"
+	-There was this guy in the forest he seemed sick, he was sweating.
+		<Talinor>
+	(saw : Elara)
+	-Elara seems worried
+		"I wonder if its connected to her husband, Talinor being sick."
+	+do something else.. [menu]
+	
+
+	
+==Talinor==
+	"That's Talinor, our tailor , I saw he looked sick earlier.. what in the world is he doing in the woods!?"	
+	-He looked lost
+		"I understand that Talinor isn't one for nature but getting lost so close to town makes no sense." 	
+	-Have you ever seen him sick before?
+		"Yes I have actually, sometimes at night he just looks sick but its rare."
+			>How rare, weekly, monthly?
+				"I cant recall.. sorry I need to go."  [realize : Talinor is werewolf]

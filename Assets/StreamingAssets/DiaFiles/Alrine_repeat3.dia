@@ -1,0 +1,10 @@
+==start==
+	"Hey again"
+	-can I get a room on the house [ action : rentRoom] 4
+		"Of-course! Here is your key!"
+	-where last did you see Talinor? [key : ElaraPass] 1
+		"I saw him with his wife , Elara , I think she gave him something.."
+
+	
+
+

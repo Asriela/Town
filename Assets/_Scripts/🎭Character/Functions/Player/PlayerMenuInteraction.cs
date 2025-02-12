@@ -19,7 +19,7 @@ public struct MenuOption
     public object Data2;
     public object Data3;
     public MenuOptionType menuOptionType;
-
+    public int menuOptionCost;
 
     public MenuOption(string buttonLabel, object data, object data2)
     {
@@ -29,6 +29,7 @@ public struct MenuOption
         Data2 = data2;
         Data3 = null;
         menuOptionType = MenuOptionType.general;
+        this.menuOptionCost = 0;
     }
 }
 
@@ -295,6 +296,11 @@ public class PlayerMenuInteraction : MonoBehaviour
             savedDiaButtons = diaButtons;
             savedContextTitle = contextTitle;
             savedMenuButtons = menuButtons;
+        }
+
+        if (menuButtons == null)
+        {
+            menuButtons= new();
         }
         OpenInteractionMenu(lastChosenOption, currentDialogue, _personWeAreSpeakingTo.CharacterName.ToString(), diaButtons, contextTitle, menuButtons, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
         // }

@@ -7,6 +7,7 @@ public class RadialMenuActionsHelper : MonoBehaviour
 {
     private float socializeTimeLeft = -1;
     public SocializeType SocialAction { get; set; } = SocializeType.none;
+    private int pointsToReward = 0;
     private Character personWeAreInteractingWith;
     private Player player;
     public void Initialize(Player player)
@@ -26,9 +27,10 @@ public class RadialMenuActionsHelper : MonoBehaviour
     }
 
 
-    public void PerformCharmAction(Character target, string action)
+    public void PerformCharmAction(Character target, string action, int points)
     {
         this.personWeAreInteractingWith = target;
+        pointsToReward= points;
         switch (action)
         {
             case "Buy Drink":
@@ -47,9 +49,10 @@ public class RadialMenuActionsHelper : MonoBehaviour
     }
 
 
-    public void PerformCoerceAction(Character target, string action)
+    public void PerformCoerceAction(Character target, string action, int points)
     {
         this.personWeAreInteractingWith= target;
+        pointsToReward = points;
         switch (action)
         {
             case "Threaten":
@@ -92,20 +95,29 @@ public class RadialMenuActionsHelper : MonoBehaviour
         {
 
             socializeTimeLeft = -1;
-            ExecuteSocialAction(SocialAction);
+  
             SocialAction = SocializeType.none;
             player.Appearance.ResetSprite();
             WorldManager.Instance.SetSpeedOfTime(SpeedOfTime.normal);
             personWeAreInteractingWith.Appearance.ResetSprite();
-
+            ActionResolution(SocialAction);
 
  
         }
     }
 
-    private void ExecuteSocialAction(SocializeType socialAction)
+    private void ActionResolution(SocializeType socialAction)
     {
         float effectFromInteraction = personWeAreInteractingWith.Relationships.AddInteractionEffect(socialAction, player);
+        if (pointsToReward < 0)
+        {
+            personWeAreInteractingWith.Persuasion.FearTowardsPlayer += -pointsToReward;
+        }
 
+        if (pointsToReward > 0)
+        {
+            personWeAreInteractingWith.Persuasion.TrustTowardsPlayer += pointsToReward;
+        }
+        
     }
 }

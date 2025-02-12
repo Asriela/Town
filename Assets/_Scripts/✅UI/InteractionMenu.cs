@@ -3,6 +3,7 @@ using UnityEngine.UIElements;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
+using System;
 using System.Text.RegularExpressions;
 using Mind;
 
@@ -18,6 +19,7 @@ public class InteractionMenu : MonoBehaviour
     private VisualElement portraitBackImage;
     private VisualElement portraitImage;
     private Button dialogue;
+    private Button statText; 
     private List<Button> dialogueOptionButtons = new();
     private float scrolldown = 0;
     private float scrolldown2 = 0;
@@ -83,13 +85,13 @@ public class InteractionMenu : MonoBehaviour
             backgroundImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/InteractionPanel"));
             backgroundImage.style.position = Position.Absolute;
             backgroundImage.style.left = new Length(0, LengthUnit.Pixel);
-            backgroundImage.style.top = new Length(0, LengthUnit.Pixel);
+            backgroundImage.style.top = new Length(-30, LengthUnit.Pixel);
             backgroundImage.style.width = new Length(480, LengthUnit.Pixel);
-            backgroundImage.style.height = new Length(600, LengthUnit.Pixel);
+            backgroundImage.style.height = new Length(630, LengthUnit.Pixel);
             backgroundImage.style.opacity = 0.99f; // Optional: Slight transparency
-            menuContainer.Add(backgroundImage);
+            menuContainer2.Add(backgroundImage);
 
-            var portraitWidth = 39 * 3;
+            var portraitWidth = 63 * 2;
             // Add the portrait background image
             portraitBackImage = new VisualElement();
             portraitBackImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/portraits/portraitBack"));
@@ -97,7 +99,7 @@ public class InteractionMenu : MonoBehaviour
             portraitBackImage.style.left = new Length(-38, LengthUnit.Pixel); // Left of the menu background
             portraitBackImage.style.top = new Length(20, LengthUnit.Pixel);
             portraitBackImage.style.width = new Length(portraitWidth, LengthUnit.Pixel); // Scale factor for portrait
-            portraitBackImage.style.height = new Length((49 * 3)+5, LengthUnit.Pixel); // Scale factor for portrait
+            portraitBackImage.style.height = new Length((49 * 9)+5, LengthUnit.Pixel); // Scale factor for portrait
             portraitBackImage.style.opacity = 0.99f;
             menuContainer2.Add(portraitBackImage);
 
@@ -107,8 +109,8 @@ public class InteractionMenu : MonoBehaviour
             portraitImage.style.position = Position.Absolute;
             portraitImage.style.left = new Length(-38, LengthUnit.Pixel); // Align with the back portrait
             portraitImage.style.top = new Length(10, LengthUnit.Pixel);
-            portraitImage.style.width = new Length(portraitWidth, LengthUnit.Pixel); // Scale factor X 7
-            portraitImage.style.height = new Length(portraitWidth, LengthUnit.Pixel); // Scale factor Y 7
+            portraitImage.style.width = portraitWidth;
+            portraitImage.style.height = portraitWidth;
             menuContainer2.Add(portraitImage);
         }
         else
@@ -155,8 +157,7 @@ public class InteractionMenu : MonoBehaviour
         GameManager.Instance.BlockingPlayerUIOnScreen = true;
         menuContainer.Clear();
         menuContainer2.Clear();
-        var myRed = new Color(0.768f, 0.251f, 0.075f);
-        var myGrey = new Color(0.478f, 0.494f, 0.518f);
+
 
         // Add the background image first
         menuContainer.Add(backgroundImage);
@@ -264,6 +265,52 @@ public class InteractionMenu : MonoBehaviour
             return;
         }
 
+        statText = new Button();//red: C03F13 green 50AA7C
+        var trust = personWeAreSpeakingTo.Persuasion.TrustTowardsPlayer;
+        var fear = personWeAreSpeakingTo.Persuasion.FearTowardsPlayer;
+        var relationship=TextConverter.GetRelationshipStatusText(personWeAreSpeakingTo);
+        var statsString = $"<color=#50AA7C>TRUST {trust}</color>\n<color=#C03F13>FEAR {fear}</color>\n<color=#A0A0A0>RELATIONSHIP</color>\n{relationship}";
+        // Add a label to the button
+        Label statLabel = new Label(statsString)
+        {
+            style =
+            {
+
+                unityTextAlign = TextAnchor.MiddleLeft,
+                fontSize = standardFontSize,
+                whiteSpace = WhiteSpace.Normal,  // Allow text wrapping within the label
+                overflow = Overflow.Hidden,
+                paddingBottom = new Length(5, LengthUnit.Pixel),  // Prevent cutting off text
+                paddingTop = new Length(20, LengthUnit.Pixel),
+            }
+        };
+        statText.Add(statLabel);
+
+        // Apply button styling to mimic other buttons
+        statText.style.position = Position.Absolute; // Set position to absolute
+        statText.style.width = new Length(340, LengthUnit.Pixel);
+        statText.style.flexDirection = FlexDirection.Column;  // Makes new content push upward
+
+
+        statText.style.alignItems = Align.FlexStart;  // Ensure text starts from the top
+        statText.style.backgroundColor = new StyleColor(Color.clear);  // Remove button background
+        statText.focusable = false;  // Prevent focus
+        statText.style.left = -50;
+        statText.style.top = 150;
+
+
+
+
+
+        statText.style.marginTop = 0;
+        statText.style.paddingTop = new Length(5, LengthUnit.Pixel);
+        statText.AddToClassList("button");
+
+        // Override click event to do nothing
+        statText.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
+
+        menuContainer2.Add(statText);
+
         //////DIALOGUE
         string strippedPastDialogue= pastDialogue;
         if (lastChosenOption != "")
@@ -288,7 +335,7 @@ public class InteractionMenu : MonoBehaviour
 
         }
 
-
+       
         // Create the button and add the label
         dialogue = new Button();
 
@@ -327,7 +374,7 @@ public class InteractionMenu : MonoBehaviour
 
 
 
-            dialogue.style.marginTop = 160 + 40;
+        dialogue.style.marginTop = 160 + 40;
         dialogue.style.paddingTop= new Length(5, LengthUnit.Pixel);
         dialogue.AddToClassList("button");
 
@@ -352,7 +399,13 @@ public class InteractionMenu : MonoBehaviour
             {
                 if (dialogueOptions[i].ButtonLabel=="do something else.." && menuButtons!=null)
                 { continue;}
+                var costText = "";
+                if (dialogueOptions[i].menuOptionCost!=0)
+                {
+                    costText =$"[Cost: {Math.Abs(dialogueOptions[i].menuOptionCost)}] ";
+                }
                 string label = dialogueOptions[i].ButtonLabel;
+                int cost = dialogueOptions[i].menuOptionCost;
                 Button button = new Button();
                 dialogueOptionButtons.Add(button);
                 // Create a container label with different styling
@@ -367,11 +420,11 @@ public class InteractionMenu : MonoBehaviour
                     }
                 };
 
-                Label textLabel = new Label(label)
+                Label textLabel = new Label(costText+label)
                 {
                     style =
                     {
-                        color = myRed,  // Default color
+                        color = cost == 0 ? Color.grey : cost < 0 ? MyColor.Red : MyColor.Green,  // Default color
                         unityTextAlign = TextAnchor.MiddleLeft,
                         fontSize = standardFontSize,
                         whiteSpace = WhiteSpace.Normal, // Allow text wrapping within the label
@@ -384,12 +437,17 @@ public class InteractionMenu : MonoBehaviour
                 // Register the MouseEnter and MouseLeave events to change the color on hover
                 button.RegisterCallback<MouseEnterEvent>(evt =>
                 {
-                    textLabel.style.color = Color.white;  // Change to white on hover
+                    textLabel.style.color = cost == 0 ? Color.white : cost < 0 ? MyColor.Red : MyColor.Green; // Change to white on hover
+                    if(cost!=0)
+                    button.style.backgroundColor = new StyleColor(cost < 0 ? MyColor.RedBack : MyColor.GreenBack);
+                    
+                    // button.style.
                 });
 
                 button.RegisterCallback<MouseLeaveEvent>(evt =>
                 {
-                    textLabel.style.color = myRed;  // Change back to the original red color when not hovered
+                    textLabel.style.color = cost == 0 ? Color.grey  : cost< 0 ? MyColor.Red : MyColor.Green;  // Change back to the original red color when not hovered
+                    button.style.backgroundColor = Color.black;
                 });
 
                 // Add labels to the button
@@ -404,7 +462,7 @@ public class InteractionMenu : MonoBehaviour
                 button.style.width = new Length(buttonWidth, LengthUnit.Pixel); // Fixed width for button
                 button.style.alignSelf = Align.Center;
                 button.style.flexDirection = FlexDirection.Row; // Ensure elements are side by side
-                button.style.top = 260 ;
+                button.style.top = 260;
                 button.style.left = new Length(-100, LengthUnit.Pixel);
 
                 button.AddToClassList("button");
@@ -497,7 +555,7 @@ public class InteractionMenu : MonoBehaviour
                 {
                     style =
                     {
-                        color = myRed,  // Default color
+                        color = MyColor.Red,  // Default color
                         unityTextAlign = TextAnchor.MiddleLeft,
                         fontSize = standardFontSize,
                         whiteSpace = WhiteSpace.Normal, // Allow text wrapping within the label
@@ -515,7 +573,7 @@ public class InteractionMenu : MonoBehaviour
 
                 button.RegisterCallback<MouseLeaveEvent>(evt =>
                 {
-                    textLabel.style.color = myRed;  // Change back to the original red color when not hovered
+                    textLabel.style.color = MyColor.Red;  // Change back to the original red color when not hovered
                 });
 
                 // Add labels to the button

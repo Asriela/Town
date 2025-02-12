@@ -105,7 +105,8 @@ namespace Mind
         Talinor,
         Elara,
         Dohlson,
-        Keth
+        Keth,
+        Onar
     }
     [Serializable]
     public enum LocationName : short

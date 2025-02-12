@@ -16,6 +16,7 @@ using UnityEngine;
 [RequireComponent(typeof(Inventory))]
 [RequireComponent(typeof(DialogueResponsesToPersonInformation))]
 [RequireComponent(typeof(Generalizations))]
+[RequireComponent(typeof(Persuasion))]
 public class Character : MonoBehaviour
 {
     private Collider2D _collider2D;
@@ -43,6 +44,7 @@ public class Character : MonoBehaviour
     public Generalizations Generalizations { get; set; }
     public Relationships Relationships { get; set; }
     public VisualStatusKnowledge VisualStatusKnowledge { get; set; }
+    public Persuasion Persuasion { get; set; }
     public Inventory Inventory { get; set; }
 
     public DialogueResponsesToPersonInformation DialogueResponsesToPersonInformation { get; set; }
@@ -73,6 +75,7 @@ public class Character : MonoBehaviour
         VisualStatusKnowledge = GetComponent<VisualStatusKnowledge>();
         Inventory = GetComponent<Inventory>();
         Inventory.Initialize(this);
+        Persuasion = GetComponent<Persuasion>();
     }
 
 
