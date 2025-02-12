@@ -166,7 +166,7 @@ public class UI : MonoBehaviour
         var inDialogueMenu= GameManager.Instance.IsInDialogueMenu(speaker);
         if (inDialogueMenu!=null)
         {
-            GameManager.Instance.UpdateInteractionMenu(inDialogueMenu,message);
+           // GameManager.Instance.UpdateInteractionMenu(inDialogueMenu,message);
         }
         else
         {

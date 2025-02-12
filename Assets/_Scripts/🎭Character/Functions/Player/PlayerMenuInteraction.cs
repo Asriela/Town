@@ -296,7 +296,10 @@ public class PlayerMenuInteraction : MonoBehaviour
             savedDiaButtons = diaButtons;
             savedContextTitle = contextTitle;
             savedMenuButtons = menuButtons;
+
+
         }
+
 
         if (menuButtons == null)
         {
