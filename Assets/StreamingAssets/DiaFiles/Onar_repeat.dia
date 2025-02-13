@@ -19,8 +19,9 @@
 		"I have travelled so far, long beyond what I am allowed to"
 		-why?[mood : emotional]
 			"To go back to how things were before, the world has changed and I can't go back"
-			-why can't you go back?"
-				"the world eats the good and the bad so it lays there waiting for you in the middle ,on the shoreline of everything you have lost, tell me what it means, for I am too old to know its meaning anymore.
+			-why can't you go back?
+				"the world eats the good and the bad so it lays there waiting for you in the middle ,on the shoreline of everything you have lost, tell me what it means, for I am too old to know its meaning any more."
+		
 		
 	-When last did you see Ashla 4+
 		"Disappearing into the forest.."
@@ -31,7 +32,7 @@
 				
 			
 
-
+	(mood : emotional)
 	-What happened to Ashla? 4+
 		"I tried to stop her.. she kept moaning about the forest understanding her , she would cry uncontrollably.."
 		-what happened then?

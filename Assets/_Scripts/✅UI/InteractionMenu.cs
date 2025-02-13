@@ -475,8 +475,8 @@ public class InteractionMenu : MonoBehaviour
                 selectRect.style.position = Position.Absolute;
                 selectRect.style.left = new Length(0, LengthUnit.Pixel);
                 selectRect.style.top = new Length(10, LengthUnit.Pixel);
-                selectRect.style.width = new Length(350, LengthUnit.Pixel);
-                selectRect.style.height = new Length(30+(25), LengthUnit.Pixel);
+                selectRect.style.width = new Length(90, LengthUnit.Pixel);
+                selectRect.style.height = new Length(25, LengthUnit.Pixel);
                 selectRect.style.flexGrow = 0;
                 selectRect.style.flexShrink = 0;
                 selectRect.style.flexBasis = new Length(0, LengthUnit.Pixel);

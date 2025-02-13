@@ -295,6 +295,16 @@ public class PlayerMenuInteraction : MonoBehaviour
 
         if (SocialAction != SocializeType.none)
         {
+            if (lastChosenOption == null)
+                Debug.LogWarning("lastChosenOption is null");
+            if (currentDialogue == null)
+                Debug.LogWarning("currentDialogue is null");
+            if (diaButtons == null)
+                Debug.LogWarning("diaButtons is null");
+            if (contextTitle == null)
+                Debug.LogWarning("contextTitle is null");
+            if (menuButtons == null)
+                Debug.LogWarning("menuButtons is null");
             savedLastChosenOption = lastChosenOption;
             savedCurrentDialogue = currentDialogue;
             savedDiaButtons = diaButtons;
