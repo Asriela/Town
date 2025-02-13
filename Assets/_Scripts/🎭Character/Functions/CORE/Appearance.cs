@@ -124,8 +124,23 @@ public class Appearance : MonoBehaviour
         {
            var testc="";
         }
+
+
+
         animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>(path);
         currentAnimationName=name;
+    }
+
+    public bool HasAnimationEnded()
+    {
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        if (stateInfo.normalizedTime >= 1f)
+        {
+           return true;
+        }
+        else
+            return false;
     }
 
     bool IsAnimation(string name)

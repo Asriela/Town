@@ -8,10 +8,10 @@ public class RadialMenuActionsHelper : MonoBehaviour
     private float socializeTimeLeft = -1;
     public SocializeType SocialAction { get; set; } = SocializeType.none;
     private int pointsToReward = 0;
-    private int relationshipImpact =0;
+    private int relationshipImpact = 0;
     private Character personWeAreInteractingWith;
     private Player player;
-
+    private bool socializeUntilAnimationIsOver;
     public void Initialize(Player player)
     {
         this.player = player;
@@ -45,6 +45,9 @@ public class RadialMenuActionsHelper : MonoBehaviour
                     break;
                 case "Give Food":
                     SocialAction = SocializeType.giveFood;
+                    break;
+                case "Bribe":
+                    SocialAction = SocializeType.bribe;
                     break;
                 case "Hug":
                     SocialAction = SocializeType.hug;
@@ -104,35 +107,62 @@ public class RadialMenuActionsHelper : MonoBehaviour
             return;
 
         player.RadialMenuInteraction.CloseInteractionMenu();
-
-        switch (SocialAction)
+        if (socializeTimeLeft == -1)
         {
-            case SocializeType.drinking:
-                if (socializeTimeLeft == -1)
-                {
-                    socializeTimeLeft = 10000;
+            socializeUntilAnimationIsOver=false;
+            switch (SocialAction)
+            {
+                case SocializeType.drinking:
+
+                    socializeTimeLeft = 5000;
                     player.Appearance.SetSpriteAction("drinking");
                     personWeAreInteractingWith.Appearance.SetSpriteAction("drinking");
 
                     WorldManager.Instance.SetRampUpSpeedOfTime(SpeedOfTime.fast);
-                }
 
-                break;
 
-            case SocializeType.smallTalk:
-                if (socializeTimeLeft == -1)
-                {
-                    socializeTimeLeft = 2000;
-                    player.Appearance.SetSpriteAction("talking");
-                    personWeAreInteractingWith.Appearance.SetSpriteAction("talking");
+                    break;
+
+                case SocializeType.smallTalk:
+
+                    socializeTimeLeft = 1000;
+                    player.Appearance.SetSpriteAction("talk");
+                    //personWeAreInteractingWith.Appearance.SetSpriteAction("talk");
 
                     WorldManager.Instance.SetRampUpSpeedOfTime(SpeedOfTime.fast);
-                }
 
-                break;
+
+                    break;
+
+                case SocializeType.giveFood:
+
+                    socializeTimeLeft = 2000;
+                    player.Appearance.SetSpriteAction("give");
+
+                    //personWeAreInteractingWith.Appearance.SetSpriteAction("talk");
+                    socializeUntilAnimationIsOver = true;
+                    WorldManager.Instance.SetRampUpSpeedOfTime(SpeedOfTime.normal);
+
+
+                    break;
+
+                case SocializeType.bribe:
+
+                    socializeTimeLeft = 2000;
+                    player.Appearance.SetSpriteAction("give");
+                    socializeUntilAnimationIsOver=true;
+                    //personWeAreInteractingWith.Appearance.SetSpriteAction("talk");
+
+                    WorldManager.Instance.SetRampUpSpeedOfTime(SpeedOfTime.normal);
+
+
+                    break;
+
+
+            }
         }
-
-
+        if (socializeUntilAnimationIsOver && player.Appearance.HasAnimationEnded())
+            socializeTimeLeft = -1;
 
 
 

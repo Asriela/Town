@@ -1,10 +1,9 @@
 ==start==
-
 	-How do you know Ashla 1+
 		"She just arrived in town a few weeks ago, she is just a teenager she had nowhere to go."
 		-why didn't you leave her with someone else?
 			"She just seemed to gravitate towards me.. I guess we share a similar pain"
-			
+
 	-People say you are from out of town, where are you from if I may ask? 2+
 		"Have you ever seen a star coin?"
 		-no, is that what you used as currency?
@@ -12,13 +11,17 @@
 			-then what was it for?
 				"It reminded us we all belonged, under the stars, as one"
 				
+
+	-Did she freeze from the cold? 2+
+		"Ashla ran away from the ice tribes in the north, this weather is like summer for her.. "
+
 	-So Onar, what can you tell me about yourself? 4+
 		"I have travelled so far, long beyond what I am allowed to"
 		-why?[mood : emotional]
 			"To go back to how things were before, the world has changed and I can't go back"
 			-why can't you go back?"
 				"the world eats the good and the bad so it lays there waiting for you in the middle ,on the shoreline of everything you have lost, tell me what it means, for I am too old to know its meaning anymore.
-				
+		
 	-When last did you see Ashla 4+
 		"Disappearing into the forest.."
 		-why didn't you go after her?[mood : emotional]
@@ -26,11 +29,9 @@
 			-What do you mean? What happened..
 				"Ashla is a child of pain.. she went into the woods..."
 				
-	(mood : emotional)				
-	-Did she freeze from the cold? 2+
-		"Ashla ran away from the ice tribes in the north, this weather is like summer for her.. "
+			
 
-	(mood : emotional)
+
 	-What happened to Ashla? 4+
 		"I tried to stop her.. she kept moaning about the forest understanding her , she would cry uncontrollably.."
 		-what happened then?
@@ -55,7 +56,7 @@
 		-WHY WHAT DID YOU DO!?
 			"I didn't do anything, its the darkness surrounding this town, it spoke to her... told her lies!" [mood: emotional]
 			
-	(mood : emotional)
+
 	-WHAT HAPPENED TO HER!? 4-
 		"The darkness took her.." 
 		-What are you talking about!?

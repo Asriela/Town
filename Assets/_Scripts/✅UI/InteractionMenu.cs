@@ -25,6 +25,7 @@ public class InteractionMenu : MonoBehaviour
     private float scrolldown2 = 0;
     private int standardFontSize=14;
     private List<string> chosenOptions = new List<string>();
+    private VisualElement selectRectangle;
 
     [SerializeField]
     private float buttonLeftMargin = 230-200;
@@ -65,7 +66,7 @@ public class InteractionMenu : MonoBehaviour
             menuContainer2.style.display = DisplayStyle.Flex;
 
             menuContainer.style.position = Position.Absolute;
-            menuContainer.style.width = new Length(440, LengthUnit.Pixel);
+            menuContainer.style.width = new Length(440+20, LengthUnit.Pixel);
             menuContainer.style.height = new Length(596, LengthUnit.Pixel);
             menuContainer.style.display = DisplayStyle.None;
             menuContainer.style.left = new Length(550, LengthUnit.Pixel);
@@ -75,12 +76,22 @@ public class InteractionMenu : MonoBehaviour
             menuContainer.style.alignItems = Align.FlexStart;
             menuContainer.style.justifyContent = Justify.FlexStart;
             menuContainer.style.overflow = Overflow.Hidden;
+            menuContainer.style.paddingRight = new Length(20, LengthUnit.Pixel);
             // Display the menu
             menuContainer.style.display = DisplayStyle.Flex;
-           
-            
 
-            
+            selectRectangle = new VisualElement();
+            selectRectangle.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/square"));
+            selectRectangle.style.position = Position.Absolute;
+            selectRectangle.style.left = new Length(0, LengthUnit.Pixel);
+            selectRectangle.style.top = new Length(-30, LengthUnit.Pixel);
+            selectRectangle.style.width = new Length(400, LengthUnit.Pixel);
+            selectRectangle.style.height = new Length(20, LengthUnit.Pixel);
+            selectRectangle.style.opacity = 0.99f; // Optional: Slight transparency
+            menuContainer2.Add(selectRectangle);
+
+
+
             // Add the background image as a child of the menu container
             backgroundImage = new VisualElement();
             backgroundImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/InteractionPanel"));
@@ -113,6 +124,8 @@ public class InteractionMenu : MonoBehaviour
             portraitImage.style.width = portraitWidth;
             portraitImage.style.height = portraitWidth;
             menuContainer2.Add(portraitImage);
+
+
         }
         else
         {
@@ -398,15 +411,26 @@ public class InteractionMenu : MonoBehaviour
             var buttonCount = dialogueOptions.Count;
             dialogueOptionButtons.Clear();
             // Arrange buttons vertically
+            int trueIndex = 0;
             for (int i = 0; i < buttonCount; i++)
             {
                 if (dialogueOptions[i].menuOptionCost > trust || dialogueOptions[i].menuOptionCost < fear)
-                { continue;}
+                {BasicFunctions.Log($"💥Button skipped: {dialogueOptions[i].ButtonLabel} because of trust/fear", LogType.dia);
+                    continue;}
                 if (dialogueOptions[i].ButtonLabel=="do something else.." && menuButtons!=null)
-                { continue;}
+                { BasicFunctions.Log($"💥Button skipped: {dialogueOptions[i].ButtonLabel} because of do something else", LogType.dia);
+                    continue;}
 
                 if(chosenOptions.Contains(dialogueOptions[i].ButtonLabel))
-                { continue; }
+                { BasicFunctions.Log($"💥Button skipped: {dialogueOptions[i].ButtonLabel} is already chosen", LogType.dia);
+                    continue; }
+
+                if(dialogueOptions[i].OptionNeeds != MemoryTags.none && dialogueOptions[i].OptionNeeds!= personWeAreSpeakingTo.State.VisualState[0])
+                    {
+                    BasicFunctions.Log($"💥Button skipped: {dialogueOptions[i].ButtonLabel} mood didnt match", LogType.dia);
+                    continue; }
+
+                
                 var costText = "";
                 int cost = dialogueOptions[i].menuOptionCost;
                 if (dialogueOptions[i].menuOptionCost!=0)
@@ -415,10 +439,12 @@ public class InteractionMenu : MonoBehaviour
                 }
                 string label = dialogueOptions[i].ButtonLabel;
                 string originalLabel= label;
+                Button button2 = new Button();
+                menuContainer.Add(button2);
                 Button button = new Button();
                 dialogueOptionButtons.Add(button);
                 // Create a container label with different styling
-                Label numberLabel = new Label($"{i + 1}.")
+                Label numberLabel = new Label($"{trueIndex + 1}.")
                 {
                     style =
                     {
@@ -437,18 +463,35 @@ public class InteractionMenu : MonoBehaviour
                         unityTextAlign = TextAnchor.MiddleLeft,
                         fontSize = standardFontSize,
                         whiteSpace = WhiteSpace.Normal, // Allow text wrapping within the label
-                        overflow = Overflow.Hidden, // Prevent text from overflowing horizontally
+                        overflow = Overflow.Visible, // Prevent text from overflowing horizontally
                         alignSelf = Align.FlexStart, // Align to the top of the button
                         unityFontStyleAndWeight = FontStyle.Bold
                     }
                 };
 
+
+                //selectRect.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/square"));
+                VisualElement selectRect = new VisualElement();
+                selectRect.style.position = Position.Absolute;
+                selectRect.style.left = new Length(0, LengthUnit.Pixel);
+                selectRect.style.top = new Length(10, LengthUnit.Pixel);
+                selectRect.style.width = new Length(350, LengthUnit.Pixel);
+                selectRect.style.height = new Length(30+(25), LengthUnit.Pixel);
+                selectRect.style.flexGrow = 0;
+                selectRect.style.flexShrink = 0;
+                selectRect.style.flexBasis = new Length(0, LengthUnit.Pixel);
+                selectRect.style.overflow = Overflow.Visible;
                 // Register the MouseEnter and MouseLeave events to change the color on hover
                 button.RegisterCallback<MouseEnterEvent>(evt =>
                 {
-                    textLabel.style.color = cost == 0 ? Color.white : cost < 0 ? MyColor.Red : MyColor.Green; // Change to white on hover
-                    if(cost!=0)
-                    button.style.backgroundColor = new StyleColor(cost < 0 ? MyColor.RedBack : MyColor.GreenBack);
+                    textLabel.style.color = cost == 0 ? Color.white : cost < 0 ? Color.white : Color.white; // Change to white on hover
+                    if (cost != 0)
+                    {
+                        selectRect.style.backgroundColor = new StyleColor(cost < 0 ? MyColor.RedBack : MyColor.GreenBack);
+                        
+                        
+                    }
+                        
                     
                     // button.style.
                 });
@@ -456,24 +499,37 @@ public class InteractionMenu : MonoBehaviour
                 button.RegisterCallback<MouseLeaveEvent>(evt =>
                 {
                     textLabel.style.color = cost == 0 ? Color.grey  : cost< 0 ? MyColor.Red : MyColor.Green;  // Change back to the original red color when not hovered
-                    button.style.backgroundColor = Color.black;
+                    selectRect.style.backgroundColor = Color.clear;
                 });
-
+                button.style.backgroundColor = Color.clear;
                 // Add labels to the button
+                button.Add(selectRect);
                 button.Add(numberLabel);
                 button.Add(textLabel);
+
 
                 // Reduced marginTop for closer buttons
                 button.style.marginLeft = new Length(buttonLeftMargin - 30 + 6 + 8, LengthUnit.Pixel); // Example left margin
                 button.style.marginTop = new Length(5, LengthUnit.Pixel); // Adjusted margin for closer buttons
 
                 button.style.marginBottom = new Length(-20, LengthUnit.Pixel);
-                button.style.width = new Length(buttonWidth, LengthUnit.Pixel); // Fixed width for button
+                button.style.width = new Length(buttonWidth+20, LengthUnit.Pixel); // Fixed width for button
                 button.style.alignSelf = Align.Center;
                 button.style.flexDirection = FlexDirection.Row; // Ensure elements are side by side
                 button.style.top = 260;
                 button.style.left = new Length(-100, LengthUnit.Pixel);
+                button.style.paddingTop = new Length(8, LengthUnit.Pixel);
+                button.style.paddingBottom = new Length(0, LengthUnit.Pixel);
+                button.style.paddingLeft = new Length(4, LengthUnit.Pixel);
+                button.style.paddingRight = new Length(4, LengthUnit.Pixel);
 
+                button.style.height = StyleKeyword.Auto; // Fit height to content
+
+                button.style.borderTopLeftRadius = 0;
+                button.style.borderTopRightRadius = 0;
+                button.style.borderBottomLeftRadius = 0;
+                button.style.borderBottomRightRadius = 0;
+                button.style.overflow = Overflow.Visible;
                 button.AddToClassList("button");
 
                 // Button click handler
@@ -482,7 +538,7 @@ public class InteractionMenu : MonoBehaviour
 
                 var finalLabel =label;
                 var finalMenuOptionType=MenuOptionType.dia;
-
+                var newIndex= trueIndex;
 
                 if (diaAction == DiaActionType.menu)
                 {
@@ -508,6 +564,7 @@ public class InteractionMenu : MonoBehaviour
 
                 // Add button to the container
                 menuContainer.Add(button);
+                trueIndex++;
             }
         }
 

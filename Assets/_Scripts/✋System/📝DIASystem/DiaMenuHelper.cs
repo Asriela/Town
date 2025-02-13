@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Mind;
 using NUnit.Framework;
 using UnityEngine;
@@ -22,13 +24,16 @@ public static class DiaMenuHelper
             MenuOption menuOption = new(diaOption.Label, diaOption.Index, diaOption.Action)
             {
                 menuOptionType = MenuOptionType.dia,
-                menuOptionCost = diaOption.ActionCost
+                menuOptionCost = diaOption.ActionCost,
+                OptionNeeds = diaOption.OptionNeeds
             };
             menuOptions.Add(menuOption);
         }
 
+
         return menuOptions;
     }
+        
 
     public static SocializeType ExecuteAction(Character player, Character personWeAreSpeakingTo, DiaActionType? actionType, object actionData)
     {

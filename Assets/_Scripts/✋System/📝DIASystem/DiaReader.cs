@@ -38,9 +38,11 @@ public class DiaOption
 
     public int ActionCost { get; }
 
+    public MemoryTags OptionNeeds { get; set; }
+
     public DiaOptionType OptionType { get; }
 
-    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action, object actionData, int actionCost, int index, int tabLevel)
+    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action, object actionData, int actionCost,MemoryTags optionNeeds, int index, int tabLevel)
     {
         LineNumber = lineNumber;
         Label = label;
@@ -50,6 +52,7 @@ public class DiaOption
         TabLevel = tabLevel;
         ActionData = actionData;
         ActionCost = actionCost;
+        OptionNeeds = optionNeeds;
     }
 }
 
@@ -77,6 +80,7 @@ public static class DiaReader
     private static int currentLine = 0;
     private static List<DiaOption> currentOptions = new();
     private static bool skipNextLineDueToBadCondition = false;
+    private static MemoryTags optionNeeds = MemoryTags.none;
 
 
 
@@ -171,9 +175,12 @@ public static class DiaReader
                 BasicFunctions.Log($"▶: {option.Label}   [{option.OptionType}]", LogType.dia);
             }
         }
-
-
-        return new DiaPackage(currentDialogue, currentOptions);
+        var returnOptions=currentOptions
+        .OrderBy(mo => mo.ActionCost != 0) // Place 0-cost items first
+        .ThenBy(mo => Math.Abs(mo.ActionCost)) // Order by absolute magnitude
+        .ToList();
+        currentOptions= returnOptions;
+        return new DiaPackage(currentDialogue, returnOptions);
 
     }
     private static void CheckForCondition(string line, string nextLine)
@@ -219,7 +226,8 @@ public static class DiaReader
                     MemoryTags enumData = (MemoryTags)rawData;
                     if (personWeAreSpeakingTo.State.VisualState[0] != enumData)
                     {
-                        skipNextLineDueToBadCondition = true;
+                        optionNeeds = enumData;
+
                         BasicFunctions.Log($"⚠️ MOOD CONDITION {dataString} WILL SKIP: {nextLine}    ", LogType.dia);
                     }
                 }
@@ -275,7 +283,9 @@ public static class DiaReader
                 { BasicFunctions.Log($"⚠️ Invalid MemoryTag: {dataString}", LogType.dia); }
 
             }
-            BasicFunctions.Log($"⚠️ FOUND CONDITION : will skip? {skipNextLineDueToBadCondition}   ", LogType.dia);
+
+
+
         }
     }
     public static bool FindNextDialogue(out bool noOptions)
@@ -462,8 +472,11 @@ public static class DiaReader
                             labelWithoutAction = line.Substring(0, Math.Max(0, line.Length - 2)).Trim();
                         }
                         // Create a new DiaOption object
-                        DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, actionData, actionCost, currentOptions.Count, allTabs[i]);
-
+                        DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, actionData, actionCost, optionNeeds, currentOptions.Count, allTabs[i]);
+                        if(optionNeeds!=MemoryTags.none)
+                        {
+                            optionNeeds = MemoryTags.none;
+                        }
                         // Add the new option to the current options list
                         currentOptions.Add(newOption);
                     }

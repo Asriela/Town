@@ -19,7 +19,9 @@ public struct MenuOption
     public object Data2;
     public object Data3;
     public MenuOptionType menuOptionType;
+    public MemoryTags OptionNeeds;
     public int menuOptionCost;
+
 
     public MenuOption(string buttonLabel, object data, object data2)
     {
@@ -30,6 +32,7 @@ public struct MenuOption
         Data3 = null;
         menuOptionType = MenuOptionType.general;
         this.menuOptionCost = 0;
+        OptionNeeds = MemoryTags.none;
     }
 }
 
@@ -231,6 +234,7 @@ public class PlayerMenuInteraction : MonoBehaviour
         {
 
             var diaDialogue = currentDiaPackage.Dialogue;
+
             currentDiaOptions = DiaMenuHelper.ConvertDiaOptionToMenuOptions(currentDiaPackage.Options);
 
             UpdateInteractionMenu(buttonLabel, diaDialogue, currentDiaOptions, "", null);
@@ -370,6 +374,7 @@ public class PlayerMenuInteraction : MonoBehaviour
 
             currentDiaPackage = DiaMenuHelper.OpenInteractionWithCharacter(_personWeAreSpeakingTo, fileType);
             var diaDialogue = currentDiaPackage.Dialogue;
+
             var diaOptions = DiaMenuHelper.ConvertDiaOptionToMenuOptions(currentDiaPackage.Options);
 
 
