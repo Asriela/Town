@@ -1,0 +1,26 @@
+==start==
+	"You there.. hold it right there! Who are you and where are you from!?"
+	>Who.. who is there?
+		"I am the captain of guard for this outpost... so who are you and where are you from?"
+		>I don't know... I cant remember 
+			<2>
+	>I don't know... I cant remember 
+		<2>
+==2==
+	"You as well..."
+	>What do you mean, me as well?
+		"Never mind that now... follow me, there is a werewolf on the loose.."
+		<3>
+
+
+==3==	
+	-I'm so cold...
+		"I bet you are with this dang blizzard! Lets get you inside stranger.."
+	-A werewolf!?
+		"Yes! So lets move!"
+	-what is this place? 
+		"Never you mind that now! Lets just get to the tavern!" 
+	-OK I will follow your lead.. [scriptedAction : takePlayerToInn]
+		<end>
+	
+	

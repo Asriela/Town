@@ -1,11 +1,67 @@
 ==start==
-	"Hey again"
-	-can I get a room on the house [ action : rentRoom] 4+
-		"Of-course! Here is your key!"
-	-you WILL give me a room without payment! [key : ElaraPass] 4-
-		"Of-course! Here is your key!"
-	-tell me more about this town
-		"I saw him with his wife , Elara , I think she gave him something.."
-	
+	-How do you know Ashla 1+
+		"She just arrived in town a few weeks ago, she is just a teenager she had nowhere to go."
+		-why didn't you leave her with someone else?
+			"She just seemed to gravitate towards me.. I guess we share a similar pain"
+			-Ok
+				<end>
+	-People say you are from out of town, where are you from if I may ask? 2+
+		"Have you ever seen a star coin?"
+		-no, is that what you used as currency?
+			"No, we didn't need that kind of thing back then.."
+			-then what was it for?
+				"It reminded us we all belonged, under the stars, as one"
+				
+	-So Onar, what can you tell me about yourself? 4+
+		"I have travelled so far, long beyond what I am allowed to"
+		-why?[mood : emotional]
+			"To go back to how things were before, the world has changed and I can't go back"
+			-why can't you go back?"
+				"the world eats the good and the bad so it lays there waiting for you in the middle ,on the shoreline of everything you have lost, tell me what it means, for I am too old to know its meaning anymore.
+				
+	-When last did you see Ashla 4+
+		"Disappearing into the forest.."
+		-why didn't you go after her?[mood : emotional]
+			"There was no point.."
+			-What do you mean? What happened..
+				"Ashla is a child of pain.. she went into the woods..."
+				
+	(mood : emotional)				
+	-Did she freeze from the cold? 2+
+		"Ashla ran away from the ice tribes in the north, this weather is like summer for her.. "
+
+	(mood : emotional)
+	-What happened to Ashla? 4+
+		"I tried to stop her.. she kept moaning about the forest understanding her , she would cry uncontrollably.."
+		-what happened then?
+			"I tried to keep her locked up because I knew the broken magic was after her"
+			-broken magic?
+				"Magic has been broken, a long time ago, it resides around this town , it caused your amnesia , but it also whispers to those who share in its pain"
+			-why was it after her?
+				"It wants a friend in its sorrow."
+			-you locked her up?
+				"much good it did, she escaped anyway.."
+			-then what?[key : woodstookher]
+				"the woods took her.." 
+					
+	-WHAT DID YOU DO TO ASHLA YOU BASTARD! 2-
+		"I didn't do anything!"
+		-DONT LIE TO ME, people heard she was locked up in your cabin!
+			"I had to protect her!"
+			-protect her from what!?
+				"Herself! She was going to... she.."
+	-WHERE IS SHE!? 4-
+		"She went into the forest!"
+		-WHY WHAT DID YOU DO!?
+			"I didn't do anything, its the darkness surrounding this town, it spoke to her... told her lies!" [mood: emotional]
+			
+	(mood : emotional)
+	-WHAT HAPPENED TO HER!? 4-
+		"The darkness took her.." 
+		-What are you talking about!?
+			"Broken magic surrounds the town, it dug into her brain and STOLE her from me!"
+			-You mean you went crazy and murdered her when she didn't want to be with you any-more![key : woodstookher]
+				"LOOK AT ME! YOU HAVE NO IDEA WHAT I HAVE LOST! SHE IS A BROKEN CHILD AND THE WOODS TOOK ADVANTAGE OF THAT! Where do you think you got your amnesia from..."
+			
 
 

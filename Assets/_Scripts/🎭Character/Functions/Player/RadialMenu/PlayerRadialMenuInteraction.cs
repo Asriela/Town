@@ -294,6 +294,21 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
         ));
 
         charmOptions.Add(new ActionOption(
+        "Bribe",
+        "💰",
+        "Costs 40 coin and gets them to talk but it dammaged your relationship with them",
+        4,
+        -2,
+        false,
+        false,
+        ViewTowards.neutral,
+        MemoryTags.none,
+        SubMenu.charmGive,
+        new Dictionary<MemoryTags, int> { },
+        new List<MemoryTags> { }
+        ));
+
+        charmOptions.Add(new ActionOption(
         "Play Chess",
         "♟",
         "Play a game of chess, requires the person to be relaxed.",
@@ -351,9 +366,24 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
     private void SetupCoerceOptions()
     {
         coerceOptions.Add(new ActionOption(
+        "Intimidate",
+        "🔪",
+        "Intimidate through foul language and body posture.",
+        -2,
+        -2,
+        false,
+        false,
+        ViewTowards.neutral,
+        MemoryTags.none,
+        SubMenu.coerceActions,
+        new Dictionary<MemoryTags, int> { },
+        new List<MemoryTags> { { MemoryTags.tense } }
+        ));
+
+        coerceOptions.Add(new ActionOption(
         "Threaten",
         "🔪",
-        "Threaten with physical violence, short term gain, long term loss as they will hate you.",
+        "Threaten with physical violence, short term gain, long term loss as they will hate you and may report you.",
         -4,
         -4,
         false,
@@ -366,13 +396,29 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
         ));
 
         coerceOptions.Add(new ActionOption(
+        "Beat up",
+        "🔪",
+        "Physically beat up, its really a last resort as they will dispise you after this. ",
+        -6,
+        -8,
+        false,
+        false,
+        ViewTowards.veryNegative,
+        MemoryTags.none,
+        SubMenu.coerceActions,
+        new Dictionary<MemoryTags, int> { },
+        new List<MemoryTags> { { MemoryTags.scared } }
+        ));
+
+
+        coerceOptions.Add(new ActionOption(
         "Blackmail",
         "🔪",
-        "You need dirt on someone to blackmail them.",
+        "Only available if you have dirt on someone. Current dirt: You know Onar kept Ashla locked up in his cabin.",
         -4,
-        -4,
+        -2,
         false,
-        true,
+        false,
         ViewTowards.neutral,
         MemoryTags.none,
         SubMenu.coerceActions,

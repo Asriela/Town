@@ -1,0 +1,14 @@
+==start==
+	"#Onar looks distant and distressed# Hey can I help you? "
+	>Hi I heard what happened to Ashla, would you like some company?
+		"um ok sure.. come in."
+		>thank you
+			<end>
+	>WHERE IS ASHLA!?
+		"excuse me...?"
+		>you heard me, where is she!?
+			"what are you on about!?"
+			>don't play dumb with me..
+				<end>
+	
+	

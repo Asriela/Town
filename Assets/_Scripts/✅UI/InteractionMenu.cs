@@ -24,6 +24,7 @@ public class InteractionMenu : MonoBehaviour
     private float scrolldown = 0;
     private float scrolldown2 = 0;
     private int standardFontSize=14;
+    private List<string> chosenOptions = new List<string>();
 
     [SerializeField]
     private float buttonLeftMargin = 230-200;
@@ -402,6 +403,9 @@ public class InteractionMenu : MonoBehaviour
                 { continue;}
                 if (dialogueOptions[i].ButtonLabel=="do something else.." && menuButtons!=null)
                 { continue;}
+
+                if(chosenOptions.Contains(dialogueOptions[i].ButtonLabel))
+                { continue; }
                 var costText = "";
                 int cost = dialogueOptions[i].menuOptionCost;
                 if (dialogueOptions[i].menuOptionCost!=0)
@@ -409,7 +413,7 @@ public class InteractionMenu : MonoBehaviour
                     costText =$"[Cost: {Math.Abs(cost)}] ";
                 }
                 string label = dialogueOptions[i].ButtonLabel;
-
+                string originalLabel= label;
                 Button button = new Button();
                 dialogueOptionButtons.Add(button);
                 // Create a container label with different styling
@@ -496,6 +500,7 @@ public class InteractionMenu : MonoBehaviour
                     {
                         personWeAreSpeakingTo.Persuasion.FearTowardsPlayer += cost;
                     }
+                    chosenOptions.Add(originalLabel);
                     OnButtonClicked?.Invoke(index, finalLabel, finalMenuOptionType);
                     StartCoroutine(CheckForInputAfterDelay());
                 };

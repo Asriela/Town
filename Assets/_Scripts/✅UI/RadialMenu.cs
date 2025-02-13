@@ -469,7 +469,19 @@ public class RadialMenu : MonoBehaviour
 
         _tooltipBox.style.backgroundColor = _inOpeningMenu==false ? Color.white : MyColor.PurpleBack;
         actionImage.style.visibility = Visibility.Visible;
-        actionImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>($"Sprites/actions/{title.ToLower()}"));
+        var actionTitle= title.ToLower().Replace(" ", "");
+        actionImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>($"Sprites/actions/{actionTitle}"));
+        if (actionTitle == "givealcohol")
+        {
+            actionImage.style.width = 107;
+            actionImage.style.height = 147;
+        }
+        else
+        {
+            actionImage.style.width = 166;
+            actionImage.style.height = 147;
+        }
+
         _tooltipBox.style.visibility = Visibility.Visible;
         _tooltipText.text = tooltip;
         _tooltipEmoji.text ="";// emoji;

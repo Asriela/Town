@@ -403,9 +403,11 @@ public static class DiaReader
                         actionCost = int.Parse(match.Groups[1].Value);
                         if (foundFearCost)
                         { actionCost = -actionCost; }
+                        
                         BasicFunctions.Log($"COST: {actionCost}", LogType.dia);
                     }
                 }
+
                 if (line.StartsWith(">") || line.StartsWith("-") || line.StartsWith("+"))
                 {
                     // Determine the OptionType based on the symbol at the beginning of the line
@@ -431,7 +433,10 @@ public static class DiaReader
                         labelWithoutAction = label.Substring(0, actionStart).Trim();
                     }
 
-
+                    if (actionCost!=0)
+                    {
+                        labelWithoutAction = line.Substring(0, Math.Max(0, line.Length - 2)).Trim();
+                    }
                     // Create a new DiaOption object
                     DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, actionData, actionCost, currentOptions.Count, allTabs[i]);
 
