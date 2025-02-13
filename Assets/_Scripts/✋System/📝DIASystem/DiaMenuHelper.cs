@@ -51,6 +51,17 @@ public static class DiaMenuHelper
                     }
 
                     break;
+                case DiaActionType.mood:
+                    if (actionData != null)
+                    {
+                        var data= (MemoryTags)actionData;
+                        var state= personWeAreSpeakingTo.State.VisualState[0];
+                        var ok = false;
+
+                        personWeAreSpeakingTo.State.SetVisualState(data);
+                    }
+
+                    break;
                 case DiaActionType.action_hangout:
          
                         socialAction= SocializeType.drinking;

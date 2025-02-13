@@ -1,10 +1,10 @@
 ==start==
+
 	-How do you know Ashla 1+
 		"She just arrived in town a few weeks ago, she is just a teenager she had nowhere to go."
 		-why didn't you leave her with someone else?
 			"She just seemed to gravitate towards me.. I guess we share a similar pain"
-			-Ok
-				<end>
+			
 	-People say you are from out of town, where are you from if I may ask? 2+
 		"Have you ever seen a star coin?"
 		-no, is that what you used as currency?

@@ -270,7 +270,8 @@ public class InteractionMenu : MonoBehaviour
         var trust = personWeAreSpeakingTo.Persuasion.TrustTowardsPlayer;
         var fear = personWeAreSpeakingTo.Persuasion.FearTowardsPlayer;
         var relationship=TextConverter.GetRelationshipStatusText(personWeAreSpeakingTo);
-        var statsString = $"<color=#50AA7C>TRUST {trust}</color>\n<color=#C03F13>FEAR {fear}</color>\n<color=#A0A0A0>RELATIONSHIP</color>\n{relationship}";
+        var mood = personWeAreSpeakingTo.State.VisualState[0];
+        var statsString = $"<color=#50AA7C>TRUST {trust}</color>\n<color=#C03F13>FEAR {fear}</color>\n<color=#A0A0A0>RELATIONSHIP</color>\n{relationship}</color>\n<color=#A0A0A0>MOOD</color>\n{mood} ";
         // Add a label to the button
         Label statLabel = new Label(statsString)
         {

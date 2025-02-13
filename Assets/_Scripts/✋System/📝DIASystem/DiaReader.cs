@@ -12,7 +12,8 @@ public enum DiaActionType : short
     action_hangout,
     action_rentRoom,
     scriptedAction,
-    share
+    share,
+    mood
 }
 
 public enum DiaOptionType
@@ -175,7 +176,7 @@ public static class DiaReader
         return new DiaPackage(currentDialogue, currentOptions);
 
     }
-    private static void CheckForCondition(String line)
+    private static void CheckForCondition(string line, string nextLine)
     {
         if (line.Contains("(") && line.Contains(")"))
         {
@@ -210,6 +211,22 @@ public static class DiaReader
                 { BasicFunctions.Log($"⚠️ Invalid MemoryTag: {dataString}", LogType.dia); }
 
             }
+            if (condition.StartsWith("mood:"))
+            {
+
+                if (Enum.TryParse(typeof(MemoryTags), dataString, true, out object rawData))
+                {
+                    MemoryTags enumData = (MemoryTags)rawData;
+                    if (personWeAreSpeakingTo.State.VisualState[0] != enumData)
+                    {
+                        skipNextLineDueToBadCondition = true;
+                        BasicFunctions.Log($"⚠️ MOOD CONDITION {dataString} WILL SKIP: {nextLine}    ", LogType.dia);
+                    }
+                }
+                else
+                { BasicFunctions.Log($"⚠️ Invalid MemoryTag: {dataString}", LogType.dia); }
+
+            }
             if (condition.StartsWith("completed:"))
             {
                 if (Enum.TryParse(typeof(ScriptedTaskType), dataString, true, out object rawData))
@@ -218,6 +235,7 @@ public static class DiaReader
                     if (personWeAreSpeakingTo.Memory.GetScriptedTaskProgress(enumData) != ScriptedTaskProgressType.completed)
                     {
                         skipNextLineDueToBadCondition = true;
+                        BasicFunctions.Log($"⚠️ COMPLETED CONDITION {dataString} WILL SKIP: {nextLine}    ", LogType.dia);
                     }
                 }
                 else
@@ -232,6 +250,7 @@ public static class DiaReader
                     if (personWeAreSpeakingTo.Memory.GetScriptedTaskProgress(enumData) == ScriptedTaskProgressType.completed)
                     {
                         skipNextLineDueToBadCondition = true;
+                        BasicFunctions.Log($"⚠️ COMPLETED CONDITION {dataString} WILL SKIP: {nextLine}    ", LogType.dia);
                     }
                 }
                 else
@@ -249,12 +268,14 @@ public static class DiaReader
                     if (visualStatus == null || visualStatus.Count != 0)
                     {
                         skipNextLineDueToBadCondition = true;
+                        BasicFunctions.Log($"⚠️ SAW CONDITION {dataString} WILL SKIP: {nextLine}    ", LogType.dia);
                     }
                 }
                 else
                 { BasicFunctions.Log($"⚠️ Invalid MemoryTag: {dataString}", LogType.dia); }
 
             }
+            BasicFunctions.Log($"⚠️ FOUND CONDITION : will skip? {skipNextLineDueToBadCondition}   ", LogType.dia);
         }
     }
     public static bool FindNextDialogue(out bool noOptions)
@@ -273,7 +294,7 @@ public static class DiaReader
             { return false; }
             if (allTabs[i] == currentTab)
             {
-                CheckForCondition(line);
+               
 
 
                 // Check if the line contains quotes
@@ -389,6 +410,7 @@ public static class DiaReader
             // Check if the line starts with '>', '-', or '+'
             if (allTabs[i] == currentTab)
             {
+                CheckForCondition(line, allLines[i + 1]);
                 BasicFunctions.Log($"🔎📦: {line} {allTabs[i]} vs {currentTab} ", LogType.dia);
                 var foundTrustCost = line.EndsWith("+");
                 var foundFearCost = line.EndsWith("-");
@@ -410,38 +432,46 @@ public static class DiaReader
 
                 if (line.StartsWith(">") || line.StartsWith("-") || line.StartsWith("+"))
                 {
-                    // Determine the OptionType based on the symbol at the beginning of the line
-                    var optionType = line.StartsWith("-") ? DiaOptionType.subtract :
+                    if (skipNextLineDueToBadCondition == false)
+                    {
+                        // Determine the OptionType based on the symbol at the beginning of the line
+                        var optionType = line.StartsWith("-") ? DiaOptionType.subtract :
                                      line.StartsWith("+") ? DiaOptionType.permanent :
                                      line.StartsWith(">") ? DiaOptionType.clear :
                                      DiaOptionType.permanent;
 
-                    // Extract the label (everything after the symbol)
-                    string label = line.Substring(1).Trim();
+                        // Extract the label (everything after the symbol)
+                        string label = line.Substring(1).Trim();
 
-                    // Check for an action in square brackets
-                    DiaActionType actionType = DiaActionType.none;
-                    string labelWithoutAction = label;
-                    int actionStart = label.IndexOf('[');
-                    int actionEnd = label.IndexOf(']');
+                        // Check for an action in square brackets
+                        DiaActionType actionType = DiaActionType.none;
+                        string labelWithoutAction = label;
+                        int actionStart = label.IndexOf('[');
+                        int actionEnd = label.IndexOf(']');
 
-                    object actionData = null;
-                    if (actionStart >= 0 && actionEnd > actionStart)
-                    {
-                        string actionString = label.Substring(actionStart + 1, actionEnd - actionStart - 1).Trim();
-                        actionType = GetActionFromString(actionString, out actionData);
-                        labelWithoutAction = label.Substring(0, actionStart).Trim();
+                        object actionData = null;
+                        if (actionStart >= 0 && actionEnd > actionStart)
+                        {
+                            string actionString = label.Substring(actionStart + 1, actionEnd - actionStart - 1).Trim();
+                            actionType = GetActionFromString(actionString, out actionData);
+                            labelWithoutAction = label.Substring(0, actionStart).Trim();
+                        }
+
+                        if (actionCost != 0)
+                        {
+                            labelWithoutAction = line.Substring(0, Math.Max(0, line.Length - 2)).Trim();
+                        }
+                        // Create a new DiaOption object
+                        DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, actionData, actionCost, currentOptions.Count, allTabs[i]);
+
+                        // Add the new option to the current options list
+                        currentOptions.Add(newOption);
                     }
-
-                    if (actionCost!=0)
+                    else
                     {
-                        labelWithoutAction = line.Substring(0, Math.Max(0, line.Length - 2)).Trim();
+                        BasicFunctions.Log($"🏹🏹🏹🏹: SKIPPING!! {line} ", LogType.dia);
+                        skipNextLineDueToBadCondition = false;
                     }
-                    // Create a new DiaOption object
-                    DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, actionData, actionCost, currentOptions.Count, allTabs[i]);
-
-                    // Add the new option to the current options list
-                    currentOptions.Add(newOption);
                 }
             }
         }
@@ -507,6 +537,15 @@ public static class DiaReader
         if (theString.StartsWith("share:"))
         {
             ret = DiaActionType.share;
+            if (Enum.TryParse(typeof(MemoryTags), dataString, true, out object rawData))
+            {
+                actionData = (MemoryTags)rawData;
+            }
+
+        }
+        if (theString.StartsWith("mood:"))
+        {
+            ret = DiaActionType.mood;
             if (Enum.TryParse(typeof(MemoryTags), dataString, true, out object rawData))
             {
                 actionData = (MemoryTags)rawData;
