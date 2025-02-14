@@ -18,57 +18,57 @@ MonoBehaviour:
     _dialogue: 
     _action: 16
     _actionParameter:
-      rid: 2000162984405762524
+      rid: 9081441903479882006
     _conditions:
     - conditionType: 8
       parameter:
-        rid: 2000162984405762525
+        rid: 9081441903479882007
     - conditionType: 13
       parameter:
-        rid: 2000162984405762524
+        rid: 9081441903479882006
     - conditionType: 9
       parameter:
-        rid: 2000162984405762526
+        rid: 9081441903479882008
     _priority: 10
     _actionTags: 
   - _name: talk to player
     _dialogue: 
     _action: 25
     _actionParameter:
-      rid: 2000162984405762527
+      rid: 9081441903479882009
     _conditions:
     - conditionType: 24
       parameter:
-        rid: 2000162984405762528
+        rid: 9081441903479882010
     - conditionType: 42
       parameter:
-        rid: 2000162984405762529
+        rid: 9081441903479882011
     _priority: 10
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 2000162984405762524
+    - rid: 9081441903479882006
       type: {class: TargetLocationType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 7
-    - rid: 2000162984405762525
+    - rid: 9081441903479882007
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 0
-    - rid: 2000162984405762526
+    - rid: 9081441903479882008
       type: {class: TimeOfDayType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 8
-    - rid: 2000162984405762527
+    - rid: 9081441903479882009
       type: {class: DialogueFileType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 2
-    - rid: 2000162984405762528
+    - rid: 9081441903479882010
       type: {class: TraitType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 23
-    - rid: 2000162984405762529
+    - rid: 9081441903479882011
       type: {class: ScriptedTaskType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1

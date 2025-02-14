@@ -4002,7 +4002,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3993706518021667939, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 13.32
+      value: 23.1
       objectReference: {fileID: 0}
     - target: {fileID: 3993706518021667939, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4655,8 +4655,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ComponentVersion: 1
   m_AssetsPPU: 50
-  m_RefResolutionX: 1600
-  m_RefResolutionY: 900
+  m_RefResolutionX: 1920
+  m_RefResolutionY: 1080
   m_CropFrame: 0
   m_GridSnapping: 1
   m_FilterMode: 0
@@ -4700,7 +4700,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 9
+  orthographic size: 10.8
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -10896,6 +10896,7 @@ GameObject:
   - component: {fileID: 1359901511}
   - component: {fileID: 1359901513}
   - component: {fileID: 1359901512}
+  - component: {fileID: 1359901514}
   m_Layer: 8
   m_Name: Player
   m_TagString: Character
@@ -10912,7 +10913,7 @@ Transform:
   m_GameObject: {fileID: 1359901485}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 12.12, y: 35.55, z: 0}
+  m_LocalPosition: {x: 12.12, y: 22.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11044,6 +11045,7 @@ MonoBehaviour:
   _traits:
   - {fileID: 11400000, guid: 4cfebd498ba96d54c9d13408d6b99992, type: 2}
   - {fileID: 11400000, guid: 15170898bb7a3084a8839e707f86ce13, type: 2}
+  - {fileID: 11400000, guid: ef6c4609bb85cd64c9ccdb801d292c2b, type: 2}
   _locationTargetsList: []
   _locationKnowledge: []
   _possessionsList:
@@ -11315,6 +11317,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62479daa5bfa4de4a820a5d9feebd5c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1359901514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1359901485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01a26d9ef549414785c0fc9629c01f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &1363224191 stripped
@@ -14609,6 +14623,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 792376233}
     m_Modifications:
+    - target: {fileID: 1594025001117945278, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: _traits.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1594025001117945278, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: '_traits.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 5f7d9c49f2545294b9cf1f607db8db4a, type: 2}
     - target: {fileID: 1781535494026132575, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
       propertyPath: m_Controller
       value: 

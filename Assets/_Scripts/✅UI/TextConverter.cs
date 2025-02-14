@@ -4,6 +4,17 @@ using UnityEngine.TextCore.Text;
 
 public static class TextConverter
 {
+    public static string GetKeyText(string key)
+    {
+        var ret="";
+        if (key!="")
+        {
+          
+                ret= "Ashla was taken by broken magic";
+         
+        }
+        return ret;
+    }
     public static string GetRelationshipStatusText(Character target)
     {
         var ret = "neutral to you";

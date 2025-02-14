@@ -1,6 +1,6 @@
 ﻿using Mind;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
+
 
 
 public class RadialMenuActionsHelper : MonoBehaviour
@@ -52,6 +52,16 @@ public class RadialMenuActionsHelper : MonoBehaviour
                 case "Hug":
                     SocialAction = SocializeType.hug;
                     break;
+                case "Play Chess":
+                    SocialAction = SocializeType.playChess;
+                    break;
+                case "Comfort":
+                    SocialAction = SocializeType.comfort;
+                    break;
+                case "Sympathize":
+                    SocialAction = SocializeType.sympathize;
+                    break;
+      
             }
         }
 
@@ -91,11 +101,17 @@ public class RadialMenuActionsHelper : MonoBehaviour
         {
             switch (actionOption.Name)
             {
+                case "Intimidate":
+                    SocialAction = SocializeType.intimidate;
+                    break;
                 case "Threaten":
-                    Debug.Log($"Threatening {target.name}...");
+                    SocialAction = SocializeType.threaten;
+                    break;
+                case "Beat up":
+                    SocialAction = SocializeType.beatUp;
                     break;
                 case "Blackmail":
-                    Debug.Log($"Blackmailing {target.name} with their secrets...");
+                    SocialAction = SocializeType.blackmail;
                     break;
             }
         }
@@ -116,7 +132,7 @@ public class RadialMenuActionsHelper : MonoBehaviour
 
                     socializeTimeLeft = 5000;
                     player.Appearance.SetSpriteAction("drinking");
-                    personWeAreInteractingWith.Appearance.SetSpriteAction("drinking");
+                    //personWeAreInteractingWith.Appearance.SetSpriteAction("drinking");
 
                     WorldManager.Instance.SetRampUpSpeedOfTime(SpeedOfTime.fast);
 
@@ -158,7 +174,64 @@ public class RadialMenuActionsHelper : MonoBehaviour
 
                     break;
 
+                case SocializeType.hug:
 
+                    socializeTimeLeft = 2000;
+                    player.Appearance.SetSpriteAction("talk");
+
+                    //personWeAreInteractingWith.Appearance.SetSpriteAction("talk");
+                    socializeUntilAnimationIsOver = true;
+                    WorldManager.Instance.SetRampUpSpeedOfTime(SpeedOfTime.normal);
+
+
+                    break;
+                case SocializeType.comfort:
+
+                    socializeTimeLeft = 2000;
+                    player.Appearance.SetSpriteAction("talk");
+
+                    //personWeAreInteractingWith.Appearance.SetSpriteAction("talk");
+                    socializeUntilAnimationIsOver = true;
+                    WorldManager.Instance.SetRampUpSpeedOfTime(SpeedOfTime.normal);
+
+
+                    break;
+                case SocializeType.sympathize:
+                    socializeTimeLeft = 2000;
+                    player.Appearance.SetSpriteAction("talk");
+                    //personWeAreInteractingWith.Appearance.SetSpriteAction("talk");
+                    socializeUntilAnimationIsOver = true;
+                    break;
+                case SocializeType.playChess:
+                    socializeTimeLeft = 2000;
+                    player.Appearance.SetSpriteAction("talk");
+                    //personWeAreInteractingWith.Appearance.SetSpriteAction("talk");
+                    socializeUntilAnimationIsOver = true;
+                    break;
+                case SocializeType.intimidate:
+                    socializeTimeLeft = 2000;
+                    player.Appearance.SetSpriteAction("talk");
+                    //personWeAreInteractingWith.Appearance.SetSpriteAction("talk");
+                    socializeUntilAnimationIsOver = true;
+                    break;
+                case SocializeType.threaten:
+                    socializeTimeLeft = 2000;
+                    player.Appearance.SetSpriteAction("talk");
+                    //personWeAreInteractingWith.Appearance.SetSpriteAction("talk");
+                    socializeUntilAnimationIsOver = true;
+                    break;
+                case SocializeType.beatUp:
+                    socializeTimeLeft = 2000;
+                    player.Appearance.SetSpriteAction("talk");
+                    //personWeAreInteractingWith.Appearance.SetSpriteAction("talk");
+                    socializeUntilAnimationIsOver = true;
+                    break;
+                case SocializeType.blackmail:
+                    socializeTimeLeft = 2000;
+                    player.Appearance.SetSpriteAction("talk");
+                    //personWeAreInteractingWith.Appearance.SetSpriteAction("talk");
+                    socializeUntilAnimationIsOver = true;
+                    break;
             }
         }
         if (socializeUntilAnimationIsOver && player.Appearance.HasAnimationEnded())

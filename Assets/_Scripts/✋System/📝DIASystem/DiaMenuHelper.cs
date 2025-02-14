@@ -25,7 +25,10 @@ public static class DiaMenuHelper
             {
                 menuOptionType = MenuOptionType.dia,
                 menuOptionCost = diaOption.ActionCost,
-                OptionNeeds = diaOption.OptionNeeds
+                OptionNeeds = diaOption.OptionNeeds,
+                OptionKey = diaOption.OptionKey,
+                IsKey = diaOption.IsKey,
+                UniqueId = diaOption.UniqueId
             };
             menuOptions.Add(menuOption);
         }

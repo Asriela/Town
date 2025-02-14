@@ -21,7 +21,7 @@ public static class DiaCharacterFileHelper
 
                     Mind.CharacterName.Agnar => GetAgnarFile(character),
                     Mind.CharacterName.Elara => GetElaraFile(character),
-                    Mind.CharacterName.Onar => GetOnarFile(character),
+                    //Mind.CharacterName.Onar => GetOnarFile(character),
                     _ => Default(character)
                 };
                 break;

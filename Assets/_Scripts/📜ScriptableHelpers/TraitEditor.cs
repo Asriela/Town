@@ -235,6 +235,7 @@ public class TraitEditor : Editor
             Mind.ConditionType.hasNamedOccupant => typeof(Mind.CharacterName),
             Mind.ConditionType.notHaveNamedOccupant => typeof(Mind.CharacterName),
             Mind.ConditionType.attackedPerson => typeof(Mind.CharacterName),
+            Mind.ConditionType.closeToCharacter => typeof(Mind.CharacterName),
             _ => null
         };
 
@@ -310,5 +311,6 @@ public class TraitEditor : Editor
 
 }
 
-*/
 
+
+*/

@@ -11,7 +11,7 @@
 			-then what was it for?
 				"It reminded us we all belonged, under the stars, as one"
 				
-
+	(mood : emotional)
 	-Did she freeze from the cold? 2+
 		"Ashla ran away from the ice tribes in the north, this weather is like summer for her.. "
 
@@ -54,10 +54,10 @@
 				"Herself! She was going to... she.."
 	-WHERE IS SHE!? 4-
 		"She went into the forest!"
-		-WHY WHAT DID YOU DO!?
-			"I didn't do anything, its the darkness surrounding this town, it spoke to her... told her lies!" [mood: emotional]
+		-WHY WHAT DID YOU DO!?[mood: emotional]
+			"I didn't do anything, its the darkness surrounding this town, it spoke to her... told her lies!" 
 			
-
+	(mood : emotional)
 	-WHAT HAPPENED TO HER!? 4-
 		"The darkness took her.." 
 		-What are you talking about!?

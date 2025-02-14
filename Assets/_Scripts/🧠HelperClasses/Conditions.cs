@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Mind;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 
 public static class Conditions
@@ -60,6 +61,7 @@ public static class Conditions
         _conditionDelegates.Add(ConditionType.hasNamedOccupant, new ConditionDelegate<CharacterName>(CheckForOccupantByName));
         _conditionDelegates.Add(ConditionType.notHaveNamedOccupant, new ConditionDelegate<CharacterName>(CheckForOccupantByName));
         _conditionDelegates.Add(ConditionType.attackedPerson, new ConditionDelegate<CharacterName>(CheckLastAttacked));
+        _conditionDelegates.Add(ConditionType.closeToCharacter, new ConditionDelegate<CharacterName>(CheckCloseToCharacter));
     }
 
     public static bool CheckCondition(Condition condition, NPC npc)
@@ -143,6 +145,7 @@ public static class Conditions
                 ConditionType.hasNamedOccupant => ConditionHandler<CharacterName>((ConditionDelegate<CharacterName>)conditionDelegate, condition.parameter, npc, true),
                 ConditionType.notHaveNamedOccupant => ConditionHandler<CharacterName>((ConditionDelegate<CharacterName>)conditionDelegate, condition.parameter, npc, false),
                 ConditionType.attackedPerson => ConditionHandler<CharacterName>((ConditionDelegate<CharacterName>)conditionDelegate, condition.parameter, npc, true),
+                ConditionType.closeToCharacter => ConditionHandler<CharacterName>((ConditionDelegate<CharacterName>)conditionDelegate, condition.parameter, npc, true),
                 _ => false
             };
 
@@ -172,6 +175,21 @@ public static class Conditions
         }
         return !trueStatement;
     }
+    private static bool CheckCloseToCharacter(CharacterName parameter, NPC npc, bool trueStatement)
+    {
+        var character = WorldManager.Instance.GetCharacter(parameter);
+        var player = WorldManager.Instance.ThePlayer;
+        var pos1= npc.transform.position;
+        var pos2 = player.transform.position;
+        float distance = Vector3.Distance(pos1, pos2);
+
+        if (distance<9)
+        {
+            return trueStatement;
+        }
+        return !trueStatement;
+    }
+    
     private static bool CheckLastAttacked(CharacterName parameter, NPC npc, bool trueStatement)
     {
         var value = npc.Memory.LastWeAttacked;

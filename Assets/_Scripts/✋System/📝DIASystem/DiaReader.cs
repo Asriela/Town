@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using Mind;
+using System.Xml;
 
 public enum DiaActionType : short
 {
@@ -13,7 +14,8 @@ public enum DiaActionType : short
     action_rentRoom,
     scriptedAction,
     share,
-    mood
+    mood,
+    key
 }
 
 public enum DiaOptionType
@@ -31,6 +33,8 @@ public class DiaOption
 
     public int Index { get; set; }
 
+    public string UniqueId { get; set; }
+
     public int TabLevel { get; }
     public DiaActionType Action { get; }
 
@@ -39,20 +43,24 @@ public class DiaOption
     public int ActionCost { get; }
 
     public MemoryTags OptionNeeds { get; set; }
-
+    public string OptionKey { get; set; }
+    public string IsKey { get; set; }
     public DiaOptionType OptionType { get; }
 
-    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action, object actionData, int actionCost,MemoryTags optionNeeds, int index, int tabLevel)
+    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action, object actionData, int actionCost,MemoryTags optionNeeds,string optionKey, string isKey, int index, int tabLevel, string uniqueId)
     {
         LineNumber = lineNumber;
         Label = label;
         Action = action;
         OptionType = optionType;
         Index = index;
+        UniqueId= uniqueId;
         TabLevel = tabLevel;
         ActionData = actionData;
         ActionCost = actionCost;
         OptionNeeds = optionNeeds;
+        OptionKey= optionKey;
+        IsKey = isKey;
     }
 }
 
@@ -81,7 +89,8 @@ public static class DiaReader
     private static List<DiaOption> currentOptions = new();
     private static bool skipNextLineDueToBadCondition = false;
     private static MemoryTags optionNeeds = MemoryTags.none;
-
+    private static string optionKey = "";
+    private static string currentFileName = "";
 
 
     public static DiaPackage OpenNewDialogue(string filename)
@@ -224,15 +233,27 @@ public static class DiaReader
                 if (Enum.TryParse(typeof(MemoryTags), dataString, true, out object rawData))
                 {
                     MemoryTags enumData = (MemoryTags)rawData;
-                    if (personWeAreSpeakingTo.State.VisualState[0] != enumData)
-                    {
+             
                         optionNeeds = enumData;
 
                         BasicFunctions.Log($"⚠️ MOOD CONDITION {dataString} WILL SKIP: {nextLine}    ", LogType.dia);
-                    }
+                    
                 }
                 else
                 { BasicFunctions.Log($"⚠️ Invalid MemoryTag: {dataString}", LogType.dia); }
+
+            }
+            if (condition.StartsWith("key:"))
+            {
+
+         
+                   // if (!player.KeyKnowledge.Keys.Contains(dataString))
+                  //  {
+                        optionKey = dataString;
+
+                        BasicFunctions.Log($"⚠️ KEY CONDITION {dataString} WILL SKIP: {nextLine}    ", LogType.dia);
+                   // }
+       
 
             }
             if (condition.StartsWith("completed:"))
@@ -420,6 +441,8 @@ public static class DiaReader
             // Check if the line starts with '>', '-', or '+'
             if (allTabs[i] == currentTab)
             {
+                var advanceLine=i+1;
+                if(advanceLine<allLines.Count)
                 CheckForCondition(line, allLines[i + 1]);
                 BasicFunctions.Log($"🔎📦: {line} {allTabs[i]} vs {currentTab} ", LogType.dia);
                 var foundTrustCost = line.EndsWith("+");
@@ -467,15 +490,25 @@ public static class DiaReader
                             labelWithoutAction = label.Substring(0, actionStart).Trim();
                         }
 
+                        var isKey="";
+                        if (actionType == DiaActionType.key)
+                        {
+                            isKey= actionData.ToString();
+                            
+                        }
                         if (actionCost != 0)
                         {
                             labelWithoutAction = line.Substring(0, Math.Max(0, line.Length - 2)).Trim();
                         }
                         // Create a new DiaOption object
-                        DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, actionData, actionCost, optionNeeds, currentOptions.Count, allTabs[i]);
+                        DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, actionData, actionCost, optionNeeds, optionKey,isKey, currentOptions.Count, allTabs[i], $"{currentFileName} + {i + allTabs[i]}");
                         if(optionNeeds!=MemoryTags.none)
                         {
                             optionNeeds = MemoryTags.none;
+                        }
+                        if (optionKey !="")
+                        {
+                            optionKey = "";
                         }
                         // Add the new option to the current options list
                         currentOptions.Add(newOption);
@@ -563,6 +596,14 @@ public static class DiaReader
             {
                 actionData = (MemoryTags)rawData;
             }
+
+        }
+        if (theString.StartsWith("key:"))
+        {
+            ret = DiaActionType.key;
+     
+                actionData =(object) dataString;
+            
 
         }
         return ret;
@@ -657,6 +698,7 @@ public static class DiaReader
 
     public static void SetCurrentDialogueFile(string fileName)
     {
+        currentFileName= fileName;
         currentFileText = DiaImporter.GetDiaFileText(fileName);
         TurnFileIntoLines();
         for (int i = 0; i < allLines.Count; i++)

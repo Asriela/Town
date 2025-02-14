@@ -20,8 +20,10 @@ public struct MenuOption
     public object Data3;
     public MenuOptionType menuOptionType;
     public MemoryTags OptionNeeds;
+    public string OptionKey;
     public int menuOptionCost;
-
+    public string IsKey;
+    public string UniqueId;
 
     public MenuOption(string buttonLabel, object data, object data2)
     {
@@ -33,6 +35,9 @@ public struct MenuOption
         menuOptionType = MenuOptionType.general;
         this.menuOptionCost = 0;
         OptionNeeds = MemoryTags.none;
+        IsKey="";
+        OptionKey = "";
+        UniqueId="";
     }
 }
 

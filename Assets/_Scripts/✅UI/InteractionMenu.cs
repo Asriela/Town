@@ -6,6 +6,7 @@ using System.Linq;
 using System;
 using System.Text.RegularExpressions;
 using Mind;
+using UnityEngine.Windows;
 
 
 public class InteractionMenu : MonoBehaviour
@@ -145,7 +146,7 @@ public class InteractionMenu : MonoBehaviour
             if (scrolldown > 0)
             {
 
-                dialogue.style.marginTop = 160 + 40 + scrolldown;
+                dialogue.style.marginTop = 160 + 90 + scrolldown;
                 foreach (var item in dialogueOptionButtons)
                 {
                     item.style.top = 240 + 90 + scrolldown2;
@@ -159,13 +160,15 @@ public class InteractionMenu : MonoBehaviour
     private string StripColorTags(string input)
     {
         return System.Text.RegularExpressions.Regex.Replace(input, "<color[^>]*?>|</color>", string.Empty);
+
+
     }
 
     public void ShowMenu(string lastChosenOption, string currentDialogue, string currentSpeaker, List<MenuOption> dialogueOptions, string contextTitle, List<MenuOption> menuButtons, Character personWeAreSpeakingTo)
     {
 
-            scrolldown = 0;
-        scrolldown2 = 0;
+            scrolldown = 20;
+        scrolldown2 = 20;
             
 
         GameManager.Instance.BlockingPlayerUIOnScreen = true;
@@ -284,7 +287,7 @@ public class InteractionMenu : MonoBehaviour
         var fear = personWeAreSpeakingTo.Persuasion.FearTowardsPlayer;
         var relationship=TextConverter.GetRelationshipStatusText(personWeAreSpeakingTo);
         var mood = personWeAreSpeakingTo.State.VisualState[0];
-        var statsString = $"<color=#50AA7C>TRUST {trust}</color>\n<color=#C03F13>FEAR {fear}</color>\n<color=#A0A0A0>RELATIONSHIP</color>\n{relationship}</color>\n<color=#A0A0A0>MOOD</color>\n{mood} ";
+        var statsString = $"<color={MyColor.GreenHex}>TRUST {trust}</color>\n<color={MyColor.RedHex}>FEAR {fear}</color>\n<color=#A0A0A0>RELATIONSHIP</color>\n{relationship}</color>\n<color=#A0A0A0>MOOD</color>\n{mood} ";
         // Add a label to the button
         Label statLabel = new Label(statsString)
         {
@@ -292,7 +295,7 @@ public class InteractionMenu : MonoBehaviour
             {
 
                 unityTextAlign = TextAnchor.MiddleLeft,
-                fontSize = standardFontSize,
+                fontSize = 12,
                 whiteSpace = WhiteSpace.Normal,  // Allow text wrapping within the label
                 overflow = Overflow.Hidden,
                 paddingBottom = new Length(5, LengthUnit.Pixel),  // Prevent cutting off text
@@ -334,6 +337,8 @@ public class InteractionMenu : MonoBehaviour
         pastDialogue = $"<color=#7F807A>" +
                   $"{strippedPastDialogue}";
 
+        pastDialogue = MyColor.WrapTextInPurpleTag(pastDialogue);
+
         // Conditionally add "YOU-{lastChosenOption}" if it's not an empty string
         if (lastChosenOption!="")
         {
@@ -350,12 +355,13 @@ public class InteractionMenu : MonoBehaviour
 
         }
 
-       
+
         // Create the button and add the label
         dialogue = new Button();
-
+        var removestars= System.Text.RegularExpressions.Regex.Replace(pastDialogue, @"\*", string.Empty);
+        
         // Add a label to the button
-        Label dialogueLabel = new Label(pastDialogue)
+        Label dialogueLabel = new Label(removestars)
         {
             style =
             {
@@ -373,7 +379,7 @@ public class InteractionMenu : MonoBehaviour
         // Apply button styling to mimic other buttons
         dialogue.style.position = Position.Absolute; // Set position to absolute
         dialogue.style.left = new Length(130 + 120 + 60 - 19 - 9, LengthUnit.Pixel);
-        dialogue.style.top = new Length(90 + scrolldown, LengthUnit.Pixel); // Set initial top position
+        dialogue.style.top = new Length(40 + scrolldown, LengthUnit.Pixel); // Set initial top position
         dialogue.style.width = new Length(340, LengthUnit.Pixel);
         dialogue.style.flexDirection = FlexDirection.ColumnReverse;  // Makes new content push upward
 
@@ -389,7 +395,7 @@ public class InteractionMenu : MonoBehaviour
 
 
 
-        dialogue.style.marginTop = 160 + 40;
+        dialogue.style.marginTop = 0 ;
         dialogue.style.paddingTop= new Length(5, LengthUnit.Pixel);
         dialogue.AddToClassList("button");
 
@@ -404,7 +410,7 @@ public class InteractionMenu : MonoBehaviour
             dialogue.style.top = new Length(90 + scrolldown - dialogue.resolvedStyle.height, LengthUnit.Pixel);
         });
 
-   
+   var player =WorldManager.Instance.ThePlayer;
         // Add the dialogue options
         if (dialogueOptions != null)
         {
@@ -414,44 +420,60 @@ public class InteractionMenu : MonoBehaviour
             int trueIndex = 0;
             for (int i = 0; i < buttonCount; i++)
             {
-                if (dialogueOptions[i].menuOptionCost > trust || dialogueOptions[i].menuOptionCost < fear)
+                if (dialogueOptions[i].menuOptionCost > trust || -dialogueOptions[i].menuOptionCost > fear)
                 {BasicFunctions.Log($"💥Button skipped: {dialogueOptions[i].ButtonLabel} because of trust/fear", LogType.dia);
                     continue;}
                 if (dialogueOptions[i].ButtonLabel=="do something else.." && menuButtons!=null)
                 { BasicFunctions.Log($"💥Button skipped: {dialogueOptions[i].ButtonLabel} because of do something else", LogType.dia);
                     continue;}
 
-                if(chosenOptions.Contains(dialogueOptions[i].ButtonLabel))
+                if(chosenOptions.Contains(dialogueOptions[i].UniqueId))
                 { BasicFunctions.Log($"💥Button skipped: {dialogueOptions[i].ButtonLabel} is already chosen", LogType.dia);
                     continue; }
 
-                if(dialogueOptions[i].OptionNeeds != MemoryTags.none && dialogueOptions[i].OptionNeeds!= personWeAreSpeakingTo.State.VisualState[0])
+                var theirMood= personWeAreSpeakingTo.State.VisualState[0];
+                var moodReq = dialogueOptions[i].OptionNeeds;
+                if (moodReq != MemoryTags.none && moodReq !=theirMood)
                     {
                     BasicFunctions.Log($"💥Button skipped: {dialogueOptions[i].ButtonLabel} mood didnt match", LogType.dia);
                     continue; }
-
-                
+                var optionKey= dialogueOptions[i].OptionKey;
+                var playerKeys= player.KeyKnowledge.Keys;
+                var hasKey=false;
+                if (optionKey == "" || optionKey == null || playerKeys.Count>0)
+                    { hasKey=true;}
+                if(hasKey==false)
+                {
+                    BasicFunctions.Log($"💥Button skipped: {dialogueOptions[i].ButtonLabel} key didnt match", LogType.dia);
+                    continue;
+                }
                 var costText = "";
                 int cost = dialogueOptions[i].menuOptionCost;
-                if (dialogueOptions[i].menuOptionCost!=0)
+                if (cost != 0)
                 {
-                    costText =$"[Cost: {Math.Abs(cost)}] ";
+                    if(cost>0)
+                    costText =$"[Trust: {Math.Abs(cost)}] ";
+                    else
+                        costText = $"[Fear: {Math.Abs(cost)}] ";
                 }
-                string label = dialogueOptions[i].ButtonLabel;
+                string label = dialogueOptions[i].ButtonLabel.TrimStart('-');
                 string originalLabel= label;
                 Button button2 = new Button();
                 menuContainer.Add(button2);
+                Button button3 = new Button();
+                menuContainer.Add(button3);
                 Button button = new Button();
                 dialogueOptionButtons.Add(button);
                 // Create a container label with different styling
-                Label numberLabel = new Label($"{trueIndex + 1}.")
+                Label numberLabel = new Label($"{trueIndex + 1}.-")
                 {
                     style =
                     {
                         color = Color.white,
                         unityTextAlign = TextAnchor.MiddleLeft,
                         fontSize = standardFontSize,
-                        alignSelf = Align.FlexStart  // Align to the top of the button
+                        alignSelf = Align.FlexStart , // Align to the top of the button
+                        unityFontStyleAndWeight = FontStyle.Normal
                     }
                 };
 
@@ -459,24 +481,24 @@ public class InteractionMenu : MonoBehaviour
                 {
                     style =
                     {
-                        color = cost == 0 ? Color.grey : cost < 0 ? MyColor.Red : MyColor.Green,  // Default color
+                        color = cost == 0 ? MyColor.Cyan : cost < 0 ? MyColor.Red : MyColor.Green,  // Default color
                         unityTextAlign = TextAnchor.MiddleLeft,
                         fontSize = standardFontSize,
                         whiteSpace = WhiteSpace.Normal, // Allow text wrapping within the label
                         overflow = Overflow.Visible, // Prevent text from overflowing horizontally
                         alignSelf = Align.FlexStart, // Align to the top of the button
-                        unityFontStyleAndWeight = FontStyle.Bold
+                        unityFontStyleAndWeight = FontStyle.Normal
                     }
                 };
 
-
+                //textLabel.transform.scale = new Vector3(0.8f, 1f, 1f);
                 //selectRect.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/square"));
                 VisualElement selectRect = new VisualElement();
                 selectRect.style.position = Position.Absolute;
                 selectRect.style.left = new Length(0, LengthUnit.Pixel);
-                selectRect.style.top = new Length(10, LengthUnit.Pixel);
-                selectRect.style.width = new Length(90, LengthUnit.Pixel);
-                selectRect.style.height = new Length(25, LengthUnit.Pixel);
+                selectRect.style.top = new Length(5, LengthUnit.Pixel);
+                selectRect.style.width = new Length(95, LengthUnit.Pixel);
+                selectRect.style.height = new Length(24, LengthUnit.Pixel);
                 selectRect.style.flexGrow = 0;
                 selectRect.style.flexShrink = 0;
                 selectRect.style.flexBasis = new Length(0, LengthUnit.Pixel);
@@ -485,20 +507,22 @@ public class InteractionMenu : MonoBehaviour
                 button.RegisterCallback<MouseEnterEvent>(evt =>
                 {
                     textLabel.style.color = cost == 0 ? Color.white : cost < 0 ? Color.white : Color.white; // Change to white on hover
-                    if (cost != 0)
+                
+                        selectRect.style.backgroundColor = new StyleColor(cost == 0 ? MyColor.CyanBack : cost < 0 ? MyColor.Red : MyColor.GreenBack);
+                        
+                        if(cost == 0)
                     {
-                        selectRect.style.backgroundColor = new StyleColor(cost < 0 ? MyColor.RedBack : MyColor.GreenBack);
-                        
-                        
+                        selectRect.style.width = new Length(320, LengthUnit.Pixel);
+                        selectRect.style.height = new Length(36, LengthUnit.Pixel);
                     }
-                        
-                    
+
+
                     // button.style.
                 });
 
                 button.RegisterCallback<MouseLeaveEvent>(evt =>
                 {
-                    textLabel.style.color = cost == 0 ? Color.grey  : cost< 0 ? MyColor.Red : MyColor.Green;  // Change back to the original red color when not hovered
+                    textLabel.style.color = cost == 0 ? MyColor.Cyan : cost< 0 ? MyColor.Red : MyColor.Green;  // Change back to the original red color when not hovered
                     selectRect.style.backgroundColor = Color.clear;
                 });
                 button.style.backgroundColor = Color.clear;
@@ -510,7 +534,7 @@ public class InteractionMenu : MonoBehaviour
 
                 // Reduced marginTop for closer buttons
                 button.style.marginLeft = new Length(buttonLeftMargin - 30 + 6 + 8, LengthUnit.Pixel); // Example left margin
-                button.style.marginTop = new Length(5, LengthUnit.Pixel); // Adjusted margin for closer buttons
+                button.style.marginTop = -30;// Adjusted margin for closer buttons
 
                 button.style.marginBottom = new Length(-20, LengthUnit.Pixel);
                 button.style.width = new Length(buttonWidth+20, LengthUnit.Pixel); // Fixed width for button
@@ -518,10 +542,10 @@ public class InteractionMenu : MonoBehaviour
                 button.style.flexDirection = FlexDirection.Row; // Ensure elements are side by side
                 button.style.top = 260;
                 button.style.left = new Length(-100, LengthUnit.Pixel);
-                button.style.paddingTop = new Length(8, LengthUnit.Pixel);
+                button.style.paddingTop = new Length(-10, LengthUnit.Pixel);
                 button.style.paddingBottom = new Length(0, LengthUnit.Pixel);
-                button.style.paddingLeft = new Length(4, LengthUnit.Pixel);
-                button.style.paddingRight = new Length(4, LengthUnit.Pixel);
+                button.style.paddingLeft = new Length(0, LengthUnit.Pixel);
+                button.style.paddingRight = new Length(0, LengthUnit.Pixel);
 
                 button.style.height = StyleKeyword.Auto; // Fit height to content
 
@@ -535,7 +559,7 @@ public class InteractionMenu : MonoBehaviour
                 // Button click handler
                 var diaAction = (DiaActionType)dialogueOptions[i].Data2;
                 int index = i;
-
+                var uniqueId= dialogueOptions[i].UniqueId;
                 var finalLabel =label;
                 var finalMenuOptionType=MenuOptionType.dia;
                 var newIndex= trueIndex;
@@ -545,6 +569,8 @@ public class InteractionMenu : MonoBehaviour
                     finalLabel="open menu";
                     finalMenuOptionType=MenuOptionType.general;
                 }
+                var key= dialogueOptions[i].IsKey;
+                var keyText= TextConverter.GetKeyText(key);
                 button.clicked += () =>
                 {
                     BasicFunctions.Log($"🌎Button clicked: {label}", LogType.ui);
@@ -557,7 +583,14 @@ public class InteractionMenu : MonoBehaviour
                     {
                         personWeAreSpeakingTo.Persuasion.FearTowardsPlayer += cost;
                     }
-                    chosenOptions.Add(originalLabel);
+
+                    if(key != "")
+                    {
+                        player.KeyKnowledge.Keys.Add(key);
+                        pastDialogue += $"*Found key info: {keyText}*\n";
+                    }
+                        
+                    chosenOptions.Add(uniqueId);
                     OnButtonClicked?.Invoke(index, finalLabel, finalMenuOptionType);
                     StartCoroutine(CheckForInputAfterDelay());
                 };

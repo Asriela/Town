@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Mind;
-using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.UIElements;
 public enum SubMenu
@@ -157,7 +156,7 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
         {
             _justOpenedPieMenu = true;
             Character character = hit.collider.GetComponent<Character>();
-            if (character != null)
+            if (character != null && GameManager.Instance.BlockingPlayerUIOnScreen==false)
             {
                 _personWeAreInteractingWith = character;
                 OpenPrimaryMenu();
@@ -173,13 +172,24 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
 
     private void OpenPrimaryMenu()
     {
-        _justOpenedPieMenu = true;
+        
+        if (_personWeAreInteractingWith.CharacterName == CharacterName.Dohlson)
+        {
+            GameManager.Instance.OpenDialoguePlayer(_personWeAreInteractingWith, DialogueFileType.auto);
+            CloseInteractionMenu();
+        }
+        else
+        {
+            _justOpenedPieMenu = true;
 
 
-        _radialMenu.OnButtonClicked += HandlePrimarySelection;
-        _radialMenu.OnButtonClicked -= HandleCoerceSelection;
-        _radialMenu.OnButtonClicked -= HandleCharmSelection;
-        OpenRadialMenu(mainOptions);
+            _radialMenu.OnButtonClicked += HandlePrimarySelection;
+            _radialMenu.OnButtonClicked -= HandleCoerceSelection;
+            _radialMenu.OnButtonClicked -= HandleCharmSelection;
+            OpenRadialMenu(mainOptions);
+        }
+
+
     }
 
 

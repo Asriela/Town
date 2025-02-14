@@ -33,6 +33,7 @@ namespace Mind
         patrol,
         doctor,
         tavernGuard,
+        talkToPlayer
         
     }
     [Serializable]
@@ -206,7 +207,14 @@ namespace Mind
         ask,
         tell,
         giveFood,
-        bribe
+        bribe,
+        playChess,
+        comfort,
+        sympathize,
+        intimidate,
+        threaten,
+        beatUp,
+        blackmail
     }
 
     [Serializable]
@@ -284,7 +292,8 @@ namespace Mind
         hasNamedOccupant,
         notHaveNamedOccupant,
         notLastSpokeTo,
-        attackedPerson
+        attackedPerson,
+        closeToCharacter
     }
     [Serializable]
     public enum TimeOfDayType : short
