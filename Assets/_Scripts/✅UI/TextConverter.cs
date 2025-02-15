@@ -17,7 +17,7 @@ public static class TextConverter
     }
     public static string GetRelationshipStatusText(Character target)
     {
-        var ret = "neutral to you";
+        var ret = "neutral";
         var player = WorldManager.Instance.ThePlayer;
         var relationship = target.Relationships.GetRelationshipWith(target, player);
 
@@ -62,6 +62,6 @@ public static class TextConverter
             ret = "likes you";
         }
 
-        return ret + $" [{relationship}]";
+        return ret + $" {relationship}";
     }
 }

@@ -16,7 +16,7 @@ using UnityEngine;
 [RequireComponent(typeof(Inventory))]
 [RequireComponent(typeof(DialogueResponsesToPersonInformation))]
 [RequireComponent(typeof(Generalizations))]
-[RequireComponent(typeof(Persuasion))]
+[RequireComponent(typeof(Impression))]
 [RequireComponent(typeof(KeyKnowledge))]
 
 public class Character : MonoBehaviour
@@ -46,7 +46,7 @@ public class Character : MonoBehaviour
     public Generalizations Generalizations { get; set; }
     public Relationships Relationships { get; set; }
     public VisualStatusKnowledge VisualStatusKnowledge { get; set; }
-    public Persuasion Persuasion { get; set; }
+    public Impression Impression { get; set; }
     public KeyKnowledge KeyKnowledge { get; set; }
     public Inventory Inventory { get; set; }
 
@@ -78,7 +78,7 @@ public class Character : MonoBehaviour
         VisualStatusKnowledge = GetComponent<VisualStatusKnowledge>();
         Inventory = GetComponent<Inventory>();
         Inventory.Initialize(this);
-        Persuasion = GetComponent<Persuasion>();
+        Impression = GetComponent<Impression>();
         KeyKnowledge = GetComponent<KeyKnowledge>();
     }
 

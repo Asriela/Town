@@ -133,6 +133,7 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
         _justOpenedPieMenu = false;
         _personWeAreInteractingWith = null;
         _radialMenu.HideMenu();
+        EventManager.TriggerSwitchCameraToNormalMode();
     }
 
 

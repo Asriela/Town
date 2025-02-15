@@ -37,6 +37,20 @@ namespace Mind
         
     }
     [Serializable]
+    public enum SocialImpression : short
+    {
+        none,
+        boring,
+        amusing,
+        annoying,
+        serious,
+        romantic,
+        brave,
+        evil,
+        rude,
+        
+    }
+    [Serializable]
     public enum ActionType : short
     {
         defaultAction,

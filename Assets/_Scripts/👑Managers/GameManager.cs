@@ -40,6 +40,7 @@ public class GameManager : Singleton<GameManager>
     }
     public void OpenDialoguePlayer(Character personSpeaking,DialogueFileType fileType)
     {
+        WorldManager.Instance.ThePlayer.RadialMenuInteraction.CloseInteractionMenu();
         WorldManager.Instance.ThePlayer.MenuInteraction.OpenDialoguePlayer(personSpeaking, fileType);
     }
     public Character GetPersonWeAreSpeakingTo()

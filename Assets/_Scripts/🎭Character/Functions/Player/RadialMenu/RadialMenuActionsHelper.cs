@@ -262,12 +262,12 @@ public class RadialMenuActionsHelper : MonoBehaviour
         float effectFromInteraction = personWeAreInteractingWith.Relationships.AddInteractionEffect(socialAction, player, relationshipImpact);
         if (pointsToReward < 0)
         {
-            personWeAreInteractingWith.Persuasion.FearTowardsPlayer += -pointsToReward;
+            personWeAreInteractingWith.Impression.FearTowardsPlayer += -pointsToReward;
         }
 
         if (pointsToReward > 0)
         {
-            personWeAreInteractingWith.Persuasion.TrustTowardsPlayer += pointsToReward;
+            personWeAreInteractingWith.Impression.TrustTowardsPlayer += pointsToReward;
         }
 
     }

@@ -17,7 +17,7 @@ public class InteractionMenu : MonoBehaviour
     private VisualElement menuContainer;
     private VisualElement menuContainer2;
     private VisualElement backgroundImage;
-    private VisualElement portraitBackImage;
+    private VisualElement sideBarBack;
     private VisualElement portraitImage;
     private Button dialogue;
     private Button statText; 
@@ -27,6 +27,9 @@ public class InteractionMenu : MonoBehaviour
     private int standardFontSize=14;
     private List<string> chosenOptions = new List<string>();
     private VisualElement selectRectangle;
+    private string redOn=MyColor.GreyHex;
+    private string greenOn = MyColor.GreyHex;
+    private Label statLabel;
 
     [SerializeField]
     private float buttonLeftMargin = 230-200;
@@ -44,13 +47,14 @@ public class InteractionMenu : MonoBehaviour
 
         if (interactionMenuTemplate != null)
         {
+            VisualElement interactionMenu2 = interactionMenuTemplate.CloneTree();
+            root.Add(interactionMenu2);
             VisualElement interactionMenu = interactionMenuTemplate.CloneTree();
             root.Add(interactionMenu);
-           VisualElement interactionMenu2 = interactionMenuTemplate.CloneTree();
-            root.Add(interactionMenu2);
+
             // Get references to the container
-            menuContainer = interactionMenu.Q<VisualElement>("MenuContainer");
-            menuContainer2= interactionMenu2.Q<VisualElement>("MenuContainer");
+            menuContainer2 = interactionMenu2.Q<VisualElement>("MenuContainer");
+            menuContainer= interactionMenu.Q<VisualElement>("MenuContainer");
 
             menuContainer2.style.position = Position.Absolute;
             menuContainer2.style.width = new Length(50, LengthUnit.Pixel);
@@ -89,6 +93,7 @@ public class InteractionMenu : MonoBehaviour
             selectRectangle.style.width = new Length(400, LengthUnit.Pixel);
             selectRectangle.style.height = new Length(20, LengthUnit.Pixel);
             selectRectangle.style.opacity = 0.99f; // Optional: Slight transparency
+
             menuContainer2.Add(selectRectangle);
 
 
@@ -102,25 +107,32 @@ public class InteractionMenu : MonoBehaviour
             backgroundImage.style.width = new Length(480, LengthUnit.Pixel);
             backgroundImage.style.height = new Length(630, LengthUnit.Pixel);
             backgroundImage.style.opacity = 0.99f; // Optional: Slight transparency
+
             menuContainer2.Add(backgroundImage);
 
             var portraitWidth = 63 * 2;
             // Add the portrait background image
-            portraitBackImage = new VisualElement();
-            portraitBackImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/portraits/portraitBack"));
-            portraitBackImage.style.position = Position.Absolute;
-            portraitBackImage.style.left = new Length(-38, LengthUnit.Pixel); // Left of the menu background
-            portraitBackImage.style.top = new Length(20, LengthUnit.Pixel);
-            portraitBackImage.style.width = new Length(portraitWidth, LengthUnit.Pixel); // Scale factor for portrait
-            portraitBackImage.style.height = new Length((49 * 9)+5, LengthUnit.Pixel); // Scale factor for portrait
-            portraitBackImage.style.opacity = 0.99f;
-            menuContainer2.Add(portraitBackImage);
+            sideBarBack = new VisualElement();
+            sideBarBack.style.backgroundColor= MyColor.GreyBack;
+            sideBarBack.style.position = Position.Absolute;
+            sideBarBack.style.left = new Length(-78, LengthUnit.Pixel); // Left of the menu background
+            sideBarBack.style.top = new Length(00, LengthUnit.Pixel);
+            sideBarBack.style.width = new Length(portraitWidth+50, LengthUnit.Pixel); // Scale factor for portrait
+            sideBarBack.style.height = new Length((49 * 6)+5+20, LengthUnit.Pixel); // Scale factor for portrait
+            sideBarBack.style.opacity = 0.99f;
+            sideBarBack.style.borderTopLeftRadius = 10;
+            sideBarBack.style.borderTopRightRadius = 10;
+            sideBarBack.style.borderBottomLeftRadius = 10;
+            sideBarBack.style.borderBottomRightRadius = 10;
+            menuContainer2.Add(sideBarBack);
+
+
 
             // Add the actual portrait image
             portraitImage = new VisualElement();
             portraitImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/portraits/portraitTalinor"));
             portraitImage.style.position = Position.Absolute;
-            portraitImage.style.left = new Length(-38, LengthUnit.Pixel); // Align with the back portrait
+            portraitImage.style.left = new Length(-68, LengthUnit.Pixel); // Align with the back portrait
             portraitImage.style.top = new Length(10, LengthUnit.Pixel);
             portraitImage.style.width = portraitWidth;
             portraitImage.style.height = portraitWidth;
@@ -163,6 +175,11 @@ public class InteractionMenu : MonoBehaviour
 
 
     }
+    string GetStatString(int trust, int fear, string relationship, MemoryTags mood, string impression)
+    {
+        return $"<color={greenOn}>TRUST {trust}</color>\n<color={redOn}>FEAR {fear}</color>\n-----------\n<color=#A0A0A0>RELATIONSHIP</color>\n{relationship}</color>\n<color=#A0A0A0>MOOD</color>\n{mood}\n<color=#A0A0A0>IMPRESSION</color>\n{impression} ";
+
+    }
 
     public void ShowMenu(string lastChosenOption, string currentDialogue, string currentSpeaker, List<MenuOption> dialogueOptions, string contextTitle, List<MenuOption> menuButtons, Character personWeAreSpeakingTo)
     {
@@ -182,7 +199,7 @@ public class InteractionMenu : MonoBehaviour
         if (personWeAreSpeakingTo != null)
         {
             // Add the portrait images
-            menuContainer2.Add(portraitBackImage);
+            menuContainer2.Add(sideBarBack);
             menuContainer2.Add(portraitImage);
 
             // Update the portrait image with the character's name
@@ -221,7 +238,7 @@ public class InteractionMenu : MonoBehaviour
             nameButtonContainer.Add(nameButton);
 
             // Add the container for the name button to the menu (it won't affect the other button layout)
-            menuContainer2.Add(nameButtonContainer);
+          //  menuContainer2.Add(nameButtonContainer);
         }
         var currentPlayerSocialAction= GameManager.Instance.GetPlayersCurrentSocialAction();
         if (currentPlayerSocialAction != SocializeType.none)
@@ -283,13 +300,15 @@ public class InteractionMenu : MonoBehaviour
         }
 
         statText = new Button();//red: C03F13 green 50AA7C
-        var trust = personWeAreSpeakingTo.Persuasion.TrustTowardsPlayer;
-        var fear = personWeAreSpeakingTo.Persuasion.FearTowardsPlayer;
+        var trust = personWeAreSpeakingTo.Impression.TrustTowardsPlayer;
+        var fear = personWeAreSpeakingTo.Impression.FearTowardsPlayer;
         var relationship=TextConverter.GetRelationshipStatusText(personWeAreSpeakingTo);
         var mood = personWeAreSpeakingTo.State.VisualState[0];
-        var statsString = $"<color={MyColor.GreenHex}>TRUST {trust}</color>\n<color={MyColor.RedHex}>FEAR {fear}</color>\n<color=#A0A0A0>RELATIONSHIP</color>\n{relationship}</color>\n<color=#A0A0A0>MOOD</color>\n{mood} ";
+        var impression = personWeAreSpeakingTo.Impression.GetSocialImpressionText();
+
+        var statsString =GetStatString(trust, fear, relationship, mood,impression);
         // Add a label to the button
-        Label statLabel = new Label(statsString)
+         statLabel = new Label(statsString)
         {
             style =
             {
@@ -313,8 +332,8 @@ public class InteractionMenu : MonoBehaviour
         statText.style.alignItems = Align.FlexStart;  // Ensure text starts from the top
         statText.style.backgroundColor = new StyleColor(Color.clear);  // Remove button background
         statText.focusable = false;  // Prevent focus
-        statText.style.left = -50;
-        statText.style.top = 150;
+        statText.style.left = -80;
+        statText.style.top = 120;
 
 
 
@@ -322,7 +341,7 @@ public class InteractionMenu : MonoBehaviour
 
         statText.style.marginTop = 0;
         statText.style.paddingTop = new Length(5, LengthUnit.Pixel);
-        statText.AddToClassList("button");
+        statText.AddToClassList("statStyle");
 
         // Override click event to do nothing
         statText.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
@@ -459,8 +478,15 @@ public class InteractionMenu : MonoBehaviour
                 string label = dialogueOptions[i].ButtonLabel.TrimStart('-');
                 string originalLabel= label;
                 Button button2 = new Button();
+                button2.style.left = new Length(200, LengthUnit.Pixel);
+
+                button2.visible = false;
                 menuContainer.Add(button2);
+
                 Button button3 = new Button();
+                button3.style.left = new Length(200, LengthUnit.Pixel);
+
+                button3.visible = false;
                 menuContainer.Add(button3);
                 Button button = new Button();
                 dialogueOptionButtons.Add(button);
@@ -509,13 +535,22 @@ public class InteractionMenu : MonoBehaviour
                     textLabel.style.color = cost == 0 ? Color.white : cost < 0 ? Color.white : Color.white; // Change to white on hover
                 
                         selectRect.style.backgroundColor = new StyleColor(cost == 0 ? MyColor.CyanBack : cost < 0 ? MyColor.Red : MyColor.GreenBack);
-                        
-                        if(cost == 0)
+                    if (cost < 0)
+                    {
+                        redOn = MyColor.RedHex;
+                  }
+                   
+                    if (cost > 0)
+                        greenOn = MyColor.GreenHex;
+                    if (cost == 0)
                     {
                         selectRect.style.width = new Length(320, LengthUnit.Pixel);
                         selectRect.style.height = new Length(36, LengthUnit.Pixel);
                     }
-
+                    else
+                    {
+                        statLabel.text = GetStatString(trust, fear, relationship, mood, impression);
+                    }
 
                     // button.style.
                 });
@@ -524,6 +559,9 @@ public class InteractionMenu : MonoBehaviour
                 {
                     textLabel.style.color = cost == 0 ? MyColor.Cyan : cost< 0 ? MyColor.Red : MyColor.Green;  // Change back to the original red color when not hovered
                     selectRect.style.backgroundColor = Color.clear;
+                    redOn= MyColor.GreyHex;
+                    greenOn = MyColor.GreyHex;
+                    statLabel.text = GetStatString(trust, fear, relationship, mood, impression);
                 });
                 button.style.backgroundColor = Color.clear;
                 // Add labels to the button
@@ -577,11 +615,11 @@ public class InteractionMenu : MonoBehaviour
                     GameManager.Instance.UIClicked = true;
                     if (cost > 0)
                     {
-                        personWeAreSpeakingTo.Persuasion.TrustTowardsPlayer-= cost;
+                        personWeAreSpeakingTo.Impression.TrustTowardsPlayer-= cost;
                     }
                     if (cost < 0)
                     {
-                        personWeAreSpeakingTo.Persuasion.FearTowardsPlayer += cost;
+                        personWeAreSpeakingTo.Impression.FearTowardsPlayer += cost;
                     }
 
                     if(key != "")

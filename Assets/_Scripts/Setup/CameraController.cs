@@ -74,6 +74,9 @@ public class CameraController : MonoBehaviour
         // Calculate the midpoint between the two interaction transforms
         Vector3 midpoint = (interactionTransform1.position + interactionTransform2.position) / 2;
 
+        // Adjust Y position to match interactionTransform2
+        midpoint.y = interactionTransform2.position.y;
+
         // Offset the camera to the left to leave space for the interaction menu
         Vector3 interactionOffset = new Vector3(5f, 0f, fixedZPosition);
 

@@ -35,6 +35,7 @@ public class RadialMenu : MonoBehaviour
     private Label _fearMeter;
     private Label _relationshipStatus;
     private Label _moodStatus;
+    private Label _impressionText;
 
     private bool _inOpeningMenu = false;
     private void OnEnable()
@@ -94,7 +95,18 @@ public class RadialMenu : MonoBehaviour
             };
             _backPanel.Add(_characterName);
 
-
+            _impressionText = new Label
+            {
+                style =
+                {
+                    color = Color.grey,
+                    fontSize = 14,
+                    unityTextAlign = TextAnchor.MiddleCenter,
+                    marginBottom = 5,
+                    top = -10
+                }
+            };
+            _backPanel.Add(_impressionText);
             // Trust and Fear Meters
             _trustMeter = new Label
             {
@@ -328,8 +340,9 @@ public class RadialMenu : MonoBehaviour
 
         var player=WorldManager.Instance.ThePlayer;
         _characterName.text = targetCharacter.CharacterName.ToString();
-        _trustMeter.text = $"TRUST: {targetCharacter.Persuasion.TrustTowardsPlayer}";
-        _fearMeter.text = $"FEAR: {targetCharacter.Persuasion.FearTowardsPlayer}";
+        _impressionText.text = targetCharacter.Impression.GetSocialImpressionText();
+        _trustMeter.text = $"TRUST: {targetCharacter.Impression.TrustTowardsPlayer}";
+        _fearMeter.text = $"FEAR: {targetCharacter.Impression.FearTowardsPlayer}";
         _relationshipStatus.text = $"<color=#969696>RELATIONSHIP:</color>\n{TextConverter.GetRelationshipStatusText(targetCharacter)}";
         _moodStatus.text = $"<color=#969696>MOOD:</color>\n{targetCharacter.State.VisualState[0]}";
 
@@ -490,8 +503,8 @@ public class RadialMenu : MonoBehaviour
         _tooltipTextTitle.style.color = _inOpeningMenu? Color.white : Color.black;
         var addTrust= points > 0 ? $" + {points}" : "";
         var addFear = points < 0 ? $" + {-points}" : "";
-        _trustMeter.text = $"TRUST: {targetCharacter.Persuasion.TrustTowardsPlayer}{addTrust}";
-        _fearMeter.text = $"FEAR: {targetCharacter.Persuasion.FearTowardsPlayer}{addFear}";
+        _trustMeter.text = $"TRUST: {targetCharacter.Impression.TrustTowardsPlayer}{addTrust}";
+        _fearMeter.text = $"FEAR: {targetCharacter.Impression.FearTowardsPlayer}{addFear}";
 
         var relAddition="";
         if (actionOption.RelationshipImpact > 0)
@@ -526,8 +539,8 @@ public class RadialMenu : MonoBehaviour
         _tooltipTextTitle.text = "";
         actionImage.style.visibility = Visibility.Hidden;
         _tooltipEmoji.text = "";
-        _trustMeter.text = $"TRUST: {targetCharacter.Persuasion.TrustTowardsPlayer}";
-        _fearMeter.text = $"FEAR: {targetCharacter.Persuasion.FearTowardsPlayer}";
+        _trustMeter.text = $"TRUST: {targetCharacter.Impression.TrustTowardsPlayer}";
+        _fearMeter.text = $"FEAR: {targetCharacter.Impression.FearTowardsPlayer}";
         _moodStatus.text = $"<color=#969696>MOOD:</color>\n{targetCharacter.State.VisualState[0]}";
         _relationshipStatus.text = $"<color=#969696>RELATIONSHIP:</color>\n{TextConverter.GetRelationshipStatusText(targetCharacter)}";
 
