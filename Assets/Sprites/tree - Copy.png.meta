@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 890763d9c79e30b4aa7be2f1c8cfe3e3
+guid: 5d854fc3db80a1e4ab5d92aa240101f9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1426518762175661240
-    second: blackmail_0
+      213: -1811651605027746156
+    second: tree - Copy_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: blackmail_0
+      name: tree - Copy_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 166
-        height: 146
+        x: 1
+        y: 1
+        width: 58
+        height: 120
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 84bf61b6ebcf33ce0800000000000000
-      internalID: -1426518762175661240
+      spriteID: 49e0e89b678bbd6e0800000000000000
+      internalID: -1811651605027746156
       vertices: []
       indices: 
       edges: []
@@ -147,8 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      blackmail_0: -1426518762175661240
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

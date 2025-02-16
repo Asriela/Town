@@ -20,19 +20,19 @@ public class InteractionMenu : MonoBehaviour
     private VisualElement sideBarBack;
     private VisualElement portraitImage;
     private Button dialogue;
-    private Button statText; 
+    private Button statText;
     private List<Button> dialogueOptionButtons = new();
     private float scrolldown = 0;
     private float scrolldown2 = 0;
-    private int standardFontSize=14;
+    private int standardFontSize = 14;
     private List<string> chosenOptions = new List<string>();
     private VisualElement selectRectangle;
-    private string redOn=MyColor.GreyHex;
+    private string redOn = MyColor.GreyHex;
     private string greenOn = MyColor.GreyHex;
     private Label statLabel;
 
     [SerializeField]
-    private float buttonLeftMargin = 230-200;
+    private float buttonLeftMargin = 230 - 200;
     [SerializeField]
     private float buttonWidth = 280;
 
@@ -54,7 +54,7 @@ public class InteractionMenu : MonoBehaviour
 
             // Get references to the container
             menuContainer2 = interactionMenu2.Q<VisualElement>("MenuContainer");
-            menuContainer= interactionMenu.Q<VisualElement>("MenuContainer");
+            menuContainer = interactionMenu.Q<VisualElement>("MenuContainer");
 
             menuContainer2.style.position = Position.Absolute;
             menuContainer2.style.width = new Length(50, LengthUnit.Pixel);
@@ -71,7 +71,7 @@ public class InteractionMenu : MonoBehaviour
             menuContainer2.style.display = DisplayStyle.Flex;
 
             menuContainer.style.position = Position.Absolute;
-            menuContainer.style.width = new Length(440+20, LengthUnit.Pixel);
+            menuContainer.style.width = new Length(440 + 20, LengthUnit.Pixel);
             menuContainer.style.height = new Length(596, LengthUnit.Pixel);
             menuContainer.style.display = DisplayStyle.None;
             menuContainer.style.left = new Length(550, LengthUnit.Pixel);
@@ -113,12 +113,12 @@ public class InteractionMenu : MonoBehaviour
             var portraitWidth = 63 * 2;
             // Add the portrait background image
             sideBarBack = new VisualElement();
-            sideBarBack.style.backgroundColor= MyColor.GreyBack;
+            sideBarBack.style.backgroundColor = MyColor.GreyBack;
             sideBarBack.style.position = Position.Absolute;
             sideBarBack.style.left = new Length(-78, LengthUnit.Pixel); // Left of the menu background
             sideBarBack.style.top = new Length(00, LengthUnit.Pixel);
-            sideBarBack.style.width = new Length(portraitWidth+50, LengthUnit.Pixel); // Scale factor for portrait
-            sideBarBack.style.height = new Length((49 * 6)+5+20, LengthUnit.Pixel); // Scale factor for portrait
+            sideBarBack.style.width = new Length(portraitWidth + 50, LengthUnit.Pixel); // Scale factor for portrait
+            sideBarBack.style.height = new Length((49 * 6) + 5 + 20, LengthUnit.Pixel); // Scale factor for portrait
             sideBarBack.style.opacity = 0.99f;
             sideBarBack.style.borderTopLeftRadius = 10;
             sideBarBack.style.borderTopRightRadius = 10;
@@ -164,29 +164,24 @@ public class InteractionMenu : MonoBehaviour
                     item.style.top = 240 + 90 + scrolldown2;
                 }
                 scrolldown -= 1;
-               scrolldown2 -= 2;
-            
+                scrolldown2 -= 2;
+
             }
         }
     }
-    private string StripColorTags(string input)
-    {
-        return System.Text.RegularExpressions.Regex.Replace(input, "<color[^>]*?>|</color>", string.Empty);
 
 
-    }
     string GetStatString(int trust, int fear, string relationship, MemoryTags mood, string impression)
     {
         return $"<color={greenOn}>TRUST {trust}</color>\n<color={redOn}>FEAR {fear}</color>\n-----------\n<color=#A0A0A0>RELATIONSHIP</color>\n{relationship}</color>\n<color=#A0A0A0>MOOD</color>\n{mood}\n<color=#A0A0A0>IMPRESSION</color>\n{impression} ";
 
     }
-
     public void ShowMenu(string lastChosenOption, string currentDialogue, string currentSpeaker, List<MenuOption> dialogueOptions, string contextTitle, List<MenuOption> menuButtons, Character personWeAreSpeakingTo)
     {
 
-            scrolldown = 20;
+        scrolldown = 20;
         scrolldown2 = 20;
-            
+
 
         GameManager.Instance.BlockingPlayerUIOnScreen = true;
         menuContainer.Clear();
@@ -196,162 +191,24 @@ public class InteractionMenu : MonoBehaviour
         // Add the background image first
         menuContainer.Add(backgroundImage);
 
-        if (personWeAreSpeakingTo != null)
-        {
-            // Add the portrait images
-            menuContainer2.Add(sideBarBack);
-            menuContainer2.Add(portraitImage);
-
-            // Update the portrait image with the character's name
-            portraitImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>($"Sprites/portraits/portrait{personWeAreSpeakingTo.CharacterName}"));
-
-            // Create a separate container for the name button (this will not affect the menu options layout)
-            VisualElement nameButtonContainer = new VisualElement();
-            nameButtonContainer.style.position = Position.Absolute;
-            nameButtonContainer.style.top = new Length(110, LengthUnit.Pixel); // Position below the portrait
-            nameButtonContainer.style.left = new Length(-70, LengthUnit.Pixel); // Align to the left margin
-            nameButtonContainer.style.width = new Length(180, LengthUnit.Pixel);
-
-            // Add a button below the portrait image with the character's name
-            Button nameButton = new Button();
-            Label nameLabel = new Label(personWeAreSpeakingTo.CharacterName.ToString())
-            {
-                style =
-                {
-                    color = Color.white,
-                    unityTextAlign = TextAnchor.MiddleCenter,
-                    fontSize = 16,
-                }
-            };
-            nameButton.Add(nameLabel);
-
-            nameButton.style.marginTop = new Length(10, LengthUnit.Pixel); // Adjust this margin if necessary
-            nameButton.style.backgroundColor = new StyleColor(Color.clear);  // Transparent background
-            nameButton.focusable = false;  // Prevent focus
-
-            nameButton.AddToClassList("button");
-
-            // Override click event to do nothing
-            nameButton.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
-
-            // Add the name button to the container
-            nameButtonContainer.Add(nameButton);
-
-            // Add the container for the name button to the menu (it won't affect the other button layout)
-          //  menuContainer2.Add(nameButtonContainer);
-        }
-        var currentPlayerSocialAction= GameManager.Instance.GetPlayersCurrentSocialAction();
-        if (currentPlayerSocialAction != SocializeType.none)
-        {
-            string socialActionText=$"<color=#7F807A>INTERACTION PAUSED BECAUSE YOU ARE BUSY \n{ChangeSocialInteractionToText(currentPlayerSocialAction, currentSpeaker)}</color>";
-            // Create the button and add the label
-            var socialAction = new Button();
-
-            // Add a label to the button
-            Label socialActionLabel = new Label(socialActionText)
-            {
-                style =
-            {
-                color = Color.white,  // Default color, will be overridden by rich text
-                unityTextAlign = TextAnchor.MiddleCenter,
-                fontSize = 17,
-                whiteSpace = WhiteSpace.Normal,  // Allow text wrapping within the label
-                overflow = Overflow.Hidden,
-                paddingBottom = new Length(5, LengthUnit.Pixel),  // Prevent cutting off text
-                paddingTop = new Length(20, LengthUnit.Pixel),
-            }
-            };
-            socialAction.Add(socialActionLabel);
-
-            // Apply button styling to mimic other buttons
-            socialAction.style.position = Position.Absolute; // Set position to absolute
-            socialAction.style.left = new Length(130 + 120 + 60 - 19 - 9, LengthUnit.Pixel);
-            socialAction.style.top = new Length(90 + scrolldown, LengthUnit.Pixel); // Set initial top position
-            socialAction.style.width = new Length(340, LengthUnit.Pixel);
-            socialAction.style.flexDirection = FlexDirection.ColumnReverse;  // Makes new content push upward
-
-            socialAction.style.overflow = Overflow.Hidden;  // Prevents content from pushing layout
-
-            socialAction.style.alignItems = Align.FlexStart;  // Ensure text starts from the top
-            socialAction.style.backgroundColor = new StyleColor(Color.clear);  // Remove button background
-            socialAction.focusable = false;  // Prevent focus
-            socialAction.style.left = 80;
-            socialAction.style.top = 220;
+        MenuHelper.Portrait(personWeAreSpeakingTo, menuContainer2, sideBarBack, portraitImage);
+        MenuHelper.ActionText(personWeAreSpeakingTo, menuContainer, scrolldown);
 
 
-
-
-
-            socialAction.style.marginTop = 160 + 40;
-            socialAction.style.paddingTop = new Length(5, LengthUnit.Pixel);
-            socialAction.AddToClassList("button");
-
-            // Override click event to do nothing
-            socialAction.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
-
-            menuContainer.Add(socialAction);
-
-            // Adjust the top position dynamically based on content height
-            socialAction.RegisterCallback<GeometryChangedEvent>(evt =>
-            {
-                socialAction.style.top = new Length(90 + scrolldown - socialAction.resolvedStyle.height, LengthUnit.Pixel);
-            });
-            return;
-        }
-
-        statText = new Button();//red: C03F13 green 50AA7C
         var trust = personWeAreSpeakingTo.Impression.TrustTowardsPlayer;
         var fear = personWeAreSpeakingTo.Impression.FearTowardsPlayer;
-        var relationship=TextConverter.GetRelationshipStatusText(personWeAreSpeakingTo);
+        var relationship = TextConverter.GetRelationshipStatusText(personWeAreSpeakingTo);
         var mood = personWeAreSpeakingTo.State.VisualState[0];
         var impression = personWeAreSpeakingTo.Impression.GetSocialImpressionText();
 
-        var statsString =GetStatString(trust, fear, relationship, mood,impression);
-        // Add a label to the button
-         statLabel = new Label(statsString)
-        {
-            style =
-            {
+        MenuHelper.StatText(personWeAreSpeakingTo, menuContainer2, ref statText, ref statLabel, greenOn, redOn, trust, fear, relationship, mood, impression);
 
-                unityTextAlign = TextAnchor.MiddleLeft,
-                fontSize = 12,
-                whiteSpace = WhiteSpace.Normal,  // Allow text wrapping within the label
-                overflow = Overflow.Hidden,
-                paddingBottom = new Length(5, LengthUnit.Pixel),  // Prevent cutting off text
-                paddingTop = new Length(20, LengthUnit.Pixel),
-            }
-        };
-        statText.Add(statLabel);
-
-        // Apply button styling to mimic other buttons
-        statText.style.position = Position.Absolute; // Set position to absolute
-        statText.style.width = new Length(340, LengthUnit.Pixel);
-        statText.style.flexDirection = FlexDirection.Column;  // Makes new content push upward
-
-
-        statText.style.alignItems = Align.FlexStart;  // Ensure text starts from the top
-        statText.style.backgroundColor = new StyleColor(Color.clear);  // Remove button background
-        statText.focusable = false;  // Prevent focus
-        statText.style.left = -80;
-        statText.style.top = 120;
-
-
-
-
-
-        statText.style.marginTop = 0;
-        statText.style.paddingTop = new Length(5, LengthUnit.Pixel);
-        statText.AddToClassList("statStyle");
-
-        // Override click event to do nothing
-        statText.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
-
-        menuContainer2.Add(statText);
-
+        #region DIALOGUE
         //////DIALOGUE
-        string strippedPastDialogue= pastDialogue;
+
+        string strippedPastDialogue = pastDialogue;
         if (lastChosenOption != "")
-        { strippedPastDialogue = StripColorTags(pastDialogue); }
+        { strippedPastDialogue = MyColor.StripColorTags(pastDialogue); }
 
         pastDialogue = $"<color=#7F807A>" +
                   $"{strippedPastDialogue}";
@@ -359,7 +216,7 @@ public class InteractionMenu : MonoBehaviour
         pastDialogue = MyColor.WrapTextInPurpleTag(pastDialogue);
 
         // Conditionally add "YOU-{lastChosenOption}" if it's not an empty string
-        if (lastChosenOption!="")
+        if (lastChosenOption != "")
         {
             pastDialogue += @$"<color=#B3B4BC>YOU-""{lastChosenOption}""</color>" + "\n\n";
         }
@@ -368,7 +225,7 @@ public class InteractionMenu : MonoBehaviour
         if (currentDialogue != "")
         {
             pastDialogue += @$"<color=#FFFFFF>{currentSpeaker.ToUpper()}</color><color=#D5D6C8>- " +
-                Regex.Replace(currentDialogue, @"^#(.*?)#(.*)", @"  <color=#a0a095>$1</color>"+"\n"+@"""$2""") +
+                Regex.Replace(currentDialogue, @"^#(.*?)#(.*)", @"  <color=#a0a095>$1</color>" + "\n" + @"""$2""") +
                 "</color>\n\n";
 
 
@@ -377,8 +234,8 @@ public class InteractionMenu : MonoBehaviour
 
         // Create the button and add the label
         dialogue = new Button();
-        var removestars= System.Text.RegularExpressions.Regex.Replace(pastDialogue, @"\*", string.Empty);
-        
+        var removestars = System.Text.RegularExpressions.Regex.Replace(pastDialogue, @"\*", string.Empty);
+
         // Add a label to the button
         Label dialogueLabel = new Label(removestars)
         {
@@ -414,8 +271,8 @@ public class InteractionMenu : MonoBehaviour
 
 
 
-        dialogue.style.marginTop = 0 ;
-        dialogue.style.paddingTop= new Length(5, LengthUnit.Pixel);
+        dialogue.style.marginTop = 0;
+        dialogue.style.paddingTop = new Length(5, LengthUnit.Pixel);
         dialogue.AddToClassList("button");
 
         // Override click event to do nothing
@@ -429,7 +286,10 @@ public class InteractionMenu : MonoBehaviour
             dialogue.style.top = new Length(90 + scrolldown - dialogue.resolvedStyle.height, LengthUnit.Pixel);
         });
 
-   var player =WorldManager.Instance.ThePlayer;
+        #endregion
+
+        #region DIALOGUE OPTIONS
+        var player = WorldManager.Instance.ThePlayer;
         // Add the dialogue options
         if (dialogueOptions != null)
         {
@@ -440,28 +300,35 @@ public class InteractionMenu : MonoBehaviour
             for (int i = 0; i < buttonCount; i++)
             {
                 if (dialogueOptions[i].menuOptionCost > trust || -dialogueOptions[i].menuOptionCost > fear)
-                {BasicFunctions.Log($"💥Button skipped: {dialogueOptions[i].ButtonLabel} because of trust/fear", LogType.dia);
-                    continue;}
-                if (dialogueOptions[i].ButtonLabel=="do something else.." && menuButtons!=null)
-                { BasicFunctions.Log($"💥Button skipped: {dialogueOptions[i].ButtonLabel} because of do something else", LogType.dia);
-                    continue;}
+                {
+                    BasicFunctions.Log($"💥Button skipped: {dialogueOptions[i].ButtonLabel} because of trust/fear", LogType.dia);
+                    continue;
+                }
+                if (dialogueOptions[i].ButtonLabel == "do something else.." && menuButtons != null)
+                {
+                    BasicFunctions.Log($"💥Button skipped: {dialogueOptions[i].ButtonLabel} because of do something else", LogType.dia);
+                    continue;
+                }
 
-                if(chosenOptions.Contains(dialogueOptions[i].UniqueId))
-                { BasicFunctions.Log($"💥Button skipped: {dialogueOptions[i].ButtonLabel} is already chosen", LogType.dia);
-                    continue; }
+                if (chosenOptions.Contains(dialogueOptions[i].UniqueId))
+                {
+                    BasicFunctions.Log($"💥Button skipped: {dialogueOptions[i].ButtonLabel} is already chosen", LogType.dia);
+                    continue;
+                }
 
-                var theirMood= personWeAreSpeakingTo.State.VisualState[0];
+                var theirMood = personWeAreSpeakingTo.State.VisualState[0];
                 var moodReq = dialogueOptions[i].OptionNeeds;
-                if (moodReq != MemoryTags.none && moodReq !=theirMood)
-                    {
+                if (moodReq != MemoryTags.none && moodReq != theirMood)
+                {
                     BasicFunctions.Log($"💥Button skipped: {dialogueOptions[i].ButtonLabel} mood didnt match", LogType.dia);
-                    continue; }
-                var optionKey= dialogueOptions[i].OptionKey;
-                var playerKeys= player.KeyKnowledge.Keys;
-                var hasKey=false;
-                if (optionKey == "" || optionKey == null || playerKeys.Count>0)
-                    { hasKey=true;}
-                if(hasKey==false)
+                    continue;
+                }
+                var optionKey = dialogueOptions[i].OptionKey;
+                var playerKeys = player.KeyKnowledge.Keys;
+                var hasKey = false;
+                if (optionKey == "" || optionKey == null || playerKeys.Count > 0)
+                { hasKey = true; }
+                if (hasKey == false)
                 {
                     BasicFunctions.Log($"💥Button skipped: {dialogueOptions[i].ButtonLabel} key didnt match", LogType.dia);
                     continue;
@@ -470,13 +337,13 @@ public class InteractionMenu : MonoBehaviour
                 int cost = dialogueOptions[i].menuOptionCost;
                 if (cost != 0)
                 {
-                    if(cost>0)
-                    costText =$"[Trust: {Math.Abs(cost)}] ";
+                    if (cost > 0)
+                        costText = $"[Trust: {Math.Abs(cost)}] ";
                     else
                         costText = $"[Fear: {Math.Abs(cost)}] ";
                 }
                 string label = dialogueOptions[i].ButtonLabel.TrimStart('-');
-                string originalLabel= label;
+                string originalLabel = label;
                 Button button2 = new Button();
                 button2.style.left = new Length(200, LengthUnit.Pixel);
 
@@ -503,7 +370,7 @@ public class InteractionMenu : MonoBehaviour
                     }
                 };
 
-                Label textLabel = new Label(costText+label)
+                Label textLabel = new Label(costText + label)
                 {
                     style =
                     {
@@ -533,13 +400,13 @@ public class InteractionMenu : MonoBehaviour
                 button.RegisterCallback<MouseEnterEvent>(evt =>
                 {
                     textLabel.style.color = cost == 0 ? Color.white : cost < 0 ? Color.white : Color.white; // Change to white on hover
-                
-                        selectRect.style.backgroundColor = new StyleColor(cost == 0 ? MyColor.CyanBack : cost < 0 ? MyColor.Red : MyColor.GreenBack);
+
+                    selectRect.style.backgroundColor = new StyleColor(cost == 0 ? MyColor.CyanBack : cost < 0 ? MyColor.Red : MyColor.GreenBack);
                     if (cost < 0)
                     {
                         redOn = MyColor.RedHex;
-                  }
-                   
+                    }
+
                     if (cost > 0)
                         greenOn = MyColor.GreenHex;
                     if (cost == 0)
@@ -557,9 +424,9 @@ public class InteractionMenu : MonoBehaviour
 
                 button.RegisterCallback<MouseLeaveEvent>(evt =>
                 {
-                    textLabel.style.color = cost == 0 ? MyColor.Cyan : cost< 0 ? MyColor.Red : MyColor.Green;  // Change back to the original red color when not hovered
+                    textLabel.style.color = cost == 0 ? MyColor.Cyan : cost < 0 ? MyColor.Red : MyColor.Green;  // Change back to the original red color when not hovered
                     selectRect.style.backgroundColor = Color.clear;
-                    redOn= MyColor.GreyHex;
+                    redOn = MyColor.GreyHex;
                     greenOn = MyColor.GreyHex;
                     statLabel.text = GetStatString(trust, fear, relationship, mood, impression);
                 });
@@ -575,7 +442,7 @@ public class InteractionMenu : MonoBehaviour
                 button.style.marginTop = -30;// Adjusted margin for closer buttons
 
                 button.style.marginBottom = new Length(-20, LengthUnit.Pixel);
-                button.style.width = new Length(buttonWidth+20, LengthUnit.Pixel); // Fixed width for button
+                button.style.width = new Length(buttonWidth + 20, LengthUnit.Pixel); // Fixed width for button
                 button.style.alignSelf = Align.Center;
                 button.style.flexDirection = FlexDirection.Row; // Ensure elements are side by side
                 button.style.top = 260;
@@ -597,37 +464,37 @@ public class InteractionMenu : MonoBehaviour
                 // Button click handler
                 var diaAction = (DiaActionType)dialogueOptions[i].Data2;
                 int index = i;
-                var uniqueId= dialogueOptions[i].UniqueId;
-                var finalLabel =label;
-                var finalMenuOptionType=MenuOptionType.dia;
-                var newIndex= trueIndex;
+                var uniqueId = dialogueOptions[i].UniqueId;
+                var finalLabel = label;
+                var finalMenuOptionType = MenuOptionType.dia;
+                var newIndex = trueIndex;
 
                 if (diaAction == DiaActionType.menu)
                 {
-                    finalLabel="open menu";
-                    finalMenuOptionType=MenuOptionType.general;
+                    finalLabel = "open menu";
+                    finalMenuOptionType = MenuOptionType.general;
                 }
-                var key= dialogueOptions[i].IsKey;
-                var keyText= TextConverter.GetKeyText(key);
+                var key = dialogueOptions[i].IsKey;
+                var keyText = TextConverter.GetKeyText(key);
                 button.clicked += () =>
                 {
                     BasicFunctions.Log($"🌎Button clicked: {label}", LogType.ui);
                     GameManager.Instance.UIClicked = true;
                     if (cost > 0)
                     {
-                        personWeAreSpeakingTo.Impression.TrustTowardsPlayer-= cost;
+                        personWeAreSpeakingTo.Impression.TrustTowardsPlayer -= cost;
                     }
                     if (cost < 0)
                     {
                         personWeAreSpeakingTo.Impression.FearTowardsPlayer += cost;
                     }
 
-                    if(key != "")
+                    if (key != "")
                     {
                         player.KeyKnowledge.Keys.Add(key);
                         pastDialogue += $"*Found key info: {keyText}*\n";
                     }
-                        
+
                     chosenOptions.Add(uniqueId);
                     OnButtonClicked?.Invoke(index, finalLabel, finalMenuOptionType);
                     StartCoroutine(CheckForInputAfterDelay());
@@ -638,6 +505,18 @@ public class InteractionMenu : MonoBehaviour
                 trueIndex++;
             }
         }
+
+
+        #endregion
+
+
+
+
+
+
+
+
+
 
         // Continue with the context button (if any)
         if (!string.IsNullOrEmpty(contextTitle))
@@ -822,15 +701,5 @@ public class InteractionMenu : MonoBehaviour
         pastDialogue = "";
     }
 
-    string ChangeSocialInteractionToText(SocializeType type, string character)
-    {
-        var ret="";
-        switch (type)
-        {
-            case SocializeType.drinking:
-                ret= $"drinking with {character}";
-                break;
-        }
-        return ret.ToUpper();
-    }
+
 }

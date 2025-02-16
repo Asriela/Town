@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      playchess_0: -4501110551201684771
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

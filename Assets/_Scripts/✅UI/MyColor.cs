@@ -35,4 +35,12 @@ public static class MyColor
         });
         return ret;
     }
+
+
+    public static string StripColorTags(string input)
+    {
+        return System.Text.RegularExpressions.Regex.Replace(input, "<color[^>]*?>|</color>", string.Empty);
+
+
+    }
 }

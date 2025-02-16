@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      intimidate_0: -8900421691957815045
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

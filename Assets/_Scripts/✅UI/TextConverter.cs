@@ -1,6 +1,7 @@
 ﻿using Mind;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
+using static Unity.Burst.Intrinsics.Arm;
 
 public static class TextConverter
 {
@@ -63,5 +64,21 @@ public static class TextConverter
         }
 
         return ret + $" {relationship}";
+    }
+    public static string GetStatString(int trust, int fear, string relationship, MemoryTags mood, string impression, string greenOn, string redOn)
+    {
+        return $"<color={greenOn}>TRUST {trust}</color>\n<color={redOn}>FEAR {fear}</color>\n-----------\n<color=#A0A0A0>RELATIONSHIP</color>\n{relationship}</color>\n<color=#A0A0A0>MOOD</color>\n{mood}\n<color=#A0A0A0>IMPRESSION</color>\n{impression} ";
+
+    }
+    public static string ChangeSocialInteractionToText(SocializeType type, string character)
+    {
+        var ret = "";
+        switch (type)
+        {
+            case SocializeType.drinking:
+                ret = $"drinking with {character}";
+                break;
+        }
+        return ret.ToUpper();
     }
 }
