@@ -249,6 +249,7 @@ public class RadialMenu : MonoBehaviour
                     unityFontDefinition  = new StyleFontDefinition(emojiFont2)
 }
             };
+
             _tooltipBox.Add(_tooltipEmoji);
 
             _tooltipText = new Label
