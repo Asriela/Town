@@ -14,13 +14,21 @@ public class InteractionMenu : MonoBehaviour
     public VisualTreeAsset interactionMenuTemplate;
     public float buttonSpacing = 2f; // Spacing between buttons
     public VisualElement root;
-    private VisualElement menuContainer;
-    private VisualElement menuContainer2;
+    public VisualElement menuContainer;
+    public VisualElement menuContainer2;
     private VisualElement backgroundImage;
     private VisualElement sideBarBack;
+    public VisualElement actionsBackPanel;
     private VisualElement portraitImage;
+    public VisualElement ActionInfoPanel;
+    public VisualElement ActionImage;
+    public Label TooltipText;
     private Button dialogue;
-    private Button statText;
+    public Button statText;
+    public Button charmMenuButton;
+    public Button coerceMenuButton;
+    public Button giveMenuButton;
+
     private List<Button> dialogueOptionButtons = new();
     private float scrolldown = 0;
     private float scrolldown2 = 0;
@@ -29,8 +37,11 @@ public class InteractionMenu : MonoBehaviour
     private VisualElement selectRectangle;
     private string redOn = MyColor.GreyHex;
     private string greenOn = MyColor.GreyHex;
-    private Label statLabel;
-
+    public Label statLabel;
+    public SocialActionMenuType ActionsMenuTypeWeAreIn = SocialActionMenuType.charm;
+    private SocialActionMenuType lastActionsMenu = SocialActionMenuType.none;
+    public List<Button> ActionButtonList=new();
+    public List<Label> ActionLabelList = new();
     [SerializeField]
     private float buttonLeftMargin = 230 - 200;
     [SerializeField]
@@ -128,6 +139,8 @@ public class InteractionMenu : MonoBehaviour
 
 
 
+            MenuHelper.SetupActionMenuElements(this,ref TooltipText, ref ActionImage, ref ActionInfoPanel, ref actionsBackPanel, ref menuContainer2, portraitWidth);
+
             // Add the actual portrait image
             portraitImage = new VisualElement();
             portraitImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/portraits/portraitTalinor"));
@@ -153,6 +166,17 @@ public class InteractionMenu : MonoBehaviour
     }
     private void Update()
     {
+        if (ActionsMenuTypeWeAreIn != lastActionsMenu)
+        {
+            var charm = ActionsMenuTypeWeAreIn == SocialActionMenuType.charm ? "S" : "";
+            var give = ActionsMenuTypeWeAreIn == SocialActionMenuType.give ? "S" : "";
+            var coercion = ActionsMenuTypeWeAreIn == SocialActionMenuType.coerce ? "S" : "";
+            charmMenuButton.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/UI/menuCharm" + $"{charm}"));
+            giveMenuButton.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/UI/menuGive" + give));
+            coerceMenuButton.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/UI/menuCoercion" + coercion));
+            lastActionsMenu= ActionsMenuTypeWeAreIn;
+        }
+
         if (dialogue != null)
         {
             if (scrolldown > 0)
@@ -178,7 +202,8 @@ public class InteractionMenu : MonoBehaviour
     }
     public void ShowMenu(string lastChosenOption, string currentDialogue, string currentSpeaker, List<MenuOption> dialogueOptions, string contextTitle, List<MenuOption> menuButtons, Character personWeAreSpeakingTo)
     {
-
+        lastActionsMenu=SocialActionMenuType.none;
+        #region START
         scrolldown = 20;
         scrolldown2 = 20;
 
@@ -202,6 +227,13 @@ public class InteractionMenu : MonoBehaviour
         var impression = personWeAreSpeakingTo.Impression.GetSocialImpressionText();
 
         MenuHelper.StatText(personWeAreSpeakingTo, menuContainer2, ref statText, ref statLabel, greenOn, redOn, trust, fear, relationship, mood, impression);
+        #endregion
+
+        #region ACTIONS MENU
+        MenuHelper.ActionsMenu(this, ActionsMenuTypeWeAreIn, personWeAreSpeakingTo);
+
+
+        #endregion
 
         #region DIALOGUE
         //////DIALOGUE

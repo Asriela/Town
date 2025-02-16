@@ -65,7 +65,7 @@ public static class TextConverter
 
         return ret + $" {relationship}";
     }
-    public static string GetStatString(int trust, int fear, string relationship, MemoryTags mood, string impression, string greenOn, string redOn)
+    public static string GetStatString(string trust, string fear, string relationship, string mood, string impression, string greenOn, string redOn)
     {
         return $"<color={greenOn}>TRUST {trust}</color>\n<color={redOn}>FEAR {fear}</color>\n-----------\n<color=#A0A0A0>RELATIONSHIP</color>\n{relationship}</color>\n<color=#A0A0A0>MOOD</color>\n{mood}\n<color=#A0A0A0>IMPRESSION</color>\n{impression} ";
 

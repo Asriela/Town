@@ -31,13 +31,17 @@ public class Impression : MonoBehaviour
 
         var maxEntry = socialImpressionsTowardsPlayer.OrderByDescending(kv => kv.Value).FirstOrDefault();
         return $"Finds you {maxEntry.Key}";
-        ;
+        
     }
     public void AddSocialImpression(SocialImpression impression, int amount)
     {
         if (socialImpressionsTowardsPlayer.ContainsKey(impression))
         {
             socialImpressionsTowardsPlayer[impression] += amount;
+        }
+        else
+        {
+            socialImpressionsTowardsPlayer.Add(impression, amount);
         }
 
     }

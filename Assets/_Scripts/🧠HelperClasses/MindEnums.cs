@@ -228,7 +228,8 @@ namespace Mind
         intimidate,
         threaten,
         beatUp,
-        blackmail
+        blackmail,
+        giveAlcohol
     }
 
     [Serializable]

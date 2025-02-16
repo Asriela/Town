@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Mind;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -20,6 +21,7 @@ public enum ActionEffects
 }
 public class ActionOption
 {
+    public SocializeType Enum;
     public string Name;
     public string Tooltip;
     public string Emoji;
@@ -34,8 +36,9 @@ public class ActionOption
     public Dictionary<MemoryTags, int> BonusPoints;
 
 
-    public ActionOption(string name, string emoji, string tooltip, int cost, int relationshipImpact, bool usedUp, bool isDisabled, ViewTowards relationshipRequirement, MemoryTags mood, SubMenu submenu, Dictionary<MemoryTags, int> bonusPoints = null, List<MemoryTags> actionEffects = null)
+    public ActionOption(SocializeType enumType,  string name,  string emoji, string tooltip, int cost, int relationshipImpact, bool usedUp, bool isDisabled, ViewTowards relationshipRequirement, MemoryTags mood, SubMenu submenu, Dictionary<MemoryTags, int> bonusPoints = null, List<MemoryTags> actionEffects = null)
     {
+        Enum = enumType;
         Name = name;
         Tooltip = tooltip;
         Points = cost;
@@ -133,7 +136,7 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
         _justOpenedPieMenu = false;
         _personWeAreInteractingWith = null;
         _radialMenu.HideMenu();
-        EventManager.TriggerSwitchCameraToNormalMode();
+        //EventManager.TriggerSwitchCameraToNormalMode();
     }
 
 
@@ -262,186 +265,17 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
             "Dancing is only effective with people who already like you." };
         List<bool> isDisabled = new() { false, false, false, false };
 
-        charmOptions.Add(new ActionOption(
-        "Small talk",
-        "💬",
-        "Takes up a small amount of time but only gives 1 trust.",
-        1,
-        1,
-        false,
-        false,
-        ViewTowards.neutral,
-        MemoryTags.none,
-        SubMenu.charmActions
-        ));
-
-        charmOptions.Add(new ActionOption(
-        "Hug",
-        "🤗",
-        "Not everyone is a hugger and people in distress are more receptive to hugs.",
-        2,
-        1,
-        false,
-        false,
-        ViewTowards.positive,
-        MemoryTags.none,
-        SubMenu.charmActions,
-        new Dictionary<MemoryTags, int> { { MemoryTags.emotional, 2 } }
-        ));
-
-        charmOptions.Add(new ActionOption(
-        "Give Food",
-        "🍗",
-        "Give them the meal you brought with you. You loose a meal but you gain a friend.",
-        4,
-        2,
-        false,
-        false,
-        ViewTowards.neutral,
-        MemoryTags.none,
-        SubMenu.charmGive,
-        new Dictionary<MemoryTags, int> { },
-        new List<MemoryTags> { { MemoryTags.relaxed } }
-        ));
-
-        charmOptions.Add(new ActionOption(
-        "Bribe",
-        "💰",
-        "Costs 40 coin and gets them to talk but it dammaged your relationship with them",
-        4,
-        -2,
-        false,
-        false,
-        ViewTowards.neutral,
-        MemoryTags.none,
-        SubMenu.charmGive,
-        new Dictionary<MemoryTags, int> { },
-        new List<MemoryTags> { }
-        ));
-
-        charmOptions.Add(new ActionOption(
-        "Play Chess",
-        "♟",
-        "Play a game of chess, requires the person to be relaxed.",
-        4,
-        3,
-        false,
-        false,
-        ViewTowards.veryPositive,
-        MemoryTags.relaxed,
-        SubMenu.charmActions
-        ));
-
-        charmOptions.Add(new ActionOption(
-        "Comfort",
-        "❤",
-        "Comfort the person when they are emotional",
-        4,
-        3,
-        false,
-        false,
-        ViewTowards.veryPositive,
-        MemoryTags.emotional,
-        SubMenu.charmEmotions
-        ));
-
-        charmOptions.Add(new ActionOption(
-        "Sympathize",
-        "👐",
-        "Show sympathy when they are emotional",
-        2,
-        1,
-        false,
-        false,
-        ViewTowards.positive,
-        MemoryTags.emotional,
-        SubMenu.charmEmotions
-        ));
-
-        charmOptions.Add(new ActionOption(
-        "Give alcohol",
-        "👐",
-        "Give the person alcohol, will lead to impairment",
-        4,
-        1,
-        false,
-        false,
-        ViewTowards.neutral,
-        MemoryTags.none,
-        SubMenu.charmGive,
-        new Dictionary<MemoryTags, int> { { MemoryTags.emotional, 3 } },
-        new List<MemoryTags> { { MemoryTags.drunk} }
-        ));
     }
 
     private void SetupCoerceOptions()
     {
-        coerceOptions.Add(new ActionOption(
-        "Intimidate",
-        "🔪",
-        "Intimidate through foul language and body posture.",
-        -2,
-        -2,
-        false,
-        false,
-        ViewTowards.neutral,
-        MemoryTags.none,
-        SubMenu.coerceActions,
-        new Dictionary<MemoryTags, int> { },
-        new List<MemoryTags> { { MemoryTags.tense } }
-        ));
-
-        coerceOptions.Add(new ActionOption(
-        "Threaten",
-        "🔪",
-        "Threaten with physical violence, short term gain, long term loss as they will hate you and may report you.",
-        -4,
-        -4,
-        false,
-        false,
-        ViewTowards.neutral,
-        MemoryTags.none,
-        SubMenu.coerceActions,
-        new Dictionary<MemoryTags, int> {},
-        new List<MemoryTags> { { MemoryTags.tense } }
-        ));
-
-        coerceOptions.Add(new ActionOption(
-        "Beat up",
-        "🔪",
-        "Physically beat up, its really a last resort as they will dispise you after this. ",
-        -6,
-        -8,
-        false,
-        false,
-        ViewTowards.veryNegative,
-        MemoryTags.none,
-        SubMenu.coerceActions,
-        new Dictionary<MemoryTags, int> { },
-        new List<MemoryTags> { { MemoryTags.scared } }
-        ));
-
-
-        coerceOptions.Add(new ActionOption(
-        "Blackmail",
-        "🔪",
-        "Only available if you have dirt on someone. Current dirt: You know Onar kept Ashla locked up in his cabin.",
-        -4,
-        -2,
-        false,
-        false,
-        ViewTowards.neutral,
-        MemoryTags.none,
-        SubMenu.coerceActions,
-        new Dictionary<MemoryTags, int> { },
-        new List<MemoryTags> { { MemoryTags.tense } }
-        ));
+       
     }
 
     private void SetupPrimaryOptions()
     {
 
-
+        /*
         mainOptions.Add(new ActionOption(
         "Charm",
         "🌼",
@@ -486,6 +320,7 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
         new Dictionary<MemoryTags, int> { },
         new List<MemoryTags> { }
         ));
+        */
     }
 
 

@@ -320,6 +320,9 @@ public class PlayerMenuInteraction : MonoBehaviour
         }
 
 
+
+
+
         if (menuButtons == null)
         {
             menuButtons= new();
@@ -330,16 +333,16 @@ public class PlayerMenuInteraction : MonoBehaviour
     public void UpdateInteractionMenu(string characterSpeaking, string currentDialogue)
     {
 
-        string newOptionLabel = "do something else..";
+       // string newOptionLabel = "do something else..";
 
-        bool optionExists = currentDiaOptions.Any(option => option.ButtonLabel == newOptionLabel);
+      //  bool optionExists = currentDiaOptions.Any(option => option.ButtonLabel == newOptionLabel);
 
-        if (!optionExists)
-        {
-            currentDiaOptions.Add(Option(newOptionLabel, currentDiaOptions.Count - 1, DiaActionType.menu));
-        }
+     //   if (!optionExists)
+       // {
+        //    currentDiaOptions.Add(Option(newOptionLabel, currentDiaOptions.Count - 1, DiaActionType.menu));
+        //}
 
-        OpenInteractionMenu("", currentDialogue, characterSpeaking, currentDiaOptions, "", null, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
+        OpenInteractionMenu("", currentDialogue, characterSpeaking, savedDiaButtons, "", null, _player.transform, _personWeAreSpeakingTo.transform, _personWeAreSpeakingTo);
 
     }
     private void HandleMenuInteraction()
@@ -442,7 +445,11 @@ public class PlayerMenuInteraction : MonoBehaviour
     private void OpenInteractionMenu(string lastChosenOption, string currentDialogue, string currentSpeaker, List<MenuOption> diaButtons, string contextTitle, List<MenuOption> menuButtons, Transform openerOfMenu, Transform target, Character whoWeAreSpeakingTo)
     {
         EventManager.TriggerSwitchCameraToInteractionMode(openerOfMenu, target);
-
+        savedLastChosenOption = lastChosenOption;
+        savedCurrentDialogue = currentDialogue;
+        savedDiaButtons = diaButtons;
+        savedContextTitle = contextTitle;
+        savedMenuButtons = menuButtons;
         _interactionMenu.ShowMenu(lastChosenOption, currentDialogue, currentSpeaker, diaButtons, contextTitle, menuButtons, whoWeAreSpeakingTo);
     }
 

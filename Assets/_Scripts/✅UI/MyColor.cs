@@ -14,9 +14,12 @@ public static class MyColor
     public static readonly string PurpleHex = "#6B516C";
     public static readonly string RedHex = "#D7431F";
     public static readonly string GreenHex = "#A5C64F";
+    public static readonly string WhiteHex = "#FFFFFF";
     public static readonly string YellowHex = "#E4B83A";
     public static readonly string CyanHex = "#6CADB5";
     public static readonly string GreyHex = "#A0A0A0";
+    public static readonly string DarkGreyHex = "#6B6B6B";
+    
     public static readonly Color Cyan = new  Color(0.424f, 0.678f, 0.710f);
     public static readonly Color CyanBack = new Color(0.286f, 0.459f, 0.478f);
 
