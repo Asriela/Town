@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: fee33ffc0465e59498335fb17855de24
+guid: 1b8b00481a64b5b45af3acb1ab3b6e94
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5582203656716190071
-    second: InteractionPanel_0
+      213: -9206967013187436459
+    second: reassure_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: InteractionPanel_0
+      name: reassure_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 11
-        width: 616
-        height: 926
+        y: 0
+        width: 166
+        height: 147
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 771847666a8f77d40800000000000000
-      internalID: 5582203656716190071
+      spriteID: 550493838484a3080800000000000000
+      internalID: -9206967013187436459
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      InteractionPanel_0: 5582203656716190071
+      reassure_0: -9206967013187436459
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

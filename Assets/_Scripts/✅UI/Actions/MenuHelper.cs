@@ -39,6 +39,7 @@ public static class MenuHelper
         ActionInfoPanel.style.flexDirection = FlexDirection.Column;
         ActionInfoPanel.style.alignItems = Align.Center;
         ActionInfoPanel.style.justifyContent = Justify.Center;
+        ActionInfoPanel.visible = false;
         menuContainer2.Add(ActionInfoPanel);
 
         var picWidth = (166/4)*3;
@@ -68,14 +69,6 @@ public static class MenuHelper
         };
         ActionInfoPanel.Add(_tooltipText);
 
-        for(int i=0; i< 10; i++)
-        {
-            myMenu.ActionButtonList.Add( new());
-
-            myMenu.ActionLabelList.Add(new());
-            myMenu.ActionButtonList[i].Add(myMenu.ActionLabelList[i]);
-
-        }
         myMenu.charmMenuButton=new();
         myMenu.giveMenuButton = new();
         myMenu.coerceMenuButton = new();
@@ -84,7 +77,12 @@ public static class MenuHelper
 
     public static void ActionsMenu(InteractionMenu myMenu, SocialActionMenuType actionsMenuTypeWeAreIn, Character personWeAreSpeakingTo)
     {
+     
 
+        foreach (var item in myMenu.ActionButtonList)
+        {
+            item.Clear();
+        }
 
         myMenu.menuContainer2.Add(myMenu.actionsBackPanel);
         myMenu.menuContainer2.Add(myMenu.ActionInfoPanel);
@@ -93,57 +91,57 @@ public static class MenuHelper
         float topOffset = 120; // Starting vertical position
 
         var player = WorldManager.Instance.ThePlayer;
-        var i=-1;
+
         foreach (var action in availableActions)
         {
-            i++;
+            var actionButton = new Button(); // Red: C03F13 Green: 50AA7C
+
             var actionString = action.Name;
             // Add a label to the button
-  
-
-
-
-            myMenu.ActionLabelList[i].style.color = Color.white;
-            myMenu.ActionLabelList[i].style.unityTextAlign = TextAnchor.MiddleLeft;
-            myMenu.ActionLabelList[i].style.fontSize = 12;
-            myMenu.ActionLabelList[i].style.whiteSpace = WhiteSpace.Normal; // Allow text wrapping within the label
-            myMenu.ActionLabelList[i].style.overflow = Overflow.Visible;
-            myMenu.ActionLabelList[i].style.paddingBottom = new Length(0, LengthUnit.Pixel);  // Prevent cutting off text
-            myMenu.ActionLabelList[i].style.paddingTop = new Length(0, LengthUnit.Pixel);
-            myMenu.ActionLabelList[i].style.width = new Length(200, LengthUnit.Pixel);
-
-
-
-
-            myMenu.ActionButtonList[i].AddToClassList("statStyle");
+            var actionLabel = new Label(actionString)
+            {
+                style =
+            {
+            color = Color.white,
+            unityTextAlign = TextAnchor.MiddleLeft,
+            fontSize = 12,
+            whiteSpace = WhiteSpace.Normal,  // Allow text wrapping within the label
+            overflow = Overflow.Visible,
+            paddingBottom = new Length(0, LengthUnit.Pixel),  // Prevent cutting off text
+            paddingTop = new Length(0, LengthUnit.Pixel),
+            width = new Length(200, LengthUnit.Pixel),
+            }
+            };
+            actionButton.Add(actionLabel);
+            actionButton.AddToClassList("statStyle");
             // Apply button styling to mimic other buttons
-            myMenu.ActionButtonList[i].style.position = Position.Absolute; // Set position to absolute
-            myMenu.ActionButtonList[i].style.width = new Length(130, LengthUnit.Pixel);
-            myMenu.ActionButtonList[i].style.flexDirection = FlexDirection.Column;  // Makes new content push upward
+            actionButton.style.position = Position.Absolute; // Set position to absolute
+            actionButton.style.width = new Length(130, LengthUnit.Pixel);
+            actionButton.style.flexDirection = FlexDirection.Column;  // Makes new content push upward
 
-            myMenu.ActionButtonList[i].style.alignItems = Align.FlexStart;  // Ensure text starts from the top
-            myMenu.ActionButtonList[i].style.backgroundColor = new StyleColor(Color.clear);  // Remove button background
+            actionButton.style.alignItems = Align.FlexStart;  // Ensure text starts from the top
+            actionButton.style.backgroundColor = new StyleColor(Color.clear);  // Remove button background
    
-            myMenu.ActionButtonList[i].focusable = false;  // Prevent focus
-            myMenu.ActionButtonList[i].style.left = -73;
-            myMenu.ActionButtonList[i].style.top = 250+topOffset; // Set the vertical position based on topOffset
-            myMenu.ActionButtonList[i].style.unityFont = Resources.Load<Font>("Fonts/CALIBRIL");
-            myMenu.ActionButtonList[i].style.paddingBottom = new Length(2, LengthUnit.Pixel);
-            myMenu.ActionButtonList[i].style.paddingTop = new Length(2, LengthUnit.Pixel);
-            myMenu.ActionButtonList[i].style.borderTopLeftRadius = 0;
-            myMenu.ActionButtonList[i].style.borderTopRightRadius = 0;
-            myMenu.ActionButtonList[i].style.borderBottomLeftRadius = 0;
-            myMenu.ActionButtonList[i].style.borderBottomRightRadius = 0;
+            actionButton.focusable = false;  // Prevent focus
+            actionButton.style.left = -73;
+            actionButton.style.top = 260+topOffset; // Set the vertical position based on topOffset
+            actionButton.style.unityFont = Resources.Load<Font>("Fonts/CALIBRIL");
+            actionButton.style.paddingBottom = new Length(2, LengthUnit.Pixel);
+            actionButton.style.paddingTop = new Length(2, LengthUnit.Pixel);
+            actionButton.style.borderTopLeftRadius = 0;
+            actionButton.style.borderTopRightRadius = 0;
+            actionButton.style.borderBottomLeftRadius = 0;
+            actionButton.style.borderBottomRightRadius = 0;
             // Increment topOffset for the next button
             var tooltip = action.Tooltip;
             var actionName = action.Name;
             var points = action.Points;
             var actionTitle = actionName.ToLower().Replace(" ", "");
-            myMenu.ActionButtonList[i].RegisterCallback<MouseEnterEvent>(e =>
+            actionButton.RegisterCallback<MouseEnterEvent>(e =>
             {
-                myMenu.ActionButtonList[i].style.backgroundColor = new StyleColor(Color.white);
-                myMenu.ActionLabelList[i].style.color = Color.black;
-                myMenu.ActionLabelList[i].style.unityFontStyleAndWeight = FontStyle.Bold;
+                actionButton.style.backgroundColor = new StyleColor(Color.white);
+                actionLabel.style.color = Color.black;
+                actionLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
                 myMenu.ActionInfoPanel.visible = true;
                 myMenu.TooltipText.text = action.Tooltip;
                 myMenu.ActionImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>($"Sprites/actions/{actionTitle}"));
@@ -173,11 +171,11 @@ public static class MenuHelper
             });
 
             // Mouse leave event: hide outline
-            myMenu.ActionButtonList[i].RegisterCallback<MouseLeaveEvent>(e =>
+            actionButton.RegisterCallback<MouseLeaveEvent>(e =>
             {
-                myMenu.ActionButtonList[i].style.backgroundColor = new StyleColor(Color.clear);
-                myMenu.ActionLabelList[i].style.color = Color.white;
-                myMenu.ActionLabelList[i].style.unityFontStyleAndWeight = FontStyle.Normal;
+                actionButton.style.backgroundColor = new StyleColor(Color.clear);
+                actionLabel.style.color = Color.white;
+                actionLabel.style.unityFontStyleAndWeight = FontStyle.Normal;
                 myMenu.ActionInfoPanel.visible = false;
 
                 var texttrust = $"{personWeAreSpeakingTo.Impression.TrustTowardsPlayer}";
@@ -197,21 +195,20 @@ public static class MenuHelper
             // Increment topOffset for the next button
             topOffset += 30; // Adjust this value for more or less spacing between buttons
 
-            myMenu.ActionButtonList[i].clicked += () =>
+            actionButton.clicked += () =>
             {
 
                 //GameManager.Instance.UIClicked = true;
-                player.RadialActionsHelper.PerformCharmAction(personWeAreSpeakingTo,action);
+                var actionFailed =false;
+                personWeAreSpeakingTo.Ui.Speak(personWeAreSpeakingTo, SocialActionsHelper.ProcessActionResponse(personWeAreSpeakingTo, action,ref actionFailed));
+                player.RadialActionsHelper.PerformAction(personWeAreSpeakingTo,action, actionFailed);
 
 
-                personWeAreSpeakingTo.Ui.Speak(personWeAreSpeakingTo, SocialActionsHelper.ProcessActionResponse(personWeAreSpeakingTo,action));
+               
                 //StartCoroutine(CheckForInputAfterDelay());
             };
-
-        
-
-            myMenu.menuContainer2.Add(myMenu.ActionButtonList[i]);
-
+            myMenu.menuContainer2.Add(actionButton);
+            myMenu.ActionButtonList.Add(actionButton);
         }
 
 

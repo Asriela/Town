@@ -329,15 +329,15 @@ public static class DiaReader
 
 
                 // Check if the line contains quotes
-                int firstQuote = line.IndexOf('"');
-                int secondQuote = line.IndexOf('"', firstQuote + 1);
+                int firstQuote = line.IndexOf('#');
 
-                if (firstQuote != -1 && secondQuote != -1)
+
+                if (firstQuote != -1)
                 {
                     if (skipNextLineDueToBadCondition == false)
                     {
                         // Extract the text between the quotes
-                        currentDialogue = line.Substring(firstQuote + 1, secondQuote - firstQuote - 1);
+                        currentDialogue = line.Substring(firstQuote + 1);
 
                         // Update currentLine to the next line for future searches
                         currentLine = i + 1;
@@ -346,8 +346,8 @@ public static class DiaReader
 
                         line = allLines[currentLine];
                         firstQuote = line.IndexOf('"');
-                        secondQuote = line.IndexOf('"', firstQuote + 1);
-                        if (firstQuote != -1 && secondQuote != -1)
+       
+                        if (firstQuote != -1)
                         { noOptions = true; }
                         return true; // Exit the method once the dialogue is found
                     }
@@ -499,7 +499,10 @@ public static class DiaReader
                         if (actionCost != 0)
                         {
                             labelWithoutAction = line.Substring(0, Math.Max(0, line.Length - 2)).Trim();
+                            labelWithoutAction = line.Replace(">", "");
+                            labelWithoutAction = line.Replace("+", "");
                         }
+
                         // Create a new DiaOption object
                         DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, actionData, actionCost, optionNeeds, optionKey,isKey, currentOptions.Count, allTabs[i], $"{currentFileName} + {i + allTabs[i]}");
                         if(optionNeeds!=MemoryTags.none)

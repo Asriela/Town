@@ -7,6 +7,8 @@ public static class MyColor
     public static readonly Color Grey = new Color(0.478f, 0.494f, 0.518f);
     public static readonly Color GreenBack = new Color(0.412f, 0.478f, 0.224f);
     public static readonly Color GreyBack = new Color(0.1137f, 0.0941f, 0.1098f);
+    public static readonly Color LightGreyBack = new Color(39f / 255f, 38f / 255f, 36f / 255f);//272624
+
     //new Color(0.33f, 0.41f, 0.23f);
     public static readonly Color RedBack = new Color(0.57f, 0.15f, 0.07f);
     public static readonly Color PurpleBack = new Color(70f / 255f, 69f / 255f, 104f / 255f);
@@ -15,6 +17,8 @@ public static class MyColor
     public static readonly string RedHex = "#D7431F";
     public static readonly string GreenHex = "#A5C64F";
     public static readonly string WhiteHex = "#FFFFFF";
+    public static readonly string PaleWhiteHex = "#CFD5BF";
+    
     public static readonly string YellowHex = "#E4B83A";
     public static readonly string CyanHex = "#6CADB5";
     public static readonly string GreyHex = "#A0A0A0";

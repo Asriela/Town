@@ -78,7 +78,7 @@ public class CameraController : MonoBehaviour
         midpoint.y = interactionTransform2.position.y;
 
         // Offset the camera to the left to leave space for the interaction menu
-        Vector3 interactionOffset = new Vector3(5f, 0f, fixedZPosition);
+        Vector3 interactionOffset = new Vector3(10f, 0f, fixedZPosition);
 
         // Smoothly move the camera to the desired interaction position
         Vector3 desiredPosition = midpoint + interactionOffset;

@@ -3,10 +3,11 @@ using UnityEngine;
 
 
 
-public class RadialMenuActionsHelper : MonoBehaviour
+public class PerformMenuAction : MonoBehaviour
 {
     private float socializeTimeLeft = -1;
     public SocializeType SocialAction { get; set; } = SocializeType.none;
+    private bool currentActionFailed= false;
     private int pointsToReward = 0;
     private int relationshipImpact = 0;
     private Character personWeAreInteractingWith;
@@ -29,40 +30,14 @@ public class RadialMenuActionsHelper : MonoBehaviour
     }
 
 
-    public void PerformCharmAction(Character target, ActionOption actionOption)
+    public void PerformAction(Character target, ActionOption actionOption, bool actionFailed)
     {
         this.personWeAreInteractingWith = target;
+        currentActionFailed= actionFailed;
 
         if (ProcessActionOption(actionOption, target))
         {
-            switch (actionOption.Name)
-            {
-                case "Give alcohol":
-                    SocialAction = SocializeType.drinking;
-                    break;
-                case "Small talk":
-                    SocialAction = SocializeType.smallTalk;
-                    break;
-                case "Give Food":
-                    SocialAction = SocializeType.giveFood;
-                    break;
-                case "Bribe":
-                    SocialAction = SocializeType.bribe;
-                    break;
-                case "Hug":
-                    SocialAction = SocializeType.hug;
-                    break;
-                case "Play Chess":
-                    SocialAction = SocializeType.playChess;
-                    break;
-                case "Comfort":
-                    SocialAction = SocializeType.comfort;
-                    break;
-                case "Sympathize":
-                    SocialAction = SocializeType.sympathize;
-                    break;
-      
-            }
+            SocialAction = actionOption.Enum;
         }
 
 
@@ -94,28 +69,6 @@ public class RadialMenuActionsHelper : MonoBehaviour
         return ret;
     }
 
-    public void PerformCoerceAction(Character target, ActionOption actionOption)
-    {
-        this.personWeAreInteractingWith = target;
-        if (ProcessActionOption(actionOption, target))
-        {
-            switch (actionOption.Name)
-            {
-                case "Intimidate":
-                    SocialAction = SocializeType.intimidate;
-                    break;
-                case "Threaten":
-                    SocialAction = SocializeType.threaten;
-                    break;
-                case "Beat up":
-                    SocialAction = SocializeType.beatUp;
-                    break;
-                case "Blackmail":
-                    SocialAction = SocializeType.blackmail;
-                    break;
-            }
-        }
-    }
 
     private void DoSocialAction()
     {
@@ -226,6 +179,18 @@ public class RadialMenuActionsHelper : MonoBehaviour
                     //personWeAreInteractingWith.Appearance.SetSpriteAction("talk");
                     socializeUntilAnimationIsOver = true;
                     break;
+                case SocializeType.insult:
+                    socializeTimeLeft = 2000;
+                    player.Appearance.SetSpriteAction("talk");
+                    //personWeAreInteractingWith.Appearance.SetSpriteAction("talk");
+                    socializeUntilAnimationIsOver = true;
+                    break;
+                case SocializeType.messWithTheirHead:
+                    socializeTimeLeft = 2000;
+                    player.Appearance.SetSpriteAction("talk");
+                    //personWeAreInteractingWith.Appearance.SetSpriteAction("talk");
+                    socializeUntilAnimationIsOver = true;
+                    break;
                 case SocializeType.blackmail:
                     socializeTimeLeft = 2000;
                     player.Appearance.SetSpriteAction("talk");
@@ -250,14 +215,15 @@ public class RadialMenuActionsHelper : MonoBehaviour
             player.Appearance.ResetSprite();
             WorldManager.Instance.SetSpeedOfTime(SpeedOfTime.normal);
             personWeAreInteractingWith.Appearance.ResetSprite();
-            ActionResolution(SocialAction);
+            if(currentActionFailed==false)
+            ActionResolution(SocialAction, personWeAreInteractingWith);
             SocialAction = SocializeType.none;
 
 
         }
     }
 
-    private void ActionResolution(SocializeType socialAction)
+    private void ActionResolution(SocializeType socialAction, Character personWeAreTalkingTo)
     {
         float effectFromInteraction = personWeAreInteractingWith.Relationships.AddInteractionEffect(socialAction, player, relationshipImpact);
         if (pointsToReward < 0)
@@ -270,5 +236,6 @@ public class RadialMenuActionsHelper : MonoBehaviour
             personWeAreInteractingWith.Impression.TrustTowardsPlayer += pointsToReward;
         }
 
+        GameManager.Instance.UpdateInteractionMenu(personWeAreTalkingTo, "");
     }
 }

@@ -1,22 +1,22 @@
 ==start==
-	"You there.. hold it right there! Who are you and where are you from!?"
+	#"You there.. hold it right there! Who are you and where are you from!?"
 	>Who.. who is there?
-		"I am the captain of guard for this outpost... so who are you and where are you from?"
+		#"I am the captain of guard for this outpost... so who are you and where are you from?"
 		>I don't know... I cant remember 
 			<2>
 	>I don't know... I cant remember 
 		<2>
 ==2==
-	"You as well..."
+	#"You as well..."
 	>What do you mean, me as well?
-		"Never mind that now... follow me, there is a werewolf on the loose.."
+		#"Never mind that now... follow me, there is a werewolf on the loose.."
 		<3>
 
 
 ==3==	
 	-I'm so cold...
-		"I bet you are with this dang blizzard, lets get you inside stranger.."
+		#"I bet you are with this dang blizzard, lets get you inside stranger.."
 	-what is this place? 
-		"Never you mind that now, lets just to the tavern!" 
+		#"Never you mind that now, lets just to the tavern!" 
 	-OK I will follow your lead.. [scriptedAction : takePlayerToInn]
 		<end>

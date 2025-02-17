@@ -230,7 +230,7 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
     private void HandleCharmSelection(ActionOption actionOption)
     {
         _radialMenu.OnButtonClicked -= HandleCharmSelection; // Unsubscribe
-        _player.RadialActionsHelper.PerformCharmAction(_personWeAreInteractingWith, actionOption);
+     //   _player.RadialActionsHelper.PerformCharmAction(_personWeAreInteractingWith, actionOption);
     }
 
 
@@ -249,7 +249,7 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
     private void HandleCoerceSelection(ActionOption actionOption)
     {
         _radialMenu.OnButtonClicked -= HandleCoerceSelection; // Unsubscribe
-        _player.RadialActionsHelper.PerformCoerceAction(_personWeAreInteractingWith, actionOption);
+       // _player.RadialActionsHelper.PerformCoerceAction(_personWeAreInteractingWith, actionOption);
     }
 
 

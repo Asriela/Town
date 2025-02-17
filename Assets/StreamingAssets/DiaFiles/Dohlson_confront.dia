@@ -1,8 +1,26 @@
 ==start==
-	"Ok he doesn't want to come out, go in there and find out where Ashla is."
-	-I will see what I can do.
-		"I give you until morning and then I am arresting him."
-		-Ok
-			<end>
+	#He looks around, you can tell from his body language he is genuinely stressed out.
+	-
+		#"Olaf is in there and doesn't want to come out, so go in there and find out where Ashla is."
+		>That fucker?
+			#"Look you and I may have made a deal but I am not letting a child fucker loose."
+			-How do you know he..
+				#"The screams to be let out.."
+				-Look, we all need our sleep
+					#"Ok so you go deaf when you close your eyes then. Good to know."
+				
+			-Let me have him until morning, we aren't going to find her without speaking to him first.
+				#He sighs deeply.
+			-Why was he keeping her locked up?
+				#"Teenage girl comes to town, he looks after her, maybe too well, she tries to escape , he locks her up.."
+			-Leave
+				<end>
+		>I will see what I can do.
+			#"I give you until morning and then I am arresting him."	
+			-Leave
+				<end>
+		-Are you alright? 1+
+			#"Hmm girl was sweet is all.."
+			
 	
 	

@@ -7,6 +7,11 @@ public class Impression : MonoBehaviour
 {
     public int FearTowardsPlayer { get; set; } = 0;
     public int TrustTowardsPlayer { get; set; } = 0;
+
+    public int ProgressToBreakdown { get; set;} =0;
+
+    public int Confidence { get; set; } = 10;
+
     private Dictionary<SocialImpression, int> socialImpressionsTowardsPlayer = new();
 
 

@@ -47,7 +47,8 @@ namespace Mind
         relaxed,
         emotional,
         drunk,
-        none
+        none,
+        stressed
     }
 
     [Serializable]

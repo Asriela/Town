@@ -16,7 +16,7 @@ public static class DiaCharacterFileHelper
         switch (fileType)
         {
             case DialogueFileType.auto:
-                ret = character.CharacterName switch
+                ret = character.CharacterName switch 
                 {
 
                     Mind.CharacterName.Agnar => GetAgnarFile(character),

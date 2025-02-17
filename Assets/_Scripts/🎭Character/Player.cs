@@ -4,7 +4,7 @@ using UnityEngine.AI;
 
 [RequireComponent(typeof(PlayerMenuInteraction))]
 [RequireComponent(typeof(PlayerRadialMenuInteraction))]
-[RequireComponent(typeof(RadialMenuActionsHelper))]
+[RequireComponent(typeof(PerformMenuAction))]
 [RequireComponent(typeof(PlayerControls))]
 public class Player : Character
 {
@@ -18,7 +18,7 @@ public class Player : Character
     private InteractionPackage _currentInteraction = null;
     public PlayerMenuInteraction MenuInteraction { get; set; }
     public PlayerRadialMenuInteraction RadialMenuInteraction { get; set; }
-    public RadialMenuActionsHelper RadialActionsHelper { get; set; }
+    public PerformMenuAction RadialActionsHelper { get; set; }
     public PlayerControls PlayerControls { get; set; }
 
     private void Start()
@@ -29,7 +29,7 @@ public class Player : Character
         RadialMenuInteraction.Initialize(this);
         PlayerControls = GetComponent<PlayerControls>();
         PlayerControls.Initialize(this);
-        RadialActionsHelper = GetComponent<RadialMenuActionsHelper>();
+        RadialActionsHelper = GetComponent<PerformMenuAction>();
         RadialActionsHelper.Initialize(this);
         // Initialize with the default color
 

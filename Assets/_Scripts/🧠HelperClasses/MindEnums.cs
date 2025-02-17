@@ -48,7 +48,7 @@ namespace Mind
         brave,
         evil,
         rude,
-        
+        scary,
     }
     [Serializable]
     public enum ActionType : short
@@ -229,7 +229,10 @@ namespace Mind
         threaten,
         beatUp,
         blackmail,
-        giveAlcohol
+        giveAlcohol,
+        reassure,
+        puthandOnShoulder,
+        messWithTheirHead
     }
 
     [Serializable]

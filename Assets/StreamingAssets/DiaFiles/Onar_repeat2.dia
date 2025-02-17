@@ -47,15 +47,20 @@
 				#"the woods took her.." 
 					
 	-WHAT DID YOU DO TO ASHLA YOU BASTARD! 2-
-		#"You cannot just come into my home and think you can intimidate me!"
-		-You sure about that?
-			#"I don't know what happened to Ashla, she just ran away.."
-			-DONT LIE TO ME, people heard she was locked up in your cabin! 2-
-				#"I had to protect her!"
-				-protect her from what!?
-					#"Herself! She was going to... she.."
+		#"I didn't do anything!"
+		-DONT LIE TO ME, people heard she was locked up in your cabin! 2-
+			#"I had to protect her!"
+			-protect her from what!?
+				#"Herself! She was going to... she.."
 
-
+			
+	(mood : emotional)
+	-WHAT HAPPENED TO HER!? 4-
+		#"The darkness took her.." 
+		-What are you talking about!?
+			#"Broken magic surrounds the town, it dug into her brain and STOLE her from me!"
+			-You mean you went crazy and murdered her when she didn't want to be with you any-more![key : woodstookher]
+				#"LOOK AT ME! YOU HAVE NO IDEA WHAT I HAVE LOST! SHE IS A BROKEN CHILD AND THE WOODS TOOK ADVANTAGE OF THAT! Where do you think you got your amnesia from..."
 			
 
 

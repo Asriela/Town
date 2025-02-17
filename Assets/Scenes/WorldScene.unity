@@ -4042,7 +4042,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5495340519497977495, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
       propertyPath: '_visualState.Array.data[0]'
-      value: 25
+      value: 42
       objectReference: {fileID: 0}
     - target: {fileID: 6799200206703036821, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
       propertyPath: m_Name
@@ -10897,6 +10897,7 @@ GameObject:
   - component: {fileID: 1359901513}
   - component: {fileID: 1359901512}
   - component: {fileID: 1359901514}
+  - component: {fileID: 1359901515}
   m_Layer: 8
   m_Name: Player
   m_TagString: Character
@@ -11329,6 +11330,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b01a26d9ef549414785c0fc9629c01f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1359901515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1359901485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f296b6a09e25f6478267dad5a3f65f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &1363224191 stripped

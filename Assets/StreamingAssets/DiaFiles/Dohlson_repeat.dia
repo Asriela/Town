@@ -1,9 +1,9 @@
 ==start==
-	"So what did you find out so far?"
+	#"So what did you find out so far?"
 	(key : takenbywoods)
 	>Ashla was taken by the broken magic.
-		"Well that settles that."
+		#"Well that settles that."
 	-Nothing
-		"Ashla could still be out there! Why are we wasting time?"
+		#"Ashla could still be out there! Why are we wasting time?"
 
 	
