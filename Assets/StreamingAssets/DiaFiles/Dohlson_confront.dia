@@ -14,10 +14,8 @@
 				#He sighs deeply. "Look I know you are an assurance agent and all but I am not letting a child fucker loose."
 				>Assurance agent?
 					#"You are fucking kidding me right? You amnesia is still not gone?"
-					-What's causing the amnesia?
-						#"Just great, now you are forgetting why you are forgetting, its the dark magic surrounding this outpost, or some shit like that."
 					-Yeah its not fucking gone.
-						#"You work for the assurance agency? You are here to prevent a calamity the agency foresaw..."	
+						#"You work for the assurance agency..?" You can make out his confused squint through his visor slit "You are here to prevent a calamity the agency foresaw.."
 						*ok let me sort out this guy.
 							#"You sure you will be ok?"
 							>Yeah fuck, leave me alone
@@ -37,7 +35,10 @@
 							*I don't remember
 								#"Can you go talk to the fucker so we can end this already.."
 								-leave
-									<end>
+									<end>				
+					-What's causing the amnesia?
+						#"Just great, now you are forgetting why you are forgetting, its the dark magic surrounding this outpost, or some shit like that."
+
 				>We aren't letting him, loose, we are fucking finding out where the kid is.
 					#"Fine, you have until morning and then that.. well, then he is mine.."
 					-Leave
@@ -51,4 +52,5 @@
 			#"Ashla told me why she ran away from her tribe.. only to come here and..."
 			
 	
+
 	
