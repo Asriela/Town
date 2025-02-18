@@ -2,22 +2,46 @@
 	#Onar looks distant he just stares at you not saying a word.
 	>I heard what happened to Ashla, would you like some company? 1+
 		#"um.. sure.."
-		<entrance>
+		<positive>
+
+					
 
 	
 	>WHAT DID YOU DO TO ASHLA YOU BASTARD! 1-
 		#"You cannot just come into my home and think you can intimidate me!"
-		-You sure about that? 2-
+		-You sure about that? 4-
 			#"I don't know what happened to Ashla, she just ran away.."
-			-DONT LIE TO ME, people heard she was locked up in your cabin! 2-
+			-DONT LIE TO ME, people heard she was locked up in your cabin! 4-
 				#"I had to protect her!"
 				-protect her from what!?
 					#"Herself! She was going to... she.."
+	
+	
+==positive==
+	>So how do you know Ashla 1+
+		#"I don't, she is just someone that arrived in town."
+		>So why the fuck is she with you then? 1-
+			#"She came to me, gravitated to me, I don't know why!"
+			>You mean you MANIPULATED her?![mood : tense] 2-
+				#"Who are you? What do you want from me.." He looks at you with cowardice.
+				>Answer the question.. [mood : emotional] 2-
+					#"You don't know what she has been though.." 
+					<Ashla>
+				
+		^Then what happened.. how exactly did you meet 2+
+			#"I saw her at the tavern and I saw something in her eyes.."
+			>What did you see? 4+
+				#"Myself"
+				<Ashla>
+				
+	>Tell me more about yourself? 1+
+
 					
 ==Ashla==
 	>why didn't you leave her with someone else? 2+
 		#He looks off into the distance "She just seemed to gravitate towards me.. I guess we share a similar pain"
-		<entrance>	
+		<positive>
+
 		
 ==Onar==
 	-Where?

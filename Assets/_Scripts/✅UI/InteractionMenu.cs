@@ -477,7 +477,9 @@ public class InteractionMenu : MonoBehaviour
                     if (textLabel.text != "CONTINUE >")
                     {
                         textLabel.text = textLabel.text.Replace(">", "");
-                        textLabel.text = textLabel.text.Replace(">", "");
+                        textLabel.text = textLabel.text.Replace("*", "");
+                        numberLabel.text = numberLabel.text.Replace(">", "");
+                        numberLabel.text = numberLabel.text.Replace("*", "");
                     }
                     //textLabel.transform.scale = new Vector3(0.8f, 1f, 1f);
                     //selectRect.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/square"));

@@ -98,6 +98,7 @@ public static class DiaReader
     private static string optionKey = "";
     private static string currentFileName = "";
     private static int currentOptionNumber = 1;
+    private static string lastDialogueBeforeSectionChange="";
 
     public static DiaPackage OpenNewDialogue(string filename)
     {
@@ -148,9 +149,14 @@ public static class DiaReader
             currentTab = 1;
             currentLine = differentSectionLine;
         }
-
+        var noOptions = false;
         //find the next dialogue at indent
-        if (!FindNextDialogue(out bool noOptions))
+        if (gotoDifferentSection)
+        {
+            currentDialogue= lastDialogueBeforeSectionChange;
+        }
+        else
+        if (!FindNextDialogue(ref noOptions))
         {
             //currentLine++;
             if (gotoDifferentSection)
@@ -315,7 +321,7 @@ public static class DiaReader
 
         }
     }
-    public static bool FindNextDialogue(out bool noOptions)
+    public static bool FindNextDialogue(ref bool noOptions)
     {
         noOptions = false;
         // Start from the currentLine index
@@ -344,7 +350,7 @@ public static class DiaReader
                     {
                         // Extract the text between the quotes
                         currentDialogue = line.Substring(firstQuote + 1);
-
+                        lastDialogueBeforeSectionChange= currentDialogue;
                         // Update currentLine to the next line for future searches
                         currentLine = i + 1;
                         BasicFunctions.Log($"😄📖: CHOSE! {line} {allTabs[i]} vs {currentTab} ", LogType.dia);
@@ -523,10 +529,14 @@ public static class DiaReader
                         if (actionCost != 0)
                         {
                             labelWithoutAction = line.Substring(0, Math.Max(0, line.Length - 2)).Trim();
-                            labelWithoutAction = line.Replace(">", "");
-                            labelWithoutAction = line.Replace("+", "");
-                        }
 
+
+                        }
+                        labelWithoutAction= line;
+                        labelWithoutAction = new string(labelWithoutAction.Where(c => c!= '>').ToArray());
+                        labelWithoutAction = new string(labelWithoutAction.Where(c => c != '+').ToArray());
+                        labelWithoutAction = new string(labelWithoutAction.Where(c => c != '*').ToArray());
+                        labelWithoutAction = new string(labelWithoutAction.Where(c => c != '^').ToArray());
                         // Create a new DiaOption object
                         DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, actionData, actionCost, optionNeeds, optionKey, isKey, currentOptions.Count, allTabs[i], $"{currentFileName} + {i + allTabs[i]}", currentOptionNumber++);
 

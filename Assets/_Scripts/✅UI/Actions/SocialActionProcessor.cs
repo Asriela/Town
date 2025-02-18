@@ -31,6 +31,7 @@ public static class SocialActionProcessor
         currentPersonWeAreSpeakingTo = personWeAreSpeakingTo;
         actionFailed = false;
         var ret = "";
+        var pronoun ="he";
         var actionText = $"{action.Name} WORKED";
         var mood= personWeAreSpeakingTo.State.VisualState[0];
         switch (action.Enum)
@@ -67,13 +68,31 @@ public static class SocialActionProcessor
                 ret = "You threaten to knock in his knees. 'I'm just an old man! Why would you say something like that!?'";
 
 
+                ChangeImpression(SocialImpression.evil, 1);
+                break;
+            case SocializeType.intimidate:
+                ret = "You take out your sword and demands that he tells you what you need to know. He looks at you with fear in his eyes.";
+
+
                 ChangeImpression(SocialImpression.scary, 2);
+                break;
+            case SocializeType.blackmail:
+                ret = "You tell him how you know that Ashla was locked up in his house and that if he doesn't co-operate you will tell the rest of the town. He looks around with fear and panick.";
+
+
+                ChangeImpression(SocialImpression.scary, 2);
+                break;
+            case SocializeType.messWithTheirHead:
+                ret = "You tell him how he is just a piece of shit child molester and that how his darkness will consume him as he rots in jail. He looks around in horror his eyes darting trembling.";
+
+
+                ChangeImpression(SocialImpression.evil, 4);
                 break;
             case SocializeType.beatUp:
                 ret = "You punch him in the face. He is bleeding from the mouth he looks up at you with horror.";
 
 
-                ChangeImpression(SocialImpression.evil, 2);
+                ChangeImpression(SocialImpression.evil, 3);
                 break;
         }
         if (actionFailed)

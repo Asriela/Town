@@ -62,6 +62,7 @@ public static class SocialActionsHelper
                         ret.Add(coerceOptions[SocializeType.blackmail]);
                         ret.Add(coerceOptions[SocializeType.threaten]);
                         ret.Add(coerceOptions[SocializeType.beatUp]);
+                        ret.Add(coerceOptions[SocializeType.messWithTheirHead]);
                         break;
                     case SocialActionMenuType.give:
                         ret.Add(giveOptions[SocializeType.bribe]);
@@ -221,7 +222,7 @@ public static class SocialActionsHelper
         "Insult",
         false,
         "🔪",
-        "You can get buy insulting someone without them hating your forever",
+        "You can get by insulting someone without them hating your forever",
         -1,
         -1,
         false,
@@ -253,7 +254,7 @@ public static class SocialActionsHelper
         "Threaten",
         false,
         "🔪",
-        "Threaten with physical violence, short term gain, long term loss as they will hate you and may report you.",
+        "Threaten with physical violence, short term gain, long term loss as they will hate you and may report you. Action can break the person.",
         -4,
         -4,
         false,
@@ -262,14 +263,14 @@ public static class SocialActionsHelper
         MemoryTags.none,
         SubMenu.coerceActions,
         new Dictionary<MemoryTags, int> { },
-        new List<MemoryTags> { { MemoryTags.tense } }
+        new List<MemoryTags> { { MemoryTags.scared } }
         ));
 
         coerceOptions.Add(SocializeType.beatUp,new ActionOption(SocializeType.beatUp,
         "Beat up",
         false,
         "🔪",
-        "Physically beat up, its really a last resort as they will dispise you after this. ",
+        "Physically beat up, its really a last resort as they will dispise you after this. Action can break the person. ",
         -6,
         -8,
         false,
@@ -284,7 +285,7 @@ public static class SocialActionsHelper
 
         coerceOptions.Add(SocializeType.blackmail,new ActionOption(SocializeType.blackmail,
         "Blackmail",
-        false,
+        true,
         "🔪",
         "Only available if you have dirt on someone. Current dirt: You know Onar kept Ashla locked up in his cabin.",
         -4,
@@ -298,6 +299,21 @@ public static class SocialActionsHelper
         new List<MemoryTags> { { MemoryTags.tense } }
         ));
 
+        coerceOptions.Add(SocializeType.messWithTheirHead, new ActionOption(SocializeType.messWithTheirHead,
+        "Mess with their head",
+        true,
+        "🔪",
+        "Psychological attack by getting into the persons insecurities. Action can break the person.",
+        -6,
+        -3,
+        false,
+        false,
+        ViewTowards.veryNegative,
+        MemoryTags.none,
+        SubMenu.coerceActions,
+        new Dictionary<MemoryTags, int> { },
+        new List<MemoryTags> { { MemoryTags.scared } }
+        ));
         return coerceOptions;
     }
 

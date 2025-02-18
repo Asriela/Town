@@ -6,7 +6,7 @@ using UnityEngine;
 public class Impression : MonoBehaviour
 {
     public int FearTowardsPlayer { get; set; } = 0;
-    public int TrustTowardsPlayer { get; set; } = 0;
+    public int TrustTowardsPlayer { get; set; } = 20;
 
     public int ProgressToBreakdown { get; set;} =0;
 

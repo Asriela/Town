@@ -101,10 +101,22 @@ public static class MenuHelper
             var actionButton = new Button(); // Red: C03F13 Green: 50AA7C
             var hasEnoughRelationship = true;
             var relReq = (int)action.RelationshipRequirement;
-            if (relReq > 0)
-                hasEnoughRelationship = relReq <= relationship;
-            if (relReq < 0)
+            if (actionsMenuTypeWeAreIn==SocialActionMenuType.coerce)
+            {
+
                 hasEnoughRelationship = relReq >= relationship;
+                if(relReq==0)
+                    hasEnoughRelationship=true;
+            }
+            else
+            {
+                hasEnoughRelationship = relReq <= relationship;
+            }
+     
+
+
+
+
             var actionString = action.Name;
 
             if(!hasEnoughRelationship)
