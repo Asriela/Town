@@ -24,8 +24,9 @@ public enum DiaOptionType
     none,
     permanent,
     subtract,
-    clear
-
+    clear,
+    clearAll,
+    clearSameLine
 }
 public class DiaOption
 {
@@ -48,24 +49,24 @@ public class DiaOption
     public string IsKey { get; set; }
     public DiaOptionType OptionType { get; }
 
-    public int OptionNumber { get;}
-    public bool OldOption { get; set;} = false;
+    public int OptionNumber { get; }
+    public bool OldOption { get; set; } = false;
 
-    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action, object actionData, int actionCost,MemoryTags optionNeeds,string optionKey, string isKey, int index, int tabLevel, string uniqueId, int optionNumber)
+    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action, object actionData, int actionCost, MemoryTags optionNeeds, string optionKey, string isKey, int index, int tabLevel, string uniqueId, int optionNumber)
     {
         LineNumber = lineNumber;
         Label = label;
         Action = action;
         OptionType = optionType;
         Index = index;
-        UniqueId= uniqueId;
+        UniqueId = uniqueId;
         TabLevel = tabLevel;
         ActionData = actionData;
         ActionCost = actionCost;
         OptionNeeds = optionNeeds;
-        OptionKey= optionKey;
+        OptionKey = optionKey;
         IsKey = isKey;
-        OptionNumber= optionNumber;
+        OptionNumber = optionNumber;
     }
 }
 
@@ -96,7 +97,7 @@ public static class DiaReader
     private static MemoryTags optionNeeds = MemoryTags.none;
     private static string optionKey = "";
     private static string currentFileName = "";
-    private static int currentOptionNumber =1;
+    private static int currentOptionNumber = 1;
 
     public static DiaPackage OpenNewDialogue(string filename)
     {
@@ -189,11 +190,11 @@ public static class DiaReader
                 BasicFunctions.Log($"▶: {option.Label}   [{option.OptionType}]", LogType.dia);
             }
         }
-        var returnOptions=currentOptions
+        var returnOptions = currentOptions
         .OrderBy(mo => mo.ActionCost != 0) // Place 0-cost items first
         .ThenBy(mo => Math.Abs(mo.ActionCost)) // Order by absolute magnitude
         .ToList();
-        currentOptions= returnOptions;
+        currentOptions = returnOptions;
         return new DiaPackage(currentDialogue, returnOptions);
 
     }
@@ -238,11 +239,11 @@ public static class DiaReader
                 if (Enum.TryParse(typeof(MemoryTags), dataString, true, out object rawData))
                 {
                     MemoryTags enumData = (MemoryTags)rawData;
-             
-                        optionNeeds = enumData;
 
-                        BasicFunctions.Log($"⚠️ MOOD CONDITION {dataString} WILL SKIP: {nextLine}    ", LogType.dia);
-                    
+                    optionNeeds = enumData;
+
+                    BasicFunctions.Log($"⚠️ MOOD CONDITION {dataString} WILL SKIP: {nextLine}    ", LogType.dia);
+
                 }
                 else
                 { BasicFunctions.Log($"⚠️ Invalid MemoryTag: {dataString}", LogType.dia); }
@@ -251,14 +252,14 @@ public static class DiaReader
             if (condition.StartsWith("key:"))
             {
 
-         
-                   // if (!player.KeyKnowledge.Keys.Contains(dataString))
-                  //  {
-                        optionKey = dataString;
 
-                        BasicFunctions.Log($"⚠️ KEY CONDITION {dataString} WILL SKIP: {nextLine}    ", LogType.dia);
-                   // }
-       
+                // if (!player.KeyKnowledge.Keys.Contains(dataString))
+                //  {
+                optionKey = dataString;
+
+                BasicFunctions.Log($"⚠️ KEY CONDITION {dataString} WILL SKIP: {nextLine}    ", LogType.dia);
+                // }
+
 
             }
             if (condition.StartsWith("completed:"))
@@ -330,7 +331,7 @@ public static class DiaReader
             { return false; }
             if (allTabs[i] == currentTab)
             {
-               
+
 
 
                 // Check if the line contains quotes
@@ -351,7 +352,7 @@ public static class DiaReader
 
                         line = allLines[currentLine];
                         firstQuote = line.IndexOf('"');
-       
+
                         if (firstQuote != -1)
                         { noOptions = true; }
                         return true; // Exit the method once the dialogue is found
@@ -409,13 +410,20 @@ public static class DiaReader
         if (lastOption != null)
         {
             // Clear the current options list
-            if (lastOption.OptionType == DiaOptionType.clear)
+            if (lastOption.OptionType == DiaOptionType.clear || lastOption.OptionType == DiaOptionType.clearAll)
             {
                 List<DiaOption> optionsToKeep = new List<DiaOption>();
 
                 foreach (var option in currentOptions)
                 {
-                    if (option.OptionType == DiaOptionType.permanent|| option.TabLevel != lastOption.TabLevel)
+                    var haveToClearLine = false;
+                    if (lastOption.OptionType == DiaOptionType.clear && option.TabLevel >= lastOption.TabLevel)
+                        haveToClearLine = true;
+
+                    if (lastOption.OptionType != DiaOptionType.clearAll)
+                        haveToClearLine = true;
+
+                    if (option.OptionType == DiaOptionType.permanent || (haveToClearLine == false))
                     {
                         optionsToKeep.Add(option);
                     }
@@ -425,12 +433,17 @@ public static class DiaReader
                 currentOptions.AddRange(optionsToKeep);
             }
 
+
+            if (lastOption.OptionType == DiaOptionType.clearSameLine)
+            {
+                currentOptions.RemoveAll(dia => dia.TabLevel == lastOption.TabLevel);
+            }
             if (lastOption.OptionType == DiaOptionType.subtract)
             {
                 currentOptions.RemoveAt(lastOption.Index);
             }
         }
-        var tempList =new List<DiaOption>();
+        var tempList = new List<DiaOption>();
 
         // Iterate through all lines starting from the currentLine
         for (int i = currentLine; i < allLines.Count; i++)
@@ -447,13 +460,13 @@ public static class DiaReader
             // Check if the line starts with '>', '-', or '+'
             if (allTabs[i] == currentTab)
             {
-                var advanceLine=i+1;
-                if(advanceLine<allLines.Count)
-                CheckForCondition(line, allLines[i + 1]);
+                var advanceLine = i + 1;
+                if (advanceLine < allLines.Count)
+                    CheckForCondition(line, allLines[i + 1]);
                 BasicFunctions.Log($"🔎📦: {line} {allTabs[i]} vs {currentTab} ", LogType.dia);
                 var foundTrustCost = line.EndsWith("+");
                 var foundFearCost = line.EndsWith("-");
-                var actionCost=0;
+                var actionCost = 0;
                 if (foundTrustCost || foundFearCost)
                 {
 
@@ -464,12 +477,12 @@ public static class DiaReader
                         actionCost = int.Parse(match.Groups[1].Value);
                         if (foundFearCost)
                         { actionCost = -actionCost; }
-                        
+
                         BasicFunctions.Log($"COST: {actionCost}", LogType.dia);
                     }
                 }
 
-                if (line.StartsWith(">") || line.StartsWith("-") || line.StartsWith("+"))
+                if (line.StartsWith("^") || line.StartsWith("*") || line.StartsWith(">") || line.StartsWith("-") || line.StartsWith("+"))
                 {
                     if (skipNextLineDueToBadCondition == false)
                     {
@@ -477,8 +490,13 @@ public static class DiaReader
                         var optionType = line.StartsWith("-") ? DiaOptionType.subtract :
                                      line.StartsWith("+") ? DiaOptionType.permanent :
                                      line.StartsWith(">") ? DiaOptionType.clear :
+                                     line.StartsWith("*") ? DiaOptionType.clearAll :
+                                     line.StartsWith("^") ? DiaOptionType.clearSameLine :
                                      DiaOptionType.permanent;
 
+                        var wow = false;
+                        if (optionType == DiaOptionType.clearAll)
+                            wow = true;
                         // Extract the label (everything after the symbol)
                         string label = line.Substring(1).Trim();
 
@@ -496,11 +514,11 @@ public static class DiaReader
                             labelWithoutAction = label.Substring(0, actionStart).Trim();
                         }
 
-                        var isKey="";
+                        var isKey = "";
                         if (actionType == DiaActionType.key)
                         {
-                            isKey= actionData.ToString();
-                            
+                            isKey = actionData.ToString();
+
                         }
                         if (actionCost != 0)
                         {
@@ -510,13 +528,13 @@ public static class DiaReader
                         }
 
                         // Create a new DiaOption object
-                        DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, actionData, actionCost, optionNeeds, optionKey,isKey, currentOptions.Count, allTabs[i], $"{currentFileName} + {i + allTabs[i]}", currentOptionNumber++);
-                      
-                        if (optionNeeds!=MemoryTags.none)
+                        DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, actionData, actionCost, optionNeeds, optionKey, isKey, currentOptions.Count, allTabs[i], $"{currentFileName} + {i + allTabs[i]}", currentOptionNumber++);
+
+                        if (optionNeeds != MemoryTags.none)
                         {
                             optionNeeds = MemoryTags.none;
                         }
-                        if (optionKey !="")
+                        if (optionKey != "")
                         {
                             optionKey = "";
                         }
@@ -533,10 +551,10 @@ public static class DiaReader
         }
         foreach (var item in currentOptions)
         {
-            item.OldOption=true;
+            item.OldOption = true;
         }
-        
-            currentOptions.InsertRange(0, tempList);
+
+        currentOptions.InsertRange(0, tempList);
         // Sort the options so that all options with option type permanent are at the end
         currentOptions.Sort((a, b) =>
         {
@@ -556,7 +574,7 @@ public static class DiaReader
             currentOptions[i].Index = i;  // Set the new index position
         }
 
-       
+
 
 
     }
@@ -620,9 +638,9 @@ public static class DiaReader
         if (theString.StartsWith("key:"))
         {
             ret = DiaActionType.key;
-     
-                actionData =(object) dataString;
-            
+
+            actionData = (object)dataString;
+
 
         }
         return ret;
@@ -717,7 +735,7 @@ public static class DiaReader
 
     public static void SetCurrentDialogueFile(string fileName)
     {
-        currentFileName= fileName;
+        currentFileName = fileName;
         currentFileText = DiaImporter.GetDiaFileText(fileName);
         TurnFileIntoLines();
         for (int i = 0; i < allLines.Count; i++)

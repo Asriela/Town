@@ -103,6 +103,12 @@ public static class SocialActionProcessor
                 actionFailed = true;
                 ChangeImpression(SocialImpression.annoying, 2);
                 break;
+            case SocializeType.joke:
+                ret = "He just stares at you.";
+
+                actionFailed = true;
+                ChangeImpression(SocialImpression.annoying, 2);
+                break;
             case SocializeType.puthandOnShoulder:
                 if (impression != SocialImpression.annoying && impression != SocialImpression.infuriating)
                 {

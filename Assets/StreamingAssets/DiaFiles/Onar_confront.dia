@@ -1,12 +1,8 @@
 ==start==
 	#Onar looks distant he just stares at you not saying a word.
 	>I heard what happened to Ashla, would you like some company? 1+
-		#"um ok sure.. come in."
-		-Thank you, so how do you know Ashla 1+
-			#"She just arrived in town a few weeks ago, she is just a teenager she had nowhere to go."
-			-why didn't you leave her with someone else?
-				#She look at you "She just seemed to gravitate towards me.. I guess we share a similar pain"
-
+		#"um.. sure.."
+		<entrance>
 
 	
 	>WHAT DID YOU DO TO ASHLA YOU BASTARD! 1-
@@ -17,3 +13,19 @@
 				#"I had to protect her!"
 				-protect her from what!?
 					#"Herself! She was going to... she.."
+					
+==Ashla==
+	-why didn't you leave her with someone else? 2+
+		#He looks off into the distance "She just seemed to gravitate towards me.. I guess we share a similar pain"
+		<entrance>	
+		
+==Onar==
+	-Where?
+	
+==entrance==
+	>Thank you, so how do you know Ashla 1+
+		#"Ashla.. she uh.. arrived in town a few weeks ago, she is just a teenager she had nowhere to go."
+		<Ashla>
+	>Where are you from Onar? 1+
+		#"I'm from out of town"
+		<Onar>
