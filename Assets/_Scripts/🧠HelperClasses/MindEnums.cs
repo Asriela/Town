@@ -49,6 +49,7 @@ namespace Mind
         evil,
         rude,
         scary,
+        infuriating,
     }
     [Serializable]
     public enum ActionType : short

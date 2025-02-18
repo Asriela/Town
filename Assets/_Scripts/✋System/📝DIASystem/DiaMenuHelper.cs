@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Mind;
 using NUnit.Framework;
@@ -28,7 +29,9 @@ public static class DiaMenuHelper
                 OptionNeeds = diaOption.OptionNeeds,
                 OptionKey = diaOption.OptionKey,
                 IsKey = diaOption.IsKey,
-                UniqueId = diaOption.UniqueId
+                UniqueId = diaOption.UniqueId,
+                OptionNumber= diaOption.OptionNumber,
+                OldOption= diaOption.OldOption,
             };
             menuOptions.Add(menuOption);
         }

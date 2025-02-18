@@ -8,11 +8,13 @@ public class PerformMenuAction : MonoBehaviour
     private float socializeTimeLeft = -1;
     public SocializeType SocialAction { get; set; } = SocializeType.none;
     private bool currentActionFailed= false;
+    private ActionOption currentAction;
     private int pointsToReward = 0;
     private int relationshipImpact = 0;
     private Character personWeAreInteractingWith;
     private Player player;
     private bool socializeUntilAnimationIsOver;
+    private InteractionMenu theMenu;
     public void Initialize(Player player)
     {
         this.player = player;
@@ -30,10 +32,10 @@ public class PerformMenuAction : MonoBehaviour
     }
 
 
-    public void PerformAction(Character target, ActionOption actionOption, bool actionFailed)
+    public void PerformAction(Character target, ActionOption actionOption, InteractionMenu theMenu)
     {
         this.personWeAreInteractingWith = target;
-        currentActionFailed= actionFailed;
+        this.theMenu = theMenu;
 
         if (ProcessActionOption(actionOption, target))
         {
@@ -46,9 +48,11 @@ public class PerformMenuAction : MonoBehaviour
 
     private bool ProcessActionOption(ActionOption actionOption, Character target)
     {
+        
         var ret = true;
         int additionalPoints = 0;
         var mood = target.State.VisualState[0];
+        currentAction= actionOption;
         if (actionOption.BonusPoints.ContainsKey(mood))
         {
             additionalPoints = actionOption.BonusPoints[mood];
@@ -64,7 +68,7 @@ public class PerformMenuAction : MonoBehaviour
         }
 
 
-
+        if(actionOption.OnceOff)
         actionOption.UsedUp = true;
         return ret;
     }
@@ -126,7 +130,28 @@ public class PerformMenuAction : MonoBehaviour
 
 
                     break;
+                case SocializeType.greet:
 
+                    socializeTimeLeft = 2000;
+                    player.Appearance.SetSpriteAction("talk"); 
+                    socializeUntilAnimationIsOver = true;
+                    //personWeAreInteractingWith.Appearance.SetSpriteAction("talk");
+
+                    WorldManager.Instance.SetRampUpSpeedOfTime(SpeedOfTime.normal);
+
+
+                    break;
+                case SocializeType.puthandOnShoulder:
+
+                    socializeTimeLeft = 2000;
+                    player.Appearance.SetSpriteAction("talk");
+                    socializeUntilAnimationIsOver = true;
+                    //personWeAreInteractingWith.Appearance.SetSpriteAction("talk");
+
+                    WorldManager.Instance.SetRampUpSpeedOfTime(SpeedOfTime.normal);
+
+
+                    break;
                 case SocializeType.hug:
 
                     socializeTimeLeft = 2000;
@@ -208,16 +233,21 @@ public class PerformMenuAction : MonoBehaviour
 
         if (socializeTimeLeft < 0)
         {
-
+            theMenu.DoingAction = null;
             socializeTimeLeft = -1;
 
 
             player.Appearance.ResetSprite();
             WorldManager.Instance.SetSpeedOfTime(SpeedOfTime.normal);
             personWeAreInteractingWith.Appearance.ResetSprite();
-            if(currentActionFailed==false)
+            currentActionFailed=false;
+            personWeAreInteractingWith.Ui.Speak(personWeAreInteractingWith, SocialActionsHelper.ProcessActionResponse(personWeAreInteractingWith, currentAction, ref currentActionFailed));
+
+            if (currentActionFailed==false)
             ActionResolution(SocialAction, personWeAreInteractingWith);
             SocialAction = SocializeType.none;
+
+       
 
 
         }

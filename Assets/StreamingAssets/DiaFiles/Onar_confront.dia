@@ -1,6 +1,6 @@
 ==start==
-	#Onar looks distant and distressed "Hey can I help you? "
-	-Hi I heard what happened to Ashla, would you like some company?
+	#Onar looks distant he just stares at you not saying a word.
+	>I heard what happened to Ashla, would you like some company? 1+
 		#"um ok sure.. come in."
 		-Thank you, so how do you know Ashla 1+
 			#"She just arrived in town a few weeks ago, she is just a teenager she had nowhere to go."
@@ -9,7 +9,7 @@
 
 
 	
-	-WHAT DID YOU DO TO ASHLA YOU BASTARD! 1-
+	>WHAT DID YOU DO TO ASHLA YOU BASTARD! 1-
 		#"You cannot just come into my home and think you can intimidate me!"
 		-You sure about that? 2-
 			#"I don't know what happened to Ashla, she just ran away.."

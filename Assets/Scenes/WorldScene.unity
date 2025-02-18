@@ -4048,6 +4048,38 @@ PrefabInstance:
       propertyPath: m_Name
       value: Captain of guard
       objectReference: {fileID: 0}
+    - target: {fileID: 7689604564608265291, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: _peopleKnowledge.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7689604564608265291, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: _peopleKnowledge.Array.data[0].knower
+      value: 
+      objectReference: {fileID: 489728387}
+    - target: {fileID: 7689604564608265291, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: _peopleKnowledge.Array.data[0].knowledge.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7689604564608265291, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: _peopleKnowledge.Array.data[0].knowledge.Array.data[0].character
+      value: 
+      objectReference: {fileID: 1359901501}
+    - target: {fileID: 7689604564608265291, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: _peopleKnowledge.Array.data[0].knowledge.Array.data[0].memoryTags.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7689604564608265291, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: '_peopleKnowledge.Array.data[0].knowledge.Array.data[0].memoryTags.Array.data[0]'
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7989385345033673886, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: _peopleViews.Array.data[0].views.Array.data[1].view
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7989385345033673886, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
+      propertyPath: _peopleViews.Array.data[0].views.Array.data[2].view
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8992165545157527332, guid: 6624a52bf7562e24fac57dceb5aa3184, type: 3}
       propertyPath: _characterName
       value: 11
@@ -4334,11 +4366,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4773332652865760712, guid: 98d6204f22f93a544a248c80313f1d1b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 25.5
+      value: 19.64
       objectReference: {fileID: 0}
     - target: {fileID: 4773332652865760712, guid: 98d6204f22f93a544a248c80313f1d1b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 48.4
+      value: 41.64
       objectReference: {fileID: 0}
     - target: {fileID: 4773332652865760712, guid: 98d6204f22f93a544a248c80313f1d1b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -10914,7 +10946,7 @@ Transform:
   m_GameObject: {fileID: 1359901485}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 12.12, y: 22.7, z: 0}
+  m_LocalPosition: {x: 12.12, y: 23.26, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12546,6 +12578,7 @@ MonoBehaviour:
     trait: {fileID: 11400000, guid: 1dbcc5e7f4e2f9d4f9adf15442afaeb5, type: 2}
   - traitType: 25
     trait: {fileID: 11400000, guid: 1dbcc5e7f4e2f9d4f9adf15442afaeb5, type: 2}
+  interactionMenu: {fileID: 1717695974}
 --- !u!1001 &1612200066
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13277,6 +13310,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3531590608350215589, guid: 0d706048d70192d43acbc691ad435960, type: 3}
   m_PrefabInstance: {fileID: 702101384}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1717695974 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4221562605464312396, guid: 0d706048d70192d43acbc691ad435960, type: 3}
+  m_PrefabInstance: {fileID: 702101384}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 267b044dc02c719489dd25c1d315a18b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1729955856
 GameObject:
   m_ObjectHideFlags: 0

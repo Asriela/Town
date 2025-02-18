@@ -20,6 +20,10 @@ public class GameManager : Singleton<GameManager>
 
     public bool CantClickOffInteractionMenu { get; set; }
 
+    [SerializeField]
+    private InteractionMenu interactionMenu;
+    public InteractionMenu InteractionMenu { get=> interactionMenu;}
+
     public void UpdateInteractionMenu(Character characterSpeaking, string currentDialogue)
     {
         var characterLabel = characterSpeaking.CharacterName.ToString();

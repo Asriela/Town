@@ -34,9 +34,10 @@ public class ActionOption
     public List<MemoryTags> ActionEffects;
     public SubMenu InSubMenu;
     public Dictionary<MemoryTags, int> BonusPoints;
+    public bool OnceOff;
 
 
-    public ActionOption(SocializeType enumType,  string name,  string emoji, string tooltip, int cost, int relationshipImpact, bool usedUp, bool isDisabled, ViewTowards relationshipRequirement, MemoryTags mood, SubMenu submenu, Dictionary<MemoryTags, int> bonusPoints = null, List<MemoryTags> actionEffects = null)
+    public ActionOption(SocializeType enumType,  string name, bool onceOff, string emoji, string tooltip, int cost, int relationshipImpact, bool usedUp, bool isDisabled, ViewTowards relationshipRequirement, MemoryTags mood, SubMenu submenu, Dictionary<MemoryTags, int> bonusPoints = null, List<MemoryTags> actionEffects = null)
     {
         Enum = enumType;
         Name = name;
@@ -51,7 +52,7 @@ public class ActionOption
         BonusPoints = bonusPoints ?? new Dictionary<MemoryTags, int>();
         RelationshipImpact =relationshipImpact;
         InSubMenu = submenu;
-
+        OnceOff= onceOff;
     }
 
 }
@@ -177,21 +178,10 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
     private void OpenPrimaryMenu()
     {
         
-        if (_personWeAreInteractingWith.CharacterName == CharacterName.Dohlson)
-        {
+
             GameManager.Instance.OpenDialoguePlayer(_personWeAreInteractingWith, DialogueFileType.auto);
             CloseInteractionMenu();
-        }
-        else
-        {
-            _justOpenedPieMenu = true;
 
-
-            _radialMenu.OnButtonClicked += HandlePrimarySelection;
-            _radialMenu.OnButtonClicked -= HandleCoerceSelection;
-            _radialMenu.OnButtonClicked -= HandleCharmSelection;
-            OpenRadialMenu(mainOptions);
-        }
 
 
     }

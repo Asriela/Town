@@ -5,6 +5,7 @@ public static class MyColor
     public static readonly Color Red = new Color(0.768f, 0.251f, 0.075f);//C03F13
     public static readonly Color Green = new Color(0.647f, 0.776f, 0.310f);//new Color(0.53f, 0.65f, 0.37f);//new Color(0.3137f, 0.6667f, 0.4863f);
     public static readonly Color Grey = new Color(0.478f, 0.494f, 0.518f);
+    public static readonly Color DarkGrey = new Color(96 / 255f, 96 / 255f, 96 / 255f);
     public static readonly Color GreenBack = new Color(0.412f, 0.478f, 0.224f);
     public static readonly Color GreyBack = new Color(0.1137f, 0.0941f, 0.1098f);
     public static readonly Color LightGreyBack = new Color(39f / 255f, 38f / 255f, 36f / 255f);//272624
@@ -21,10 +22,13 @@ public static class MyColor
     
     public static readonly string YellowHex = "#E4B83A";
     public static readonly string CyanHex = "#6CADB5";
+    public static readonly string DarkCyanHex = "#57878E";
+    
     public static readonly string GreyHex = "#A0A0A0";
     public static readonly string DarkGreyHex = "#6B6B6B";
     
     public static readonly Color Cyan = new  Color(0.424f, 0.678f, 0.710f);
+    public static readonly Color DarkCyan = new Color(87 / 255f, 135 / 255f, 142 / 255f);
     public static readonly Color CyanBack = new Color(0.286f, 0.459f, 0.478f);
 
 

@@ -72,13 +72,25 @@ public static class TextConverter
     }
     public static string ChangeSocialInteractionToText(SocializeType type, string character)
     {
-        var ret = "";
+        var ret = $"YOU ";
+        var pronoun ="HIM";
         switch (type)
         {
             case SocializeType.drinking:
-                ret = $"drinking with {character}";
+                ret += $"DRINK WITH {pronoun}";
+                break;
+            case SocializeType.beatUp:
+                ret += $"BEAT {pronoun} UP";
+                break;
+            case SocializeType.insult:
+                ret += $"INSULT {pronoun}";
+                break;
+            case SocializeType.smallTalk:
+                ret += $"MAKE SMALL TALK";
                 break;
         }
+        if (ret== "YOU ")
+        { ret = $"YOU {type}"; }
         return ret.ToUpper();
     }
 }

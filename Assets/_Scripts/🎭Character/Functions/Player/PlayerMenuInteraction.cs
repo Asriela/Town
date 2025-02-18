@@ -24,6 +24,8 @@ public struct MenuOption
     public int menuOptionCost;
     public string IsKey;
     public string UniqueId;
+    public int OptionNumber;
+    public bool OldOption;
 
     public MenuOption(string buttonLabel, object data, object data2)
     {
@@ -38,6 +40,8 @@ public struct MenuOption
         IsKey="";
         OptionKey = "";
         UniqueId="";
+        OptionNumber=0;
+        OldOption=false;
     }
 }
 

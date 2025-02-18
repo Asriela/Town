@@ -35,8 +35,10 @@ public class InteractionEffect
     }
 }
 
+
 public class Relationships : MonoBehaviour
 {
+
     private Character _character;
 
     public void Initialize(Character character)
@@ -44,7 +46,10 @@ public class Relationships : MonoBehaviour
         _character = character;
         WorldManager.Instance.OnMidnight += MoveTodaysInteractionEffectsToThePast;
     }
-
+    private void Start()
+    {
+        RecalculateMyRelationshipWithEveryone();
+    }
     [SerializeField]
     private List<CharacterRelationshipFloatPair> _characterRelationships = new();
 

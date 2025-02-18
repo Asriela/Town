@@ -1,18 +1,52 @@
 ==start==
 	#He looks around, you can tell from his body language he is genuinely stressed out.
 	-
-		#"Olaf is in there and doesn't want to come out, so go in there and find out where Ashla is."
+		#"That fucker is in there and doesn't want to come out. He will pay for what he did to Ashla"
 		>That fucker?
-			#"Look you and I may have made a deal but I am not letting a child fucker loose."
+			#"Don't fall for Olafs sweet old man routine, he is one sick bastard."
 			-How do you know he..
-				#"The screams to be let out.."
-				-Look, we all need our sleep
+				#"She screamed at night to be let out, did that not wake you.."
+				-No
 					#"Ok so you go deaf when you close your eyes then. Good to know."
-				
-			-Let me have him until morning, we aren't going to find her without speaking to him first.
-				#He sighs deeply.
-			-Why was he keeping her locked up?
-				#"Teenage girl comes to town, he looks after her, maybe too well, she tries to escape , he locks her up.."
+				>Why was he keeping her locked up?
+					#"Teenage girl comes to town, he looks after her, maybe too well, she tries to escape , he locks her up.."
+			-Let me speak to him until morning, we aren't going to find out where she is without him.
+				#He sighs deeply. "Look I know you are an assurance agent and all but I am not letting a child fucker loose."
+				>Assurance agent?
+					#"You are fucking kidding me right? You amnesia is still not gone?"
+					-Yeah its not fucking gone
+						#"You work for the assurance agency? You are here to prevent a calamity the agency foresaw..."	
+						-ok let me sort out this guy.
+							#"You sure you will be ok?"
+							>Yeah fuck, leave me alone
+								#"Just go already."
+								>leave
+									<end>
+								>Yes
+									#"Ok, good luck"
+										-leave
+											<end>
+						-what calamity?
+							#"Isn't finding out what the calamity might be like, your whole job?"
+							-sure
+								#"ok.. we are running out of time.. I give you until morning to talk to that fucker and then I am arresting him."
+								-ok
+									<end>
+							-I don't remember
+								#"Can you go talk to the fucker so we can end this already.."
+								-leave
+									<end>
+							
+						
+					-What's causing the amnesia?
+						#"Just great, now you are forgetting why you are forgetting, its the dark magic surrounding this outpost, or some shit like that."
+
+				>We aren't letting him, loose, we are fucking finding out where the kid is.
+					#"Fine, you have until morning and then that.. well, then he is mine.."
+					-Leave
+						<end>
+
+
 			-Leave
 				<end>
 		>I will see what I can do.
@@ -20,7 +54,7 @@
 			-Leave
 				<end>
 		-Are you alright? 1+
-			#"Hmm girl was sweet is all.."
+			#"Ashla told me why she ran away from her tribe.. only to come here and..."
 			
 	
 	

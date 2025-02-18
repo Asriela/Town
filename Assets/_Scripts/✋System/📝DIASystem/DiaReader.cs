@@ -4,6 +4,7 @@ using System.Linq;
 using System;
 using Mind;
 using System.Xml;
+using System.Data;
 
 public enum DiaActionType : short
 {
@@ -47,7 +48,10 @@ public class DiaOption
     public string IsKey { get; set; }
     public DiaOptionType OptionType { get; }
 
-    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action, object actionData, int actionCost,MemoryTags optionNeeds,string optionKey, string isKey, int index, int tabLevel, string uniqueId)
+    public int OptionNumber { get;}
+    public bool OldOption { get; set;} = false;
+
+    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action, object actionData, int actionCost,MemoryTags optionNeeds,string optionKey, string isKey, int index, int tabLevel, string uniqueId, int optionNumber)
     {
         LineNumber = lineNumber;
         Label = label;
@@ -61,6 +65,7 @@ public class DiaOption
         OptionNeeds = optionNeeds;
         OptionKey= optionKey;
         IsKey = isKey;
+        OptionNumber= optionNumber;
     }
 }
 
@@ -91,7 +96,7 @@ public static class DiaReader
     private static MemoryTags optionNeeds = MemoryTags.none;
     private static string optionKey = "";
     private static string currentFileName = "";
-
+    private static int currentOptionNumber =1;
 
     public static DiaPackage OpenNewDialogue(string filename)
     {
@@ -410,7 +415,7 @@ public static class DiaReader
 
                 foreach (var option in currentOptions)
                 {
-                    if (option.OptionType == DiaOptionType.permanent)
+                    if (option.OptionType == DiaOptionType.permanent|| option.TabLevel != lastOption.TabLevel)
                     {
                         optionsToKeep.Add(option);
                     }
@@ -425,6 +430,7 @@ public static class DiaReader
                 currentOptions.RemoveAt(lastOption.Index);
             }
         }
+        var tempList =new List<DiaOption>();
 
         // Iterate through all lines starting from the currentLine
         for (int i = currentLine; i < allLines.Count; i++)
@@ -504,8 +510,9 @@ public static class DiaReader
                         }
 
                         // Create a new DiaOption object
-                        DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, actionData, actionCost, optionNeeds, optionKey,isKey, currentOptions.Count, allTabs[i], $"{currentFileName} + {i + allTabs[i]}");
-                        if(optionNeeds!=MemoryTags.none)
+                        DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, actionData, actionCost, optionNeeds, optionKey,isKey, currentOptions.Count, allTabs[i], $"{currentFileName} + {i + allTabs[i]}", currentOptionNumber++);
+                      
+                        if (optionNeeds!=MemoryTags.none)
                         {
                             optionNeeds = MemoryTags.none;
                         }
@@ -514,7 +521,7 @@ public static class DiaReader
                             optionKey = "";
                         }
                         // Add the new option to the current options list
-                        currentOptions.Add(newOption);
+                        tempList.Add(newOption);
                     }
                     else
                     {
@@ -524,7 +531,12 @@ public static class DiaReader
                 }
             }
         }
-
+        foreach (var item in currentOptions)
+        {
+            item.OldOption=true;
+        }
+        
+            currentOptions.InsertRange(0, tempList);
         // Sort the options so that all options with option type permanent are at the end
         currentOptions.Sort((a, b) =>
         {
@@ -543,6 +555,10 @@ public static class DiaReader
         {
             currentOptions[i].Index = i;  // Set the new index position
         }
+
+       
+
+
     }
     private static DiaActionType GetActionFromString(string theString, out object actionData)
     {

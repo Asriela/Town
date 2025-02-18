@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using Mind;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static Unity.Burst.Intrinsics.Arm;
@@ -8,7 +9,7 @@ using static Unity.Burst.Intrinsics.Arm;
 public static class MenuHelper
 {
 
-    public static void SetupActionMenuElements(InteractionMenu myMenu,ref Label _tooltipText, ref VisualElement actionImage, ref VisualElement ActionInfoPanel, ref VisualElement actionsBackPanel, ref VisualElement menuContainer2, float portraitWidth)
+    public static void SetupActionMenuElements(InteractionMenu myMenu, ref Label _tooltipText, ref VisualElement actionImage, ref VisualElement ActionInfoPanel, ref VisualElement actionsBackPanel, ref VisualElement menuContainer2, float portraitWidth)
     {
         actionsBackPanel = new VisualElement();
         actionsBackPanel.style.backgroundColor = MyColor.GreyBack;
@@ -16,7 +17,7 @@ public static class MenuHelper
         actionsBackPanel.style.left = new Length(-78, LengthUnit.Pixel); // Left of the menu background
         actionsBackPanel.style.top = new Length((49 * 6) + 5 + 20 + 10, LengthUnit.Pixel);
         actionsBackPanel.style.width = new Length(portraitWidth + 50, LengthUnit.Pixel); // Scale factor for portrait
-        actionsBackPanel.style.height = new Length(250, LengthUnit.Pixel); // Scale factor for portrait
+        actionsBackPanel.style.height = new Length(250+20, LengthUnit.Pixel); // Scale factor for portrait
         actionsBackPanel.style.opacity = 0.99f;
         actionsBackPanel.style.borderTopLeftRadius = 10;
         actionsBackPanel.style.borderTopRightRadius = 10;
@@ -27,9 +28,9 @@ public static class MenuHelper
         ActionInfoPanel = new VisualElement();
         ActionInfoPanel.style.backgroundColor = Color.white;
         ActionInfoPanel.style.position = Position.Absolute;
-        ActionInfoPanel.style.left = new Length(-278+40, LengthUnit.Pixel); // Left of the menu background
+        ActionInfoPanel.style.left = new Length(-278 + 40, LengthUnit.Pixel); // Left of the menu background
         ActionInfoPanel.style.top = new Length((49 * 6) + 5 + 20 + 10, LengthUnit.Pixel);
-        ActionInfoPanel.style.width = new Length(portraitWidth+30, LengthUnit.Pixel); // Scale factor for portrait
+        ActionInfoPanel.style.width = new Length(portraitWidth + 30, LengthUnit.Pixel); // Scale factor for portrait
         ActionInfoPanel.style.height = new Length(200, LengthUnit.Pixel); // Scale factor for portrait
         ActionInfoPanel.style.opacity = 0.99f;
         ActionInfoPanel.style.borderTopLeftRadius = 10;
@@ -42,8 +43,8 @@ public static class MenuHelper
         ActionInfoPanel.visible = false;
         menuContainer2.Add(ActionInfoPanel);
 
-        var picWidth = (166/4)*3;
-        var picHeight = (147/4)*3;
+        var picWidth = (166 / 4) * 3;
+        var picHeight = (147 / 4) * 3;
         actionImage = new VisualElement();
         actionImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/portraits/portraitBack"));
         actionImage.style.position = Position.Absolute;
@@ -61,15 +62,16 @@ public static class MenuHelper
                 {
                     color = Color.black,
                     fontSize = 12,
-                    unityTextAlign = TextAnchor.LowerCenter,
+                    unityTextAlign = TextAnchor.MiddleCenter,
                     whiteSpace = WhiteSpace.Normal,
                     alignSelf = Align.Center,
-                    flexGrow = 1
+                    flexGrow = 1,
+                    width = 160,
                 }
         };
         ActionInfoPanel.Add(_tooltipText);
 
-        myMenu.charmMenuButton=new();
+        myMenu.charmMenuButton = new();
         myMenu.giveMenuButton = new();
         myMenu.coerceMenuButton = new();
     }
@@ -77,7 +79,7 @@ public static class MenuHelper
 
     public static void ActionsMenu(InteractionMenu myMenu, SocialActionMenuType actionsMenuTypeWeAreIn, Character personWeAreSpeakingTo)
     {
-     
+
 
         foreach (var item in myMenu.ActionButtonList)
         {
@@ -91,18 +93,29 @@ public static class MenuHelper
         float topOffset = 120; // Starting vertical position
 
         var player = WorldManager.Instance.ThePlayer;
-
+        var relationship = personWeAreSpeakingTo.Relationships.GetRelationshipWith(personWeAreSpeakingTo, player);
+     
         foreach (var action in availableActions)
         {
+            if(action.UsedUp == true) continue;
             var actionButton = new Button(); // Red: C03F13 Green: 50AA7C
-
+            var hasEnoughRelationship = true;
+            var relReq = (int)action.RelationshipRequirement;
+            if (relReq > 0)
+                hasEnoughRelationship = relReq <= relationship;
+            if (relReq < 0)
+                hasEnoughRelationship = relReq >= relationship;
             var actionString = action.Name;
+
+            if(!hasEnoughRelationship)
+                actionString+= " "+relReq.ToString();
             // Add a label to the button
+
             var actionLabel = new Label(actionString)
             {
                 style =
             {
-            color = Color.white,
+            color = hasEnoughRelationship ? Color.white : Color.grey,
             unityTextAlign = TextAnchor.MiddleLeft,
             fontSize = 12,
             whiteSpace = WhiteSpace.Normal,  // Allow text wrapping within the label
@@ -121,10 +134,10 @@ public static class MenuHelper
 
             actionButton.style.alignItems = Align.FlexStart;  // Ensure text starts from the top
             actionButton.style.backgroundColor = new StyleColor(Color.clear);  // Remove button background
-   
+
             actionButton.focusable = false;  // Prevent focus
             actionButton.style.left = -73;
-            actionButton.style.top = 260+topOffset; // Set the vertical position based on topOffset
+            actionButton.style.top = 260 + topOffset; // Set the vertical position based on topOffset
             actionButton.style.unityFont = Resources.Load<Font>("Fonts/CALIBRIL");
             actionButton.style.paddingBottom = new Length(2, LengthUnit.Pixel);
             actionButton.style.paddingTop = new Length(2, LengthUnit.Pixel);
@@ -139,12 +152,36 @@ public static class MenuHelper
             var actionTitle = actionName.ToLower().Replace(" ", "");
             actionButton.RegisterCallback<MouseEnterEvent>(e =>
             {
-                actionButton.style.backgroundColor = new StyleColor(Color.white);
-                actionLabel.style.color = Color.black;
-                actionLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+                if (hasEnoughRelationship)
+                {
+                    actionButton.style.backgroundColor = new StyleColor(Color.white);
+                    actionLabel.style.color = Color.black;
+                    actionLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+                    myMenu.TooltipText.style.unityFontStyleAndWeight = FontStyle.Normal;
+                    myMenu.TooltipText.text = action.Tooltip;
+                    myMenu.TooltipText.style.top = 55;
+                    myMenu.TooltipText.style.color = Color.black;
+                    myMenu.TooltipText.style.unityFont = Resources.Load<Font>("Fonts/CALIBRIB");
+                    myMenu.ActionImage.visible = true;
+                    myMenu.ActionImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>($"Sprites/actions/{actionTitle}"));
+                    myMenu.ActionInfoPanel.style.backgroundColor = Color.white;
+                    myMenu.ActionInfoPanel.style.height = new Length(200, LengthUnit.Pixel);
+                }
+                else
+                {
+                    myMenu.TooltipText.text = $"{relReq} RELATIONSHIP TO UNLOCK \nYOU HAVE {relationship}";
+                    myMenu.TooltipText.style.color = MyColor.DarkGrey;
+                    myMenu.TooltipText.style.unityFont = Resources.Load<Font>("Fonts/CALIBRIL");
+                    myMenu.TooltipText.style.unityFontStyleAndWeight = FontStyle.Normal;
+                    // myMenu.ActionImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>($"Sprites/actions/notUnlocked"));
+                    myMenu.ActionImage.visible = false;
+                    myMenu.ActionInfoPanel.style.backgroundColor = MyColor.GreyBack;
+                    myMenu.TooltipText.style.top = 0;
+                    myMenu.ActionInfoPanel.style.height = new Length(100, LengthUnit.Pixel);
+                }
                 myMenu.ActionInfoPanel.visible = true;
-                myMenu.TooltipText.text = action.Tooltip;
-                myMenu.ActionImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>($"Sprites/actions/{actionTitle}"));
+    
+    
 
                 var addTrust = points > 0 ? $" + {points}" : "";
                 var addFear = points < 0 ? $" + {-points}" : "";
@@ -167,14 +204,14 @@ public static class MenuHelper
 
                 var moodtext = $"{personWeAreSpeakingTo.State.VisualState[0]}{moodAddition}";
                 var impressionText = personWeAreSpeakingTo.Impression.GetSocialImpressionText();
-                myMenu.statLabel.text = TextConverter.GetStatString(texttrust, textfear, relationshipText, moodtext, impressionText, points>0 ? MyColor.GreenHex : MyColor.WhiteHex, points<0 ? MyColor.RedHex : MyColor.WhiteHex);
+                myMenu.statLabel.text = TextConverter.GetStatString(texttrust, textfear, relationshipText, moodtext, impressionText, points > 0 ? MyColor.GreenHex : MyColor.WhiteHex, points < 0 ? MyColor.RedHex : MyColor.WhiteHex);
             });
 
             // Mouse leave event: hide outline
             actionButton.RegisterCallback<MouseLeaveEvent>(e =>
             {
                 actionButton.style.backgroundColor = new StyleColor(Color.clear);
-                actionLabel.style.color = Color.white;
+                actionLabel.style.color = hasEnoughRelationship ? Color.white : Color.grey;
                 actionLabel.style.unityFontStyleAndWeight = FontStyle.Normal;
                 myMenu.ActionInfoPanel.visible = false;
 
@@ -182,7 +219,7 @@ public static class MenuHelper
                 var textfear = $"{personWeAreSpeakingTo.Impression.FearTowardsPlayer}";
 
 
-
+                myMenu.ActionImage.visible = false;
                 var relationshipText = $"{TextConverter.GetRelationshipStatusText(personWeAreSpeakingTo)}";
 
 
@@ -197,14 +234,17 @@ public static class MenuHelper
 
             actionButton.clicked += () =>
             {
+                if (hasEnoughRelationship)
+                {
+                    myMenu.DoingAction = action;
+                    GameManager.Instance.UpdateInteractionMenu(personWeAreSpeakingTo, "");
+                    player.RadialActionsHelper.PerformAction(personWeAreSpeakingTo, action, myMenu);
+                }
+                    //GameManager.Instance.UIClicked = true;
 
-                //GameManager.Instance.UIClicked = true;
-                var actionFailed =false;
-                personWeAreSpeakingTo.Ui.Speak(personWeAreSpeakingTo, SocialActionsHelper.ProcessActionResponse(personWeAreSpeakingTo, action,ref actionFailed));
-                player.RadialActionsHelper.PerformAction(personWeAreSpeakingTo,action, actionFailed);
 
 
-               
+
                 //StartCoroutine(CheckForInputAfterDelay());
             };
             myMenu.menuContainer2.Add(actionButton);
@@ -228,10 +268,10 @@ public static class MenuHelper
         myMenu.charmMenuButton.style.borderTopRightRadius = 0;
         myMenu.charmMenuButton.style.borderBottomLeftRadius = 0;
         myMenu.charmMenuButton.style.borderBottomRightRadius = 0;
-        myMenu.charmMenuButton.style.color= myMenu.ActionsMenuTypeWeAreIn== SocialActionMenuType.charm ? MyColor.Green : Color.white;
+        myMenu.charmMenuButton.style.color = myMenu.ActionsMenuTypeWeAreIn == SocialActionMenuType.charm ? MyColor.Green : Color.white;
         myMenu.charmMenuButton.clicked += () =>
         {
-            myMenu.ActionsMenuTypeWeAreIn=SocialActionMenuType.charm;
+            myMenu.ActionsMenuTypeWeAreIn = SocialActionMenuType.charm;
             ActionsMenu(myMenu, myMenu.ActionsMenuTypeWeAreIn, personWeAreSpeakingTo);
 
         };
@@ -286,7 +326,7 @@ public static class MenuHelper
         };
 
 
- 
+
 
 
 
@@ -495,66 +535,82 @@ public static class MenuHelper
 
     }
 
-    public static void ActionText(Character personWeAreSpeakingTo, VisualElement menuContainer, float scrolldown)
+    public static void ActionText(ActionOption DoingAction, Character personWeAreSpeakingTo, VisualElement menuContainer, float scrolldown)
     {
-        var currentPlayerSocialAction = GameManager.Instance.GetPlayersCurrentSocialAction();
-        if (currentPlayerSocialAction != SocializeType.none)
-        {
-            string socialActionText = $"<color=#7F807A>INTERACTION PAUSED BECAUSE YOU ARE BUSY \n{TextConverter.ChangeSocialInteractionToText(currentPlayerSocialAction, personWeAreSpeakingTo.CharacterName.ToString())}</color>";
-            // Create the button and add the label
-            var socialAction = new Button();
 
-            // Add a label to the button
-            Label socialActionLabel = new Label(socialActionText)
-            {
-                style =
+        string socialActionText = $"<color=#7F807A>{TextConverter.ChangeSocialInteractionToText(DoingAction.Enum, personWeAreSpeakingTo.CharacterName.ToString())}</color>";
+        // Create the button and add the label
+        var actionImage = new VisualElement();
+        actionImage = new VisualElement();
+        var actionName = DoingAction.Name;
+        var actionTitle = actionName.ToLower().Replace(" ", "");
+        actionImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>($"Sprites/actions/{actionTitle}"));
+        actionImage.style.position = Position.Absolute;
+
+        actionImage.style.width = 166; // Scale factor for portrait
+        actionImage.style.height = 147; // Scale factor for portrait
+        actionImage.style.opacity = 1;
+        actionImage.style.unityTextAlign = TextAnchor.MiddleCenter;
+        actionImage.style.left = 180;
+        actionImage.style.top = 390;
+
+        
+        menuContainer.Add(actionImage);
+        var socialAction = new Button();
+
+        // Add a label to the button
+        Label socialActionLabel = new Label(socialActionText)
+        {
+            style =
             {
                 color = Color.white,  // Default color, will be overridden by rich text
                 unityTextAlign = TextAnchor.MiddleCenter,
+                alignSelf =Align.Center,
+                justifyContent =Justify.Center,
                 fontSize = 17,
                 whiteSpace = WhiteSpace.Normal,  // Allow text wrapping within the label
                 overflow = Overflow.Hidden,
                 paddingBottom = new Length(5, LengthUnit.Pixel),  // Prevent cutting off text
                 paddingTop = new Length(20, LengthUnit.Pixel),
             }
-            };
-            socialAction.Add(socialActionLabel);
+        };
+        socialAction.Add(socialActionLabel);
 
-            // Apply button styling to mimic other buttons
-            socialAction.style.position = Position.Absolute; // Set position to absolute
-            socialAction.style.left = new Length(130 + 120 + 60 - 19 - 9, LengthUnit.Pixel);
-            socialAction.style.top = new Length(90 + scrolldown, LengthUnit.Pixel); // Set initial top position
-            socialAction.style.width = new Length(340, LengthUnit.Pixel);
-            socialAction.style.flexDirection = FlexDirection.ColumnReverse;  // Makes new content push upward
+        // Apply button styling to mimic other buttons
+        socialAction.style.position = Position.Absolute; // Set position to absolute
+        socialAction.style.left = new Length(130 + 120 + 60 - 19 - 9, LengthUnit.Pixel);
+        socialAction.style.top = new Length(120 + scrolldown, LengthUnit.Pixel); // Set initial top position
+        socialAction.style.width = new Length(340, LengthUnit.Pixel);
+        socialAction.style.flexDirection = FlexDirection.ColumnReverse;  // Makes new content push upward
 
-            socialAction.style.overflow = Overflow.Hidden;  // Prevents content from pushing layout
+        socialAction.style.overflow = Overflow.Hidden;  // Prevents content from pushing layout
 
-            socialAction.style.alignItems = Align.FlexStart;  // Ensure text starts from the top
-            socialAction.style.backgroundColor = new StyleColor(Color.clear);  // Remove button background
-            socialAction.focusable = false;  // Prevent focus
-            socialAction.style.left = 80;
-            socialAction.style.top = 220;
-
-
+        socialAction.style.alignItems = Align.FlexStart;  // Ensure text starts from the top
+        socialAction.style.backgroundColor = new StyleColor(Color.clear);  // Remove button background
+        socialAction.focusable = false;  // Prevent focus
+        socialAction.style.left = 90;
+        socialAction.style.top = 320;
 
 
 
-            socialAction.style.marginTop = 160 + 40;
-            socialAction.style.paddingTop = new Length(5, LengthUnit.Pixel);
-            socialAction.AddToClassList("button");
 
-            // Override click event to do nothing
-            socialAction.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
 
-            menuContainer.Add(socialAction);
+        socialAction.style.marginTop = 160 + 130;
+        socialAction.style.paddingTop = new Length(5, LengthUnit.Pixel);
+        socialAction.AddToClassList("button");
 
-            // Adjust the top position dynamically based on content height
-            socialAction.RegisterCallback<GeometryChangedEvent>(evt =>
-            {
-                socialAction.style.top = new Length(90 + scrolldown - socialAction.resolvedStyle.height, LengthUnit.Pixel);
-            });
-            return;
-        }
+        // Override click event to do nothing
+        socialAction.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
+
+        menuContainer.Add(socialAction);
+
+        // Adjust the top position dynamically based on content height
+        socialAction.RegisterCallback<GeometryChangedEvent>(evt =>
+        {
+            socialAction.style.top = new Length(90 + scrolldown - socialAction.resolvedStyle.height, LengthUnit.Pixel);
+        });
+
+
     }
 
 
