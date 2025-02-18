@@ -1,9 +1,11 @@
-﻿using Mind;
+﻿using System.Linq.Expressions;
+using Mind;
 using UnityEngine;
 
 public static class SocialActionProcessor
 {
     private static Character currentPersonWeAreSpeakingTo;
+    public static SocialImpression announceImpressionChange= SocialImpression.none;
     public static string ProcessAction(Character personWeAreSpeakingTo, ActionOption action, ref bool actionFailed)
     {
 
@@ -15,36 +17,71 @@ public static class SocialActionProcessor
         };
         return ret;
     }
-    static void ChangeImpression(SocialImpression impression , int amount)
+    static void ChangeImpression(SocialImpression impression, int amount)
     {
-        if (currentPersonWeAreSpeakingTo.Impression.GetSocialImpression()!= impression)
-            GameManager.Instance.InteractionMenu.pastDialogue += $"*{currentPersonWeAreSpeakingTo.CharacterName} finds you {impression}*\n";
-        currentPersonWeAreSpeakingTo.Impression.AddSocialImpression(impression, amount);
+
+        var lastImpression = currentPersonWeAreSpeakingTo.Impression.GetSocialImpression();
+       var newImpression= currentPersonWeAreSpeakingTo.Impression.AddSocialImpression(impression, amount);
+
+        //if (lastImpression != newImpression)
+            announceImpressionChange= newImpression;
+
+
 
     }
     static void ChangeMood(MemoryTags mood)
     {
         currentPersonWeAreSpeakingTo.State.SetVisualState(mood);
     }
+    static void AddToBreakDown(int amount)
+        {
+        currentPersonWeAreSpeakingTo.Impression.ProgressToBreakdown+= amount;
+
+    }
+    static void RemoveFromBreakDown(int amount)
+    {
+        currentPersonWeAreSpeakingTo.Impression.ProgressToBreakdown -= amount;
+    }
     private static string ProcessOnar(Character personWeAreSpeakingTo, ActionOption action, ref bool actionFailed)
     {
         currentPersonWeAreSpeakingTo = personWeAreSpeakingTo;
         actionFailed = false;
         var ret = "";
-        var pronoun ="he";
+        var pronoun = "he";
         var actionText = $"{action.Name} WORKED";
-        var mood= personWeAreSpeakingTo.State.VisualState[0];
+        var mood = personWeAreSpeakingTo.State.VisualState[0];
         switch (action.Enum)
         {
             case SocializeType.greet:
-                ret = "'Good afternoon to you as well, what can I do you for?'";
+                ret = "'Good afternoon to you as well, what can I help with?'";
+                ChangeImpression(SocialImpression.friendly, 1);
+
+                break;
+            case SocializeType.bribe:
+                ret = "'Good afternoon to you as well, what can I help with?'";
+                ChangeImpression(SocialImpression.friendly, 1);
+
+                break;
+            case SocializeType.joke:
+                if (mood == MemoryTags.relaxed || mood == MemoryTags.drunk)
+                {
+                    ret = "You tell the joke about the hairy chair 'Hahaha good one!'";
+                    ChangeImpression(SocialImpression.amusing, 1);
+                }
+                else
+                {
+
+                    ret = "'With all do respect I am not really in the mood for a joke right now'";
+                    ChangeImpression(SocialImpression.annoying, 1);
+                    actionFailed = true;
+                }
 
 
                 break;
             case SocializeType.smallTalk:
-                if(mood==MemoryTags.distant || mood== MemoryTags.tense  || mood== MemoryTags.tense)
+                if (mood == MemoryTags.distant || mood == MemoryTags.tense || mood == MemoryTags.tense)
                 {
-                    ret="'Not sure if you can tell but I am not really in the mood for meaningless chatter..'";
+                    ret = "'Not sure if you can tell but I am not really in the mood for meaningless chatter..'";
                     ChangeImpression(SocialImpression.annoying, 1);
                     actionFailed = true;
                 }
@@ -52,10 +89,10 @@ public static class SocialActionProcessor
                 {
 
                     ret = "You talk about the weather 'Yeah its quite freezing up here.'";
-
+                    ChangeImpression(SocialImpression.friendly, 1);
                 }
 
-        
+
 
                 break;
             case SocializeType.insult:
@@ -66,9 +103,10 @@ public static class SocialActionProcessor
                 break;
             case SocializeType.threaten:
                 ret = "You threaten to knock in his knees. 'I'm just an old man! Why would you say something like that!?'";
-
+                
 
                 ChangeImpression(SocialImpression.evil, 1);
+                AddToBreakDown(1);
                 break;
             case SocializeType.intimidate:
                 ret = "You take out your sword and demands that he tells you what you need to know. He looks at you with fear in his eyes.";
@@ -85,14 +123,16 @@ public static class SocialActionProcessor
             case SocializeType.messWithTheirHead:
                 ret = "You tell him how he is just a piece of shit child molester and that how his darkness will consume him as he rots in jail. He looks around in horror his eyes darting trembling.";
 
-
+                
                 ChangeImpression(SocialImpression.evil, 4);
+                AddToBreakDown(5);
                 break;
             case SocializeType.beatUp:
                 ret = "You punch him in the face. He is bleeding from the mouth he looks up at you with horror.";
-
+                
 
                 ChangeImpression(SocialImpression.evil, 3);
+                AddToBreakDown(3);
                 break;
         }
         if (actionFailed)
@@ -118,7 +158,7 @@ public static class SocialActionProcessor
                 break;
             case SocializeType.hug:
                 ret = "Get the fuck off me!";
-                actionText="FAIL: You awkwardly go in for a hug.";
+                actionText = "FAIL: You awkwardly go in for a hug.";
                 actionFailed = true;
                 ChangeImpression(SocialImpression.annoying, 2);
                 break;
@@ -131,11 +171,11 @@ public static class SocialActionProcessor
             case SocializeType.puthandOnShoulder:
                 if (impression != SocialImpression.annoying && impression != SocialImpression.infuriating)
                 {
-                    
+
                     ret = "He looks at you and while you cant make out his expression you can tell by the slightest movement of his head , he appreciated it.";
                     actionText = "You put your hand on his shoulder.";
                     ChangeMood(MemoryTags.focused);
-                    }
+                }
                 else
                 {
                     ret = "'Get your hands off me.'";
@@ -151,7 +191,7 @@ public static class SocialActionProcessor
         ret = ret.Replace('\'', '"');
         return $"<color={MyColor.DarkGreyHex}>[{actionText}]</color> " + ret;
     }
-   
+
 }
 
 

@@ -270,8 +270,9 @@ public class InteractionMenu : MonoBehaviour
         pastDialogue = $"<color=#7F807A>" +
                   $"{strippedPastDialogue}";
 
-        pastDialogue = MyColor.WrapTextInPurpleTag(pastDialogue);
 
+        pastDialogue = MyColor.WrapTextInYellowTag(pastDialogue);
+        pastDialogue = MyColor.WrapTextInPurpleTag(pastDialogue);
         // Conditionally add "YOU-{lastChosenOption}" if it's not an empty string
         if (lastChosenOption != "" && lastChosenOption != "CONTINUE >")
         {
@@ -359,12 +360,19 @@ public class InteractionMenu : MonoBehaviour
                 var buttonCount = dialogueOptions.Count;
                 dialogueOptionButtons.Clear();
 
+                dialogueOptions = dialogueOptions.OrderBy(item => item.OptionMoodReq == MemoryTags.none ? 0 : 1).ToList();
+
                 // Arrange buttons vertically
                 int trueIndex = 0;
                 for (int i = 0; i < buttonCount; i++)
                 {
                     var optionIsDisabled = false;
                     if (dialogueOptions[i].menuOptionCost > trust || -dialogueOptions[i].menuOptionCost > fear)
+                    {
+                        optionIsDisabled = true;
+                    }
+                    var theirMood = personWeAreSpeakingTo.State.VisualState[0];
+                    if (dialogueOptions[i].OptionMoodReq!=MemoryTags.none && dialogueOptions[i].OptionMoodReq != theirMood)
                     {
                         optionIsDisabled = true;
                     }
@@ -380,7 +388,7 @@ public class InteractionMenu : MonoBehaviour
                         continue;
                     }
 
-                    var theirMood = personWeAreSpeakingTo.State.VisualState[0];
+                    
                     var moodReq = dialogueOptions[i].OptionNeeds;
                     if (moodReq != MemoryTags.none && moodReq != theirMood)
                     {

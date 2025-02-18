@@ -16,7 +16,8 @@ public enum DiaActionType : short
     scriptedAction,
     share,
     mood,
-    key
+    key,
+    reqMood
 }
 
 public enum DiaOptionType
@@ -52,7 +53,9 @@ public class DiaOption
     public int OptionNumber { get; }
     public bool OldOption { get; set; } = false;
 
-    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action, object actionData, int actionCost, MemoryTags optionNeeds, string optionKey, string isKey, int index, int tabLevel, string uniqueId, int optionNumber)
+    public MemoryTags OptionMoodReq { get; set;}
+
+    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action, object actionData, int actionCost, MemoryTags optionNeeds, MemoryTags optionMoodReq,string optionKey, string isKey, int index, int tabLevel, string uniqueId, int optionNumber)
     {
         LineNumber = lineNumber;
         Label = label;
@@ -67,6 +70,7 @@ public class DiaOption
         OptionKey = optionKey;
         IsKey = isKey;
         OptionNumber = optionNumber;
+        OptionMoodReq= optionMoodReq;
     }
 }
 
@@ -526,6 +530,12 @@ public static class DiaReader
                             isKey = actionData.ToString();
 
                         }
+                        var optionMoodReq = MemoryTags.none;
+                        if (actionType == DiaActionType.reqMood)
+                        {
+                            optionMoodReq = (MemoryTags)actionData;
+
+                        }
                         if (actionCost != 0)
                         {
                             labelWithoutAction = line.Substring(0, Math.Max(0, line.Length - 2)).Trim();
@@ -538,7 +548,8 @@ public static class DiaReader
                         labelWithoutAction = new string(labelWithoutAction.Where(c => c != '*').ToArray());
                         labelWithoutAction = new string(labelWithoutAction.Where(c => c != '^').ToArray());
                         // Create a new DiaOption object
-                        DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, actionData, actionCost, optionNeeds, optionKey, isKey, currentOptions.Count, allTabs[i], $"{currentFileName} + {i + allTabs[i]}", currentOptionNumber++);
+                        
+                        DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, actionData, actionCost, optionNeeds,optionMoodReq, optionKey, isKey, currentOptions.Count, allTabs[i], $"{currentFileName} + {i + allTabs[i]}", currentOptionNumber++);
 
                         if (optionNeeds != MemoryTags.none)
                         {
@@ -559,12 +570,17 @@ public static class DiaReader
                 }
             }
         }
+
+
         foreach (var item in currentOptions)
         {
             item.OldOption = true;
         }
 
         currentOptions.InsertRange(0, tempList);
+
+
+        currentOptions= currentOptions.OrderBy(item => item.OptionMoodReq == MemoryTags.none ? 0 : 1).ToList();
         // Sort the options so that all options with option type permanent are at the end
         currentOptions.Sort((a, b) =>
         {
@@ -653,13 +669,29 @@ public static class DiaReader
 
 
         }
+        if (theString.StartsWith("requiresmood:"))
+        {
+            ret = DiaActionType.reqMood;
+            if (Enum.TryParse(typeof(MemoryTags), dataString, true, out object rawData))
+            {
+                actionData = (MemoryTags)rawData;
+            }
+
+        }
         return ret;
     }
 
 
 
 
-
+    public static DiaPackage GotoSection(string sectionName)
+    {
+        
+        FindSpecificSection(sectionName, out int sectionLine);
+        currentTab++;
+        var ret = Next(true, false, null, 0);
+        return ret;
+    }
 
 
     private static void FindNextSection()

@@ -26,10 +26,11 @@ public struct MenuOption
     public string UniqueId;
     public int OptionNumber;
     public bool OldOption;
+    public MemoryTags OptionMoodReq;
 
     public MenuOption(string buttonLabel, object data, object data2)
     {
-
+        
         ButtonLabel = buttonLabel;
         Data1 = data;
         Data2 = data2;
@@ -42,6 +43,7 @@ public struct MenuOption
         UniqueId="";
         OptionNumber=0;
         OldOption=false;
+        OptionMoodReq = MemoryTags.none;
     }
 }
 
@@ -247,6 +249,25 @@ public class PlayerMenuInteraction : MonoBehaviour
             currentDiaOptions = DiaMenuHelper.ConvertDiaOptionToMenuOptions(currentDiaPackage.Options);
 
             UpdateInteractionMenu(buttonLabel, diaDialogue, currentDiaOptions, "", null);
+        }
+
+
+    }
+
+    public void ChangeDiaSection(string diaSection)
+    {
+
+        currentDiaPackage = DiaReader.GotoSection( diaSection);
+        //SocialAction = DiaMenuHelper.ExecuteAction(_player, _personWeAreSpeakingTo, diaActionToExecute, diaActionData);
+
+        if (currentDiaPackage != null)
+        {
+
+            var diaDialogue = currentDiaPackage.Dialogue;
+
+            currentDiaOptions = DiaMenuHelper.ConvertDiaOptionToMenuOptions(currentDiaPackage.Options);
+
+            UpdateInteractionMenu("", diaDialogue, currentDiaOptions, "", null);
         }
 
 

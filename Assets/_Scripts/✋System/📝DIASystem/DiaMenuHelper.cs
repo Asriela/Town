@@ -32,6 +32,7 @@ public static class DiaMenuHelper
                 UniqueId = diaOption.UniqueId,
                 OptionNumber= diaOption.OptionNumber,
                 OldOption= diaOption.OldOption,
+                OptionMoodReq  = diaOption.OptionMoodReq
             };
             menuOptions.Add(menuOption);
         }

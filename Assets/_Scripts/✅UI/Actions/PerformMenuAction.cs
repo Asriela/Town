@@ -1,4 +1,5 @@
-﻿using Mind;
+﻿using System.Linq.Expressions;
+using Mind;
 using UnityEngine;
 
 
@@ -242,7 +243,15 @@ public class PerformMenuAction : MonoBehaviour
             personWeAreInteractingWith.Appearance.ResetSprite();
             currentActionFailed=false;
             personWeAreInteractingWith.Ui.Speak(personWeAreInteractingWith, SocialActionsHelper.ProcessActionResponse(personWeAreInteractingWith, currentAction, ref currentActionFailed));
-
+            if (personWeAreInteractingWith.Impression.ProgressToBreakdown > 10)
+            {
+                GameManager.Instance.InteractionMenu.pastDialogue += $"^{personWeAreInteractingWith.CharacterName} has had a mental breakdown^\n";
+                WorldManager.Instance.ThePlayer.MenuInteraction.ChangeDiaSection("breakdown");
+            }
+                if(SocialActionProcessor.announceImpressionChange!=SocialImpression.none)
+            { GameManager.Instance.InteractionMenu.pastDialogue += $"*{personWeAreInteractingWith.CharacterName} finds you {SocialActionProcessor.announceImpressionChange}*\n";
+                SocialActionProcessor.announceImpressionChange=SocialImpression.none;
+                }
             if (currentActionFailed==false)
             ActionResolution(SocialAction, personWeAreInteractingWith);
             SocialAction = SocializeType.none;

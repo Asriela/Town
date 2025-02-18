@@ -24,7 +24,7 @@ public static class TextConverter
 
         if (relationship <= (float)ViewTowards.unforgivable)
         {
-            ret = "finds you unforgivable";
+            ret = "unforgivable";
         }
         else if (relationship <= (float)ViewTowards.despise)
         {
@@ -87,6 +87,9 @@ public static class TextConverter
                 break;
             case SocializeType.smallTalk:
                 ret += $"MAKE SMALL TALK";
+                break;
+            case SocializeType.puthandOnShoulder:
+                ret += $"PUT YOUR HAND ON HIS SHOULDER";
                 break;
         }
         if (ret== "YOU ")

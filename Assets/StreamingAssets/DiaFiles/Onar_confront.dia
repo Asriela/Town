@@ -16,6 +16,7 @@
 				-protect her from what!?
 					#"Herself! She was going to... she.."
 	
+
 	
 ==positive==
 	>So how do you know Ashla 1+
@@ -29,16 +30,28 @@
 					<Ashla>
 				
 		^Then what happened.. how exactly did you meet 2+
-			#"I saw her at the tavern and I saw something in her eyes.."
+			#"I saw her at the tavern and I saw something in her eyes.. and I think she saw something in mine, after that we just clicked."
 			>What did you see? 4+
 				#"Myself"
 				<Ashla>
-				
-	>Tell me more about yourself? 1+
-
-					
+			>How did you convince her to stay with you? 2+
+				#"She just came with me.."
+				<Ashla>
+	
+	
+	>Tell me more about yourself?  [requiresMood : relaxed]
+		#"Like her I am a long way from home.. have you ever heard of a star coin?"
+		
+	>Where is Ashla now? [requiresMood : emotional]
+		#"I don't know.. "
+		>Its ok you can tell me..
+			#"No I really don't the darkness took her, I don't know what it did with her.
+		>What the fuck do you mean you don't know? 2-
+			#"I don't know what the broken magic did to her!"
+		
+	
 ==Ashla==
-	>why didn't you leave her with someone else? 2+
+	>why didn't you leave her with someone else? 
 		#He looks off into the distance "She just seemed to gravitate towards me.. I guess we share a similar pain"
 		<positive>
 
@@ -53,3 +66,8 @@
 	>Where are you from Onar? 1+
 		#"I'm from out of town"
 		<Onar>
+
+==breakdown==
+	>Onar?
+		#"It was all me.. I did this"
+		-No you didnt

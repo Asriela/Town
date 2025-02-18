@@ -50,6 +50,20 @@ namespace Mind
         rude,
         scary,
         infuriating,
+        terrifying,
+        cruel,
+        hilarious,
+        assHole,
+        antiSocial,
+        militant,
+        monstrous,
+        friendly,
+        warmHearted,
+        stuckUp,
+        arrogant,
+        lifeOfTheParty,
+        charming,
+        sexy,
     }
     [Serializable]
     public enum ActionType : short

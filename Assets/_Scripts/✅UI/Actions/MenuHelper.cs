@@ -31,7 +31,7 @@ public static class MenuHelper
         ActionInfoPanel.style.left = new Length(-278 + 40, LengthUnit.Pixel); // Left of the menu background
         ActionInfoPanel.style.top = new Length((49 * 6) + 5 + 20 + 10, LengthUnit.Pixel);
         ActionInfoPanel.style.width = new Length(portraitWidth + 30, LengthUnit.Pixel); // Scale factor for portrait
-        ActionInfoPanel.style.height = new Length(200, LengthUnit.Pixel); // Scale factor for portrait
+        ActionInfoPanel.style.height = new Length(230, LengthUnit.Pixel); // Scale factor for portrait
         ActionInfoPanel.style.opacity = 0.99f;
         ActionInfoPanel.style.borderTopLeftRadius = 10;
         ActionInfoPanel.style.borderTopRightRadius = 10;
@@ -177,7 +177,7 @@ public static class MenuHelper
                     myMenu.ActionImage.visible = true;
                     myMenu.ActionImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>($"Sprites/actions/{actionTitle}"));
                     myMenu.ActionInfoPanel.style.backgroundColor = Color.white;
-                    myMenu.ActionInfoPanel.style.height = new Length(200, LengthUnit.Pixel);
+                    myMenu.ActionInfoPanel.style.height = new Length(220, LengthUnit.Pixel);
                 }
                 else
                 {
@@ -472,6 +472,7 @@ public static class MenuHelper
         pastDialogue = $"<color=#7F807A>" +
                   $"{strippedPastDialogue}";
 
+        pastDialogue = MyColor.WrapTextInYellowTag(pastDialogue);
         pastDialogue = MyColor.WrapTextInPurpleTag(pastDialogue);
 
         // Conditionally add "YOU-{lastChosenOption}" if it's not an empty string
