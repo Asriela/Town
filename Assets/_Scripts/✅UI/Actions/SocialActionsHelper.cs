@@ -17,6 +17,8 @@ public static class SocialActionsHelper
     private static Dictionary<SocializeType, ActionOption> coerceOptions = new(SetupCoerceOptions());
     private static Dictionary<SocializeType, ActionOption> giveOptions = new(SetupGiveOptions());
 
+    private static readonly float veryLongTime =90f;
+
     public static List<ActionOption> GetAvailableActions(SocialActionMenuType actionMenuType, Character personWeAreSpeakingTo)
     {
         List<ActionOption> ret = new();
@@ -48,11 +50,11 @@ public static class SocialActionsHelper
                 {
                     case SocialActionMenuType.charm:
                         ret.Add(charmOptions[SocializeType.greet]);
+                        ret.Add(charmOptions[SocializeType.sitAtFireplace]);
                         ret.Add(charmOptions[SocializeType.smallTalk]);
                         ret.Add(charmOptions[SocializeType.joke]);
                         ret.Add(charmOptions[SocializeType.hug]);
                         ret.Add(charmOptions[SocializeType.reassure]);
-                        ret.Add(charmOptions[SocializeType.comfort]);
                         ret.Add(charmOptions[SocializeType.playChess]);
 
                         break;
@@ -65,6 +67,7 @@ public static class SocialActionsHelper
                         ret.Add(coerceOptions[SocializeType.messWithTheirHead]);
                         break;
                     case SocialActionMenuType.give:
+                        ret.Add(giveOptions[SocializeType.makeTea]);
                         ret.Add(giveOptions[SocializeType.bribe]);
                         ret.Add(giveOptions[SocializeType.giveAlcohol]);
                         ret.Add(giveOptions[SocializeType.giveFood]);
@@ -93,6 +96,7 @@ public static class SocialActionsHelper
         "Greet",
         true,
         "💬",
+        5,
         "Takes up a small amount of time but only gives 1 trust.",
         1,
         0,
@@ -100,7 +104,10 @@ public static class SocialActionsHelper
         false,
         ViewTowards.neutral,
         MemoryTags.none,
-        SubMenu.charmActions
+        SubMenu.charmActions,
+        new Dictionary<MemoryTags, int> { },
+        new List<MemoryTags> { }
+
         ));
 
         charmOptions.Add(SocializeType.smallTalk, new ActionOption(
@@ -108,6 +115,7 @@ public static class SocialActionsHelper
         "Small talk",
         false,
         "💬",
+        10,
         "Takes up a small amount of time but only gives 2 trust.",
         1,
         1,
@@ -117,12 +125,30 @@ public static class SocialActionsHelper
         MemoryTags.none,
         SubMenu.charmActions
         ));
+        charmOptions.Add(SocializeType.sitAtFireplace, new ActionOption(
+        SocializeType.sitAtFireplace,
+        "Sit at fireplace",
+        false,
+        "💬",
+        30,
+        "No relationship or trust bonus just relaxes the person",
+        0,
+        0,
+        false,
+        false,
+        ViewTowards.neutral,
+        MemoryTags.none,
+        SubMenu.charmActions,
+                          new Dictionary<MemoryTags, int> { },
+        new List<MemoryTags> { { MemoryTags.relaxed } }
+        ));
 
         charmOptions.Add(SocializeType.joke, new ActionOption(
         SocializeType.joke,
         "Joke",
         false,
         "💬",
+        5,
         "Risky but works when it works",
         2,
         1,
@@ -138,6 +164,7 @@ public static class SocialActionsHelper
         "Hug",
         false,
         "🤗",
+        5,
         "Not everyone is a hugger and people in distress are more receptive to hugs.",
         2,
         1,
@@ -156,6 +183,7 @@ public static class SocialActionsHelper
         "Play Chess",
         false,
         "♟",
+        30,
         "Play a game of chess, requires the person to be relaxed.",
         4,
         3,
@@ -170,6 +198,7 @@ public static class SocialActionsHelper
         "Reassure",
         false,
         "👐",
+        5,
         "Show reassurance when they are emotional",
         2,
         1,
@@ -184,6 +213,7 @@ public static class SocialActionsHelper
         "Put hand on shoulder",
         true,
         "👐",
+        1,
         "Every bit helps",
         1,
         1,
@@ -198,6 +228,7 @@ public static class SocialActionsHelper
         "Comfort",
         false,
         "❤",
+        10,
         "Comfort the person when they are emotional",
         4,
         3,
@@ -222,6 +253,7 @@ public static class SocialActionsHelper
         "Insult",
         false,
         "🔪",
+        1,
         "You can get by insulting someone without them hating your forever",
         -1,
         -1,
@@ -238,6 +270,7 @@ public static class SocialActionsHelper
         "Intimidate",
         true,
         "🔪",
+        5,
         "Intimidate through foul language and body posture.",
         -2,
         -2,
@@ -254,6 +287,7 @@ public static class SocialActionsHelper
         "Threaten",
         false,
         "🔪",
+        5,
         "Threaten with physical violence, short term gain, long term loss as they will hate you and may report you. Action can break the person.",
         -4,
         -4,
@@ -270,6 +304,7 @@ public static class SocialActionsHelper
         "Beat up",
         false,
         "🔪",
+        10,
         "Physically beat up, its really a last resort as they will dispise you after this. Action can break the person. ",
         -6,
         -8,
@@ -287,25 +322,27 @@ public static class SocialActionsHelper
         "Blackmail",
         true,
         "🔪",
+        5,
         "Only available if you have dirt on someone. Current dirt: You know Onar kept Ashla locked up in his cabin.",
         -4,
-        -2,
+        0,
         false,
         false,
         ViewTowards.neutral,
         MemoryTags.none,
         SubMenu.coerceActions,
         new Dictionary<MemoryTags, int> { },
-        new List<MemoryTags> { { MemoryTags.tense } }
+        new List<MemoryTags> { { MemoryTags.scared } }
         ));
 
         coerceOptions.Add(SocializeType.messWithTheirHead, new ActionOption(SocializeType.messWithTheirHead,
         "Mess with their head",
         true,
         "🔪",
+        60,
         "Psychological attack by getting into the persons insecurities. Action can break the person.",
         -6,
-        -3,
+        0,
         false,
         false,
         ViewTowards.veryNegative,
@@ -325,6 +362,7 @@ public static class SocialActionsHelper
         "Give Food",
         true,
         "🍗",
+        5,
         "Give them the meal you brought with you. You loose a meal but you gain a friend.",
         4,
         2,
@@ -336,12 +374,29 @@ public static class SocialActionsHelper
         new Dictionary<MemoryTags, int> { },
         new List<MemoryTags> { { MemoryTags.relaxed } }
         ));
-
+        charmOptions.Add(SocializeType.makeTea, new ActionOption(
+          SocializeType.makeTea,
+          "Make tea",
+          false,
+          "💬",
+          30,
+          "Small relationship impact, relaxes the person",
+          2,
+          1,
+          false,
+          false,
+          ViewTowards.positive,
+          MemoryTags.none,
+          SubMenu.charmGive,
+                  new Dictionary<MemoryTags, int> { },
+        new List<MemoryTags> { { MemoryTags.relaxed } }
+          ));
         charmOptions.Add(SocializeType.bribe, new ActionOption(
              SocializeType.bribe,
         "Bribe",
         true,
         "💰",
+        5,
         "Costs 40 coin and gets them to talk but it dammaged your relationship with them",
         4,
         -2,
@@ -360,6 +415,7 @@ public static class SocialActionsHelper
         "Give alcohol",
         true,
         "👐",
+        60,
         "Give the person alcohol, will lead to impairment",
         4,
         1,

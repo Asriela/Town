@@ -3,16 +3,24 @@ using System.Collections.Generic;
 using Mind;
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 [System.Serializable]
 public class TraitTypeTraitPair
 {
     public Mind.TraitType traitType;
     public Trait trait;
 }
+public enum GameState
+{
+    none,
+    won,
+    lost
+}
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField]
     private List<TraitTypeTraitPair> _traitsInPlay = new();
+    public GameState EndGameState { get; set;} = GameState.none;
 
     public bool UIClicked { get; set; }
     public bool BlockingPlayerUIOnScreen { get; set; }
@@ -23,6 +31,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private InteractionMenu interactionMenu;
     public InteractionMenu InteractionMenu { get=> interactionMenu;}
+
 
     public void UpdateInteractionMenu(Character characterSpeaking, string currentDialogue)
     {
@@ -79,6 +88,10 @@ public class GameManager : Singleton<GameManager>
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
+        }
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
     public Dictionary<Mind.TraitType, Trait> TraitsInPlay

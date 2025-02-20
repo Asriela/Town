@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Mind;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 
 
@@ -12,10 +13,13 @@ public class PerformMenuAction : MonoBehaviour
     private ActionOption currentAction;
     private int pointsToReward = 0;
     private int relationshipImpact = 0;
+    float timeAddition = 0;
     private Character personWeAreInteractingWith;
     private Player player;
     private bool socializeUntilAnimationIsOver;
     private InteractionMenu theMenu;
+    private MemoryTags moodToChange;
+
     public void Initialize(Player player)
     {
         this.player = player;
@@ -53,7 +57,8 @@ public class PerformMenuAction : MonoBehaviour
         var ret = true;
         int additionalPoints = 0;
         var mood = target.State.VisualState[0];
-        currentAction= actionOption;
+        timeAddition= actionOption.TimeLength;
+        currentAction = actionOption;
         if (actionOption.BonusPoints.ContainsKey(mood))
         {
             additionalPoints = actionOption.BonusPoints[mood];
@@ -64,7 +69,7 @@ public class PerformMenuAction : MonoBehaviour
         foreach (var effect in actionOption.ActionEffects)
         {
 
-            target.State.VisualState[0] = effect;
+            moodToChange = effect;
 
         }
 
@@ -223,6 +228,12 @@ public class PerformMenuAction : MonoBehaviour
                     //personWeAreInteractingWith.Appearance.SetSpriteAction("talk");
                     socializeUntilAnimationIsOver = true;
                     break;
+                default:
+                    socializeTimeLeft = 2000;
+                    player.Appearance.SetSpriteAction("talk");
+                    //personWeAreInteractingWith.Appearance.SetSpriteAction("talk");
+                    socializeUntilAnimationIsOver = true;
+                    break;
             }
         }
         if (socializeUntilAnimationIsOver && player.Appearance.HasAnimationEnded())
@@ -255,8 +266,28 @@ public class PerformMenuAction : MonoBehaviour
             if (currentActionFailed==false)
             ActionResolution(SocialAction, personWeAreInteractingWith);
             SocialAction = SocializeType.none;
+            if (timeAddition != 0)
+            {
+                WorldManager.Instance.TimeProgress += timeAddition;
+                if (WorldManager.Instance.TimeProgress >= WorldManager.Instance.MaxTime)
+                {
+                    GameManager.Instance.EndGameState = GameState.lost;
+                }
+         
+                GameManager.Instance.UpdateInteractionMenu(personWeAreInteractingWith, "");
 
-       
+
+            }
+            var currentMood= personWeAreInteractingWith.State.VisualState[0];
+            if (moodToChange!=0 && moodToChange != MemoryTags.none && currentMood!= moodToChange)
+            {
+                GameManager.Instance.InteractionMenu.NewMood = $"@that made {personWeAreInteractingWith.CharacterName} {moodToChange}@\n";
+                personWeAreInteractingWith.State.SetVisualState(moodToChange);
+                GameManager.Instance.UpdateInteractionMenu(personWeAreInteractingWith, "");
+            }
+            timeAddition=0;
+
+
 
 
         }

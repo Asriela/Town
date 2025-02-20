@@ -3,7 +3,7 @@
 public class PlayerControls : MonoBehaviour
 {
     [Header("Movement Settings")]
-    public float moveSpeed = 2.5f;            // Maximum movement speed
+    public float moveSpeed = 2.5f*2f;            // Maximum movement speed
     public float acceleration = 10f;       // How quickly the player accelerates
     public float deceleration = 40f;       // How quickly the player decelerates
 

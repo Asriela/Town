@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class Impression : MonoBehaviour
 {
-    public int FearTowardsPlayer { get; set; } = 0;
-    public int TrustTowardsPlayer { get; set; } = 0;
+    public int FearTowardsPlayer { get; set; } = 20;
+    public int TrustTowardsPlayer { get; set; } = 20;
 
     public int ProgressToBreakdown { get; set; } = 0;
 
@@ -98,7 +98,7 @@ public class Impression : MonoBehaviour
                 if (amount > 7)
                 { ret = SocialImpression.militant; }
                 break;
-            case SocialImpression.friendly:
+            case SocialImpression.kind:
                 if (amount > 7)
                 { ret = SocialImpression.warmHearted; }
                 break;
@@ -130,7 +130,7 @@ public enum BaseSocial
     rude,
     boring,
     serious,
-    friendly,
+    kind,
     stuckUp,
     brave,
     charming,

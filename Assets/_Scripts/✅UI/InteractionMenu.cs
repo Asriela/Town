@@ -7,6 +7,7 @@ using System;
 using System.Text.RegularExpressions;
 using Mind;
 using UnityEngine.Windows;
+using System.Linq.Expressions;
 
 
 public class InteractionMenu : MonoBehaviour
@@ -22,6 +23,7 @@ public class InteractionMenu : MonoBehaviour
     private VisualElement portraitImage;
     public VisualElement ActionInfoPanel;
     public VisualElement ActionImage;
+    public VisualElement EndGameBack;
     public Label TooltipText;
     private Button dialogue;
     public Button statText;
@@ -29,6 +31,7 @@ public class InteractionMenu : MonoBehaviour
     public Button coerceMenuButton;
     public Button giveMenuButton;
     public ActionOption DoingAction=null;
+    string reportNewKey="";
 
     private List<Button> dialogueOptionButtons = new();
     private float scrolldown = 0;
@@ -51,7 +54,18 @@ public class InteractionMenu : MonoBehaviour
     public delegate void ButtonClicked(int positionInList, string buttonLabel, MenuOptionType menuOptionType);
     public event ButtonClicked OnButtonClicked;
 
-    public string pastDialogue = ""; // New field to store the past dialogue
+    public string pastDialogue =  $"<color=#7F807A>" ; // New field to store the past dialogue
+
+    public Label WinLooseLabel { get; set; }
+    public Label WinLooseDetailsLabel { get; internal set; }
+    public VisualElement TimeBar { get; internal set; }
+    public VisualElement TimeBarBack { get; internal set; }
+    public VisualElement TimeBarNext { get; internal set; }
+    public float TimeBarWidth { get; internal set; }
+    public VisualElement TimePanel { get; internal set; }
+    public Label TimeText { get; internal set; }
+    public string NewImpression { get; internal set; }
+    public string NewMood { get; internal set; }
 
     void OnEnable()
     {
@@ -146,7 +160,7 @@ public class InteractionMenu : MonoBehaviour
 
 
             MenuHelper.SetupActionMenuElements(this, ref TooltipText, ref ActionImage, ref ActionInfoPanel, ref actionsBackPanel, ref menuContainer2, portraitWidth);
-
+            MenuHelper.SetupWinLooseElements(this);
             // Add the actual portrait image
             portraitImage = new VisualElement();
             portraitImage.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/portraits/portraitTalinor"));
@@ -216,6 +230,7 @@ public class InteractionMenu : MonoBehaviour
     }
     public void ShowMenu(string lastChosenOption, string currentDialogue, string currentSpeaker, List<MenuOption> dialogueOptions, string contextTitle, List<MenuOption> menuButtons, Character personWeAreSpeakingTo)
     {
+
         lastActionsMenu = SocialActionMenuType.none;
         #region START
         if (currentDialogue != "")
@@ -235,8 +250,12 @@ public class InteractionMenu : MonoBehaviour
         GameManager.Instance.BlockingPlayerUIOnScreen = true;
         menuContainer.Clear();
         menuContainer2.Clear();
-
-
+        var endGameState= GameManager.Instance.EndGameState;
+        if (endGameState  != GameState.none)
+        {
+            MenuHelper.WinLooseScreen(this, endGameState);
+            return;
+        }
         // Add the background image first
         menuContainer.Add(backgroundImage);
 
@@ -267,35 +286,61 @@ public class InteractionMenu : MonoBehaviour
         if (lastChosenOption != "")
         { strippedPastDialogue = MyColor.StripColorTags(pastDialogue); }
 
-        pastDialogue = $"<color=#7F807A>" +
+        pastDialogue =
                   $"{strippedPastDialogue}";
 
 
-        pastDialogue = MyColor.WrapTextInYellowTag(pastDialogue);
+
         pastDialogue = MyColor.WrapTextInPurpleTag(pastDialogue);
+
         // Conditionally add "YOU-{lastChosenOption}" if it's not an empty string
         if (lastChosenOption != "" && lastChosenOption != "CONTINUE >")
         {
-            pastDialogue += @$"<color=#B3B4BC>YOU-""{lastChosenOption}""</color>" + "\n\n";
+            pastDialogue += @$"<color=#B3B4BC>YOU-""{lastChosenOption}""</color>" + "\n" + "\n" + "()";
         }
 
+        pastDialogue += NewImpression;
+
+        pastDialogue += NewMood;
+
+        pastDialogue += reportNewKey;
+
+        if(NewMood!="")
+        pastDialogue = MyColor.WrapTextInDarkYellowTag(pastDialogue) + "\n";
+        NewMood = "";
+
+        if (reportNewKey!="")
+        pastDialogue = MyColor.WrapTextInAquaTag(pastDialogue)+"\n";
+        reportNewKey = "";
+
+        pastDialogue = MyColor.WrapTextInYellowTag(pastDialogue);
+        NewImpression = "";
         // Add the speaker and current dialogue in white
+
+        var newDialogue="";
         if (currentDialogue != "")
         {
-            pastDialogue += @$"<color=#FFFFFF>{currentSpeaker.ToUpper()}</color><color=#D5D6C8>- " +
-                Regex.Replace(currentDialogue, @"^#(.*?)#(.*)", @$"  <color={MyColor.PaleWhiteHex}>$1</color>" + "\n" + @"""$2""") +
-                "</color>\n\n";
+            newDialogue = @$"<color=#FFFFFF>{currentSpeaker.ToUpper()}</color><color=#D5D6C8>- " +
+                Regex.Replace(currentDialogue, @"^#(.*?)#(.*)", @$"  <color={MyColor.PaleWhiteHex}>$1</color>"+ @"""$2""") +
+                "\n\n";
 
 
+        }
+        newDialogue = newDialogue.Replace("\n", "");
+        if (newDialogue != "")
+        {
+            pastDialogue += newDialogue + "\n" + "\n";
         }
 
 
         // Create the button and add the label
         dialogue = new Button();
         var removestars = System.Text.RegularExpressions.Regex.Replace(pastDialogue, @"\*", string.Empty);
+        pastDialogue.Replace("()", "");
+        removestars=removestars.Replace("()","\n");
 
         // Add a label to the button
-        Label dialogueLabel = new Label(removestars)
+        Label dialogueLabel = new Label($"<color=#7F807A>"+removestars + "</color>")
         {
             style =
             {
@@ -360,7 +405,7 @@ public class InteractionMenu : MonoBehaviour
                 var buttonCount = dialogueOptions.Count;
                 dialogueOptionButtons.Clear();
 
-                dialogueOptions = dialogueOptions.OrderBy(item => item.OptionMoodReq == MemoryTags.none ? 0 : 1).ToList();
+
 
                 // Arrange buttons vertically
                 int trueIndex = 0;
@@ -596,10 +641,10 @@ public class InteractionMenu : MonoBehaviour
                             personWeAreSpeakingTo.Impression.FearTowardsPlayer += cost;
                         }
 
-                        if (key != "")
+                        if (key != Key.none)
                         {
                             player.KeyKnowledge.Keys.Add(key);
-                            pastDialogue += $"*Found key info: {keyText}*\n";
+                            reportNewKey = $"$Found key info: {keyText}$\n";
 
                         }
 

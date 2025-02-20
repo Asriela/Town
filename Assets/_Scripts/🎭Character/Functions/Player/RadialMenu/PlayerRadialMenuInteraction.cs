@@ -35,9 +35,10 @@ public class ActionOption
     public SubMenu InSubMenu;
     public Dictionary<MemoryTags, int> BonusPoints;
     public bool OnceOff;
+    public float TimeLength;
 
 
-    public ActionOption(SocializeType enumType,  string name, bool onceOff, string emoji, string tooltip, int cost, int relationshipImpact, bool usedUp, bool isDisabled, ViewTowards relationshipRequirement, MemoryTags mood, SubMenu submenu, Dictionary<MemoryTags, int> bonusPoints = null, List<MemoryTags> actionEffects = null)
+    public ActionOption(SocializeType enumType,  string name, bool onceOff, string emoji, float timeLength, string tooltip, int cost, int relationshipImpact, bool usedUp, bool isDisabled, ViewTowards relationshipRequirement, MemoryTags mood, SubMenu submenu, Dictionary<MemoryTags, int> bonusPoints = null, List<MemoryTags> actionEffects = null)
     {
         Enum = enumType;
         Name = name;
@@ -53,6 +54,7 @@ public class ActionOption
         RelationshipImpact =relationshipImpact;
         InSubMenu = submenu;
         OnceOff= onceOff;
+        TimeLength=timeLength;
     }
 
 }
@@ -171,17 +173,21 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
 
     private void OpenRadialMenu(List<ActionOption> options)
     {
-        EventManager.TriggerSwitchCameraToInteractionMode(_player.transform, _personWeAreInteractingWith.transform);
-        _radialMenu.OpenMenu(options, _personWeAreInteractingWith);
+
+            EventManager.TriggerSwitchCameraToInteractionMode(_player.transform, _personWeAreInteractingWith.transform);
+            _radialMenu.OpenMenu(options, _personWeAreInteractingWith);
+        
+
     }
 
     private void OpenPrimaryMenu()
     {
-        
 
+        if (_personWeAreInteractingWith.CharacterName != CharacterName.Onar)
+        {
             GameManager.Instance.OpenDialoguePlayer(_personWeAreInteractingWith, DialogueFileType.auto);
             CloseInteractionMenu();
-
+        }
 
 
     }

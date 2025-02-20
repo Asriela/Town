@@ -54,12 +54,12 @@ public static class SocialActionProcessor
         {
             case SocializeType.greet:
                 ret = "'Good afternoon to you as well, what can I help with?'";
-                ChangeImpression(SocialImpression.friendly, 1);
+                ChangeImpression(SocialImpression.kind, 1);
 
                 break;
             case SocializeType.bribe:
                 ret = "'Good afternoon to you as well, what can I help with?'";
-                ChangeImpression(SocialImpression.friendly, 1);
+                ChangeImpression(SocialImpression.stuckUp, 5);
 
                 break;
             case SocializeType.joke:
@@ -79,28 +79,39 @@ public static class SocialActionProcessor
 
                 break;
             case SocializeType.smallTalk:
-                if (mood == MemoryTags.distant || mood == MemoryTags.tense || mood == MemoryTags.tense)
+                if (mood == MemoryTags.relaxed || mood == MemoryTags.drunk)
+                {
+                    ret = "You talk about the weather 'Yeah its quite freezing up here.'";
+                    ChangeImpression(SocialImpression.kind, 1);
+                }
+                else
                 {
                     ret = "'Not sure if you can tell but I am not really in the mood for meaningless chatter..'";
                     ChangeImpression(SocialImpression.annoying, 1);
                     actionFailed = true;
-                }
-                else
-                {
-
-                    ret = "You talk about the weather 'Yeah its quite freezing up here.'";
-                    ChangeImpression(SocialImpression.friendly, 1);
+                 
                 }
 
 
 
                 break;
             case SocializeType.insult:
-                ret = "He squints at you. 'Is that really the person you want to be? Insulting?'";
+                if(mood == MemoryTags.scared)
+                {
+                    ret = "He looks down in shame.";
 
-                actionFailed = true;
-                ChangeImpression(SocialImpression.rude, 1);
-                break;
+            
+                    ChangeImpression(SocialImpression.rude, 2);
+                }
+                else
+                {
+                    ret = "He squints at you. 'Is that really the person you want to be? Insulting?'";
+
+                    actionFailed = true;
+                    ChangeImpression(SocialImpression.rude, 1);
+                }
+
+                break; 
             case SocializeType.threaten:
                 ret = "You threaten to knock in his knees. 'I'm just an old man! Why would you say something like that!?'";
                 
@@ -125,7 +136,7 @@ public static class SocialActionProcessor
 
                 
                 ChangeImpression(SocialImpression.evil, 4);
-                AddToBreakDown(5);
+                AddToBreakDown(7);
                 break;
             case SocializeType.beatUp:
                 ret = "You punch him in the face. He is bleeding from the mouth he looks up at you with horror.";

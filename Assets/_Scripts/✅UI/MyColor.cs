@@ -15,12 +15,14 @@ public static class MyColor
     public static readonly Color PurpleBack = new Color(70f / 255f, 69f / 255f, 104f / 255f);
     public static readonly Color Purple = new Color(0.419f, 0.318f, 0.424f);
     public static readonly string PurpleHex = "#CC33FF";
+    public static readonly string AquaHex = "#5EFFF1";
     public static readonly string RedHex = "#D7431F";
     public static readonly string GreenHex = "#A5C64F";
     public static readonly string WhiteHex = "#FFFFFF";
     public static readonly string PaleWhiteHex = "#CFD5BF";
     
     public static readonly string YellowHex = "#E4B83A";
+    public static readonly string DarkYellowHex = "#8A7230";
     public static readonly string CyanHex = "#6CADB5";
     public static readonly string DarkCyanHex = "#57878E";
     
@@ -46,6 +48,20 @@ public static class MyColor
         });
         return ret;
     }
+    public static string WrapTextInDarkYellowTag(string pastDialogue)
+    {
+        // Define the purple color tag
+        string purpleTagStart = $"<color={DarkYellowHex}>"; // Use your specific MyColor.PurpleHex value here
+        string purpleTagEnd = "</color>";
+        var beforetext = pastDialogue;
+        // Regex to find text wrapped in '*' and replace it with purple color tag
+        var ret = System.Text.RegularExpressions.Regex.Replace(pastDialogue, @"\@(.*?)\@", match =>
+        {
+            // Wrap the matched text with the purple color tag
+            return purpleTagStart + match.Groups[1].Value + purpleTagEnd;
+        });
+        return ret;
+    }
     public static string WrapTextInPurpleTag(string pastDialogue)
     {
         // Define the purple color tag
@@ -60,7 +76,20 @@ public static class MyColor
         });
         return ret;
     }
-
+    public static string WrapTextInAquaTag(string pastDialogue)
+    {
+        // Define the purple color tag
+        string purpleTagStart = $"<color={AquaHex}>"; // Use your specific MyColor.PurpleHex value here
+        string purpleTagEnd = "</color>";
+        var beforetext = pastDialogue;
+        // Regex to find text wrapped in '*' and replace it with purple color tag
+        var ret = System.Text.RegularExpressions.Regex.Replace(pastDialogue, @"\$(.*?)\$", match =>
+        {
+            // Wrap the matched text with the purple color tag
+            return purpleTagStart + match.Groups[1].Value + purpleTagEnd;
+        });
+        return ret;
+    }
     public static string StripColorTags(string input)
     {
         return System.Text.RegularExpressions.Regex.Replace(input, "<color[^>]*?>|</color>", string.Empty);

@@ -1,7 +1,7 @@
 ==start==
 	#"So what did you find out so far?"
 	(key : takenbywoods)
-	>Ashla was taken by the broken magic.
+	>Ashla was taken by the broken magic.[ending : won]
 		#"Well that settles that."
 	-Nothing
 		#"Ashla could still be out there! Why are we wasting time?"

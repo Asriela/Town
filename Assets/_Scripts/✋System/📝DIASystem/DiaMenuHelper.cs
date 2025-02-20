@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Linq.Expressions;
 using Mind;
 using NUnit.Framework;
 using UnityEngine;
@@ -30,9 +31,9 @@ public static class DiaMenuHelper
                 OptionKey = diaOption.OptionKey,
                 IsKey = diaOption.IsKey,
                 UniqueId = diaOption.UniqueId,
-                OptionNumber= diaOption.OptionNumber,
-                OldOption= diaOption.OldOption,
-                OptionMoodReq  = diaOption.OptionMoodReq
+                OptionNumber = diaOption.OptionNumber,
+                OldOption = diaOption.OldOption,
+                OptionMoodReq = diaOption.OptionMoodReq
             };
             menuOptions.Add(menuOption);
         }
@@ -40,17 +41,17 @@ public static class DiaMenuHelper
 
         return menuOptions;
     }
-        
+
 
     public static SocializeType ExecuteAction(Character player, Character personWeAreSpeakingTo, DiaActionType? actionType, object actionData)
     {
-        SocializeType socialAction= SocializeType.none;
+        SocializeType socialAction = SocializeType.none;
         if (actionType != null)
         {
             switch (actionType)
             {
                 case DiaActionType.scriptedAction:
-                    if (actionData!=null)
+                    if (actionData != null)
                     {
                         personWeAreSpeakingTo.Memory.ScriptedTaskProgress[(ScriptedTaskType)actionData] = ScriptedTaskProgressType.activated;
                     }
@@ -63,21 +64,47 @@ public static class DiaMenuHelper
                     }
 
                     break;
+                case DiaActionType.endGame:
+                    if (actionData != null)
+                    {
+                        GameManager.Instance.EndGameState = GameState.won;
+
+
+                        GameManager.Instance.UpdateInteractionMenu(personWeAreSpeakingTo, "");
+                    }
+
+                    break;
                 case DiaActionType.mood:
                     if (actionData != null)
                     {
-                        var data= (MemoryTags)actionData;
-                        var state= personWeAreSpeakingTo.State.VisualState[0];
+                        var data = (MemoryTags)actionData;
+                        var state = personWeAreSpeakingTo.State.VisualState[0];
                         var ok = false;
+                        var currentMood = personWeAreSpeakingTo.State.VisualState[0];
+                        if (data != MemoryTags.none && currentMood != data)
+                        {
+                            personWeAreSpeakingTo.State.SetVisualState(data);
+                            GameManager.Instance.InteractionMenu.NewMood = $"@that made {personWeAreSpeakingTo.CharacterName} {data}@\n";
+                        }
 
-                        personWeAreSpeakingTo.State.SetVisualState(data);
+                    }
+
+                    break;
+                case DiaActionType.impression:
+                    if (actionData != null)
+                    {
+                        var data = (SocialImpression)actionData;
+
+
+                            var newImpression= personWeAreSpeakingTo.Impression.AddSocialImpression(data,1);
+                        GameManager.Instance.InteractionMenu.NewImpression = $"*{personWeAreSpeakingTo.CharacterName} finds you {newImpression}*\n";
                     }
 
                     break;
                 case DiaActionType.action_hangout:
-         
-                        socialAction= SocializeType.drinking;
-                    
+
+                    socialAction = SocializeType.drinking;
+
 
                     break;
                 case DiaActionType.action_rentRoom:

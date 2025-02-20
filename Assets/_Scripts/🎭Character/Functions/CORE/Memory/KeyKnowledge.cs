@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class KeyKnowledge : MonoBehaviour
 {
-    public List<string> Keys { get; set;}=new();
+    public List<Key> Keys { get; set;}=new();
 }

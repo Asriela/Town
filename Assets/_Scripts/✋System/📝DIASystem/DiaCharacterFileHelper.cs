@@ -47,7 +47,7 @@ public static class DiaCharacterFileHelper
     private static string Default(Character character)
     {
         var name = character.CharacterName;
-        var ret = $"{name}_1";
+        var ret = $"{name}_repeat"; //$"{name}_1";
         if (accessCount[name] > 0)
         {
             ret = $"{name}_repeat";

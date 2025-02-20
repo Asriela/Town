@@ -57,7 +57,7 @@ namespace Mind
         antiSocial,
         militant,
         monstrous,
-        friendly,
+        kind,
         warmHearted,
         stuckUp,
         arrogant,
@@ -247,7 +247,9 @@ namespace Mind
         giveAlcohol,
         reassure,
         puthandOnShoulder,
-        messWithTheirHead
+        messWithTheirHead,
+        sitAtFireplace,
+        makeTea
     }
 
     [Serializable]

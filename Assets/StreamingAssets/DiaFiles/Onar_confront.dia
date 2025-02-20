@@ -2,72 +2,228 @@
 	#Onar looks distant he just stares at you not saying a word.
 	>I heard what happened to Ashla, would you like some company? 1+
 		#"um.. sure.."
-		<positive>
+		<WhatHappenedToAshla>
 
-					
-
-	
 	>WHAT DID YOU DO TO ASHLA YOU BASTARD! 1-
 		#"You cannot just come into my home and think you can intimidate me!"
-		-You sure about that? 4-
-			#"I don't know what happened to Ashla, she just ran away.."
-			-DONT LIE TO ME, people heard she was locked up in your cabin! 4-
-				#"I had to protect her!"
-				-protect her from what!?
-					#"Herself! She was going to... she.."
+		<negativePath>
 	
-
-	
-==positive==
+//start
+==positivePath==
 	>So how do you know Ashla 1+
 		#"I don't, she is just someone that arrived in town."
-		>So why the fuck is she with you then? 1-
+		>Then what happened how exactly did you meet 2+
+			#"I saw her at the tavern and I saw something in her eyes.. and I think she saw something in mine, after that, she just came home with me."
+			>How did you convince her to stay with you? 2+
+				#"I didn't , she convinced me, its funny because its not like she even needed shelter.."  
+				>How can a lost teenage girl not need shelter?
+					#"She is from the Ald-kla tribe, they don't feel cold and they can pull nutrients out of nature with their connection to before."
+					<whyGoWithYou>
+			>What did you see? 4+
+				#"I saw the same pain, I had entombed into my own eyes."
+				-What is this pain you share? [mood : emotional]
+					#"Can you catch the sun before it touches the dusk of its soul? That was Ashla for me, now I will never see her rise again."
+					>She is DEAD? 4+ 
+						#He hangs his head low.
+						-
+							#"I tried, I really tried everything.."
+							<WhatHappenedToAshla>
+					>The fuck did you do to her!? [mood : angry] 4-
+						#"I did NOTHING!" 
+						<WhatHappenedToAshla>
+
+					
+		>So why the fuck was she with you then? 1-
 			#"She came to me, gravitated to me, I don't know why!"
 			>You mean you MANIPULATED her?![mood : tense] 2-
 				#"Who are you? What do you want from me.." He looks at you with cowardice.
 				>Answer the question.. [mood : emotional] 2-
 					#"You don't know what she has been though.." 
-					<Ashla>
-				
-		^Then what happened.. how exactly did you meet 2+
-			#"I saw her at the tavern and I saw something in her eyes.. and I think she saw something in mine, after that we just clicked."
-			>What did you see? 4+
-				#"Myself"
-				<Ashla>
-			>How did you convince her to stay with you? 2+
-				#"She just came with me.."
-				<Ashla>
+					<WhatHappenedToAshla>
+
 	
-	
-	>Tell me more about yourself?  [requiresMood : relaxed]
-		#"Like her I am a long way from home.. have you ever heard of a star coin?"
+	>Tell me more about yourself? [requiresMood : relaxed] 2+
+		#"Like Ashla, I am a long time away from home.. have you ever heard of a star coin?"
+		<OnarLore>
 		
-	>Where is Ashla now? [requiresMood : emotional]
-		#"I don't know.. "
-		>Its ok you can tell me..
-			#"No I really don't the darkness took her, I don't know what it did with her.
-		>What the fuck do you mean you don't know? 2-
-			#"I don't know what the broken magic did to her!"
-		
+
+//middle					
+==whyGoWithYou==			
+	>So then why did she decide to go with you?
+		#"There is one thing we need more than anything else in this world, love."
+		>So she sought that love with you? 2+
+			#"She didn't seek love with me" He looks at you annoyed "she just wanted to know someone cared.. That she wasn't alone."
+			>Why did she leave her tribe?
+				#"She ran away.."
+				-
+					#"Look, she never told me why."
+					>ok
+						#"I still remember her eyes when I asked her.." He holds in his breath and looks over to the fireplace.
+						<WhatHappenedToAshla>
+					>You can tell me.. 8+
+						#"The Reachers attacked her tribe, they had been hunting them for so many years.."
+						<reachers>
+		>So you fucked her? [impression : rude]2-
+			#"I did not FUCK her." 
+			-Are you sure about that?[mood : angry]
+				#"YES! She wanted someone who understood her. Not some fuck buddy!"
+				<WhatHappenedToAshla>	
+	>Connection to before?
+		#"Old magic is gone, but you can still reach it if you can tap into the past."
+		>What past?
+			#"Over a thousand years ago, before everything changed."
+			-What changed?
+				#"You used to be able to whisper to magic, tell her your secrets and together you would make something beautiful, now.."
+				-
+					#"Now she has been broken. Used by arcane users such as yourself forcing her countless fingers in countless directions."
+					>I didn't do anything, I just use spells I was taught!
+						#"USE spells..."
+						-
+							#"Where do you think your amnesia comes from.."
+							-I was told, the forest.
+								#"Look, look out that window!" He points shaking to the window of his cabin. "You see that forest?"
+								-[mood : angry]
+									#"He lies there, broken , magic itself, surrounding this entire FUCKING outpost." 
+									<WhatHappenedToAshla>
+					>Its just a spell, you are making this up. [impression : annoying]
+						#He grumbles to himself. "Good luck with your amnesia."
+						<whyGoWithYou>
+					
+					
+		-How do you reach the past?
+			#"Ive been trying to go back to it for over two hundred years, but it slips through my fingers like sands of an hour glass."
+		-So Ashla how does she fit into all this?
+			#"Her tribe is the only people with an unbroken recollection of the past.
+			
 	
-==Ashla==
-	>why didn't you leave her with someone else? 
-		#He looks off into the distance "She just seemed to gravitate towards me.. I guess we share a similar pain"
-		<positive>
+		
+		
+==reachers==
+	>The Reachers?
+		#"All your spells come from those who tortured humans to discover them, its a derogatory term for them, 'reaching' for magic."
+		-
+			#"To make new spells you need direct access to something with old magic, they had that direct connection."
+			-
+				#"So they turned over that tribe trying to find every last source of old magic they could."
+				<reachers>
+	>But what happened to Ashla during the attack? 2+
+		#"She got.. they.."
+		-I see, so she came here and then what?
+			#"She came to me.. she stayed with me.." He looks dazed
+			<WhatHappenedToAshla>
 
 		
-==Onar==
-	-Where?
-	
-==entrance==
-	>Thank you, so how do you know Ashla 1+
-		#"Ashla.. she uh.. arrived in town a few weeks ago, she is just a teenager she had nowhere to go."
-		<Ashla>
-	>Where are you from Onar? 1+
-		#"I'm from out of town"
-		<Onar>
+==WhatHappenedToAshla==	
+	>So what happened to Ashla?
+		#"I tried to stop her.. she kept moaning about the forest understanding her , she would go in these dazes crying uncontrollably.. and then sudden stretches of murmurs "
+		-What was she murmuring about? 2+
+			#"Pine needles in her skin.. how it wanted to comfort her , hold her..."
+		>So why isn't she here any more...
+			#"I caught her just running straight out into the forest, so I caught her and brought her back."
+			<Innocent-GOOD>
+		-sounds like she was trying to escape you!
+			#"NO! HER FUCKING MIND WAS BEING GRASPED BY THE FOREST!"
+			<Guilty-GOOD>
+											
+
+==Innocent-GOOD==				
+	>She was trying to run away from you!
+		#"NO! HER FUCKING MIND WAS BEING GRASPED BY THE FOREST!"		
+		<Guilty-GOOD>
+	>Why would she run straight into the forest?
+		#"Broken magic surrounds this outpost, he heard her cries of pain and called her to the forest to be with him"
+		-There is no such thing
+		-Be with him?[key : onarInnocent]
+			#"He wanted a hug"
+			
+		
+==Guilty-GOOD==
+	>YOU FUCKING GRASPED HER! 2-
+		#"NO! I , I , swear it was the forest.." He looks around with wild eyes
+		>You SICK fuck, what did you DO!?
+			#"SHE - she kissed me!"
+			>You are fucking blocking it out! REMEMBER WHAT ACTUALLY HAPPENED
+				#His breathing fastens to a panic he tries to run but you hold him down
+				-
+					#"I- I why would a teenage girl want to have sex with me...?"
+					>EXACTLY why... would... a.. teenage... girl... want to have sex with an old fuck like you?
+						#"I don't, I cant remember what happened..."
+						>YOU DONT FUCKING WANT TO REMEMBR 4-
+							#He begins to cry uncontrollably, he takes out a strange twisted ornament from his pocket
+							-
+								#It looks like a human figure twisted in on itself he begins to stroke it
+								>Just watch 
+									#He suddenly begins to magically twist in on himself his limbs bending in unnatural ways until they begin breaking, he doesn't make a sound
+									-
+										#His face just stares at you blankly as he lifts up into the air and contorts over and over into a smaller and smaller ball
+										-[key : onarGuilty]
+											#Until nothing is left.
+											>leave
+												<end>
+								>Stop him 
+									#You knock it out of his hands. He shakes like an addict in withdrawal trying to grasp after it, his breathing wheezing.
+									>Tie him up[key : onarGuilty]
+										#He just gives you a blank stare
+										>Leave 
+											<end>
+			
+
+			
+==negativePath==		
+	-You sure about that? 4-
+		#"I don't know what happened to Ashla, she just ran away.."
+		-DONT LIE TO ME, people heard she was locked up in your cabin! 4-
+			#"I had to protect her!"
+			-protect her from what!? 4-
+				#"Herself! The darkness from the forest was calling her!"
+				-What darkness? [key : onarInnocent]2-
+					#"The broken magic that surrounds this outpost, it lured her and then killed her."
+					-leave
+						<end>
 
 ==breakdown==
 	>Onar?
 		#"It was all me.. I did this"
 		-No you didnt
+		
+==OnarLore==
+	>No I haven't [impression : kind]
+		#"They were magical, more magical than anything a mage can conjure up.."
+		>Were they your currency?
+			#"We didn't need currency back then. The star coins bound us together under the heavens.
+			<OnarLoreLoop>
+			
+==OnarLoreLoop==
+	-A world without a form of barter is impossible.
+		#"Today, you would think so, but back then it was just life."
+		<OnarLoreLoop>
+	>How long ago is, back then?
+		#"Over a thousand years ago. Don't worry I am not THAT old..
+		>Then how are you here? 2+
+			
+			#"I was one of the last star children, maybe the very last one left, see.. I have never seen a star coin again, except mine" He takes out the star coin.
+			-
+				#The star coin comfortably fills his palm, it appears silver with a blue star in the centre, though the blue seems to deepen like a window into another realm.
+				>What is inside it? 
+					#"The moment it was created. The moment I was born."
+					-So what does the star coin do?
+						#"It was our connection to each other.."
+						-What happened to the connection?
+							#"Its all gone, gone with everyone I knew.."
+							-[mood : emotional]
+								#"please catch those faraway dreams that slip through my childhood fingers, now too old to close" he looks tired, like he is about to fall asleep."
+								<positivePath>
+		>OK
+			#"My star coin is the only thing that I have left of the past.. sitting under the heavens."
+			<OnarLoreLoop>
+	>Heavens? Woah no need to get religious on me.
+		#"Its not religion, what I mean is, it's the collective mind contained in the lights above us."
+		-I mean that sounds like a doctrine to me. What if the stars are just fires in the sky.
+			#"Intriguing but no, they are collective looking down on us.
+			-Is the collective smiling?
+				#"I think its more complex than that, like I said it was a different world back then.."
+				<OnarLoreLoop>
+	>Lets talk about something else..
+		#"Ok then.."
+		<positivePath>
+			

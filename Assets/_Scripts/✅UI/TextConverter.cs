@@ -5,13 +5,22 @@ using static Unity.Burst.Intrinsics.Arm;
 
 public static class TextConverter
 {
-    public static string GetKeyText(string key)
+    public static string GetKeyText(Key key)
     {
         var ret="";
-        if (key!="")
+        if (key!=Key.none)
         {
-          
-                ret= "Ashla was taken by broken magic";
+
+            switch (key)
+            {
+                case Key.onarInnocent:
+                    ret = "Ashla was taken by broken magic, Onar is innocent. Report back to Dohlson.";
+                    break;
+                case Key.onarGuilty:
+                    ret = "Onar killed Ashla. Report back to Dohlson.";
+                    break;
+            }
+                
          
         }
         return ret;

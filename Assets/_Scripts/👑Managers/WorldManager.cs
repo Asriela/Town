@@ -40,7 +40,8 @@ public class WorldManager : Singleton<WorldManager>
     [SerializeField]
     private List<LocationTypeGameObjectPair> _locations = new();
 
-
+    public float TimeProgress { get; set;}=0;
+    public float MaxTime { get; set; } = 60*3;
 
     public Dictionary<LocationName, Location> Locations
     {

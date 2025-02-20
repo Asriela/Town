@@ -18,28 +18,28 @@ MonoBehaviour:
     _dialogue: 
     _action: 25
     _actionParameter:
-      rid: 9081441903479882012
+      rid: 9081442019238215964
     _conditions:
     - conditionType: 42
       parameter:
-        rid: 9081441903479882013
+        rid: 9081442019238215965
     - conditionType: 50
       parameter:
-        rid: 9081441903479882017
+        rid: 9081442019238215966
     _priority: 10
     _actionTags: 
   references:
     version: 2
     RefIds:
-    - rid: 9081441903479882012
+    - rid: 9081442019238215964
       type: {class: DialogueFileType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 2
-    - rid: 9081441903479882013
+    - rid: 9081442019238215965
       type: {class: ScriptedTaskType, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1
-    - rid: 9081441903479882017
+    - rid: 9081442019238215966
       type: {class: CharacterName, ns: Mind, asm: Assembly-CSharp}
       data:
         value__: 1

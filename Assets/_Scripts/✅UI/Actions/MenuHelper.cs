@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Text.RegularExpressions;
+
 using Mind;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -17,7 +17,7 @@ public static class MenuHelper
         actionsBackPanel.style.left = new Length(-78, LengthUnit.Pixel); // Left of the menu background
         actionsBackPanel.style.top = new Length((49 * 6) + 5 + 20 + 10, LengthUnit.Pixel);
         actionsBackPanel.style.width = new Length(portraitWidth + 50, LengthUnit.Pixel); // Scale factor for portrait
-        actionsBackPanel.style.height = new Length(250+20, LengthUnit.Pixel); // Scale factor for portrait
+        actionsBackPanel.style.height = new Length(250 + 20, LengthUnit.Pixel); // Scale factor for portrait
         actionsBackPanel.style.opacity = 0.99f;
         actionsBackPanel.style.borderTopLeftRadius = 10;
         actionsBackPanel.style.borderTopRightRadius = 10;
@@ -74,9 +74,185 @@ public static class MenuHelper
         myMenu.charmMenuButton = new();
         myMenu.giveMenuButton = new();
         myMenu.coerceMenuButton = new();
+
+        myMenu.TimeBarWidth = 300;
+            var barHeight =30;
+        var left =140;
+        var top=610+20;
+        myMenu.TimePanel = new VisualElement();
+        myMenu.TimePanel.style.backgroundColor = MyColor.GreyBack;
+        myMenu.TimePanel.style.position = Position.Absolute;
+        myMenu.TimePanel.style.left = left-25-40+10-4;
+        myMenu.TimePanel.style.top = top-50;
+
+        myMenu.TimePanel.style.width = myMenu.TimeBarWidth+20+80-20-4;
+        myMenu.TimePanel.style.height = barHeight+80;
+        myMenu.TimePanel.style.flexDirection = FlexDirection.Column;
+        myMenu.TimePanel.style.alignItems = Align.Center;
+        myMenu.TimePanel.style.justifyContent = Justify.Center;
+        myMenu.TimePanel.visible = true;
+        myMenu.menuContainer.Add(myMenu.TimeBarBack);
+
+        myMenu.TimeText = new Label("TIME LEFT UNTIL ARREST")
+        {
+            style =
+                {
+                    color = Color.white,
+                    fontSize = 14,
+                    unityTextAlign = TextAnchor.MiddleCenter,
+                    whiteSpace = WhiteSpace.Normal,
+                    alignSelf = Align.Center,
+                    flexGrow = 1,
+                    width = 160,
+                }
+        };
+        myMenu.TimeText.style.position = Position.Absolute;
+        myMenu.TimeText.style.left = left + myMenu.TimeBarWidth/2 -80-40+5;
+        myMenu.TimeText.style.flexDirection = FlexDirection.Column;
+        myMenu.TimeText.style.alignItems = Align.Center;
+        myMenu.TimeText.style.justifyContent = Justify.Center;
+        myMenu.TimeText.style.width = 200;
+        myMenu.TimeText.style.top = top - 40+10;
+        myMenu.menuContainer.Add(myMenu.TimeText);
+
+        myMenu.TimeBarBack = new VisualElement();
+        myMenu.TimeBarBack.style.backgroundColor = Color.clear;
+        myMenu.TimeBarBack.style.borderTopWidth = 2;
+        myMenu.TimeBarBack.style.borderBottomWidth = 2;
+        myMenu.TimeBarBack.style.borderLeftWidth = 2;
+        myMenu.TimeBarBack.style.borderRightWidth = 2;
+        myMenu.TimeBarBack.style.borderTopColor = Color.white;
+        myMenu.TimeBarBack.style.borderBottomColor = Color.white;
+        myMenu.TimeBarBack.style.borderLeftColor = Color.white;
+        myMenu.TimeBarBack.style.borderRightColor = Color.white;
+        myMenu.TimeBarBack.style.position = Position.Absolute;
+        myMenu.TimeBarBack.style.left = left-20;
+        myMenu.TimeBarBack.style.top = top;
+
+        myMenu.TimeBarBack.style.width = myMenu.TimeBarWidth;
+        myMenu.TimeBarBack.style.height = barHeight;
+        myMenu.TimeBarBack.style.flexDirection = FlexDirection.Column;
+        myMenu.TimeBarBack.style.alignItems = Align.Center;
+        myMenu.TimeBarBack.style.justifyContent = Justify.Center;
+        myMenu.TimeBarBack.visible = true;
+        myMenu.menuContainer.Add(myMenu.TimeBarBack);
+
+        myMenu.TimeBarNext = new VisualElement();
+        myMenu.TimeBarNext.style.backgroundColor = MyColor.Red;
+        myMenu.TimeBarNext.style.position = Position.Absolute;
+        myMenu.TimeBarNext.style.left = left-20;
+        myMenu.TimeBarNext.style.top = top;
+        myMenu.TimeBarNext.style.width = 0;
+        myMenu.TimeBarNext.style.height = barHeight;
+        myMenu.TimeBarNext.style.flexDirection = FlexDirection.Column;
+        myMenu.TimeBarNext.style.alignItems = Align.Center;
+        myMenu.TimeBarNext.style.justifyContent = Justify.Center;
+        myMenu.TimeBarNext.visible = true;
+        myMenu.menuContainer.Add(myMenu.TimeBarNext);
+
+        myMenu.TimeBar = new VisualElement();
+        myMenu.TimeBar.style.backgroundColor = Color.white;
+        myMenu.TimeBar.style.position = Position.Absolute;
+        myMenu.TimeBar.style.left = left - 20;
+        myMenu.TimeBar.style.top = top;
+        myMenu.TimeBar.style.width = myMenu.TimeBarWidth;
+        myMenu.TimeBar.style.height = barHeight;
+        myMenu.TimeBar.style.flexDirection = FlexDirection.Column;
+        myMenu.TimeBar.style.alignItems = Align.Center;
+        myMenu.TimeBar.style.justifyContent = Justify.Center;
+        myMenu.TimeBar.visible = true;
+        myMenu.menuContainer.Add(myMenu.TimeBar);
+
+
+
+         
+    }
+    public static void SetupWinLooseElements(InteractionMenu myMenu)
+    {
+        var width = 1000;
+        var height = 600;
+        myMenu.EndGameBack = new VisualElement();
+        myMenu.EndGameBack.style.backgroundColor = MyColor.GreyBack;
+        myMenu.EndGameBack.style.position = Position.Absolute;
+        myMenu.EndGameBack.style.left = 100; // Left of the menu background
+        myMenu.EndGameBack.style.top = 50;
+        myMenu.EndGameBack.style.width = new Length(width, LengthUnit.Pixel); // Scale factor for portrait
+        myMenu.EndGameBack.style.height = new Length(height, LengthUnit.Pixel); // Scale factor for portrait
+        myMenu.EndGameBack.style.opacity = 0.96f;
+        myMenu.EndGameBack.style.borderTopLeftRadius = 10;
+        myMenu.EndGameBack.style.borderTopRightRadius = 10;
+        myMenu.EndGameBack.style.borderBottomLeftRadius = 10;
+        myMenu.EndGameBack.style.borderBottomRightRadius = 10;
+        myMenu.EndGameBack.visible = false;
+        myMenu.root.Add(myMenu.EndGameBack);
+
+        myMenu.WinLooseLabel = new Label
+        {
+            style =
+                {
+                    color = Color.white,
+                    fontSize = 80,
+                    unityTextAlign = TextAnchor.MiddleCenter,
+                    whiteSpace = WhiteSpace.Normal,
+                    alignSelf = Align.Center,
+                    flexGrow = 1,
+                    width = 1000,
+                }
+        };
+        myMenu.WinLooseLabel.style.position = Position.Absolute;
+        myMenu.WinLooseLabel.style.left = 400-300; // Left of the menu background
+        myMenu.WinLooseLabel.style.top = 200;
+        myMenu.WinLooseLabel.AddToClassList("button");
+        myMenu.root.Add(myMenu.WinLooseLabel);
+
+        myMenu.WinLooseDetailsLabel = new Label
+        {
+            style =
+                {
+                    color = Color.white,
+                    fontSize = 15,
+                    unityTextAlign = TextAnchor.MiddleCenter,
+                    whiteSpace = WhiteSpace.Normal,
+                    alignSelf = Align.Center,
+                    flexGrow = 1,
+                    width = 1000,
+                }
+        };
+        myMenu.WinLooseDetailsLabel.style.position = Position.Absolute;
+        myMenu.WinLooseDetailsLabel.style.left = 400-300; // Left of the menu background
+        myMenu.WinLooseDetailsLabel.style.top = 400;
+        myMenu.WinLooseDetailsLabel.AddToClassList("button");
+        myMenu.root.Add(myMenu.WinLooseDetailsLabel);
     }
 
+    public static void WinLooseScreen(InteractionMenu myMenu, GameState endGameState)
+    {
 
+        myMenu.WinLooseDetailsLabel.visible=true;
+        myMenu.WinLooseLabel.visible = true;
+        myMenu.EndGameBack.visible = true;
+        var statsText="";
+
+        var dohlson=WorldManager.Instance.GetCharacter(CharacterName.Dohlson);
+        var onar = WorldManager.Instance.GetCharacter(CharacterName.Onar);
+        var onarImp= onar.Impression.GetSocialImpression();
+        var dolImp= dohlson.Impression.GetSocialImpression();
+        statsText += onarImp == SocialImpression.none ? $"<color={MyColor.GreyHex}>Onar didnt have any impression of you</color>\n" :  $"<color={MyColor.GreyHex}>Onar found you</color> {onarImp}\n";
+        statsText += dolImp == SocialImpression.none ? $"<color={MyColor.GreyHex}>Dohlson didnt have any impression of you</color>\n" : $"<color={MyColor.GreyHex}>Dohlson found you</color> {dolImp}\n";
+
+
+        if (endGameState == GameState.won)
+        {
+            myMenu.WinLooseLabel.text = "YOU WON";
+            myMenu.WinLooseDetailsLabel.text = "You sucessfully found out what happened to Ashla\n\n"+statsText;
+        }
+        else
+        {
+            myMenu.WinLooseLabel.text = "YOU FAILED";
+            myMenu.WinLooseDetailsLabel.text = "You ran out of time.\n\n" + statsText;
+        }
+
+    }
     public static void ActionsMenu(InteractionMenu myMenu, SocialActionMenuType actionsMenuTypeWeAreIn, Character personWeAreSpeakingTo)
     {
 
@@ -88,39 +264,54 @@ public static class MenuHelper
 
         myMenu.menuContainer2.Add(myMenu.actionsBackPanel);
         myMenu.menuContainer2.Add(myMenu.ActionInfoPanel);
+        myMenu.menuContainer2.Add(myMenu.TimePanel);
+
+        myMenu.menuContainer2.Add(myMenu.TimeBarNext);
+        myMenu.menuContainer2.Add(myMenu.TimeBar);
+        myMenu.menuContainer2.Add(myMenu.TimeText);
+        myMenu.menuContainer2.Add(myMenu.TimeBarBack);
+
+
         var availableActions = SocialActionsHelper.GetAvailableActions(actionsMenuTypeWeAreIn, personWeAreSpeakingTo);
 
         float topOffset = 120; // Starting vertical position
 
         var player = WorldManager.Instance.ThePlayer;
         var relationship = personWeAreSpeakingTo.Relationships.GetRelationshipWith(personWeAreSpeakingTo, player);
-     
+
+        var maxTime = WorldManager.Instance.MaxTime;
+        var timeProgress = WorldManager.Instance.TimeProgress;
+
+
+        myMenu.TimeBar.style.width = (myMenu.TimeBarWidth / maxTime) * timeProgress;
+
         foreach (var action in availableActions)
         {
-            if(action.UsedUp == true) continue;
+            if (action.UsedUp == true)
+                continue;
             var actionButton = new Button(); // Red: C03F13 Green: 50AA7C
             var hasEnoughRelationship = true;
             var relReq = (int)action.RelationshipRequirement;
-            if (actionsMenuTypeWeAreIn==SocialActionMenuType.coerce)
+            if (actionsMenuTypeWeAreIn == SocialActionMenuType.coerce)
             {
 
                 hasEnoughRelationship = relReq >= relationship;
-                if(relReq==0)
-                    hasEnoughRelationship=true;
+                if (relReq == 0)
+                    hasEnoughRelationship = true;
             }
             else
             {
                 hasEnoughRelationship = relReq <= relationship;
             }
-     
+
 
 
 
 
             var actionString = action.Name;
 
-            if(!hasEnoughRelationship)
-                actionString+= " "+relReq.ToString();
+            if (!hasEnoughRelationship)
+                actionString += " " + relReq.ToString();
             // Add a label to the button
 
             var actionLabel = new Label(actionString)
@@ -161,9 +352,16 @@ public static class MenuHelper
             var tooltip = action.Tooltip;
             var actionName = action.Name;
             var points = action.Points;
+            var time= action.TimeLength;
             var actionTitle = actionName.ToLower().Replace(" ", "");
             actionButton.RegisterCallback<MouseEnterEvent>(e =>
             {
+                var maxTime= WorldManager.Instance.MaxTime;
+                var timeProgress = WorldManager.Instance.TimeProgress;
+                var timeAddition = timeProgress+ time;
+
+                myMenu.TimeBar.style.width= (myMenu.TimeBarWidth/ maxTime) * timeProgress;
+                myMenu.TimeBarNext.style.width = (myMenu.TimeBarWidth / maxTime) * timeAddition;
                 if (hasEnoughRelationship)
                 {
                     actionButton.style.backgroundColor = new StyleColor(Color.white);
@@ -192,8 +390,8 @@ public static class MenuHelper
                     myMenu.ActionInfoPanel.style.height = new Length(100, LengthUnit.Pixel);
                 }
                 myMenu.ActionInfoPanel.visible = true;
-    
-    
+
+
 
                 var addTrust = points > 0 ? $" + {points}" : "";
                 var addFear = points < 0 ? $" + {-points}" : "";
@@ -222,6 +420,13 @@ public static class MenuHelper
             // Mouse leave event: hide outline
             actionButton.RegisterCallback<MouseLeaveEvent>(e =>
             {
+                var maxTime = WorldManager.Instance.MaxTime;
+                var timeProgress = WorldManager.Instance.TimeProgress;
+
+
+                myMenu.TimeBar.style.width = (myMenu.TimeBarWidth / maxTime) * timeProgress;
+                myMenu.TimeBarNext.style.width = 0;
+
                 actionButton.style.backgroundColor = new StyleColor(Color.clear);
                 actionLabel.style.color = hasEnoughRelationship ? Color.white : Color.grey;
                 actionLabel.style.unityFontStyleAndWeight = FontStyle.Normal;
@@ -252,7 +457,7 @@ public static class MenuHelper
                     GameManager.Instance.UpdateInteractionMenu(personWeAreSpeakingTo, "");
                     player.RadialActionsHelper.PerformAction(personWeAreSpeakingTo, action, myMenu);
                 }
-                    //GameManager.Instance.UIClicked = true;
+                //GameManager.Instance.UIClicked = true;
 
 
 
@@ -287,16 +492,39 @@ public static class MenuHelper
             ActionsMenu(myMenu, myMenu.ActionsMenuTypeWeAreIn, personWeAreSpeakingTo);
 
         };
-        myMenu.menuContainer2.Add(myMenu.coerceMenuButton);
+        myMenu.menuContainer2.Add(myMenu.giveMenuButton);
         myMenu.menuContainer2.Add(myMenu.charmMenuButton);
-        myMenu.menuContainer.Add(myMenu.giveMenuButton);
+        myMenu.menuContainer.Add(myMenu.coerceMenuButton);
+
+        myMenu.giveMenuButton.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/UI/menuGive"));
+        myMenu.giveMenuButton.style.position = Position.Absolute;
+
+        myMenu.giveMenuButton.style.overflow = Overflow.Visible;
+        myMenu.giveMenuButton.AddToClassList("statStyle");
+        myMenu.giveMenuButton.style.left = -73 + 40;
+        myMenu.giveMenuButton.style.top = 340;
+        myMenu.giveMenuButton.style.width = 31; // Scale factor for portrait
+        myMenu.giveMenuButton.style.height = 30; // Scale factor for portrait
+        myMenu.giveMenuButton.style.opacity = 1;
+        myMenu.giveMenuButton.style.unityTextAlign = TextAnchor.MiddleCenter;
+        myMenu.giveMenuButton.style.borderTopLeftRadius = 0;
+        myMenu.giveMenuButton.style.borderTopRightRadius = 0;
+        myMenu.giveMenuButton.style.borderBottomLeftRadius = 0;
+        myMenu.giveMenuButton.style.borderBottomRightRadius = 0;
+        myMenu.giveMenuButton.style.color = myMenu.ActionsMenuTypeWeAreIn == SocialActionMenuType.coerce ? MyColor.Red : Color.white;
+        myMenu.giveMenuButton.clicked += () =>
+        {
+            myMenu.ActionsMenuTypeWeAreIn = SocialActionMenuType.give;
+            ActionsMenu(myMenu, myMenu.ActionsMenuTypeWeAreIn, personWeAreSpeakingTo);
+
+        };
 
         myMenu.coerceMenuButton.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/UI/menuCoercion"));
         myMenu.coerceMenuButton.style.position = Position.Absolute;
 
         myMenu.coerceMenuButton.style.overflow = Overflow.Visible;
         myMenu.coerceMenuButton.AddToClassList("statStyle");
-        myMenu.coerceMenuButton.style.left = -73 + 40;
+        myMenu.coerceMenuButton.style.left = -73 + 80;
         myMenu.coerceMenuButton.style.top = 340;
         myMenu.coerceMenuButton.style.width = 31; // Scale factor for portrait
         myMenu.coerceMenuButton.style.height = 30; // Scale factor for portrait
@@ -314,28 +542,7 @@ public static class MenuHelper
 
         };
 
-        myMenu.giveMenuButton.style.backgroundImage = new StyleBackground(Resources.Load<Texture2D>("Sprites/UI/menuGive"));
-        myMenu.giveMenuButton.style.position = Position.Absolute;
 
-        myMenu.giveMenuButton.style.overflow = Overflow.Visible;
-        myMenu.giveMenuButton.AddToClassList("statStyle");
-        myMenu.giveMenuButton.style.left = -73 + 80;
-        myMenu.giveMenuButton.style.top = 340;
-        myMenu.giveMenuButton.style.width = 31; // Scale factor for portrait
-        myMenu.giveMenuButton.style.height = 30; // Scale factor for portrait
-        myMenu.giveMenuButton.style.opacity = 1;
-        myMenu.giveMenuButton.style.unityTextAlign = TextAnchor.MiddleCenter;
-        myMenu.giveMenuButton.style.borderTopLeftRadius = 0;
-        myMenu.giveMenuButton.style.borderTopRightRadius = 0;
-        myMenu.giveMenuButton.style.borderBottomLeftRadius = 0;
-        myMenu.giveMenuButton.style.borderBottomRightRadius = 0;
-        myMenu.giveMenuButton.style.color = myMenu.ActionsMenuTypeWeAreIn == SocialActionMenuType.coerce ? MyColor.Red : Color.white;
-        myMenu.giveMenuButton.clicked += () =>
-        {
-            myMenu.ActionsMenuTypeWeAreIn = SocialActionMenuType.give;
-            ActionsMenu(myMenu, myMenu.ActionsMenuTypeWeAreIn, personWeAreSpeakingTo);
-
-        };
 
 
 
@@ -474,7 +681,8 @@ public static class MenuHelper
 
         pastDialogue = MyColor.WrapTextInYellowTag(pastDialogue);
         pastDialogue = MyColor.WrapTextInPurpleTag(pastDialogue);
-
+        pastDialogue = MyColor.WrapTextInAquaTag(pastDialogue);
+        
         // Conditionally add "YOU-{lastChosenOption}" if it's not an empty string
         if (lastChosenOption != "")
         {
@@ -485,12 +693,12 @@ public static class MenuHelper
         if (currentDialogue != "")
         {
             pastDialogue += @$"<color=#FFFFFF>{currentSpeaker.ToUpper()}</color><color=#D5D6C8>- " +
-                Regex.Replace(currentDialogue, @"^#(.*?)#(.*)", @"  <color=#a0a095>$1</color>" + "\n" + @"""$2""") +
+        
                 "</color>\n\n";
 
 
         }
-
+        //         Regex.Replace(currentDialogue, @"^#(.*?)#(.*)", @"  <color=#a0a095>$1</color>" + "\n" + @"""$2""")
 
         // Create the button and add the label
         dialogue = new Button();
@@ -567,7 +775,7 @@ public static class MenuHelper
         actionImage.style.left = 180;
         actionImage.style.top = 390;
 
-        
+
         menuContainer.Add(actionImage);
         var socialAction = new Button();
 

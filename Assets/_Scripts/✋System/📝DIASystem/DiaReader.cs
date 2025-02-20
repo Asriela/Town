@@ -17,9 +17,17 @@ public enum DiaActionType : short
     share,
     mood,
     key,
-    reqMood
+    reqMood,
+    endGame,
+    impression
 }
 
+public enum Key
+{
+    none,
+    onarInnocent,
+    onarGuilty
+}
 public enum DiaOptionType
 {
     none,
@@ -47,7 +55,7 @@ public class DiaOption
 
     public MemoryTags OptionNeeds { get; set; }
     public string OptionKey { get; set; }
-    public string IsKey { get; set; }
+    public Key IsKey { get; set; }
     public DiaOptionType OptionType { get; }
 
     public int OptionNumber { get; }
@@ -55,7 +63,7 @@ public class DiaOption
 
     public MemoryTags OptionMoodReq { get; set;}
 
-    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action, object actionData, int actionCost, MemoryTags optionNeeds, MemoryTags optionMoodReq,string optionKey, string isKey, int index, int tabLevel, string uniqueId, int optionNumber)
+    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action, object actionData, int actionCost, MemoryTags optionNeeds, MemoryTags optionMoodReq,string optionKey, Key isKey, int index, int tabLevel, string uniqueId, int optionNumber)
     {
         LineNumber = lineNumber;
         Label = label;
@@ -204,6 +212,7 @@ public static class DiaReader
         .OrderBy(mo => mo.ActionCost != 0) // Place 0-cost items first
         .ThenBy(mo => Math.Abs(mo.ActionCost)) // Order by absolute magnitude
         .ToList();
+        returnOptions = currentOptions.OrderBy(item => item.OptionMoodReq == MemoryTags.none ? 0 : 1).ToList();
         currentOptions = returnOptions;
         return new DiaPackage(currentDialogue, returnOptions);
 
@@ -524,12 +533,7 @@ public static class DiaReader
                             labelWithoutAction = label.Substring(0, actionStart).Trim();
                         }
 
-                        var isKey = "";
-                        if (actionType == DiaActionType.key)
-                        {
-                            isKey = actionData.ToString();
 
-                        }
                         var optionMoodReq = MemoryTags.none;
                         if (actionType == DiaActionType.reqMood)
                         {
@@ -548,7 +552,23 @@ public static class DiaReader
                         labelWithoutAction = new string(labelWithoutAction.Where(c => c != '*').ToArray());
                         labelWithoutAction = new string(labelWithoutAction.Where(c => c != '^').ToArray());
                         // Create a new DiaOption object
-                        
+
+                        var isKey = Key.none;
+                        if (actionType == DiaActionType.key || actionType== DiaActionType.impression || actionType==DiaActionType.mood )
+                        {
+                            if(actionType == DiaActionType.key)
+                                isKey = (Key)actionData;
+                            int firstQuote = line.IndexOf('[');
+                            {
+                                if (firstQuote != -1)
+                                {
+                                    labelWithoutAction= labelWithoutAction.Substring(0, firstQuote - 1);
+                                }
+                            }
+
+                            
+                        }
+
                         DiaOption newOption = new(i, labelWithoutAction, optionType, actionType, actionData, actionCost, optionNeeds,optionMoodReq, optionKey, isKey, currentOptions.Count, allTabs[i], $"{currentFileName} + {i + allTabs[i]}", currentOptionNumber++);
 
                         if (optionNeeds != MemoryTags.none)
@@ -580,7 +600,8 @@ public static class DiaReader
         currentOptions.InsertRange(0, tempList);
 
 
-        currentOptions= currentOptions.OrderBy(item => item.OptionMoodReq == MemoryTags.none ? 0 : 1).ToList();
+
+
         // Sort the options so that all options with option type permanent are at the end
         currentOptions.Sort((a, b) =>
         {
@@ -652,6 +673,15 @@ public static class DiaReader
             }
 
         }
+        if (theString.StartsWith("ending:"))
+        {
+            ret = DiaActionType.endGame;
+            if (Enum.TryParse(typeof(GameState), dataString, true, out object rawData))
+            {
+                actionData = (GameState)rawData;
+            }
+
+        }
         if (theString.StartsWith("mood:"))
         {
             ret = DiaActionType.mood;
@@ -661,12 +691,25 @@ public static class DiaReader
             }
 
         }
+        if (theString.StartsWith("impression:"))
+        {
+            ret = DiaActionType.impression;
+            if (Enum.TryParse(typeof(SocialImpression), dataString, true, out object rawData))
+            {
+                actionData = (SocialImpression)rawData;
+            }
+
+        }
         if (theString.StartsWith("key:"))
         {
             ret = DiaActionType.key;
 
-            actionData = (object)dataString;
-
+  
+            if (Enum.TryParse(typeof(Key), dataString, true, out object rawData))
+            {
+                actionData = (Key)rawData;
+                var newe=1;
+            }
 
         }
         if (theString.StartsWith("requiresmood:"))
