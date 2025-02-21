@@ -19,6 +19,12 @@ public static class TextConverter
                 case Key.onarGuilty:
                     ret = "Onar killed Ashla. Report back to Dohlson.";
                     break;
+                case Key.couldntDetermine:
+                    ret = "Onar is not responding its inconclusive if he did it. Report back to Dohlson. ";
+                    break;
+                case Key.onarDead:
+                    ret = "Onar killed Ashla but he also commited suicide. Report back to Dohlson. ";
+                    break;
             }
                 
          

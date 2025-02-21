@@ -8,12 +8,58 @@ public class Impression : MonoBehaviour
     public int FearTowardsPlayer { get; set; } = 20;
     public int TrustTowardsPlayer { get; set; } = 20;
 
+    public Dictionary<SocializeType,int> ActionsUsesLeftCount { get; set; }= new();
+    public List<SocializeType> ActionsRecord { get; set; } = new();
+
+    public Dictionary<SocializeType, int> ActionsPerfomedCount { get; set; } = new();
+
+    public Dictionary<SocializeType, float> TimePassedSinceAction { get; set; } = new();
+
+    public List<SocializeType> AllInputRecord { get; set; } = new();
+
     public int ProgressToBreakdown { get; set; } = 0;
+
+    public bool BrokeDown { get; set; } =false;
 
     public int Confidence { get; set; } = 10;
 
     private Dictionary<SocialImpression, int> socialImpressionsTowardsPlayer = new();
     private SocialImpression lastImpression = SocialImpression.none;
+
+    public void AddToActionsPerformedCount(SocializeType action)
+    {
+        if (ActionsPerfomedCount.ContainsKey(action))
+        {
+            ActionsPerfomedCount[action] ++;
+
+        }
+        else
+        {
+            ActionsPerfomedCount.Add(action, 1);
+        }
+    }
+    public void AddActionToTimePassed(SocializeType action, float timeLength)
+    {
+        var actionTimeScore= timeLength<=1 ? 1 : (timeLength / 5)+1;
+
+
+
+        foreach (var key in TimePassedSinceAction.Keys.ToList())
+        {
+
+            TimePassedSinceAction[key] += actionTimeScore;
+        }
+
+        if (!TimePassedSinceAction.ContainsKey(action))
+        {
+            TimePassedSinceAction.Add(action,0);
+        }
+        else
+        {
+            TimePassedSinceAction[action] =0;
+        }
+
+    }
 
     public SocialImpression GetSocialImpression()
     {
@@ -118,6 +164,14 @@ public class Impression : MonoBehaviour
                 if (amount > 7)
                 { ret = SocialImpression.sexy; }
                 break;
+            case SocialImpression.confusing:
+                if (amount > 7)
+                { ret = SocialImpression.baffling; }
+                break;
+            case SocialImpression.authoritative:
+                if (amount > 7)
+                { ret = SocialImpression.masterful; }
+                break;
         }
         return ret;
     }
@@ -134,5 +188,7 @@ public enum BaseSocial
     stuckUp,
     brave,
     charming,
-    romantic
+    romantic,
+    confusing,
+    authoritative
 }

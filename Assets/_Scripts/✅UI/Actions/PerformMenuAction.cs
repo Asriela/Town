@@ -19,7 +19,7 @@ public class PerformMenuAction : MonoBehaviour
     private bool socializeUntilAnimationIsOver;
     private InteractionMenu theMenu;
     private MemoryTags moodToChange;
-
+    MemoryTags currentMood;
     public void Initialize(Player player)
     {
         this.player = player;
@@ -56,12 +56,12 @@ public class PerformMenuAction : MonoBehaviour
         
         var ret = true;
         int additionalPoints = 0;
-        var mood = target.State.VisualState[0];
+        currentMood = target.State.VisualState[0];
         timeAddition= actionOption.TimeLength;
         currentAction = actionOption;
-        if (actionOption.BonusPoints.ContainsKey(mood))
+        if (actionOption.BonusPoints.ContainsKey(currentMood))
         {
-            additionalPoints = actionOption.BonusPoints[mood];
+            additionalPoints = actionOption.BonusPoints[currentMood];
         }
         pointsToReward = actionOption.Points + additionalPoints;
         relationshipImpact = actionOption.RelationshipImpact;
@@ -73,9 +73,13 @@ public class PerformMenuAction : MonoBehaviour
 
         }
 
+        if (actionOption.AmountOfUses != -1)
+        {
+            target.Impression.ActionsUsesLeftCount[actionOption.Enum]--;
+            if (target.Impression.ActionsUsesLeftCount[actionOption.Enum] <= 0)
+                actionOption.UsedUp = true;
+        }
 
-        if(actionOption.OnceOff)
-        actionOption.UsedUp = true;
         return ret;
     }
 
@@ -256,6 +260,7 @@ public class PerformMenuAction : MonoBehaviour
             personWeAreInteractingWith.Ui.Speak(personWeAreInteractingWith, SocialActionsHelper.ProcessActionResponse(personWeAreInteractingWith, currentAction, ref currentActionFailed));
             if (personWeAreInteractingWith.Impression.ProgressToBreakdown > 10)
             {
+                personWeAreInteractingWith.Impression.BrokeDown=true;
                 GameManager.Instance.InteractionMenu.pastDialogue += $"^{personWeAreInteractingWith.CharacterName} has had a mental breakdown^\n";
                 WorldManager.Instance.ThePlayer.MenuInteraction.ChangeDiaSection("breakdown");
             }
@@ -295,9 +300,12 @@ public class PerformMenuAction : MonoBehaviour
 
     private void ActionResolution(SocializeType socialAction, Character personWeAreTalkingTo)
     {
+        if (currentMood == MemoryTags.angry)
+            pointsToReward /= 2;
         float effectFromInteraction = personWeAreInteractingWith.Relationships.AddInteractionEffect(socialAction, player, relationshipImpact);
         if (pointsToReward < 0)
         {
+           
             personWeAreInteractingWith.Impression.FearTowardsPlayer += -pointsToReward;
         }
 

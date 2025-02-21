@@ -2,13 +2,13 @@
 	#Onar looks distant he just stares at you not saying a word.
 	>I heard what happened to Ashla, would you like some company? 1+
 		#"um.. sure.."
-		<WhatHappenedToAshla>
+		<positivePath>
 
 	>WHAT DID YOU DO TO ASHLA YOU BASTARD! 1-
 		#"You cannot just come into my home and think you can intimidate me!"
 		<negativePath>
 	
-//start
+//start//
 ==positivePath==
 	>So how do you know Ashla 1+
 		#"I don't, she is just someone that arrived in town."
@@ -21,25 +21,30 @@
 					<whyGoWithYou>
 			>What did you see? 4+
 				#"I saw the same pain, I had entombed into my own eyes."
-				-What is this pain you share? [mood : emotional]
-					#"Can you catch the sun before it touches the dusk of its soul? That was Ashla for me, now I will never see her rise again."
-					>She is DEAD? 4+ 
-						#He hangs his head low.
-						-
-							#"I tried, I really tried everything.."
-							<WhatHappenedToAshla>
-					>The fuck did you do to her!? [mood : angry] 4-
-						#"I did NOTHING!" 
-						<WhatHappenedToAshla>
+				>What is this pain you share? [mood : emotional]1+
+					#"We are both lonely and very far away from home.." He looks off into the distance
+					-
+						#"Can you catch the sun before it touches the dusk of its soul? That was Ashla for me, now I will never see her rise again."
+						>She is DEAD? 4+ 
+							#He hangs his head low.
+							-
+								#"I tried, I really tried everything.."
+								<WhatHappenedToAshla>
+						>The fuck did you do to her!? [mood : angry] 2-
+							#"I did NOTHING!" 
+							<WhatHappenedToAshla>						
+				>So where is she from?
+					#"She is from the Ald-kla tribe, a people who still have their connection to before."
+					<whyGoWithYou>
 
 					
-		>So why the fuck was she with you then? 1-
+		>So why the fuck was she with you then? 2-
 			#"She came to me, gravitated to me, I don't know why!"
 			>You mean you MANIPULATED her?![mood : tense] 2-
 				#"Who are you? What do you want from me.." He looks at you with cowardice.
 				>Answer the question.. [mood : emotional] 2-
-					#"You don't know what she has been though.." 
-					<WhatHappenedToAshla>
+					#"You don't understand her like I do.." 
+					<Guilty-GOOD>
 
 	
 	>Tell me more about yourself? [requiresMood : relaxed] 2+
@@ -47,7 +52,7 @@
 		<OnarLore>
 		
 
-//middle					
+//middle//					
 ==whyGoWithYou==			
 	>So then why did she decide to go with you?
 		#"There is one thing we need more than anything else in this world, love."
@@ -64,7 +69,7 @@
 						#"The Reachers attacked her tribe, they had been hunting them for so many years.."
 						<reachers>
 		>So you fucked her? [impression : rude]2-
-			#"I did not FUCK her." 
+			#"I did not FUCK her." He looks annoyed that you would use that word. 
 			-Are you sure about that?[mood : angry]
 				#"YES! She wanted someone who understood her. Not some fuck buddy!"
 				<WhatHappenedToAshla>	
@@ -75,7 +80,7 @@
 			-What changed?
 				#"You used to be able to whisper to magic, tell her your secrets and together you would make something beautiful, now.."
 				-
-					#"Now she has been broken. Used by arcane users such as yourself forcing her countless fingers in countless directions."
+					#"Now she have been broken. Used by arcane users such as yourself forcing her countless fingers in countless directions."
 					>I didn't do anything, I just use spells I was taught!
 						#"USE spells..."
 						-
@@ -83,7 +88,7 @@
 							-I was told, the forest.
 								#"Look, look out that window!" He points shaking to the window of his cabin. "You see that forest?"
 								-[mood : angry]
-									#"He lies there, broken , magic itself, surrounding this entire FUCKING outpost." 
+									#"She lies there, broken , magic itself, surrounding this entire FUCKING outpost." 
 									<WhatHappenedToAshla>
 					>Its just a spell, you are making this up. [impression : annoying]
 						#He grumbles to himself. "Good luck with your amnesia."
@@ -115,77 +120,159 @@
 		
 ==WhatHappenedToAshla==	
 	>So what happened to Ashla?
-		#"I tried to stop her.. she kept moaning about the forest understanding her , she would go in these dazes crying uncontrollably.. and then sudden stretches of murmurs "
+		#"A week ago she would just start crying uncontrollably.. she said the forest understood her and that it was calling her."
 		-What was she murmuring about? 2+
 			#"Pine needles in her skin.. how it wanted to comfort her , hold her..."
 		>So why isn't she here any more...
-			#"I caught her just running straight out into the forest, so I caught her and brought her back."
-			<Innocent-GOOD>
-		-sounds like she was trying to escape you!
-			#"NO! HER FUCKING MIND WAS BEING GRASPED BY THE FOREST!"
-			<Guilty-GOOD>
+			#"I saw her just running straight out into the forest, so I caught her and brought her back."
+			//extend this//
+			-SOUUNDS like she was trying to escape you!
+				#"NO! HER FUCKING MIND WAS BEING GRASPED BY THE FOREST!"
+				>YOU FUCKING GRASPED HER! 2-
+					#"NO! I , I , swear it was the forest.." He looks around with wild eyes
+					<Guilty-GOOD>
+			>Why would she run straight into the forest?[mood : emotional] 4+
+				#"You are still new here but at night if you listen carefully to the forest, you will hear the animals softly moan, their minds slowly being chewed on.. "
+				<Innocent-GOOD>
+
 											
 
-==Innocent-GOOD==				
-	>She was trying to run away from you!
-		#"NO! HER FUCKING MIND WAS BEING GRASPED BY THE FOREST!"		
-		<Guilty-GOOD>
-	>Why would she run straight into the forest?
-		#"Broken magic surrounds this outpost, he heard her cries of pain and called her to the forest to be with him"
-		-There is no such thing
-		-Be with him?[key : onarInnocent]
-			#"He wanted a hug"
-			
-		
-==Guilty-GOOD==
-	>YOU FUCKING GRASPED HER! 2-
-		#"NO! I , I , swear it was the forest.." He looks around with wild eyes
-		>You SICK fuck, what did you DO!?
-			#"SHE - she kissed me!"
-			>You are fucking blocking it out! REMEMBER WHAT ACTUALLY HAPPENED
-				#His breathing fastens to a panic he tries to run but you hold him down
+==Innocent-GOOD==		
+	-
+		#"What you are hearing is magic itself, broken and ashamed , spilling its guts all over this forest, chewing on it."
+		-What happened to magic?
+			#"You happened, people like you, arcane users, with your spells, using magic as if she were a tool"
+			-Its just a spell
+				#"Is it really? Who did you think you were pulling from when you USE magic?"
+			-Magic is not a person, its just an energy.
+				#"It has always been a spirit, back when I was a boy we would whisper our wildest dreams to her.. and she would listen like the wind, softly brushing your face to say hello."
 				-
-					#"I- I why would a teenage girl want to have sex with me...?"
-					>EXACTLY why... would... a.. teenage... girl... want to have sex with an old fuck like you?
-						#"I don't, I cant remember what happened..."
-						>YOU DONT FUCKING WANT TO REMEMBR 4-
-							#He begins to cry uncontrollably, he takes out a strange twisted ornament from his pocket
-							-
-								#It looks like a human figure twisted in on itself he begins to stroke it
-								>Just watch 
-									#He suddenly begins to magically twist in on himself his limbs bending in unnatural ways until they begin breaking, he doesn't make a sound
+					#"We would talk with her for hours and she would hold us in her embrace; like the great blue sky convolving around us, as we laid on the grass."
+					-
+						#"She would make all our dreams come true.. that was real magic, old magic."
+						-So what happened?
+							#"Someone figured out they didn't need to ask her , they could bind and force her, a thousand years of abuse and this is what is left of her."
+							>So what does this have to do with Ashla
+								#"Broken magic felt Ashla's madness, wanted to console her with its own madness. 
+								-
+									#"It heard Ashla cry at night, just like I did but it found her way into Ashla's heart, before I could."
 									-
-										#His face just stares at you blankly as he lifts up into the air and contorts over and over into a smaller and smaller ball
-										-[key : onarGuilty]
-											#Until nothing is left.
-											>leave
+										#"It asked if she had a friend - she said she did not." He looks away with pain."
+										-if you know all this why didn't you stop it?
+											#"I TRIED! Why do you think I locked her up!?"
+											-Did it work?
+												#"Obviously not! She escaped and before I could stop her she ran right into broken magic's embrace. Ashla disintegrated before my eyes." 
+										-why did it take her and not you? [key : onarInnocent]
+											#"She is a teenage girl with immense pain, before I could catch on exactly what was happening it was already too late, it had her."
+											-leave
 												<end>
-								>Stop him 
-									#You knock it out of his hands. He shakes like an addict in withdrawal trying to grasp after it, his breathing wheezing.
-									>Tie him up[key : onarGuilty]
-										#He just gives you a blank stare
-										>Leave 
+
+
+			
+			
+		 
+==Guilty-GOOD==
+	>You SICK fuck, what did you DO!?
+		#"SHE - she kissed me!"
+		>You are fucking blocking it out! REMEMBER WHAT ACTUALLY HAPPENED
+			#His breathing fastens to a panic he tries to run but you hold him down
+			-
+				#"I- I why would a teenage girl want to have sex with me...?"
+				>EXACTLY why... would... a.. teenage... girl... want to have sex with an old fuck like you?
+					#"I don't, I cant remember what happened..."
+					>YOU DONT FUCKING WANT TO REMEMBR 4-
+						#He begins to cry uncontrollably, he takes out a strange twisted ornament from his pocket
+						-
+							#It looks like a human figure twisted in on itself he begins to stroke it
+							>Just watch 
+								#He suddenly begins to magically twist in on himself his limbs bending in unnatural ways until they begin breaking, he doesn't make a sound
+								-
+									#His face just stares at you blankly as he lifts up into the air and contorts over and over into a smaller and smaller ball
+									-[key : onarDead]
+										#Until nothing is left.
+										>leave
 											<end>
+							>Stop him 
+								#You knock it out of his hands. He shakes like an addict in withdrawal trying to grasp after it, his breathing wheezing.
+								>Tie him up[key : onarGuilty]
+									#He just gives you a blank stare
+									>Leave 
+										<end>
 			
 
 			
 ==negativePath==		
 	-You sure about that? 4-
-		#"I don't know what happened to Ashla, she just ran away.."
+		#"I don't know what happened to Ashla!"
 		-DONT LIE TO ME, people heard she was locked up in your cabin! 4-
-			#"I had to protect her!"
-			-protect her from what!? 4-
+			#"I was trying to protect her!"
+			>you were trying to keep her to yourself! 2-
+				#"She kept trying to run into the forest!"
+				<Guilty-BAD>
+			>protect her from what!? 4-
 				#"Herself! The darkness from the forest was calling her!"
-				-What darkness? [key : onarInnocent]2-
-					#"The broken magic that surrounds this outpost, it lured her and then killed her."
-					-leave
-						<end>
+				<Innocent-BAD>
+
+		-She was with you right? SO what happened?
+			#"She just left and ran into the forest! I swear!"
+			<Guilty-BAD>
+				
+==Guilty-BAD==
+	-What did you do to make a teenage girl run into the FUCKING forest!?
+		#"It was the fucking forest! It called her!"
+		-The forest!? Stop deluding yourself! I know you did something with her! 2-
+			#"She came onto me!"
+			>You SICK fuck, what did you DO!? 1-
+				#"SHE - she was the one who kissed me!"
+				>You are fucking blocking it out! REMEMBER WHAT ACTUALLY HAPPENED 2-
+					#His breathing fastens to a panic he tries to run but you hold him down
+					-
+						#"I- I why would a teenage girl want to have sex with me...?"
+						>EXACTLY why... would... a.. teenage... girl... want to have sex with an old fuck like you?
+							#"I don't, I cant remember what happened..."
+							>YOU DONT FUCKING WANT TO REMEMBR 4-
+								#He begins to cry uncontrollably, he takes out a strange twisted ornament from his pocket
+								-
+									#It looks like a human figure twisted in on itself he begins to stroke it
+									>Just watch 
+										#He suddenly begins to magically twist in on himself his limbs bending in unnatural ways until they begin breaking, he doesn't make a sound
+										-
+											#His face just stares at you blankly as he lifts up into the air and contorts over and over into a smaller and smaller ball
+											-[key : onarDead]
+												#Until nothing is left.
+												>leave
+													<end>
+									>Stop him 
+										#You knock it out of his hands. He shakes like an addict in withdrawal trying to grasp after it, his breathing wheezing.
+										>Tie him up[key : onarGuilty]
+											#He just gives you a blank stare
+											>Leave 
+												<end>
+								
+				
+==Innocent-BAD==
+	-What darkness? [key : onarInnocent]2-
+		#"The broken magic that surrounds this outpost, it lured her and then killed her."
+		-I don't fucking believe you! Tell me the truth!
+			#"How do you think you got your amnesia?"
+			-
+				#"The last thing you remember was stumbling out of the forest right!?"
+				-Right..
+					#"It got to you as well, you are lucky you didn't end up like her"
+					-
+						#You start to remember brief glimpses of stumbling through the forest and being approached by dark voices.
+						-[key : onarInnocent]
+							#He looks at you with disgust that you tortured him for nothing.
+							-leave
+								<end>
 
 ==breakdown==
 	>Onar?
-		#"It was all me.. I did this"
-		-No you didnt
-		
+		#"No response"
+		>Onar?[key : couldntDetermine]
+			#He just stares vacantly ahead. You aren't going to find out anything more from him.
+			-leave
+				<end>
 ==OnarLore==
 	>No I haven't [impression : kind]
 		#"They were magical, more magical than anything a mage can conjure up.."

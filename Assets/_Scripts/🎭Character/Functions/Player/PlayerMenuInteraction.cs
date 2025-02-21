@@ -20,7 +20,7 @@ public struct MenuOption
     public object Data3;
     public MenuOptionType menuOptionType;
     public MemoryTags OptionNeeds;
-    public string OptionKey;
+    public Key OptionKey;
     public int menuOptionCost;
     public Key IsKey;
     public string UniqueId;
@@ -39,7 +39,7 @@ public struct MenuOption
         this.menuOptionCost = 0;
         OptionNeeds = MemoryTags.none;
         IsKey=Key.none;
-        OptionKey = "";
+        OptionKey = Key.none;
         UniqueId="";
         OptionNumber=0;
         OldOption=false;

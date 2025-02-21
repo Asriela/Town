@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using Mind;
 using UnityEngine.Windows;
 using System.Linq.Expressions;
+using Unity.VisualScripting;
 
 
 public class InteractionMenu : MonoBehaviour
@@ -320,6 +321,8 @@ public class InteractionMenu : MonoBehaviour
         var newDialogue="";
         if (currentDialogue != "")
         {
+
+
             newDialogue = @$"<color=#FFFFFF>{currentSpeaker.ToUpper()}</color><color=#D5D6C8>- " +
                 Regex.Replace(currentDialogue, @"^#(.*?)#(.*)", @$"  <color={MyColor.PaleWhiteHex}>$1</color>"+ @"""$2""") +
                 "\n\n";
@@ -443,7 +446,7 @@ public class InteractionMenu : MonoBehaviour
                     var optionKey = dialogueOptions[i].OptionKey;
                     var playerKeys = player.KeyKnowledge.Keys;
                     var hasKey = false;
-                    if (optionKey == "" || optionKey == null || playerKeys.Count > 0)
+                    if (optionKey == Key.none || playerKeys.Contains(optionKey))
                     { hasKey = true; }
                     if (hasKey == false)
                     {
@@ -628,8 +631,11 @@ public class InteractionMenu : MonoBehaviour
                     var keyText = TextConverter.GetKeyText(key);
                     button.clicked += () =>
                     {
+
                         if (optionIsDisabled)
                             return;
+                        personWeAreSpeakingTo.Impression.AddActionToTimePassed(SocializeType.talk, 1f);
+                        personWeAreSpeakingTo.Impression.AllInputRecord.Add(SocializeType.talk);
                         BasicFunctions.Log($"🌎Button clicked: {label}", LogType.ui);
                         GameManager.Instance.UIClicked = true;
                         if (cost > 0)

@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static Unity.Burst.Intrinsics.Arm;
+using static UnityEngine.GraphicsBuffer;
 
 public static class MenuHelper
 {
@@ -244,12 +245,12 @@ public static class MenuHelper
         if (endGameState == GameState.won)
         {
             myMenu.WinLooseLabel.text = "YOU WON";
-            myMenu.WinLooseDetailsLabel.text = "You sucessfully found out what happened to Ashla\n\n"+statsText;
+            myMenu.WinLooseDetailsLabel.text = GameManager.Instance.EndingText+"\n\n"+statsText;
         }
         else
         {
             myMenu.WinLooseLabel.text = "YOU FAILED";
-            myMenu.WinLooseDetailsLabel.text = "You ran out of time.\n\n" + statsText;
+            myMenu.WinLooseDetailsLabel.text = GameManager.Instance.EndingText+"\n\n" + statsText;
         }
 
     }
@@ -287,21 +288,28 @@ public static class MenuHelper
 
         foreach (var action in availableActions)
         {
+            if (!personWeAreSpeakingTo.Impression.ActionsUsesLeftCount.ContainsKey(action.Enum))
+            {
+                personWeAreSpeakingTo.Impression.ActionsUsesLeftCount.Add(action.Enum, action.AmountOfUses);
+            }
+
             if (action.UsedUp == true)
                 continue;
             var actionButton = new Button(); // Red: C03F13 Green: 50AA7C
             var hasEnoughRelationship = true;
-            var relReq = (int)action.RelationshipRequirement;
+            var brokeDown = personWeAreSpeakingTo.Impression.BrokeDown;
+            var lowestRelReq = (int)action.LowestRelationshipRequirement;
+            var highestRelReq = (int)action.HighestRelationshipRequirement;
             if (actionsMenuTypeWeAreIn == SocialActionMenuType.coerce)
             {
 
-                hasEnoughRelationship = relReq >= relationship;
-                if (relReq == 0)
+                hasEnoughRelationship = lowestRelReq >= relationship || (lowestRelReq==0 && highestRelReq <= relationship);
+                if (lowestRelReq == 0)
                     hasEnoughRelationship = true;
             }
             else
             {
-                hasEnoughRelationship = relReq <= relationship;
+                hasEnoughRelationship = lowestRelReq <= relationship;
             }
 
 
@@ -311,14 +319,19 @@ public static class MenuHelper
             var actionString = action.Name;
 
             if (!hasEnoughRelationship)
-                actionString += " " + relReq.ToString();
+                actionString += $" [Rel: {lowestRelReq}]";
             // Add a label to the button
-
-            var actionLabel = new Label(actionString)
+            var usesLeft= personWeAreSpeakingTo.Impression.ActionsUsesLeftCount[action.Enum];
+            var usesLeftString="";
+            if (usesLeft>0)
+            {
+                usesLeftString=usesLeft+" ";
+            }
+            var actionLabel = new Label(usesLeftString + actionString)
             {
                 style =
             {
-            color = hasEnoughRelationship ? Color.white : Color.grey,
+            color = hasEnoughRelationship && brokeDown==false ? Color.white : Color.grey,
             unityTextAlign = TextAnchor.MiddleLeft,
             fontSize = 12,
             whiteSpace = WhiteSpace.Normal,  // Allow text wrapping within the label
@@ -328,6 +341,7 @@ public static class MenuHelper
             width = new Length(200, LengthUnit.Pixel),
             }
             };
+            actionLabel.style.left=-5;
             actionButton.Add(actionLabel);
             actionButton.AddToClassList("statStyle");
             // Apply button styling to mimic other buttons
@@ -362,7 +376,7 @@ public static class MenuHelper
 
                 myMenu.TimeBar.style.width= (myMenu.TimeBarWidth/ maxTime) * timeProgress;
                 myMenu.TimeBarNext.style.width = (myMenu.TimeBarWidth / maxTime) * timeAddition;
-                if (hasEnoughRelationship)
+                if (hasEnoughRelationship && brokeDown==false)
                 {
                     actionButton.style.backgroundColor = new StyleColor(Color.white);
                     actionLabel.style.color = Color.black;
@@ -379,7 +393,7 @@ public static class MenuHelper
                 }
                 else
                 {
-                    myMenu.TooltipText.text = $"{relReq} RELATIONSHIP TO UNLOCK \nYOU HAVE {relationship}";
+                    myMenu.TooltipText.text = $"{lowestRelReq} RELATIONSHIP TO UNLOCK \nYOU HAVE {relationship}";
                     myMenu.TooltipText.style.color = MyColor.DarkGrey;
                     myMenu.TooltipText.style.unityFont = Resources.Load<Font>("Fonts/CALIBRIL");
                     myMenu.TooltipText.style.unityFontStyleAndWeight = FontStyle.Normal;
@@ -428,7 +442,7 @@ public static class MenuHelper
                 myMenu.TimeBarNext.style.width = 0;
 
                 actionButton.style.backgroundColor = new StyleColor(Color.clear);
-                actionLabel.style.color = hasEnoughRelationship ? Color.white : Color.grey;
+                actionLabel.style.color = hasEnoughRelationship && brokeDown ==false ? Color.white : Color.grey;
                 actionLabel.style.unityFontStyleAndWeight = FontStyle.Normal;
                 myMenu.ActionInfoPanel.visible = false;
 
@@ -451,7 +465,7 @@ public static class MenuHelper
 
             actionButton.clicked += () =>
             {
-                if (hasEnoughRelationship)
+               // if (hasEnoughRelationship && brokeDown==false)
                 {
                     myMenu.DoingAction = action;
                     GameManager.Instance.UpdateInteractionMenu(personWeAreSpeakingTo, "");

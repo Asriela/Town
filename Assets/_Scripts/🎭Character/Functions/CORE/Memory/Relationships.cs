@@ -252,6 +252,8 @@ public class Relationships : MonoBehaviour
     // Calculate relationships with all characters based on tags and views
     public void RecalculateMyRelationshipWithEveryone()
     {
+        var player = WorldManager.Instance.ThePlayer;
+        AddOrUpdateRelationship(_character, player, 0);
         // Accessing _character's PersonKnowledge
         var personKnowledge = _character.PersonKnowledge;
         var views = _character.Views;
@@ -301,10 +303,11 @@ public class Relationships : MonoBehaviour
             AddOrUpdateRelationship(_character, character, relationshipValue);
 
         }
-        var player = WorldManager.Instance.ThePlayer;
+
         var relationshipWithPlayer=GetRelationshipWith(_character, player);
         foreach (var effect in TodaysInteractionEffects)
         {
+            relationshipWithPlayer = GetRelationshipWith(_character, player);
             AddOrUpdateRelationship(_character, player, relationshipWithPlayer + effect.value);
         }
 

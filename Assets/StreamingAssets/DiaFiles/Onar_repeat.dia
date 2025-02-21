@@ -55,7 +55,20 @@
 				-protect her from what!?
 					#"Herself! She was going to... she.."
 
-
-			
-
+======
+						#"You are still new here but at night if you listen carefully you will hear the animals softly moan, their minds slowly being chewed on.. "
+			_
+				#"Not physically, but when you see them during the daytime you might find them scrambling around on the ground in circles eating dirt.."
+				_
+				
+				
+			#"catch those faraway dreams that slip through my childhood fingers, now too old to close" 
+		>Lets talk about something else. [impression : rude]
+			#""
+	>Where is Ashla now? [requiresMood : emotional]
+		#"I don't know.. "
+		>Its ok you can tell me..
+			#"No I really don't the darkness took her, I don't know what it did with her.
+		>What the fuck do you mean you don't know? 2-
+			#"I don't know what the broken magic did to her!"
 

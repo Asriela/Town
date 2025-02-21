@@ -29,16 +29,17 @@ public class ActionOption
     public int RelationshipImpact;
     public bool UsedUp;
     public bool IsDisabled;
-    public ViewTowards RelationshipRequirement;
+    public ViewTowards LowestRelationshipRequirement;
+    public ViewTowards HighestRelationshipRequirement;
     public MemoryTags MoodRequirement;
     public List<MemoryTags> ActionEffects;
     public SubMenu InSubMenu;
     public Dictionary<MemoryTags, int> BonusPoints;
-    public bool OnceOff;
+    public int AmountOfUses;
     public float TimeLength;
 
 
-    public ActionOption(SocializeType enumType,  string name, bool onceOff, string emoji, float timeLength, string tooltip, int cost, int relationshipImpact, bool usedUp, bool isDisabled, ViewTowards relationshipRequirement, MemoryTags mood, SubMenu submenu, Dictionary<MemoryTags, int> bonusPoints = null, List<MemoryTags> actionEffects = null)
+    public ActionOption(SocializeType enumType,  string name, int onceOff, string emoji, float timeLength, string tooltip, int cost, int relationshipImpact, bool usedUp, bool isDisabled, ViewTowards highestRelCanBe, ViewTowards lowestRelNeedsToBe, MemoryTags mood, SubMenu submenu, Dictionary<MemoryTags, int> bonusPoints = null, List<MemoryTags> actionEffects = null)
     {
         Enum = enumType;
         Name = name;
@@ -47,13 +48,14 @@ public class ActionOption
         UsedUp = usedUp;
         IsDisabled = isDisabled;
         Emoji = emoji;
-        RelationshipRequirement = relationshipRequirement;
+        LowestRelationshipRequirement = lowestRelNeedsToBe;
+        HighestRelationshipRequirement = highestRelCanBe;
         MoodRequirement = mood;
         ActionEffects= actionEffects ?? new List<MemoryTags>();
         BonusPoints = bonusPoints ?? new Dictionary<MemoryTags, int>();
         RelationshipImpact =relationshipImpact;
         InSubMenu = submenu;
-        OnceOff= onceOff;
+        AmountOfUses= onceOff;
         TimeLength=timeLength;
     }
 
@@ -335,7 +337,7 @@ public class PlayerRadialMenuInteraction : MonoBehaviour
                 moodPass=true;
             if(moodPass==false)
             { outputList.Remove(option); }
-            var relRequirement = (float)option.RelationshipRequirement;
+            var relRequirement = (float)option.LowestRelationshipRequirement;
 
             if (relRequirement < 0)
             {

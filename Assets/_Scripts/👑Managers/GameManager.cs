@@ -114,4 +114,6 @@ public class GameManager : Singleton<GameManager>
             }
         }
     }
+
+    public string EndingText { get; set; } ="You ran out of time and was unable to find out what happened to Ashla.";
 }

@@ -67,9 +67,41 @@ public static class DiaMenuHelper
                 case DiaActionType.endGame:
                     if (actionData != null)
                     {
-                        GameManager.Instance.EndGameState = GameState.won;
+                        GameManager.Instance.EndGameState = (GameState)actionData;
 
+                        if (GameManager.Instance.EndGameState==GameState.lost)
+                        {
+                            GameManager.Instance.EndingText="You pushed Onar too far and was unable to find out what happened to Ashla.";
+                        }
+                        else
+                        if (GameManager.Instance.EndGameState == GameState.won)
+                        {
+                            var onar = WorldManager.Instance.GetCharacter(CharacterName.Onar);
+                            if(onar.Relationships.GetRelationshipWith(personWeAreSpeakingTo,player)<0)
+                            {
+                                if (player.KeyKnowledge.Keys[0]==Key.onarInnocent)
+                                    GameManager.Instance.EndingText = "You used brutal force to find out that Onar was innocent and that Ashla was taken by the forest.";
+                                else
+                                if (player.KeyKnowledge.Keys[0] == Key.onarGuilty)
+                                    GameManager.Instance.EndingText = "You used brutal force to find out that Ashla was murdered by Onar.";
+                                else
+                                if (player.KeyKnowledge.Keys[0] == Key.onarDead)
+                                    GameManager.Instance.EndingText = "You used brutal force to find out that Ashla was murdered by Onar but Onar killed himself.";
 
+                            }
+                            else
+                            {
+                                if (player.KeyKnowledge.Keys[0] == Key.onarInnocent)
+                                    GameManager.Instance.EndingText = "You found out that Onar was innocent and that Ashla was taken by the forest.";
+                                else
+                                if (player.KeyKnowledge.Keys[0] == Key.onarGuilty)
+                                    GameManager.Instance.EndingText = "You found out that Ashla was murdered by Onar.";
+                                else
+                                if (player.KeyKnowledge.Keys[0] == Key.onarDead)
+                                    GameManager.Instance.EndingText = "You found out that Ashla was murdered by Onar but Onar killed himself.";
+                            }
+
+                        }
                         GameManager.Instance.UpdateInteractionMenu(personWeAreSpeakingTo, "");
                     }
 

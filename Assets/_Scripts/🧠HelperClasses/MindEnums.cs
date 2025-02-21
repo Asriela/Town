@@ -64,6 +64,11 @@ namespace Mind
         lifeOfTheParty,
         charming,
         sexy,
+        confusing,
+        mysterious,
+        baffling,
+        authoritative,
+        masterful,
     }
     [Serializable]
     public enum ActionType : short
@@ -249,7 +254,9 @@ namespace Mind
         puthandOnShoulder,
         messWithTheirHead,
         sitAtFireplace,
-        makeTea
+        makeTea,
+        talk,
+        manipulate,
     }
 
     [Serializable]
@@ -371,7 +378,8 @@ namespace Mind
         veryPositive = 3,
         extremelyPositive = 6,
         adore = 10,
-        obsessed = 25
+        obsessed = 25,
+            none=-900
 
     }
     [Serializable]

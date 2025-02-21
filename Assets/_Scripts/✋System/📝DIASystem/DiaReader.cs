@@ -26,7 +26,9 @@ public enum Key
 {
     none,
     onarInnocent,
-    onarGuilty
+    onarGuilty,
+    couldntDetermine,
+    onarDead
 }
 public enum DiaOptionType
 {
@@ -54,7 +56,7 @@ public class DiaOption
     public int ActionCost { get; }
 
     public MemoryTags OptionNeeds { get; set; }
-    public string OptionKey { get; set; }
+    public Key OptionKey { get; set; }
     public Key IsKey { get; set; }
     public DiaOptionType OptionType { get; }
 
@@ -63,7 +65,7 @@ public class DiaOption
 
     public MemoryTags OptionMoodReq { get; set;}
 
-    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action, object actionData, int actionCost, MemoryTags optionNeeds, MemoryTags optionMoodReq,string optionKey, Key isKey, int index, int tabLevel, string uniqueId, int optionNumber)
+    public DiaOption(int lineNumber, string label, DiaOptionType optionType, DiaActionType action, object actionData, int actionCost, MemoryTags optionNeeds, MemoryTags optionMoodReq,Key optionKey, Key isKey, int index, int tabLevel, string uniqueId, int optionNumber)
     {
         LineNumber = lineNumber;
         Label = label;
@@ -107,7 +109,7 @@ public static class DiaReader
     private static List<DiaOption> currentOptions = new();
     private static bool skipNextLineDueToBadCondition = false;
     private static MemoryTags optionNeeds = MemoryTags.none;
-    private static string optionKey = "";
+    private static Key optionKey = Key.none;
     private static string currentFileName = "";
     private static int currentOptionNumber = 1;
     private static string lastDialogueBeforeSectionChange="";
@@ -272,12 +274,17 @@ public static class DiaReader
             {
 
 
-                // if (!player.KeyKnowledge.Keys.Contains(dataString))
-                //  {
-                optionKey = dataString;
+                if (Enum.TryParse(typeof(Key), dataString, true, out object rawData))
+                {
+                    Key enumData = (Key)rawData;
 
-                BasicFunctions.Log($"⚠️ KEY CONDITION {dataString} WILL SKIP: {nextLine}    ", LogType.dia);
-                // }
+                    optionKey = enumData;
+
+                    BasicFunctions.Log($"⚠️ MOOD CONDITION {dataString} WILL SKIP: {nextLine}    ", LogType.dia);
+
+                }
+                else
+                { BasicFunctions.Log($"⚠️ Invalid MemoryTag: {dataString}", LogType.dia); }
 
 
             }
@@ -554,7 +561,7 @@ public static class DiaReader
                         // Create a new DiaOption object
 
                         var isKey = Key.none;
-                        if (actionType == DiaActionType.key || actionType== DiaActionType.impression || actionType==DiaActionType.mood )
+                        if (actionType == DiaActionType.key || actionType== DiaActionType.impression || actionType==DiaActionType.mood || actionType == DiaActionType.endGame)
                         {
                             if(actionType == DiaActionType.key)
                                 isKey = (Key)actionData;
@@ -575,9 +582,9 @@ public static class DiaReader
                         {
                             optionNeeds = MemoryTags.none;
                         }
-                        if (optionKey != "")
+                        if (optionKey != Key.none)
                         {
-                            optionKey = "";
+                            optionKey = Key.none;
                         }
                         // Add the new option to the current options list
                         tempList.Add(newOption);

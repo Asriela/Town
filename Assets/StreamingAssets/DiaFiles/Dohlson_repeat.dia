@@ -1,9 +1,31 @@
 ==start==
 	#"So what did you find out so far?"
-	(key : takenbywoods)
-	>Ashla was taken by the broken magic.[ending : won]
-		#"Well that settles that."
+	(key : onarInnocent)
+	>Ashla was lured by the broken magic in the woods and died.
+		#"That's a shame, I guess I was wrong about the old man."
+		-Yeah..[ending : won]
+			<end>
+	(key : onarGuilty)
+	>Onar killed Ashla
+		#"Can't wait to take this fucker down."
+		-Please do![ending : won]
+			<end>
+	(key : onarDead)
+	>Onar killed Ashla
+		#"Did you tie him up?"
+		-I couldn't
+			#"What do you mean you couldn't"
+			-He committed suicide.. by magic..
+				#He just stares at you
+				-Leave[ending : won]
+					<end>
+	(key : couldntDetermine)
+	>I could not get any information out of him
+		#"Well I am arresting him all the same."
+		-Alright.[ending : lost]
+			<end>
 	-Nothing
 		#"Ashla could still be out there! Why are we wasting time?"
-
+	-Leave
+		<end>
 	
